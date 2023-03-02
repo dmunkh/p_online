@@ -13,7 +13,7 @@ export function API() {
     });
   }
   const api = axios.create({
-    baseURL: "http://172.16.16.64:8083/",
+    baseURL: "https://training.erdenetmc.mn/api/",
     timeout: 200000,
     headers,
   });
