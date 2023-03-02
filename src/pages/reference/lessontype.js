@@ -6,18 +6,20 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Input } from "antd";
 import Swal from "sweetalert2";
-import axios from "axios";
+
+import * as API from "../../api/request"
 const LessonType = () => {
   const [show, setShow] = useState(false);
   const { dispatch } = useFormState();
   const [lesson, setLesson] = useState();
 
   useEffect(() => {
-    axios
-      .get("http://training.erdenetmc.mn/api/ref/lesson/type")
-      .then(async (data) => {
-        await setLesson(data.data);
+ 
+      API.getLessonType()
+      .then((data) => {
+         setLesson(data);
       });
+      
   }, []);
   // useEffect(() => {
   //   axios
@@ -102,7 +104,7 @@ const LessonType = () => {
     return (
       <div className="card">
         <DataTable
-          className="font-thin"
+          className="font-thin text-sm"
           value={lesson}
           paginator
           rows={20}
@@ -119,6 +121,7 @@ const LessonType = () => {
           emptyMessage=" Мэдээлэл олдсонгүй..."
         >
           <Column
+          className=""
             field=""
             header="№"
             style={{ width: "5%" }}

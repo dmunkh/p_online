@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormState } from "../../contexts/formContext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
@@ -6,33 +6,17 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Input } from "antd";
 import Swal from "sweetalert2";
+import moment from "moment";
+import * as API from "../../api/request";
 const Organization = () => {
   const [show, setShow] = useState(false);
-  const {  dispatch } = useFormState();
-  const customers = [
-    {
-      id: 1000,
-      organization: "FIBO CLOUD",
-      date:"",
-      user:"",
-      status: "Тийм",
-    },
-    {
-      id: 1001,
-      organization: "FIBO CLOUD",
-      status: "Тийм",
-    },
-    {
-      id: 1002,
-      organization: "FIBO CLOUD",
-      status: "Тийм",
-    },
-    {
-      id: 1003,
-      organization: "FIBO CLOUD",
-      status: "Тийм",
-    },
-  ];
+  const { dispatch } = useFormState();
+  const [organization, setOrganization] = useState();
+  useEffect(() => {
+    API.getLessonOrganization().then((data) => {
+      setOrganization(data);
+    });
+  }, []);
   const Table = () => {
     const [filters3, setFilters3] = useState({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -67,13 +51,7 @@ const Organization = () => {
       return JSON.parse(sessionStorage.getItem("dt-state-demo-custom"));
     };
 
-    const statusBodyTemplate = (rowData) => {
-      return (
-        <span className={`customer-badge status-${rowData.status}`}>
-          {rowData.status}
-        </span>
-      );
-    };
+    
 
     const onGlobalFilterChange = (event, filtersKey) => {
       const value = event.target.value;
@@ -125,10 +103,11 @@ const Organization = () => {
     return (
       <div className="card">
         <DataTable
-          className="text-sm"
-          value={customers}
+          className="font-thin text-sm"
+          value={organization}
           paginator
-          rows={10}
+          rows={20}
+          rowsPerPageOptions={[5, 10, 20, 50]}
           size="small"
           header={header3}
           showGridlines
@@ -152,15 +131,21 @@ const Organization = () => {
               return row.rowIndex + 1;
             }}
           ></Column>
-          <Column field="organization" header="Байгууллага"  sortable></Column>
-          <Column  field="date" header="Бүртгэсэн огноо"  style={{ width: "10%" }}></Column>
-          <Column field="user" header="Бүртгэсэн хэрэглэгч" style={{ width: "10%" }}></Column>
           <Column
-            field="status"
-            header="Төлөв"
-            style={{ width: "10%" }}
-            body={statusBodyTemplate}
+            field="OrganizationName"
+            header="Байгууллага"
             sortable
+          ></Column>
+          <Column
+            field="InsertDate"
+            header="Бүртгэсэн огноо"
+            style={{ width: "10%" }}
+            body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}
+          ></Column>
+          <Column
+            field="InsertUsername"
+            header="Бүртгэсэн хэрэглэгч"
+            style={{ width: "10%" }}
           ></Column>
           <Column
             header="Үйлдэл"
@@ -268,7 +253,7 @@ const Organization = () => {
                 <div className=" flex-auto divide-y divide-gray-50 ">
                   <div className="mx-5 mb-4 mt-2">
                     <p className="flex items-center md:w-2/3 text-base  ">
-                     Байгууллагын нэр*
+                      Байгууллагын нэр*
                     </p>
                     <Input
                       className="block p-2 w-full text-gray-900 border border-gray-200 rounded-sm"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormState } from "../../contexts/formContext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
@@ -6,33 +6,20 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Input } from "antd";
 import Swal from "sweetalert2";
+import * as API from "../../api/request"
+import moment from "moment";
 const Chamber = () => {
   const [show, setShow] = useState(false);
+  const [place, setPlace] = useState();
   const {  dispatch } = useFormState();
-  const customers = [
-    {
-      id: 1000,
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      date:"",
-      user:"",
-      status: "Тийм",
-    },
-    {
-      id: 1001,
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      status: "Тийм",
-    },
-    {
-      id: 1002,
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      status: "Тийм",
-    },
-    {
-      id: 1003,
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      status: "Тийм",
-    },
-  ];
+  useEffect(() => {
+    API.getLessonPlace().then((data) => {
+      console.log(data);
+       setPlace(data)
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const Table = () => {
     const [filters3, setFilters3] = useState({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -67,13 +54,7 @@ const Chamber = () => {
       return JSON.parse(sessionStorage.getItem("dt-state-demo-custom"));
     };
 
-    const statusBodyTemplate = (rowData) => {
-      return (
-        <span className={`customer-badge status-${rowData.status}`}>
-          {rowData.status}
-        </span>
-      );
-    };
+
 
     const onGlobalFilterChange = (event, filtersKey) => {
       const value = event.target.value;
@@ -125,10 +106,11 @@ const Chamber = () => {
     return (
       <div className="card">
         <DataTable
-          className="text-sm"
-          value={customers}
+          className="font-thin text-sm"
+          value={place}
           paginator
-          rows={10}
+          rows={20}
+          rowsPerPageOptions={[5, 10, 20, 50]}
           size="small"
           header={header3}
           showGridlines
@@ -142,7 +124,7 @@ const Chamber = () => {
           stateStorage="custom"
           customSaveState={onCustomSaveState}
           customRestoreState={onCustomRestoreState}
-          emptyMessage="No customers found."
+          emptyMessage="Мэдээлэл хоосон байна ..."
         >
           <Column
             field=""
@@ -152,16 +134,10 @@ const Chamber = () => {
               return row.rowIndex + 1;
             }}
           ></Column>
-          <Column field="chamber" header="Танхим"  sortable></Column>
-          <Column  field="date" header="Бүртгэсэн огноо"  style={{ width: "10%" }}></Column>
-          <Column field="user" header="Бүртгэсэн хэрэглэгч" style={{ width: "10%" }}></Column>
-          <Column
-            field="status"
-            header="Төлөв"
-            style={{ width: "10%" }}
-            body={statusBodyTemplate}
-            sortable
-          ></Column>
+          <Column field="PlaceName" header="Танхим"  sortable></Column>
+          <Column  field="InsertDate" header="Бүртгэсэн огноо"  style={{ width: "10%" }} body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}></Column>
+          <Column field="InsertUsername" header="Бүртгэсэн хэрэглэгч" style={{ width: "10%" }}  ></Column>
+      
           <Column
             header="Үйлдэл"
             style={{ width: "6%" }}

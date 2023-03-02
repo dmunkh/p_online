@@ -1,56 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormState } from "../../contexts/formContext";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-
+import * as API from "../../api/request"
 import Swal from "sweetalert2";
 const LessonTypeYear = () => {
   const [show, setShow] = useState(false);
+  const [type, setType] = useState([]);
+  useEffect(() => {
  
-  const customers = [
-    {
-      id: 1000,
-      name: "Нийт ажилтны сургалт",
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      employeecount: "5",
-      lessontime: "9",
-      lessonprice: "55000",
-      point: "100",
-      qualifypoint: "80",
-      status: "Тийм",
-    },
-    {
-      id: 1001,
-      name: "Ажил олгогч эздийн ХАБЭА-н сургалт",
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      employeecount: "5",
-      lessontime: "9",
-      lessonprice: "55000",
-      point: "100",
-      qualifypoint: "80",
-
-      status: "Тийм",
-    },
-    {
-      id: 1002,
-      name: "Нийт ажилтны сургалт",
-      chamber: "Ш.Отгонбилэгийн нэрэмжит Технологийн сургууль 207",
-      employeecount: "5",
-      lessontime: "9",
-      lessonprice: "55000",
-      point: "100",
-      qualifypoint: "80",
-
-      status: "Тийм",
-    },
-    {
-      id: 1003,
-      name: "Ажил олгогч эздийн ХАБЭА-н сургалт",
-      status: "Тийм",
-    },
-  ];
+    API.getLessonTypeYear()
+    .then((data) => {
+       setType(data);
+    });
+    
+}, []);
   const Table = () => {
      const {  dispatch } = useFormState();
     const [filters3, setFilters3] = useState({
@@ -70,7 +36,7 @@ const LessonTypeYear = () => {
       },
     });
 
-    const [selectedCustomer3, setSelectedCustomer3] = useState(null);
+   
 
     const filtersMap = {
       filters3: { value: filters3, callback: setFilters3 },
@@ -86,13 +52,13 @@ const LessonTypeYear = () => {
       return JSON.parse(sessionStorage.getItem("dt-state-demo-custom"));
     };
 
-    const statusBodyTemplate = (rowData) => {
-      return (
-        <span className={`customer-badge status-${rowData.status}`}>
-          {rowData.status}
-        </span>
-      );
-    };
+    // const statusBodyTemplate = (rowData) => {
+    //   return (
+    //     <span className={`customer-badge status-${rowData.status}`}>
+    //       {rowData.status}
+    //     </span>
+    //   );
+    // };
 
     const onGlobalFilterChange = (event, filtersKey) => {
       const value = event.target.value;
@@ -145,17 +111,17 @@ const LessonTypeYear = () => {
         
       <div className="card">
         <DataTable
-          className="font-roboto font-thin"
-          value={customers}
+          className=" font-thin text-sm"
+          value={type}
           paginator
-          rows={10}
+          rows={20}
+          rowsPerPageOptions={[ 10, 20, 50]}
           size="small"
           header={header3}
           showGridlines
           filters={filters3}
           onFilter={(e) => setFilters3(e.filters)}
-          selection={selectedCustomer3}
-          onSelectionChange={(e) => setSelectedCustomer3(e.value)}
+    
           selectionMode="single"
           dataKey="id"
           responsiveLayout="scroll"
@@ -172,24 +138,18 @@ const LessonTypeYear = () => {
               return row.rowIndex + 1;
             }}
           ></Column>
-          <Column field="name" header="Сургалтын төрөл" sortable></Column>
-          <Column field="chamber" header="Танхим" sortable></Column>
+          <Column field="TypeName" header="Сургалтын төрөл" sortable></Column>
+          <Column field="PlaceID" header="Танхим" sortable></Column>
           <Column
-            field="employeecount"
+            field="Limit"
             header="Суух ажилчидын тоо"
             sortable
           ></Column>
-          <Column field="lessontime" header="Сургалтын цаг"></Column>
-          <Column field="lessonprice" header="Сургалтын үнэ" sortable></Column>
-          <Column field="point" header="Шалгалтын оноо" sortable></Column>
-          <Column field="qualifypoint" header="Тэнцэх хувь" sortable></Column>
-          <Column
-            field="status"
-            header="Төлөв"
-            style={{ width: "10%" }}
-            body={statusBodyTemplate}
-            sortable
-          ></Column>
+          <Column field="Hour" header="Сургалтын цаг"></Column>
+          <Column field="Price" header="Сургалтын үнэ" sortable></Column>
+          <Column field="Point" header="Шалгалтын оноо" sortable></Column>
+          <Column field="Percent" header="Тэнцэх хувь" sortable></Column>
+
 
           <Column
             header="Үйлдэл"
