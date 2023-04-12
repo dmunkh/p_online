@@ -4,21 +4,18 @@ import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import * as API from "../../api/request"
+import * as API from "src/api/reference";
 import Swal from "sweetalert2";
 const LessonTypeYear = () => {
   const [show, setShow] = useState(false);
   const [type, setType] = useState([]);
   useEffect(() => {
- 
-    API.getLessonTypeYear()
-    .then((data) => {
-       setType(data);
+    API.getLessonTypeYear().then((data) => {
+      setType(data);
     });
-    
-}, []);
+  }, []);
   const Table = () => {
-     const {  dispatch } = useFormState();
+    const { dispatch } = useFormState();
     const [filters3, setFilters3] = useState({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       name: {
@@ -35,8 +32,6 @@ const LessonTypeYear = () => {
         constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
       },
     });
-
-   
 
     const filtersMap = {
       filters3: { value: filters3, callback: setFilters3 },
@@ -108,20 +103,18 @@ const LessonTypeYear = () => {
     const header3 = renderHeader("filters3");
 
     return (
-        
       <div className="card">
         <DataTable
           className=" font-thin text-sm"
           value={type}
           paginator
           rows={20}
-          rowsPerPageOptions={[ 10, 20, 50]}
+          rowsPerPageOptions={[10, 20, 50]}
           size="small"
           header={header3}
           showGridlines
           filters={filters3}
           onFilter={(e) => setFilters3(e.filters)}
-    
           selectionMode="single"
           dataKey="id"
           responsiveLayout="scroll"
@@ -140,16 +133,11 @@ const LessonTypeYear = () => {
           ></Column>
           <Column field="TypeName" header="Сургалтын төрөл" sortable></Column>
           <Column field="PlaceID" header="Танхим" sortable></Column>
-          <Column
-            field="Limit"
-            header="Суух ажилчидын тоо"
-            sortable
-          ></Column>
+          <Column field="Limit" header="Суух ажилчидын тоо" sortable></Column>
           <Column field="Hour" header="Сургалтын цаг"></Column>
           <Column field="Price" header="Сургалтын үнэ" sortable></Column>
           <Column field="Point" header="Шалгалтын оноо" sortable></Column>
           <Column field="Percent" header="Тэнцэх хувь" sortable></Column>
-
 
           <Column
             header="Үйлдэл"

@@ -6,20 +6,17 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Input } from "antd";
 import Swal from "sweetalert2";
+import * as API from "src/api/reference";
 
-import * as API from "../../api/request"
 const LessonType = () => {
   const [show, setShow] = useState(false);
   const { dispatch } = useFormState();
   const [lesson, setLesson] = useState();
 
   useEffect(() => {
- 
-      API.getLessonType()
-      .then((data) => {
-         setLesson(data);
-      });
-      
+    API.getLessonType().then((data) => {
+      setLesson(data);
+    });
   }, []);
   // useEffect(() => {
   //   axios
@@ -121,7 +118,7 @@ const LessonType = () => {
           emptyMessage=" Мэдээлэл олдсонгүй..."
         >
           <Column
-          className=""
+            className=""
             field=""
             header="№"
             style={{ width: "5%" }}

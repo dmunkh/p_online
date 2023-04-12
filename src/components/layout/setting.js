@@ -1,6 +1,6 @@
 import React from "react";
 import { useUserContext } from "src/contexts/userContext";
-import { userAction } from "src/reducers/userReducer";
+import { userType } from "src/reducers/userReducer";
 
 const template = {
   theme: [
@@ -41,7 +41,7 @@ const Setting = () => {
                     checked={item.value === user.template.theme}
                     onChange={(e) =>
                       userDispatch({
-                        type: userAction.CHANGE_THEME,
+                        type: userType.CHANGE_THEME,
                         data: e.target.value,
                       })
                     }
@@ -67,7 +67,7 @@ const Setting = () => {
                     checked={item.value === user.template.header}
                     onChange={(e) =>
                       userDispatch({
-                        type: userAction.CHANGE_HEADER,
+                        type: userType.CHANGE_HEADER,
                         data: e.target.value,
                       })
                     }
@@ -93,7 +93,7 @@ const Setting = () => {
                     checked={item.value === user.template.sidebar}
                     onChange={(e) =>
                       userDispatch({
-                        type: userAction.CHANGE_SIDEBAR,
+                        type: userType.CHANGE_SIDEBAR,
                         data: e.target.value,
                       })
                     }

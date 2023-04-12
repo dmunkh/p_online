@@ -13,7 +13,7 @@ export function API() {
     });
   }
   const api = axios.create({
-    baseURL: "https://training.erdenetmc.mn/api/",
+    baseURL: "https://training.erdenetmc.mn/api",
     timeout: 200000,
     headers,
   });
@@ -45,28 +45,16 @@ export async function getUserInfo() {
   const response = await API().get("/user/info");
   return response.data;
 }
+export async function getAuth() {
+  const response = await API().get("/auth");
+  return response;
+}
+export async function postAuth(params) {
+  const response = await API().post("/auth", { ...params });
+  return response;
+}
 
 export async function logOut() {
   const response = await API().get("/logout");
-  return response.data;
-}
-export async function getLessonType() {
-  const response = await API().get("ref/lesson/type");
-  return response.data;
-}
-export async function getLessonPlace() {
-  const response = await API().get("ref/lesson/place");
-  return response.data;
-}
-export async function getLessonOrganization() {
-  const response = await API().get("ref/lesson/organization");
-  return response.data;
-}
-export async function getLessonEmployee() {
-  const response = await API().get("ref/lesson/worker");
-  return response.data;
-}
-export async function getLessonTypeYear() {
-  const response = await API().get("ref/lesson/type/year");
   return response.data;
 }

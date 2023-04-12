@@ -11,7 +11,7 @@ import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
 
-const Chamber = () => {
+const LessonsType = () => {
   const navigate = useNavigate();
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
@@ -24,12 +24,12 @@ const Chamber = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getLessonPlace()
+    API.getLessonType()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
-            list_chamber: _.orderBy(res, ["PlaceName"]),
+            list_type: _.orderBy(res, ["ID"]),
           },
         });
       })
@@ -37,13 +37,13 @@ const Chamber = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_chamber: [],
+            list_type: [],
           },
         });
         message({
           type: "error",
           error,
-          title: "Байгууллагын жагсаалт татаж чадсангүй",
+          title: "Сургалтын төрөл жагсаалт татаж чадсангүй",
         });
       })
       .finally(() => setLoading(false));
@@ -114,15 +114,11 @@ const Chamber = () => {
   };
 
   const memo_table = useMemo(() => {
-    var result = state.list_chamber;
+    var result = state.list_type;
 
     if (search) {
-      result = _.filter(
-        result,
-        (a) =>
-          _.includes(_.toLower(a.PlaceName), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertDate), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertUsername), _.toLower(search))
+      result = _.filter(result, (a) =>
+        _.includes(_.toLower(a.TypeName), _.toLower(search))
       );
     }
 
@@ -254,31 +250,12 @@ const Chamber = () => {
 
         <Column
           sortable
-          header="Танхим"
-          field="PlaceName"
+          header="Сургалтын төрөл"
+          field="TypeName"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start text-left"
-        />
-        <Column
-          sortable
-          header="Бүртгэсэн огноо"
-          field="InsertDate"
-          style={{ minWidth: "80px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
-          body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}
-        />
-        <Column
-          sortable
-          header="Бүртгэсэн хэрэглэгч"
-          field="InsertUsername"
-          style={{ minWidth: "100px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start "
         />
 
         <Column
@@ -314,7 +291,7 @@ const Chamber = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_chamber, search, first, per_page]);
+  }, [state.list_type, search, first, per_page]);
 
   const save = () => {
     var error = [];
@@ -341,9 +318,9 @@ const Chamber = () => {
         ),
       });
     } else {
-      //   var data = {
-      //     razmer: state.warehouse_razmer,
-      //   };
+      var data = {
+        razmer: state.warehouse_razmer,
+      };
       if (state.id) {
         // API.putWarehouseItemID(state.id, data)
         //   .then(() => {
@@ -372,8 +349,8 @@ const Chamber = () => {
         width={700}
         title={
           <div className="text-center">
-            Танхим
-            {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
+            Сургалтын төрөл
+            {state.list_lesson_ID.id ? " засварлах" : " бүртгэх"} цонх
           </div>
         }
         visible={state.modal}
@@ -385,14 +362,14 @@ const Chamber = () => {
         }}
         footer={null}
       >
-        <div className="flex flex-col justify-start text-xs">
-          <span className="font-semibold pb-1">
-            Сургалт явагдах газар:<b className="ml-1 text-red-500">*</b>
+        <div className="w-full p-1 flex flex-col justify-start text-xs">
+          <span className="font-semibold w-52 md:w-max pr-3 pb-1">
+            Сургалтын нэр:<b className="ml-1 text-red-500">*</b>
           </span>
           <Input
             size="small"
-            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
-            defaultValue={state.list_organization.name}
+            className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            defaultValue={state.list_lesson_ID.name}
             onChange={(e) => {
               dispatch({
                 type: "STATE",
@@ -405,7 +382,7 @@ const Chamber = () => {
         <div className="my-3 border " />
 
         <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => save()}
         >
           <i className="fas fa-save" />
@@ -426,4 +403,4 @@ const Chamber = () => {
   );
 };
 
-export default React.memo(Chamber);
+export default React.memo(LessonsType);

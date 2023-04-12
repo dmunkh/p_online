@@ -1,7 +1,9 @@
 import React, { useEffect, useContext, useReducer } from "react";
-import { userAction, userReducer } from "src/reducers/userReducer";
-import * as api from "src/api/request";
+import { userType, userReducer } from "src/reducers/userReducer";
+import * as API from "src/api/request";
+import { notification } from "antd";
 import Swal from "sweetalert2";
+import _ from "lodash";
 
 const _user = {
   tn: 0,
@@ -39,6 +41,56 @@ export const useUserContext = () => {
 
 const UserContext = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, _user);
+  const [api, contextHolder] = notification.useNotification();
+
+  const checkGroup = (value) =>
+    _.some(state.userGroupList, (item) => value.includes(item));
+  const checkRole = (value) =>
+    _.some(state.userroles, (item) => value.includes(item));
+
+  const message = ({ type, error = null, title, description = null }) => {
+    if (type === "error") {
+      var message = error?.response?.data?.message
+        ? error?.response?.data?.message
+        : title;
+      var desc = null;
+      if (!message) {
+        desc = error?.response?.data?.message
+          ? error?.response?.data?.message
+          : error.toJSON().message;
+      }
+      api.error({
+        message: message,
+        description: desc,
+        placement: "topRight",
+        duration: 5,
+      });
+    }
+    if (type === "info") {
+      api.info({
+        message: title,
+        description: description,
+        placement: "topRight",
+        duration: 5,
+      });
+    }
+    if (type === "success") {
+      api.success({
+        message: title,
+        description: description,
+        placement: "topRight",
+        duration: 5,
+      });
+    }
+    if (type === "warning") {
+      api.warning({
+        message: title,
+        description: description,
+        placement: "topRight",
+        duration: 5,
+      });
+    }
+  };
 
   useEffect(() => {
     if (navigator.onLine) {
@@ -46,25 +98,22 @@ const UserContext = ({ children }) => {
         typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
       if (token === null) {
-        api
-          .API()
-          .get(`/auth`)
-          .then((res) => {
-            const result = res.data;
-            let url = result.url;
-            if (window.location.hostname === "localhost") {
-              url = url.replace(
-                "https://task.erdenetmc.mn/callback",
-                "http://localhost:3000/callback"
-              );
-            }
-            window.location.replace(url);
-          });
+        API.getAuth().then((res) => {
+          const result = res.data;
+          let url = result.url;
+          if (window.location.hostname === "localhost") {
+            url = url.replace(
+              "https://training.erdenetmc.mn/callback",
+              "http://localhost:3000/callback"
+            );
+          }
+          window.location.replace(url);
+        });
       } else {
         if (state.tn === 0) {
-          api.getUserInfo().then((userInfo) => {
+          API.getUserInfo().then((userInfo) => {
             dispatch({
-              type: userAction.LOG_IN,
+              type: userType.LOG_IN,
               data: userInfo,
             });
           });
@@ -77,42 +126,35 @@ const UserContext = ({ children }) => {
         html: "",
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.tn]);
 
   useEffect(() => {
     var menu1ID = localStorage.getItem("menu1ID");
     dispatch({
-      type: userAction.CHANGE_MENU1_ID,
+      type: userType.CHANGE_MENU1_ID,
       data: menu1ID === null ? 1863 : menu1ID,
     });
 
     var menu2ID = localStorage.getItem("menu2ID");
     dispatch({
-      type: userAction.CHANGE_MENU2_ID,
+      type: userType.CHANGE_MENU2_ID,
       data: menu2ID === null ? 0 : menu2ID,
     });
 
     var menuExpanded = localStorage.getItem("menuExpanded");
     dispatch({
-      type: userAction.CHANGE_MENU_EXPANDED,
+      type: userType.CHANGE_MENU_EXPANDED,
       data: menuExpanded === null ? 0 : menuExpanded,
     });
 
-    var menuName = localStorage.getItem("menuName");
-    dispatch({
-      type: userAction.CHANGE_MENU_NAME,
-      data: menuName === null ? "Миний үүрэг даалгавар" : menuName,
-    });
-
     var theme = localStorage.getItem("theme");
-    !theme || dispatch({ type: userAction.CHANGE_THEME, data: theme });
+    !theme || dispatch({ type: userType.CHANGE_THEME, data: theme });
 
     var header = localStorage.getItem("header");
-    !header || dispatch({ type: userAction.CHANGE_HEADER, data: header });
+    !header || dispatch({ type: userType.CHANGE_HEADER, data: header });
 
     var sidebar = localStorage.getItem("sidebar");
-    !sidebar || dispatch({ type: userAction.CHANGE_SIDEBAR, data: sidebar });
+    !sidebar || dispatch({ type: userType.CHANGE_SIDEBAR, data: sidebar });
   }, []);
 
   return (
@@ -120,9 +162,13 @@ const UserContext = ({ children }) => {
       value={{
         user: state,
         userDispatch: dispatch,
-        userAction: userAction,
+        userType: userType,
+        message,
+        checkGroup,
+        checkRole,
       }}
     >
+      {contextHolder}
       {children}
     </context.Provider>
   );

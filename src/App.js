@@ -5,7 +5,7 @@ import UserContext from "src/contexts/userContext";
 import SSO from "src/pages/sso";
 import Router from "src/router";
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       {window.location.pathname === "/callback" ? (
@@ -17,6 +17,6 @@ function App() {
       )}
     </BrowserRouter>
   );
-}
+};
 
-export default App;
+export default React.memo(App);

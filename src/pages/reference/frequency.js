@@ -11,7 +11,7 @@ import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
 
-const Chamber = () => {
+const Frequency = () => {
   const navigate = useNavigate();
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
@@ -24,12 +24,12 @@ const Chamber = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getLessonPlace()
+    API.getLessonOrganization()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
-            list_chamber: _.orderBy(res, ["PlaceName"]),
+            list_organization: _.orderBy(res, ["OrganizationName"]),
           },
         });
       })
@@ -37,7 +37,7 @@ const Chamber = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_chamber: [],
+            list_organization: [],
           },
         });
         message({
@@ -114,13 +114,13 @@ const Chamber = () => {
   };
 
   const memo_table = useMemo(() => {
-    var result = state.list_chamber;
+    var result = state.list_organization;
 
     if (search) {
       result = _.filter(
         result,
         (a) =>
-          _.includes(_.toLower(a.PlaceName), _.toLower(search)) ||
+          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) ||
           _.includes(_.toLower(a.InsertDate), _.toLower(search)) ||
           _.includes(_.toLower(a.InsertUsername), _.toLower(search))
       );
@@ -254,8 +254,8 @@ const Chamber = () => {
 
         <Column
           sortable
-          header="Танхим"
-          field="PlaceName"
+          header="Байгууллага"
+          field="OrganizationName"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
@@ -314,7 +314,7 @@ const Chamber = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_chamber, search, first, per_page]);
+  }, [state.list_organization, search, first, per_page]);
 
   const save = () => {
     var error = [];
@@ -372,7 +372,7 @@ const Chamber = () => {
         width={700}
         title={
           <div className="text-center">
-            Танхим
+            Сургалтын давтамж
             {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
           </div>
         }
@@ -387,7 +387,7 @@ const Chamber = () => {
       >
         <div className="flex flex-col justify-start text-xs">
           <span className="font-semibold pb-1">
-            Сургалт явагдах газар:<b className="ml-1 text-red-500">*</b>
+            Сургалтын давтамж:<b className="ml-1 text-red-500">*</b>
           </span>
           <Input
             size="small"
@@ -426,4 +426,4 @@ const Chamber = () => {
   );
 };
 
-export default React.memo(Chamber);
+export default React.memo(Frequency);

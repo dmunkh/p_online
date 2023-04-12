@@ -1,323 +1,587 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
+import { useUserContext } from "src/contexts/userContext";
+import { useReferenceContext } from "src/contexts/referenceContext";
+import * as API from "src/api/reference";
+import { Spin, Select, Input, Modal, InputNumber } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { InputText } from "primereact/inputtext";
-import Swal from "sweetalert2";
-import * as API from "../../api/request";
+import { useNavigate } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
+import _ from "lodash";
 import moment from "moment";
+import Swal from "sweetalert2";
+
 const Employee = () => {
-  const [show, setShow] = useState(false);
-  const [employee, setEmployee] = useState([]);
-  useEffect(() => {
-    API.getLessonEmployee().then((data) => {
-      setEmployee(data);
-    });
+  const navigate = useNavigate();
+  const { message, checkRole } = useUserContext();
+  const { state, dispatch } = useReferenceContext();
+
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [first, set_first] = useState(0);
+  const [per_page, set_per_page] = useState(50);
+
+  //байгуулга жагсаалт
+  useLayoutEffect(() => {
+    API.getLessonOrganization()
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_organization: _.orderBy(
+              _(res)
+                .groupBy("OrganizationName")
+                .map((list, key) => ({
+                  OrganizationName: list[0].OrganizationName,
+                  ID: list[0].ID,
+                }))
+                .value(),
+              ["OrganizationName"]
+            ),
+          },
+        });
+        // dispatch({
+        //   type: "STATE",
+        //   data: {
+        //     list_organization: _.orderBy(res, ["OrganizationName"]),
+        //   },
+        // });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_organization: [],
+          },
+        });
+        message({
+          type: "error",
+          error,
+          title: "Байгууллагын жагсаалт татаж чадсангүй",
+        });
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const Table = () => {
-    const [filters3, setFilters3] = useState({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      "OrganizationName": {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-    });
-    const onGlobalFilterChange = (event, filtersKey) => {
-      const value = event.target.value;
-      let filters = { ...filtersMap[filtersKey].value };
-      filters["global"].value = value;
 
-      filtersMap[filtersKey].callback(filters);
-    };
-    const organizationBodyTemplate = (employee) => {
-      return (
-        <div className="flex justify-center ">
-          {/* <img
-            alt={rowData.country.name}
-            src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
-            className={`flag flag-${}`}
-            style={{ width: "24px" }}
-          /> */}
-          <span>{employee.OrganizationName}</span>
-        </div>
-      );
-    };
-    const filtersMap = {
-      filters3: { value: filters3, callback: setFilters3 },
-    };
-    const renderHeader = (filtersKey) => {
-      const filters = filtersMap[`${filtersKey}`].value;
-      const value = filters["global"] ? filters["global"].value : "";
+  // жагсаалт
+  useLayoutEffect(() => {
+    setLoading(true);
+    API.getLessonEmployee()
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_employee: _.orderBy(res, ["OrganizationName"]),
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_organization: [],
+          },
+        });
+        message({
+          type: "error",
+          error,
+          title: "Байгууллагын жагсаалт татаж чадсангүй",
+        });
+      })
+      .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.refresh]);
 
-    return (
-      <div>
-        <div className="md:flex items-center justify-between mx-2">
-          <span className="p-input-icon-left">
-            <i className="pi pi-search" />
-            <InputText
-              className="h-10 "
-              type="search"
-              value={value || ""}
-              onChange={(e) => onGlobalFilterChange(e, filtersKey)}
-              placeholder="Хайлт хийх..."
-            />
-          </span>
-          <button
-            className={
-              "text-white  bg-gradient-to-r from-green-400 to-blue-500 font-semibold rounded-lg  px-10 py-2  my-2 w-5/6 md:w-1/6"
-            }
-            onClick={() => {
-              setShow(true);
-              // dispatch({
-              //   type: "CHANGE_FORM",
-              //   data: {
-              //     id: null,
-              //     name: "",
-              //   },
-              // });
-            }}
-          >
-            Нэмэх
-          </button>
-        </div>
-     
-      </div>
-    );
-  };
-  const header3 = renderHeader("filters3");
-  return(<DataTable
-    className="font-roboto font-thin"
-    value={employee}
-    dataKey="ID"
-    paginator
-    rows={20}
-    header={header3}
-    rowsPerPageOptions={[5, 10, 20, 50]}
-    rowGroupMode="rowspan"
-    groupRowsBy="OrganizationName"
-    sortMode="single"
-    sortField="OrganizationName"
-    sortOrder={1}
-    size="small"
-    scrollable
-    tableStyle={{ minWidth: "50rem" }}
-    emptyMessage="Мэдээлэл хоосон байна ..."
-  >
-    <Column
-      field=""
-      header="№"
-      style={{ width: "5%" }}
-      body={(data, row) => {
-        return row.rowIndex + 1;
-      }}
-    ></Column>
-    <Column
-      field="OrganizationName"
-      header="Байгууллага"
-      body={organizationBodyTemplate}
-    ></Column>
-    <Column field="RegisterNumber" header="Регистер" sortable></Column>
-    <Column field="ShortName" header="Овог нэр" sortable></Column>
-    <Column field="DepartmentName" header="Албан тушаал"></Column>
-    <Column
-      field="InsertDate"
-      header="Бүртгэсэн огноо"
-      body={(data) =>
-        moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")
+  const deleteItem = (item) => {
+    Swal.fire({
+      text: "Устгахдаа итгэлтэй байна уу?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // API.deleteItemWarehouse(item.warehouse_id)
+        //   .then(() => {
+        //     message({
+        //       type: "success",
+        //       title: "Амжилттай устгагдлаа",
+        //     });
+        //     dispatch({ type: "REFRESH" });
+        //   })
+        //   .catch((error) => {
+        //     message({
+        //       type: "error",
+        //       error,
+        //       title: "Ажлын байр устгаж чадсангүй",
+        //     });
+        //   });
+        message({
+          type: "error",
+          title: "Амжилттай устгагдлаа",
+        });
       }
-      sortable
-    ></Column>
-    <Column
-      field="InsertUsername"
-      header="Бүртгэсэн хэрэглэгч"
-      sortable
-    ></Column>
-  
-    <Column
-      header="Үйлдэл"
-      style={{ width: "6%" }}
-      body={(customers, row) => {
-        return (
-          <div className="flex justify-between">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5 text-red-500"
-              onClick={() => {
-                Swal.fire({
-                  title: "Та устгахдаа итгэлтэй байна уу?",
-                  icon: "question",
-                  showDenyButton: true,
-                  confirmButtonColor: "#1890ff",
-                  confirmButtonText: "Тийм",
-                  denyButtonText: "Үгүй",
-                  customClass: {
-                    actions: "my-actions",
-                    cancelButton: "order-1 right-gap",
-                    confirmButton: "order-2",
-                    denyButton: "order-3",
-                  },
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    Swal.fire("Амжилттай усгагдлаа.", "", "success");
-                  } else if (result.isDenied) {
-                    Swal.fire("Устгаж чадсангүй", "", "info");
-                  }
-                });
-              }}
-            >
-              <path
-                fillRule="evenodd"
-                d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"
-                clipRule="evenodd"
-              />
-            </svg>
-  
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-5 h-5 "
-              onClick={() => {
-                setShow(true);
-                // dispatch({
-                //   type: "CHANGE_FORM",
-                //   data: {
-                //     id: customers.id,
-                //     name: customers.name,
-                //   },
-                // });
-              }}
-            >
-              <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
-              <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
-            </svg>
-          </div>
-        );
-      }}
-    ></Column>
-  </DataTable>)
-  
-}
-  const Modal = () => {
+    });
+  };
+  const updateItem = (item) => {
+    // API.getWarehouseItemID(item.warehouse_id)
+    //   .then((res) => {
+    // dispatch({
+    //   type: "STATE",
+    //   data: {
+    //     list_lesson_ID: {
+    //       res
+    //     },
+    //   },
+    // });
+    //     //loadItemTypeList(res.itemtypeid);
+    dispatch({
+      type: "STATE",
+      data: { modal: true },
+    });
+    //   })
+    //   .catch((error) => {
+    //     message({
+    //       type: "error",
+    //       error,
+    //       title: "Мэдээлэл татаж чадсангүй.",
+    //     });
+    //     dispatch({
+    //       type: "CLEAR",
+    //     });
+    //   });
+  };
+
+  const memo_table = useMemo(() => {
+    var result = state.list_employee;
+
+    if (search) {
+      result = _.filter(
+        result,
+        (a) =>
+          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) ||
+          _.includes(_.toLower(a.InsertDate), _.toLower(search)) ||
+          _.includes(_.toLower(a.InsertUsername), _.toLower(search))
+      );
+    }
+
     return (
-      <div className={show ? "card" : "hidden"}>
-        <div className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 w-screen h-screen bg-black opacity-30 z-10 "></div>
-        <div className="fixed top-1/2 left-1/2 md:w-1/3 w-4/5 h-auto -translate-x-1/2 -translate-y-1/2 z-20">
-          <div className="relative mx-2 overflow-clip  bg-white rounded-sm shadow">
-            <div className="flex justify-between items-center   rounded-t border-b">
-              <div className=" flex-auto justify-between divide-y divide-gray-50 ">
-                <div className="flex items-center justify-between mx-5 mt-3">
-                  <p className="font-semibold text-lg">Үндсэн мэдээлэл</p>
-                  <div className="flex justify-end">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6 cursor-pointer"
-                      onClick={() => {
-                        setShow(false);
-                      }}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className=" flex-auto divide-y divide-gray-50 ">
-                  <div className="mx-5 mb-4 mt-2">
-                    <div className="md:flex justify-between gap-4">
-                      <div className="w-full">
-                        <p className=" text-base  ">Байгууллага:*</p>
-                        <select
-                          id="countries"
-                          placeholder="Өргөдлийн төрлөө сонгоно уу"
-                          defaultValue={"null"}
-                          className="bg-white border drop-shadow-xl  text-gray-900 text rounded-lg focus:ring-gray-200 focus:border-gray-200 block w-full p-2"
-                        >
-                          <option value="null">Сонгоно уу</option>
-                          <option value="US">Ажилтан</option>
-                          <option value="CA">Ахмад</option>
-                          <option value="FR">МШӨ</option>
-                        </select>
-                      </div>
-                      <div className="w-full">
-                        <p className="flex items-center text-base my-2 ">
-                          Албан тушаал:
-                        </p>
-                        <input
-                          type="text"
-                          className="form-control block w-full px-3 py-1.5 text-base  font-normal   bg-white bg-clip-padding border  rounded   "
-                        />
-                      </div>
-                    </div>
-
-                    <p className="flex items-center md:w-2/3 text-base my-2 ">
-                      Регистерийн дугаар:
-                    </p>
-                    <input
-                      type="text"
-                      className="form-control block w-full px-3 py-1.5 text-base  font-normal   bg-white bg-clip-padding border  rounded   "
-                      id="exampleNumber0"
-                    />
-                    <p className="flex items-center md:w-2/3 text-base my-2 ">
-                      Овог:
-                    </p>
-                    <input
-                      type="text"
-                      className="form-control block w-full px-3 py-1.5 text-base  font-normal   bg-white bg-clip-padding border  rounded   "
-                      id="exampleNumber0"
-                    />
-                    <p className="flex items-center md:w-2/3 text-base my-2 ">
-                      Нэр:
-                    </p>
-                    <input
-                      type="text"
-                      className="form-control block w-full px-3 py-1.5 text-base  font-normal   bg-white bg-clip-padding border  rounded   "
-                      id="exampleNumber0"
-                    />
-                  </div>
-
-                  <div className=" flex justify-end bg-gray-50 gap-3 ">
-                    <button
-                      className="bg-[#5472D4]  py-2.5 px-5 rounded-sm my-3  text-white  mr-5   "
-                      onClick={() => {
-                        setShow(false);
-                      }}
-                    >
-                      Хадгалах
-                    </button>
-                  </div>
-                </div>
+      <DataTable
+        scrollable
+        dataKey="ID"
+        size="small"
+        stripedRows
+        showGridlines
+        className="w-full "
+        sortMode="single"
+        removableSort
+        scrollHeight={window.innerHeight - 275}
+        responsiveLayout="scroll"
+        value={result}
+        rowGroupMode="subheader"
+        groupRowsBy="OrganizationName"
+        rowGroupHeaderTemplate={(data) => {
+          return (
+            <span className="text-xs font-semibold ">
+              <span className="ml-1"> {data.OrganizationName}</span>
+            </span>
+          );
+        }}
+        header={
+          <div className="flex items-center justify-between">
+            <div className="w-full md:max-w-[200px]">
+              <Input
+                placeholder="Хайх..."
+                prefix={<SearchOutlined />}
+                className="w-full rounded-lg"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2 ">
+              {/* {checkRole(["xx_act_add"]) && ( */}
+              <div
+                title="Нэмэх"
+                className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                onClick={() => {
+                  dispatch({
+                    type: "STATE",
+                    data: { modal: true },
+                  });
+                }}
+              >
+                <i className="fa fa-plus" />
               </div>
+              {/* )} */}
             </div>
           </div>
-        </div>
-      </div>
+        }
+        paginator
+        rowHover
+        first={first}
+        rows={per_page}
+        onPage={(event) => {
+          set_first(event.first);
+          set_per_page(event.rows);
+        }}
+        paginatorTemplate={{
+          layout:
+            "RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink",
+          RowsPerPageDropdown: (options) => {
+            const dropdownOptions = [
+              { label: 10, value: 10 },
+              { label: 20, value: 20 },
+              { label: 50, value: 50 },
+              { label: 100, value: 100 },
+              { label: 200, value: 200 },
+              { label: 500, value: 500 },
+            ];
+            return (
+              <>
+                <span
+                  className="text-xs mx-1"
+                  style={{ color: "var(--text-color)", userSelect: "none" }}
+                >
+                  <span className="font-semibold">Нэг хуудсанд:</span>
+                </span>
+                <Select
+                  size="small"
+                  showSearch={false}
+                  value={options.value}
+                  onChange={(value) => {
+                    options.onChange({
+                      value: value,
+                    });
+                  }}
+                >
+                  {_.map(dropdownOptions, (item) => (
+                    <Select.Option key={item.value} value={item.value}>
+                      {item.value}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </>
+            );
+          },
+          CurrentPageReport: (options) => {
+            return (
+              <span
+                style={{
+                  color: "var(--text-color)",
+                  userSelect: "none",
+                  width: "200px",
+                  textAlign: "center",
+                }}
+              >
+                <span className="text-xs font-semibold">
+                  <span>
+                    {options.first} - {options.last}
+                  </span>
+                  <span className="ml-3">Нийт: {options.totalRecords}</span>
+                </span>
+              </span>
+            );
+          },
+        }}
+        paginatorClassName="justify-content-end"
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Мэдээлэл олдсонгүй...
+          </div>
+        }
+      >
+        <Column
+          header="№"
+          align="center"
+          style={{ minWidth: "50px", maxWidth: "50px" }}
+          className="text-xs w-full"
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
+          body={(data, row) => row.rowIndex + 1}
+        />
+
+        {/* <Column
+          sortable
+          header="Байгууллага"
+          field="OrganizationName"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start text-left"
+        /> */}
+        <Column
+          sortable
+          header="Овог нэр"
+          field="ShortName"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start text-left"
+        />
+        <Column
+          sortable
+          header="Регистер"
+          field="RegisterNumber"
+          style={{ minWidth: "100px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start text-left"
+        />
+        <Column
+          sortable
+          header="Албан тушаал"
+          field="DepartmentName"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start text-left"
+        />
+        <Column
+          sortable
+          header="Бүртгэсэн огноо"
+          field="InsertDate"
+          style={{ minWidth: "80px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center "
+          body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}
+        />
+        <Column
+          sortable
+          header="Бүртгэсэн хэрэглэгч"
+          field="InsertUsername"
+          style={{ minWidth: "100px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start "
+        />
+
+        <Column
+          align="center"
+          header="Үйлдэл"
+          className="text-xs"
+          style={{ minWidth: "90px", maxWidth: "90px" }}
+          headerClassName="flex items-center justify-center"
+          body={(item) => {
+            return (
+              <div className="flex items-center justify-center gap-2">
+                {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
+                <button
+                  className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  onClick={() => updateItem(item)}
+                >
+                  <i className="fe fe-edit" />
+                </button>
+                {/* )}
+
+                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
+                <button
+                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  onClick={() => deleteItem(item)}
+                >
+                  <i className="fe fe-trash-2" />
+                </button>
+                {/* )} */}
+              </div>
+            );
+          }}
+        />
+      </DataTable>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_employee, search, first, per_page]);
+
+  const save = () => {
+    var error = [];
+    if (!state.id) {
+      state.warehouse_razmer || error.push("Хамгаалах хэрэгслийн төрөл.");
+    }
+
+    if (error.length > 0) {
+      message({
+        type: "warning",
+        title: (
+          <div className="text-orange-500 font-semibold">
+            Дараах мэдээлэл дутуу байна
+          </div>
+        ),
+        description: (
+          <div className="flex flex-col gap-1">
+            {_.map(error, (item, index) => (
+              <div key={index}>
+                - <span className="ml-1">{item}</span>
+              </div>
+            ))}
+          </div>
+        ),
+      });
+    } else {
+      //   var data = {
+      //     razmer: state.warehouse_razmer,
+      //   };
+      if (state.id) {
+        // API.putWarehouseItemID(state.id, data)
+        //   .then(() => {
+        //     dispatch({ type: "REFRESH" });
+        //     dispatch({ type: "MODAL", data: false });
+        //     message({
+        //       type: "success",
+        //       title: "Амжилттай хадгалагдлаа.",
+        //     });
+        //   })
+        //   .catch((error) => {
+        //     message({
+        //       type: "error",
+        //       error,
+        //       title: "Засварлаж чадсангүй",
+        //     });
+        //   });
+      }
+    }
   };
 
   return (
-    <div className="card  rounded-md p-5 font-[Roboto] ">
-      <Modal />
+    <>
+      <Modal
+        centered
+        width={700}
+        title={
+          <div className="text-center">
+            Гадны ажилчид
+            {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
+          </div>
+        }
+        visible={state.modal}
+        onCancel={() => {
+          dispatch({
+            type: "STATE",
+            data: { modal: false },
+          });
+        }}
+        footer={null}
+      >
+        <div className="flex flex-col  text-xs">
+          <div className="flex  flex-col justify-start">
+            <span className="w-1/3 pb-1 font-semibold">
+              Байгууллага:<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Select
+              className="w-full"
+              placeholder="Сонгоно уу."
+              optionFilterProp="children"
+              value={state.selected_organizationID}
+              onChange={(value) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    selected_organizationID: value,
+                  },
+                });
+              }}
+            >
+              {_.map(state.list_organization, (item) => (
+                <Select.Option key={item.ID} value={item.ID}>
+                  {item.OrganizationName}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <hr className="my-2" />
+          <div className="flex flex-col justify-start">
+            <span className="font-semibold pb-1">
+              Албан тушаал :<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Input
+              size="small"
+              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
+              defaultValue={state.list_organization.name}
+              onChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: { lessonsName: e.target.value },
+                });
+              }}
+            />
+          </div>
+          <hr className="my-2" />
+          <div className="flex flex-col justify-start">
+            <span className="font-semibold pb-1">
+              Регистерийн дугаар :<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Input
+              size="small"
+              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
+              defaultValue={state.list_organization.name}
+              onChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: { lessonsName: e.target.value },
+                });
+              }}
+            />
+          </div>{" "}
+          <hr className="my-2" />
+          <div className="flex flex-col justify-start">
+            <span className="font-semibold pb-1">
+              Овог :<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Input
+              size="small"
+              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
+              defaultValue={state.list_organization.name}
+              onChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: { lessonsName: e.target.value },
+                });
+              }}
+            />
+          </div>{" "}
+          <hr className="my-2" />
+          <div className="flex flex-col justify-start">
+            <span className="font-semibold pb-1">
+              Нэр :<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Input
+              size="small"
+              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
+              defaultValue={state.list_organization.name}
+              onChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: { lessonsName: e.target.value },
+                });
+              }}
+            />
+          </div>
+        </div>
 
-      <Table />
-    </div>
+        <div className="my-3 border " />
+
+        <button
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+          onClick={() => save()}
+        >
+          <i className="fas fa-save" />
+          <span className="ml-2">Хадгалах</span>
+        </button>
+      </Modal>
+
+      <div className="card flex justify-center text-xs rounded p-2">
+        <Spin
+          tip="Уншиж байна."
+          className="min-h-full first-line:bg-opacity-80"
+          spinning={loading}
+        >
+          {memo_table}
+        </Spin>
+      </div>
+    </>
   );
 };
+
 export default React.memo(Employee);
