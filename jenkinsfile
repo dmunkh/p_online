@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE = "training_front"
+        DOCKER_FOLDER = "training"
+        SOURCE = "git@gitlab.erdenetmc.mn:byambasuren.e/training_front.git"
+        DEPLOYMENT = "training-front-deployment"
+        NAMESPACE = "training"
+    }
+    stages {      
+ 
+        stage('Stash') {
+            steps {
+                stash includes: '**/*', name: 'binary'
+            }
+        }
+ 
+        stage('Build'){
+            steps {
+                node('Additional-node') {
+                    unstash 'binary'
+                    sh "docker build -t registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:build.${BUILD_NUMBER} ."
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                node('Additional-node') {
+                    sh "docker push registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:build.${BUILD_NUMBER}"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {                
+                sshagent(['kube-key']) {
+                    sh "ssh -o StrictHostKeyChecking=no -l emcadmin 10.10.4.11 'kubectl -n ${env.NAMESPACE} set image deployment/${env.DEPLOYMENT} client=registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:build.${BUILD_NUMBER}'"
+                }                
+            }
+        }
+        stage('Build latest') {
+            steps {
+                node('Additional-node') {
+                    sh "docker tag registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:build.${BUILD_NUMBER} registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:latest"
+                    sh "docker push registry.erdenetmc.mn/${env.DOCKER_FOLDER}/${env.DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+    }  
+}
+
