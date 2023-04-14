@@ -3,7 +3,7 @@ import { useUserContext } from "src/contexts/userContext";
 import Setting from "src/components/layout/setting";
 
 const Header = () => {
-  const { user, userDispatch, userAction } = useUserContext();
+  const { user, userDispatch, userType } = useUserContext();
   const [setting, setSetting] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ const Header = () => {
               onClick={(e) => {
                 e.preventDefault();
                 userDispatch({
-                  type: userAction.CHANGE_SHOW_SIDEBAR,
+                  type: userType.CHANGE_SHOW_SIDEBAR,
                   data: !user.template.showSidebar,
                 });
               }}
