@@ -14,6 +14,7 @@ const _state = {
   list_organization: [],
 
   list_employee: [],
+  selected_orgName: null,
   selected_organizationID: null,
 
   list_chamber: [],

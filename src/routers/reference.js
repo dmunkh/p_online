@@ -9,9 +9,9 @@ import LessonType from "src/pages/reference/lessonsType";
 import LessonRegister from "src/pages/reference/lessonsRegister";
 import Chamber from "src/pages/reference/chamber";
 import Organization from "src/pages/reference/organizations";
-import Employee from "src/pages/reference/employee";
+import Employee from "src/pages/reference/worker/employee";
 import Frequency from "src/pages/reference/frequency";
-import Worker from "src/pages/registration/worker";
+import Worker from "src/pages/registration/worker2";
 
 const Reference = () => {
   const data = [

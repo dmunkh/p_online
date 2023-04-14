@@ -2,6 +2,7 @@ import React, { useState, useMemo, useLayoutEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/reference";
+import Header from "./header";
 import { Spin, Select, Input, Modal, InputNumber } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -11,7 +12,7 @@ import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
 
-const Employee = () => {
+const List = () => {
   const navigate = useNavigate();
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
@@ -21,58 +22,15 @@ const Employee = () => {
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
 
-  //байгуулга жагсаалт
+  // жагсаалт
   useLayoutEffect(() => {
+    setLoading(true);
     API.getLessonOrganization()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
-            list_organization: _.orderBy(
-              _(res)
-                .groupBy("OrganizationName")
-                .map((list, key) => ({
-                  OrganizationName: list[0].OrganizationName,
-                  ID: list[0].ID,
-                }))
-                .value(),
-              ["OrganizationName"]
-            ),
-          },
-        });
-        // dispatch({
-        //   type: "STATE",
-        //   data: {
-        //     list_organization: _.orderBy(res, ["OrganizationName"]),
-        //   },
-        // });
-      })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_organization: [],
-          },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Байгууллагын жагсаалт татаж чадсангүй",
-        });
-      });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // жагсаалт
-  useLayoutEffect(() => {
-    setLoading(true);
-    API.getLessonEmployee()
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_employee: _.orderBy(res, ["OrganizationName"]),
+            list_organization: _.orderBy(res, ["OrganizationName"]),
           },
         });
       })
@@ -157,7 +115,7 @@ const Employee = () => {
   };
 
   const memo_table = useMemo(() => {
-    var result = state.list_employee;
+    var result = state.list_organization;
 
     if (search) {
       result = _.filter(
@@ -182,15 +140,6 @@ const Employee = () => {
         scrollHeight={window.innerHeight - 275}
         responsiveLayout="scroll"
         value={result}
-        rowGroupMode="subheader"
-        groupRowsBy="OrganizationName"
-        rowGroupHeaderTemplate={(data) => {
-          return (
-            <span className="text-xs font-semibold ">
-              <span className="ml-1"> {data.OrganizationName}</span>
-            </span>
-          );
-        }}
         header={
           <div className="flex items-center justify-between">
             <div className="w-full md:max-w-[200px]">
@@ -304,37 +253,10 @@ const Employee = () => {
           body={(data, row) => row.rowIndex + 1}
         />
 
-        {/* <Column
+        <Column
           sortable
           header="Байгууллага"
           field="OrganizationName"
-          style={{ minWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start text-left"
-        /> */}
-        <Column
-          sortable
-          header="Овог нэр"
-          field="ShortName"
-          style={{ minWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start text-left"
-        />
-        <Column
-          sortable
-          header="Регистер"
-          field="RegisterNumber"
-          style={{ minWidth: "100px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start text-left"
-        />
-        <Column
-          sortable
-          header="Албан тушаал"
-          field="DepartmentName"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
@@ -393,7 +315,7 @@ const Employee = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_employee, search, first, per_page]);
+  }, [state.list_organization, search, first, per_page]);
 
   const save = () => {
     var error = [];
@@ -451,7 +373,7 @@ const Employee = () => {
         width={700}
         title={
           <div className="text-center">
-            Гадны ажилчид
+            Сургалтын давтамж
             {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
           </div>
         }
@@ -464,124 +386,47 @@ const Employee = () => {
         }}
         footer={null}
       >
-        <div className="flex flex-col  text-xs">
-          <div className="flex  flex-col justify-start">
-            <span className="w-1/3 pb-1 font-semibold">
-              Байгууллага:<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Select
-              className="w-full"
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              value={state.selected_organizationID}
-              onChange={(value) => {
-                dispatch({
-                  type: "STATE",
-                  data: {
-                    selected_organizationID: value,
-                  },
-                });
-              }}
-            >
-              {_.map(state.list_organization, (item) => (
-                <Select.Option key={item.ID} value={item.ID}>
-                  {item.OrganizationName}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Албан тушаал :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Регистерийн дугаар :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>{" "}
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Овог :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>{" "}
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Нэр :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>
+        <div className="flex flex-col justify-start text-xs">
+          <span className="font-semibold pb-1">
+            Сургалтын давтамж:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            defaultValue={state.list_organization.name}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: { lessonsName: e.target.value },
+              });
+            }}
+          />
         </div>
 
         <div className="my-3 border " />
 
         <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
           onClick={() => save()}
         >
           <i className="fas fa-save" />
           <span className="ml-2">Хадгалах</span>
         </button>
       </Modal>
-
-      <div className="card flex justify-center text-xs rounded p-2">
-        <Spin
-          tip="Уншиж байна."
-          className="min-h-full first-line:bg-opacity-80"
-          spinning={loading}
-        >
-          {memo_table}
-        </Spin>
+      <div className=" card flex p-2 border rounded text-xs">
+        <Header />
+        <div className="card flex justify-center text-xs rounded p-2">
+          <Spin
+            tip="Уншиж байна."
+            className="min-h-full first-line:bg-opacity-80"
+            spinning={loading}
+          >
+            {memo_table}
+          </Spin>
+        </div>
       </div>
     </>
   );
 };
 
-export default React.memo(Employee);
+export default React.memo(List);
