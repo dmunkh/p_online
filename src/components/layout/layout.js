@@ -4,6 +4,7 @@ import { useUserContext } from "src/contexts/userContext";
 import Sidebar from "src/components/layout/sidebar";
 import Header from "src/components/layout/header";
 import Breadcrumb from "src/components/layout/breadcrumb";
+import { userType } from "src/reducers/userReducer";
 
 const Layout = ({ children }) => {
   const { user, userDispatch, userAction } = useUserContext();
@@ -15,7 +16,7 @@ const Layout = ({ children }) => {
           className="md:hidden absolute w-full min-h-screen bg-gray-700 opacity-50 z-10"
           onClick={() => {
             userDispatch({
-              type: userAction.CHANGE_SHOW_SIDEBAR,
+              type: userType.CHANGE_SHOW_SIDEBAR,
               data: !user.template.showSidebar,
             });
           }}
