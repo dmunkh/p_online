@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
 import { useUserContext } from "../../contexts/userContext";
 import { useReferenceContext } from "../../contexts/referenceContext";
-import * as API from "../../api/reference";
+import * as API from "../../api/request";
 import { Spin, Select, Input, Modal } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -11,7 +11,7 @@ import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
 
-const Frequency = () => {
+const Interval = () => {
 
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
@@ -24,12 +24,12 @@ const Frequency = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getLessonOrganization()
+    API.getInterval()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
-            list_organization: _.orderBy(res, ["OrganizationName"]),
+           list_interval : _.orderBy(res, ["interval_name"]),
           },
         });
       })
@@ -37,7 +37,7 @@ const Frequency = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_organization: [],
+            list_interval: [],
           },
         });
         message({
@@ -114,22 +114,21 @@ const Frequency = () => {
   };
 
   const memo_table = useMemo(() => {
-    var result = state.list_organization;
+    var result = state.list_interval;
 
     if (search) {
       result = _.filter(
         result,
         (a) =>
-          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertDate), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertUsername), _.toLower(search))
+          _.includes(_.toLower(a.interval_name), _.toLower(search)) 
+        
       );
     }
 
     return (
       <DataTable
         scrollable
-        dataKey="ID"
+        dataKey="id"
         size="small"
         stripedRows
         showGridlines
@@ -162,7 +161,7 @@ const Frequency = () => {
                   });
                 }}
               >
-                <i className="fa fa-plus" />
+                <i className="ft-plus" />
               </div>
               {/* )} */}
             </div>
@@ -254,38 +253,19 @@ const Frequency = () => {
 
         <Column
           sortable
-          header="Байгууллага"
-          field="OrganizationName"
+          header="Давтамж"
+          field="interval_name"
           style={{ minWidth: "150px" }}
           className="text-xs "
-          headerClassName="flex items-center justify-center"
+          headerClassName="flex items-center justify-left"
           bodyClassName="flex items-center justify-start text-left"
         />
-        <Column
-          sortable
-          header="Бүртгэсэн огноо"
-          field="InsertDate"
-          style={{ minWidth: "80px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
-          body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}
-        />
-        <Column
-          sortable
-          header="Бүртгэсэн хэрэглэгч"
-          field="InsertUsername"
-          style={{ minWidth: "100px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start "
-        />
-
+  
         <Column
           align="center"
           header="Үйлдэл"
           className="text-xs"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
+          style={{ minWidth: "100px", maxWidth: "100px" }}
           headerClassName="flex items-center justify-center"
           body={(item) => {
             return (
@@ -295,7 +275,7 @@ const Frequency = () => {
                   className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                   onClick={() => updateItem(item)}
                 >
-                  <i className="fe fe-edit" />
+                  <i className="ft-edit" />
                 </button>
                 {/* )}
 
@@ -304,7 +284,7 @@ const Frequency = () => {
                   className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                   onClick={() => deleteItem(item)}
                 >
-                  <i className="fe fe-trash-2" />
+                  <i className="ft-trash-2" />
                 </button>
                 {/* )} */}
               </div>
@@ -426,4 +406,4 @@ const Frequency = () => {
   );
 };
 
-export default React.memo(Frequency);
+export default React.memo(Interval);

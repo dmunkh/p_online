@@ -108,3 +108,33 @@ export async function getModul() {
   const response = await API().get("/modul");
   return response.data;
 }
+
+
+// interval
+
+export async function getInterval() {
+  const response = await API().get("/interval");
+  return response.data;
+}
+
+// Гаднын ажилчид
+
+export async function getPerson() {
+  const response = await API().get("/person");
+  return response.data;
+}
+
+
+// Сургалтын төрөл жилээр
+
+export async function getTypeYear(params) {
+  const response = await API().get("/type/year",{params:{
+    module_id: 1,
+    year: 2023
+  }});
+  return response.data;
+}
+export async function postTypeYear(data) {
+  const response = await API().post("/type/year", data);
+  return response.data;
+}

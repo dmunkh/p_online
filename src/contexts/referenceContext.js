@@ -42,6 +42,19 @@ const _state = {
   placeID: null,
   place_name: "",
 
+  list_typeyear: [],
+  selected_typeyear: {
+    hour: null,
+    limit: null,
+    percent: null,
+    place_id: null,
+    point: null,
+    price_emc: null,
+    price_organization: null,
+    type_id: null,
+    year: null,
+  },
+
   list_lessonsRegister: [],
   selected_lessonsTypeID: [],
 
