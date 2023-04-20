@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useUserContext } from "../contexts/userContext";
+import * as API from "../api/request";
+import Swal from "sweetalert2";
 
 const Header = (props) => {
-  const { user, logOut } = useUserContext();
+  const { user, userDispatch, userType, logOut } = useUserContext();
   const [src, setSrc] = useState();
   const OnError = (e) => {
     if (user.info.gender === 1) {
@@ -11,7 +13,7 @@ const Header = (props) => {
       setSrc("/img/women.png");
     }
   };
- 
+
   return (
     <nav
       className={`navbar navbar-expand-lg navbar-light header-navbar navbar-fixed gadot-shadow bg-white `}
@@ -28,14 +30,9 @@ const Header = (props) => {
           </div>
           <ul className="navbar-nav">
             <li className="nav-item mr-2 d-none d-lg-block">
-              <img
-                className=" w-40"
-                alt="logo"
-                src="/img/logo_black.png"
-              />
+              <img className=" w-40" alt="logo" src="/img/logo_black.png" />
             </li>
           </ul>
-         
         </div>
         <div className="navbar-container ">
           <div className="navbar-collapse d-block">
@@ -95,7 +92,18 @@ const Header = (props) => {
                     href="/"
                     onClick={(e) => {
                       e.preventDefault();
-                      logOut();
+                      API.logOut()
+                        .then(() => {
+                          userDispatch({ type: userType.LOG_OUT });
+                          window.location = "https://digital.erdenetmc.mn";
+                        })
+                        .catch(() =>
+                          Swal.fire({
+                            icon: "warning",
+                            title: "Гарах сервис ажиллахгүй байна.",
+                            html: "",
+                          })
+                        );
                     }}
                   >
                     <div className="d-flex align-items-center">

@@ -44,6 +44,8 @@ const _state = {
 
   list_lessonsRegister: [],
   selected_lessonsTypeID: [],
+
+  list_modul: [],
 };
 
 export const useReferenceContext = () => {

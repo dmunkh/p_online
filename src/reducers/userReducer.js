@@ -33,8 +33,10 @@ export const userReducer = (state, action) => {
       };
     case userType.LOG_OUT:
       localStorage.removeItem("token");
-      localStorage.removeItem("menuID");
+      localStorage.removeItem("menu1ID");
+      localStorage.removeItem("menu2ID");
       localStorage.removeItem("menuName");
+      localStorage.removeItem("menuExpanded");
       return { ...state, ...action.data, loggedIn: false };
 
     case userType.CHANGE_MENU:

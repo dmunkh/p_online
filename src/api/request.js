@@ -103,3 +103,8 @@ export async function deleteOrganization(id) {
   const response = await API().delete("/organization/" + id);
   return response.data;
 }
+//modul
+export async function getModul() {
+  const response = await API().get("/modul");
+  return response.data;
+}
