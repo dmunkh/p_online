@@ -1,0 +1,16 @@
+.scrollbar {
+  overflow-y: auto;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+  background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(224, 224, 224, 0.2);
+}
+.sidebar-background {
+  background-image: url("/img/01.jpg");
+}
