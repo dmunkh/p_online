@@ -10,10 +10,11 @@ import LessonRegister from "../pages/reference/lessonsRegister";
 import Chamber from "../pages/reference/place";
 import Organization from "../pages/reference/organizations";
 import Employee from "../pages/reference/worker/employee";
-import Frequency from "../pages/reference/frequency";
+import Interval from "../pages/reference/interval";
 import Worker from "../pages/registration/worker2";
 import Place from "../pages/reference/place";
 import Module from "../pages/reference/module";
+import LessonTypeYear from "../pages/reference/lessontypeyear";
 
 const Reference = () => {
   const data = [
@@ -22,6 +23,14 @@ const Reference = () => {
       component: (
         <UseReferenceContext>
           <LessonType />
+        </UseReferenceContext>
+      ),
+    },
+    {
+      path: "/reference/typeyear",
+      component: (
+        <UseReferenceContext>
+          <LessonTypeYear />
         </UseReferenceContext>
       ),
     },
@@ -58,10 +67,10 @@ const Reference = () => {
       ),
     },
     {
-      path: "/reference/frequency",
+      path: "/reference/interval",
       component: (
         <UseReferenceContext>
-          <Frequency />
+          <Interval />
         </UseReferenceContext>
       ),
     },

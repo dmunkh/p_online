@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
 import { useUserContext } from "../../../contexts/userContext";
 import { useReferenceContext } from "../../../contexts/referenceContext";
-import * as API from "../../../api/reference";
+import * as API from "../../../api/request";
 import Header from "./header";
 import { Spin, Select, Input, Modal } from "antd";
 import { DataTable } from "primereact/datatable";
@@ -21,58 +21,14 @@ const Employee = () => {
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
 
-  //байгуулга жагсаалт
+  //жагсаалт
   useLayoutEffect(() => {
-    API.getLessonOrganization()
+    API.getPerson()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
-            list_organization: _.orderBy(
-              _(res)
-                .groupBy("OrganizationName")
-                .map((list, key) => ({
-                  OrganizationName: list[0].OrganizationName,
-                  ID: list[0].ID,
-                }))
-                .value(),
-              ["OrganizationName"]
-            ),
-          },
-        });
-        // dispatch({
-        //   type: "STATE",
-        //   data: {
-        //     list_organization: _.orderBy(res, ["OrganizationName"]),
-        //   },
-        // });
-      })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_organization: [],
-          },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Байгууллагын жагсаалт татаж чадсангүй",
-        });
-      });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // жагсаалт
-  useLayoutEffect(() => {
-    setLoading(true);
-    API.getLessonEmployee()
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_employee: _.orderBy(res, ["OrganizationName"]),
+           list_employee : _.orderBy(res, ["person_name"]),
           },
         });
       })
@@ -80,18 +36,17 @@ const Employee = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_organization: [],
+            list_employee: [],
           },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Байгууллагын жагсаалт татаж чадсангүй",
-        });
+        })
       })
-      .finally(() => setLoading(false));
+     
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
+
+  // жагсаалт
+
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -159,19 +114,14 @@ const Employee = () => {
   const memo_table = useMemo(() => {
     var result = state.list_employee;
 
-    if (state.selected_organizationID)
-      result = _.filter(
-        result,
-        (a) => a.OrganizationName === state.selected_orgName
-      );
+   
 
     if (search) {
       result = _.filter(
         result,
         (a) =>
-          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertDate), _.toLower(search)) ||
-          _.includes(_.toLower(a.InsertUsername), _.toLower(search))
+          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) 
+        
       );
     }
 
