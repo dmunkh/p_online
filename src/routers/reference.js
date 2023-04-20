@@ -13,6 +13,7 @@ import Employee from "../pages/reference/worker/employee";
 import Frequency from "../pages/reference/frequency";
 import Worker from "../pages/registration/worker2";
 import Place from "../pages/reference/place";
+import Module from "../pages/reference/module";
 
 const Reference = () => {
   const data = [
@@ -73,6 +74,14 @@ const Reference = () => {
       ),
     },
     {
+      path: "/reference/module",
+      component: (
+        <UseReferenceContext>
+          <Module />
+        </UseReferenceContext>
+      ),
+    },
+    {
       path: "/registration/worker",
       component: (
         <FormContextProvider>
@@ -80,7 +89,6 @@ const Reference = () => {
         </FormContextProvider>
       ),
     },
-    
   ];
   return (
     <Routes>

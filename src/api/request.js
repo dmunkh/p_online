@@ -105,6 +105,6 @@ export async function deleteOrganization(id) {
 }
 //modul
 export async function getModul() {
-  const response = await API().get("/modul");
+  const response = await API().get("/module");
   return response.data;
 }
