@@ -150,7 +150,6 @@ export async function deleteOrganization(id) {
   return response.data;
 }
 
-
 // interval
 
 export async function getInterval() {
