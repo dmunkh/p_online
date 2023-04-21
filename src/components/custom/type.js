@@ -4,18 +4,21 @@ import _ from "lodash";
 import { Select } from "antd";
 
 const TypeList = (props) => {
+  console.log("props: ", props);
   const [list, setList] = useState([]);
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    API.getType({ module_id: props.module_id }).then((res) => {
-      setList(res);
+    props.module_id !== undefined &&
+      API.getType({ module_id: props.module_id }).then((res) => {
+        setList(res);
+        console.log("res: ", res);
 
-      if (res.length > 0 && !props.value) props.onChange(res[0].id);
-    });
+        if (res.length > 0 && !props.value) props.onChange(res[0].id);
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.module_id]);
 
   return (
     <div>
