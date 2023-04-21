@@ -1,7 +1,5 @@
-import React, { useContext, useLayoutEffect, useReducer } from "react";
+import React, { useContext, useReducer } from "react";
 import { reducer } from "../reducers/referenceReducer";
-import * as API from "../api/request";
-import _ from "lodash";
 
 const context = React.createContext();
 

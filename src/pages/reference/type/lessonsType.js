@@ -21,7 +21,6 @@ const LessonsType = () => {
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
 
-  console.log("state.selected_moduleID: ", state.selected_moduleID);
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
@@ -89,7 +88,6 @@ const LessonsType = () => {
     });
   };
   const updateItem = (item) => {
-    console.log("item: ", item);
     API.getLessonTypeID(item.id)
       .then((res) => {
         dispatch({
@@ -154,7 +152,7 @@ const LessonsType = () => {
         className="w-full text-sm"
         sortMode="single"
         removableSort
-        scrollHeight={window.innerHeight - 380}
+        scrollHeight={window.innerHeight - 400}
         responsiveLayout="scroll"
         value={result}
         header={
@@ -349,7 +347,7 @@ const LessonsType = () => {
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["type_edit"]) && (
                   <button
-                    className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => updateItem(item)}
                   >
                     <i className="ft-edit" />

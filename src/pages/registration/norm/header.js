@@ -12,7 +12,6 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState([]);
 
-  console.log("user?.list_department: ", state?.list_department);
   useEffect(() => {
     if (state?.list_department?.length > 0 && state?.department === null) {
       var department = _.find(state?.list_department, {

@@ -25,7 +25,6 @@ const LessonTypeYear = () => {
     setLoading(true);
     API.getTypeYear()
       .then((res) => {
-        console.log(res)
         dispatch({
           type: "STATE",
           data: {
@@ -47,7 +46,7 @@ const LessonTypeYear = () => {
         });
       })
       .finally(() => setLoading(false));
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
@@ -126,7 +125,6 @@ const LessonTypeYear = () => {
     //   type_id:state.selected_typeyear.type_id,
     //   year: state.selected_typeyear.year }
 
-
     if (error.length > 0) {
       message({
         type: "warning",
@@ -146,9 +144,7 @@ const LessonTypeYear = () => {
         ),
       });
     } else if (state.placeID === null) {
-      API.postTypeYear({
-       
-      })
+      API.postTypeYear({})
         .then(() => {
           dispatch({
             type: "STATE",
@@ -192,7 +188,6 @@ const LessonTypeYear = () => {
   };
   const memo_table = useMemo(() => {
     var result = state.list_typeyear;
-  
 
     if (search) {
       result = _.filter(result, (a) =>
@@ -352,7 +347,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center text-center"
           bodyClassName="flex items-center justify-center"
         />
-     <Column
+        <Column
           sortable
           header="Сургалтын үргэлжлэх хугацаа"
           field="hour"
@@ -361,7 +356,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center text-center"
           bodyClassName="flex items-center justify-center "
         />
-         <Column
+        <Column
           sortable
           header="Сургалтын үнэ"
           field="price_emc"
@@ -370,7 +365,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-           <Column
+        <Column
           sortable
           header="Сургалтын үнэ /Гаднын байгууллага/"
           field="price_organization"
@@ -379,7 +374,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-         <Column
+        <Column
           sortable
           header="Шалгалтын оноо"
           field="percent"
@@ -388,7 +383,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-          <Column
+        <Column
           sortable
           header="Тэнцэх хувь"
           field="point"
@@ -431,8 +426,6 @@ const LessonTypeYear = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_organization, search, first, per_page]);
-
- 
 
   return (
     <>
