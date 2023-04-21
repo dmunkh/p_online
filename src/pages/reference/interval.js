@@ -8,11 +8,9 @@ import { Column } from "primereact/column";
 
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import moment from "moment";
 import Swal from "sweetalert2";
 
 const Interval = () => {
-
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
@@ -29,7 +27,7 @@ const Interval = () => {
         dispatch({
           type: "STATE",
           data: {
-           list_interval : _.orderBy(res, ["interval_name"]),
+            list_interval: _.orderBy(res, ["interval_name"]),
           },
         });
       })
@@ -117,11 +115,8 @@ const Interval = () => {
     var result = state.list_interval;
 
     if (search) {
-      result = _.filter(
-        result,
-        (a) =>
-          _.includes(_.toLower(a.interval_name), _.toLower(search)) 
-        
+      result = _.filter(result, (a) =>
+        _.includes(_.toLower(a.interval_name), _.toLower(search))
       );
     }
 
@@ -260,7 +255,7 @@ const Interval = () => {
           headerClassName="flex items-center justify-left"
           bodyClassName="flex items-center justify-start text-left"
         />
-  
+
         <Column
           align="center"
           header="Үйлдэл"

@@ -4,9 +4,10 @@ import { reducer } from "../reducers/trainingReducer";
 const context = React.createContext();
 
 const _state = {
-  list: [],
+  list_training: [],
   refresh: 0,
   modal: false,
+  change_year: null,
 };
 
 export const useTrainingContext = () => {

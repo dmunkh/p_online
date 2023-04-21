@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Header";
 
-import Footer from "./Footer";
 import RightBar from "./RightBar";
 import NavBar from "./Navbar";
 
@@ -78,11 +77,16 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      <Footer />
       <div
         className={`sidenav-overlay ${isCollapsed ? "d-none" : "d-block"}`}
       ></div>
-      <div className="drag-target"></div>
+      <button
+        className="btn btn-primary scroll-top"
+        type="button"
+        style={{ display: "inline-block" }}
+      >
+        <i className="ft-arrow-up"></i>
+      </button>
       <RightBar />
     </div>
   );

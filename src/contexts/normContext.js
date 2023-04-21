@@ -32,7 +32,6 @@ const Context = ({ children }) => {
 
   useLayoutEffect(() => {
     API.getUserDepartment().then((res) => {
-      console.log("res: ", res);
       var result = [];
       _.map(_.orderBy(res, ["departmentlevelid", "departmentcode"]), (item) => {
         result.push({

@@ -109,7 +109,6 @@ export async function getModule() {
   return response.data;
 }
 
-
 // interval
 
 export async function getInterval() {
@@ -177,3 +176,4 @@ export async function getLessonType(params) {
   });
   return response.data;
 }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

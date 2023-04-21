@@ -156,7 +156,7 @@ const Employee = () => {
               {checkRole(["person_add"]) && ( 
               <div
                 title="Нэмэх"
-                className="p-1 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-full bg-violet-500 text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                className="p-1 flex items-center justify-center font-semibold  border-1 border-teal-400 rounded-full bg-teal-500 text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
                 onClick={() => {
                   dispatch({
                     type: "CLEAR_EMPLOYEE",
@@ -305,7 +305,7 @@ const Employee = () => {
               <div className="flex items-center justify-center gap-2">
               {checkRole(["person_edit"]) && ( 
                 <button
-                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-2 border-teal-600 bg-teal-500 hover:scale-125 text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-purple-400 bg-purple-500 hover:scale-125 text-white focus:outline-none duration-300"
                   onClick={() => updateItem(item)}
                 >
                   <i className="ft-edit" />
@@ -314,7 +314,7 @@ const Employee = () => {
 
                   {checkRole(["person_delete"]) && ( 
                 <button
-                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-red-600 bg-red-500 hover:scale-125 text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-red-400 bg-red-500 hover:scale-125 text-white focus:outline-none duration-300"
                   onClick={() => deleteItem(item)}
                 >
                   <i className="ft-trash-2" />
@@ -528,16 +528,27 @@ const Employee = () => {
             />
           </div>
         </div>
+        <hr className="my-2" />
+        <div className="" />
+                                                    <button type="button" class="btn btn-primary mr-1 w-full" 
+        ><i class="ft-check mr-2"></i>Save</button>
+                                                    <button type="button" class="btn btn-secondary w-full"><i class="ft-x mr-2"></i>Cancel</button>
+                                               
 
-        <div className="my-3 border " />
-
-        <button
+        {/* <button
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => save()}
         >
           <i className="fas fa-save" />
           <span className="ml-2">Хадгалах</span>
         </button>
+        <button
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+          onClick={() => save()}
+        >
+          <i className="fas fa-save" />
+          <span className="ml-2">Хадгалах</span>
+        </button> */}
       </Modal>
       <div className="card flex p-2 border rounded text-xs">
         <div className="flex flex-col rounded">
