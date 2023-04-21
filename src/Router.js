@@ -12,6 +12,7 @@ import ReferenceRoute from "./routers/reference";
 import ConfirmationRoute from "./routers/confirmation";
 import PlanRoute from "./routers/plan";
 import NormRoute from "./routers/norm";
+import PlanHabRoute from "src/routers/planhab";
 import RegisterEmplRoute from "./routers/registerEmpl";
 import TrainingRoute from "./routers/training";
 
@@ -21,7 +22,6 @@ const Router = () => {
   const { user } = useUserContext();
   const location = useLocation();
   const navigate = useNavigate();
-
 
   return (
     <>
@@ -33,6 +33,7 @@ const Router = () => {
               <ReferenceRoute />
               <ConfirmationRoute />
               <PlanRoute />
+              <PlanHabRoute />
               <NormRoute />
               <RegisterEmplRoute />
               <TrainingRoute />

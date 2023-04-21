@@ -2,18 +2,18 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseNormContext from "../contexts/normContext";
+import UsePlanHabContext from "src/contexts/planhabContext";
 
-import List from "../pages/registration/norm/list";
+import Planhab from "src/pages/planhab/index";
 
 const PlanXab = () => {
   const data = [
     {
-      path: "/planhab/index/index",
+      path: "/planhab",
       component: (
-        <UseNormContext>
-          <List />
-        </UseNormContext>
+        <UsePlanHabContext>
+          <Planhab />
+        </UsePlanHabContext>
       ),
     },
   ];

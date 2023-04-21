@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
 import { useUserContext } from "../../contexts/userContext";
 import { useReferenceContext } from "../../contexts/referenceContext";
+import Module from "../../components/custom/module"
 import * as API from "../../api/request";
 import { Spin, Select, Input, Modal, DatePicker } from "antd";
 import { DataTable } from "primereact/datatable";
@@ -74,28 +75,9 @@ const LessonTypeYear = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useLayoutEffect(() => {
-    API.getModule()
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_module: _.orderBy(res, ["place_name"]),
-          },
-        });
-      })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useLayoutEffect(() => {
-    API.getLessonType({ module_id: module })
+    API.getType({ module_id: module })
       .then((res) => {
         dispatch({
           type: "STATE",
@@ -688,31 +670,26 @@ const LessonTypeYear = () => {
       </Modal>
 
       <div className="card flex justify-center text-xs rounded p-2">
-        <div className="md:flex justify-startrounded gap-4 mt-2">
-          <Select
-            className="rounded-md md:w-64 "
-            placeholder="Сонгоно уу."
-            value={module}
-            onChange={(value) => {
-              setModule(value);
-            }}
-          >
-            {_.map(state.list_module, (item) => (
-              <Option className="text-xs" key={item.id} value={item.id}>
-                {item.module_name}
-              </Option>
-            ))}
-          </Select>
-          <DatePicker
+        <div className="md:flex justify-start rounded gap-4 mt-2 w-1/5">
+        <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
             format={yearFormat}
             picker="year"
-            className="rounded-md h-10 md:w-32   "
+            className="h-9 md:w-32   "
             onChange={(e) => {
               setDate(e.$y);
             }}
           />
+          <div className="w-full md:min-w-[200px]">
+          <Module  value={module}
+            onChange={(value) => {
+              setModule(value);
+            }}
+            />
+              </div>
+      
+         
         </div>
 
         <div className="my-2 border border-gray-100" />

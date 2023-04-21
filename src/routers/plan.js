@@ -2,18 +2,26 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseReferenceContext from "../contexts/referenceContext";
-
-import LessonType from "../pages/reference/type/lessonsType";
+import UsePlanContext from "src/contexts/planContext";
+import PlanList from "src/pages/plan/index";
+import PlanWorker from "src/pages/plan/workers";
 
 const Plan = () => {
   const data = [
     {
-      path: "/reference/lesson",
+      path: "/plan",
       component: (
-        <UseReferenceContext>
-          <LessonType />
-        </UseReferenceContext>
+        <UsePlanContext>
+          <PlanList />
+        </UsePlanContext>
+      ),
+    },
+    {
+      path: "/plan/:id",
+      component: (
+        <UsePlanContext>
+          <PlanWorker />
+        </UsePlanContext>
       ),
     },
   ];

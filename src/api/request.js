@@ -58,8 +58,54 @@ export async function logOut() {
   const response = await API().get("/logout");
   return response.data;
 }
+
+//Хэрэглэгч
 export async function getUserDepartment() {
   const response = await API().get("/user/department");
+  return response.data;
+}
+
+//Сургалтын бүлэг - Мodule
+export async function getModule() {
+  const response = await API().get("/module");
+  return response.data;
+}
+// Сургалтын төрөл - Type
+
+export async function getType(params) {
+  const response = await API().get("type", { params: { ...params } });
+  return response.data;
+}
+
+// Сургалтын төрөл жилээр - TypeYear
+
+export async function getTypesYear(module_id) {
+  const response = await API().get("/type/year",{params:{
+    module_id: module_id,
+    year: 2023
+  }});
+
+  return response.data;
+}
+
+
+export async function deleteTypeYear(id) {
+  const response = await API().delete("/type/year/" + id);
+  return response.data;
+}
+
+export async function getTypeYearID(id) {
+  const response = await API().get("/type/year/"+id);
+  return response.data;
+}
+
+export async function putTypeYear(data) {
+  const response = await API().post("/type/year", data);
+  return response.data;
+}
+
+export async function postTypeYear(data) {
+  const response = await API().post("/type/year", data);
   return response.data;
 }
 
@@ -103,11 +149,7 @@ export async function deleteOrganization(id) {
   const response = await API().delete("/organization/" + id);
   return response.data;
 }
-//modul
-export async function getModule() {
-  const response = await API().get("/module");
-  return response.data;
-}
+
 
 // interval
 
@@ -122,8 +164,10 @@ export async function getPerson() {
   const response = await API().get("/person");
   return response.data;
 }
+
 export async function putPerson(id) {
   const response = await API().put("/person/"+id);
+
   return response.data;
 }
 
@@ -135,45 +179,12 @@ export async function deletePerson(id) {
   const response = await API().delete("/person/" + id);
   return response.data;
 }
-// Сургалтын төрөл жилээр
-
-export async function getTypesYear(module_id, year) {
-  const response = await API().get("/type/year",{params:{
-    module_id: module_id,
-    year: year
-  }});
-
-  return response.data;
-}
-
-export async function deleteTypeYear(id) {
-  const response = await API().delete("/type/year/" + id);
-  return response.data;
-}
-
-export async function getTypeYear(id) {
-  const response = await API().get("/type/year/"+id);
-  return response.data;
-}
 
 
-export async function postTypeYear(data) {
-  const response = await API().post("/type/year", data);
-  return response.data;
-}
-export async function putTypeYear(data) {
-  const response = await API().post("/type/year", data);
-  return response.data;
-}
 
-//сургалтийн  төрөл
 
-export async function getLessonType(params) {
-  const response = await API().get("/type", {
-    params: {
-      ...params,
-    },
-  });
-  return response.data;
-}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+

@@ -1,19 +1,29 @@
-import React, { useContext, useReducer } from "react";
-import { reducer } from "src/reducers/planReducer";
+import React, { useContext, useReducer, useLayoutEffect } from "react";
+import { reducer } from "src/reducers/planhabReducer";
+import * as API from "src/api/planhab";
 import moment from "moment";
+import _ from "lodash";
 
 const context = React.createContext();
 
 const _state = {
+  id: null,
   list: [],
+  date: moment(),
   refresh: 0,
   modal: false,
-  date: moment(),
-  department: null,
-  typeid: null,
+  modaltypeid: null,
+  loading: false,
+  list_department: [],
+  list_normposition: [],
+  list_norm: [],
+  list_type: [],
+  department_id: null,
+  position_id: null,
+  moduleid: null,
 };
 
-export const usePlanContext = () => {
+export const usePlanHabContext = () => {
   const ctx = useContext(context);
   if (ctx === undefined) {
     throw new Error("Context must be used within a Provider");
