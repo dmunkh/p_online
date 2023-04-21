@@ -133,14 +133,6 @@ export async function deleteOrganization(id) {
   const response = await API().delete("/organization/" + id);
   return response.data;
 }
-<<<<<<< HEAD
-=======
-//modul
-export async function getModul() {
-  const response = await API().get("/module");
-  return response.data;
-}
->>>>>>> 1a48ad2753228d3d8cb0c4ff909c347450e9727b
 
 // interval
 
@@ -155,22 +147,3 @@ export async function getPerson() {
   const response = await API().get("/person");
   return response.data;
 }
-<<<<<<< HEAD
-=======
-
-// Сургалтын төрөл жилээр
-
-export async function getTypeYear(params) {
-  const response = await API().get("/type/year", {
-    params: {
-      module_id: 1,
-      year: 2023,
-    },
-  });
-  return response.data;
-}
-export async function postTypeYear(data) {
-  const response = await API().post("/type/year", data);
-  return response.data;
-}
->>>>>>> 1a48ad2753228d3d8cb0c4ff909c347450e9727b
