@@ -54,9 +54,7 @@
     padding: 0 0 !important;
   }
   
-  .p-rowgroup-header-name{ 
-    width: -webkit-fill-available;
-  }
+
   .ant-switch-checked {
     background-color: #4ADE80 !important;
   }

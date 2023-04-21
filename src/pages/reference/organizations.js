@@ -389,7 +389,7 @@ const Organizations = () => {
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
           onClick={() => save()}
         >
-          <i className="fas fa-save" />
+          <i className="ft-save" />
           <span className="ml-2">Хадгалах</span>
         </button>
       </Modal>

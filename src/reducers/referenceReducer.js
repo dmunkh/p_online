@@ -33,12 +33,23 @@ export const reducer = (state, action) => {
         interval_name: null,
         time: null,
       };
+
     case "CLEAR_PLACE":
       return {
         ...state,
         placeID: null,
         place_name: "",
       };
+      case "CLEAR_TYPEYEAR":
+      return {
+        ...state,
+       selected_typeyear:[]
+      };
+      case "CLEAR_EMPLOYEE":
+        return {
+          ...state,
+         selected_employee:[]
+        };
 
     default:
       return state;

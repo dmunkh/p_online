@@ -8,7 +8,7 @@ const TypeList = (props) => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    API.getTypeYear({ module_id: props.module_id }).then((res) => {
+    API.getTypesYear({ module_id: props.module_id }).then((res) => {
       setList(res);
 
       if (res.length > 0 && !props.value) props.onChange(res[0].id);

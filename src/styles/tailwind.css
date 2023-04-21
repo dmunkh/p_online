@@ -3,11 +3,13 @@
 @tailwind utilities;
 
 .p-rowgroup-header {
-    background: #F0E6FC !important;
+    background: #e4ebec !important;
+  
 }
+
 .pi {
     font-size: 11px;
-    color: blue;
+    color: rgb(107, 107, 235);
 
 }
 .p-checkbox .p-checkbox-box {

@@ -33,8 +33,14 @@ const _state = {
   organization_name: "",
 
   list_employee: [],
-  selected_orgName: null,
-  selected_organizationID: null,
+  selected_employee:{
+    id:null,
+    organization_id: null,
+    position_name:"",
+    register_number:null,
+    short_name:null,
+  },
+  
 
   list_chamber: [],
   placeID: null,
@@ -42,21 +48,23 @@ const _state = {
 
   list_typeyear: [],
   selected_typeyear: {
+    id:null,
+    type_name:"",
     hour: null,
     limit: null,
     percent: null,
-    place_id: null,
+    place_id:null,
     point: null,
     price_emc: null,
     price_organization: null,
     type_id: null,
-    year: null,
-  },
+    year: null,},
+  change_year:null,
 
   list_lessonsRegister: [],
   selected_lessonsTypeID: [],
 
-  list_modul: [],
+  
 };
 
 export const useReferenceContext = () => {
