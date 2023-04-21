@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
 import { useUserContext } from "../../../contexts/userContext";
 import { useReferenceContext } from "../../../contexts/referenceContext";
 import * as API from "../../../api/request";
@@ -12,7 +12,6 @@ import moment from "moment";
 import Swal from "sweetalert2";
 
 const Employee = () => {
-
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
@@ -28,7 +27,7 @@ const Employee = () => {
         dispatch({
           type: "STATE",
           data: {
-           list_employee : _.orderBy(res, ["person_name"]),
+            list_employee: _.orderBy(res, ["id"]),
           },
         });
       })
@@ -38,15 +37,34 @@ const Employee = () => {
           data: {
             list_employee: [],
           },
-        })
-      })
-     
+        });
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
   // жагсаалт
+  useEffect(() => {
+    API.getOrganization()
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_organization: _.orderBy(res, ["id"]),
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_organization: [],
+          },
+        });
+      });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.refresh]);
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -60,75 +78,51 @@ const Employee = () => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        // API.deleteItemWarehouse(item.warehouse_id)
-        //   .then(() => {
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай устгагдлаа",
-        //     });
-        //     dispatch({ type: "REFRESH" });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Ажлын байр устгаж чадсангүй",
-        //     });
-        //   });
-        message({
-          type: "error",
-          title: "Амжилттай устгагдлаа",
-        });
+        API.deletePerson(item.id)
+          .then(() => {
+            message({
+              type: "success",
+              title: "Амжилттай устгагдлаа",
+            });
+            dispatch({ type: "STATE", data:{ refresh:state.refresh+1} });
+          })
+          .catch((error) => {
+            message({
+              type: "error",
+              error,
+              title: "Ажлын байр устгаж чадсангүй",
+            });
+          });
       }
     });
   };
   const updateItem = (item) => {
-    // API.getWarehouseItemID(item.warehouse_id)
-    //   .then((res) => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: {
-    //     list_lesson_ID: {
-    //       res
-    //     },
-    //   },
-    // });
-    //     //loadItemTypeList(res.itemtypeid);
+    dispatch({
+      type: "STATE",
+      data: { selected_employee: item },
+    });
     dispatch({
       type: "STATE",
       data: { modal: true },
     });
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
   };
 
   const memo_table = useMemo(() => {
     var result = state.list_employee;
 
-   
-
     if (search) {
       result = _.filter(
         result,
         (a) =>
-          _.includes(_.toLower(a.OrganizationName), _.toLower(search)) 
-        
+          _.includes(_.toLower(a.organization_name), _.toLower(search)) ||
+          _.includes(_.toLower(a.short_name), _.toLower(search))
       );
     }
 
     return (
       <DataTable
         scrollable
-        dataKey="ID"
+        dataKey="id"
         size="small"
         stripedRows
         showGridlines
@@ -142,8 +136,8 @@ const Employee = () => {
         groupRowsBy="OrganizationName"
         rowGroupHeaderTemplate={(data) => {
           return (
-            <span className="text-xs font-semibold ">
-              <span className="ml-1"> {data.OrganizationName}</span>
+            <span className="ml-6 text-sm font-semibold ">
+              <span className="ml-1"> {data.organization_name}</span>
             </span>
           );
         }}
@@ -159,20 +153,23 @@ const Employee = () => {
               />
             </div>
             <div className="flex items-center gap-2 ">
-              {/* {checkRole(["xx_act_add"]) && ( */}
+              {checkRole(["person_add"]) && ( 
               <div
                 title="Нэмэх"
-                className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                className="p-1 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-full bg-violet-500 text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
                 onClick={() => {
+                  dispatch({
+                    type: "CLEAR_EMPLOYEE",
+                  });
                   dispatch({
                     type: "STATE",
                     data: { modal: true },
                   });
                 }}
               >
-                <i className="fa fa-plus" />
+                <i className="ft-plus" />
               </div>
-              {/* )} */}
+             )} 
             </div>
           </div>
         }
@@ -262,49 +259,39 @@ const Employee = () => {
 
         <Column
           sortable
-          header="Овог нэр"
-          field="ShortName"
-          style={{ minWidth: "150px" }}
+          header="Байгууллагын нэр"
+          field="organization_name"
+        
           className="text-xs "
-          headerClassName="flex items-center justify-center"
+          headerClassName="flex items-center justify-left"
           bodyClassName="flex items-center justify-start text-left"
         />
         <Column
           sortable
-          header="Регистер"
-          field="RegisterNumber"
+          header="Нэр"
+          field="short_name"
           style={{ minWidth: "100px" }}
           className="text-xs "
-          headerClassName="flex items-center justify-center"
+          headerClassName="flex items-center justify-left"
           bodyClassName="flex items-center justify-start text-left"
         />
         <Column
           sortable
-          header="Албан тушаал"
-          field="DepartmentName"
-          style={{ minWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start text-left"
-        />
-        <Column
-          sortable
-          header="Бүртгэсэн огноо"
-          field="InsertDate"
+          header="Регистерийн дугаар"
+          field="register_number"
           style={{ minWidth: "80px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
-          body={(data) => moment(data.InsertDate).format("YYYY-MM-DD  h:MM:ss")}
         />
         <Column
           sortable
-          header="Бүртгэсэн хэрэглэгч"
-          field="InsertUsername"
-          style={{ minWidth: "100px" }}
+          header="Албан тушаал"
+          field="position_name"
+          style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start "
+          bodyClassName="flex items-center justify-start text-left"
         />
 
         <Column
@@ -316,23 +303,23 @@ const Employee = () => {
           body={(item) => {
             return (
               <div className="flex items-center justify-center gap-2">
-                {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
+              {checkRole(["person_edit"]) && ( 
                 <button
-                  className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-2 border-teal-600 bg-teal-500 hover:scale-125 text-white focus:outline-none duration-300"
                   onClick={() => updateItem(item)}
                 >
-                  <i className="fe fe-edit" />
+                  <i className="ft-edit" />
                 </button>
-                {/* )}
+               )}
 
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
+                  {checkRole(["person_delete"]) && ( 
                 <button
-                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-red-600 bg-red-500 hover:scale-125 text-white focus:outline-none duration-300"
                   onClick={() => deleteItem(item)}
                 >
-                  <i className="fe fe-trash-2" />
+                  <i className="ft-trash-2" />
                 </button>
-                {/* )} */}
+                )} 
               </div>
             );
           }}
@@ -348,12 +335,18 @@ const Employee = () => {
     first,
     per_page,
   ]);
-
   const save = () => {
     var error = [];
-    if (!state.id) {
-      state.warehouse_razmer || error.push("Хамгаалах хэрэгслийн төрөл.");
-    }
+    state.selected_employee.organization_id ||
+        error.push("Байгууллага:") ||
+        state.selected_employee.short_name ||
+        error.push("Нэр:");
+      const data = {
+        organization_id: state.selected_employee.organization_id,
+        position_name: state.selected_employee.position_name,
+        register_number: state.selected_employee.register_number,
+        short_name: state.selected_employee.short_name,
+      };
 
     if (error.length > 0) {
       message({
@@ -373,30 +366,53 @@ const Employee = () => {
           </div>
         ),
       });
+    } else if (state.id === null) {
+      API.postPerson({
+        ...data,
+      })
+        .then(() => {
+          dispatch({
+            type: "STATE",
+            data: {
+              refresh: state.refresh + 1,
+            },
+          });
+          dispatch({ type: "CLEAR_PERSON" });
+          dispatch({ type: "STATE", data: { modal: false } });
+          message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: error.response.data.msg,
+          });
+        });
     } else {
-      //   var data = {
-      //     razmer: state.warehouse_razmer,
-      //   };
-      if (state.id) {
-        // API.putWarehouseItemID(state.id, data)
-        //   .then(() => {
-        //     dispatch({ type: "REFRESH" });
-        //     dispatch({ type: "MODAL", data: false });
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай хадгалагдлаа.",
-        //     });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Засварлаж чадсангүй",
-        //     });
-        //   });
-      }
+      API.putPerson(state.selected_employee.id, {
+        data
+      })
+        .then(() => {
+          dispatch({
+            type: "STATE",
+            data: {
+              refresh: state.refresh + 1,
+            },
+          });
+          dispatch({ type: "STATE", data: { modal: false } });
+          message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: error.response.data.msg,
+          });
+        });
     }
   };
+
+ 
 
   return (
     <>
@@ -406,7 +422,7 @@ const Employee = () => {
         title={
           <div className="text-center">
             Гадны ажилчид
-            {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
+            {state.selected_employee.id ? " засварлах " : " бүртгэх "} цонх
           </div>
         }
         visible={state.modal}
@@ -427,22 +443,45 @@ const Employee = () => {
               className="w-full"
               placeholder="Сонгоно уу."
               optionFilterProp="children"
-              value={state.selected_organizationID}
+              value={state.selected_employee.organization_id}
               onChange={(value) => {
                 dispatch({
                   type: "STATE",
                   data: {
-                    selected_organizationID: value,
+                    ...state.selected_employee,
+                    selected_employee: {organization_id: value },
                   },
                 });
               }}
             >
               {_.map(state.list_organization, (item) => (
-                <Select.Option key={item.ID} value={item.ID}>
-                  {item.OrganizationName}
+                <Select.Option key={item.id} value={item.id}>
+                  {item.organization_name}
                 </Select.Option>
               ))}
             </Select>
+          </div>
+          <hr className="my-2" />
+          <div className="flex flex-col justify-start">
+            <span className="font-semibold pb-1">
+              Нэр :<b className="ml-1 text-red-500">*</b>
+            </span>
+            <Input
+              size="small"
+              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
+              defaultValue={state.selected_employee.short_name}
+              onChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    selected_employee: {
+                      ...state.selected_employee,
+                      short_name: e.target.value,
+                    },
+                  },
+                });
+              }}
+            />
           </div>
           <hr className="my-2" />
           <div className="flex flex-col justify-start">
@@ -452,11 +491,16 @@ const Employee = () => {
             <Input
               size="small"
               className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
+              defaultValue={state.selected_employee.position_name}
               onChange={(e) => {
                 dispatch({
                   type: "STATE",
-                  data: { lessonsName: e.target.value },
+                  data: {
+                    selected_employee: {
+                      ...state.selected_employee,
+                      position_name: e.target.value,
+                    },
+                  },
                 });
               }}
             />
@@ -469,45 +513,16 @@ const Employee = () => {
             <Input
               size="small"
               className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
+              value={state.selected_employee.register_number}
               onChange={(e) => {
                 dispatch({
                   type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>{" "}
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Овог :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
-                });
-              }}
-            />
-          </div>{" "}
-          <hr className="my-2" />
-          <div className="flex flex-col justify-start">
-            <span className="font-semibold pb-1">
-              Нэр :<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Input
-              size="small"
-              className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.list_organization.name}
-              onChange={(e) => {
-                dispatch({
-                  type: "STATE",
-                  data: { lessonsName: e.target.value },
+                  data: {
+                    selected_employee: {
+                      ...state.selected_employee,
+                      register_number: e.target.value,
+                    },
+                  },
                 });
               }}
             />

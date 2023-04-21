@@ -3,8 +3,9 @@ import { DatePicker, Select } from "antd";
 import moment from "moment";
 import { useReferenceContext } from "../../../contexts/referenceContext";
 import { useUserContext } from "../../../contexts/userContext";
-import * as API from "../../../api/reference";
+import * as API from "../../../api/request";
 import _ from "lodash";
+
 import { useLayoutEffect } from "react";
 
 const Header = () => {
@@ -13,20 +14,20 @@ const Header = () => {
 
   //байгуулга жагсаалт
   useLayoutEffect(() => {
-    API.getLessonOrganization()
+    API.getOrganization()
       .then((res) => {
         dispatch({
           type: "STATE",
           data: {
             list_organization: _.orderBy(
               _(res)
-                .groupBy("OrganizationName")
+                .groupBy("organization_name")
                 .map((list, key) => ({
-                  OrganizationName: list[0].OrganizationName,
+                  organization_name: list[0].organization_name,
                   ID: list[0].ID,
                 }))
                 .value(),
-              ["OrganizationName"]
+              ["organization_name"]
             ),
           },
         });
@@ -76,7 +77,7 @@ const Header = () => {
             <div className="w-full md:min-w-[200px]">
               <Select
                 value={state.selected_organizationID}
-                placeholder="сонгох."
+                placeholder="Сонгоно уу..."
                 allowClear
                 className="w-full text-xs"
                 onChange={(value, children) => {
@@ -90,8 +91,8 @@ const Header = () => {
                 }}
               >
                 {_.map(state?.list_organization, (item) => (
-                  <Select.Option key={item.ID} value={item.ID}>
-                    {item.OrganizationName}
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.organization_name}
                   </Select.Option>
                 ))}
               </Select>

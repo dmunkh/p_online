@@ -1,31 +1,35 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
 import { useUserContext } from "../../contexts/userContext";
 import { useReferenceContext } from "../../contexts/referenceContext";
 import * as API from "../../api/request";
-import { Spin, Select, Input, Modal } from "antd";
+import { Spin, Select, Input, Modal, DatePicker } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import dayjs from "dayjs";
 
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
+const { Option } = Select;
 
 const LessonTypeYear = () => {
-  const { message } = useUserContext();
+  const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
+  const yearFormat = "YYYY";
+  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
+  const [module, setModule] = useState(1);
 
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getTypeYear()
+    API.getTypesYear(module, date)
       .then((res) => {
-        console.log(res)
         dispatch({
           type: "STATE",
           data: {
@@ -47,9 +51,68 @@ const LessonTypeYear = () => {
         });
       })
       .finally(() => setLoading(false));
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh]);
+  }, [state.refresh, module, date]);
+
+  useEffect(() => {
+    API.getPlaces()
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_place: _.orderBy(res, ["place_name"]),
+          },
+        });
+      })
+      .catch((error) => {
+        message({
+          type: "error",
+          error,
+          title: "Жагсаалт татаж чадсангүй",
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useLayoutEffect(() => {
+    API.getModule()
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_module: _.orderBy(res, ["place_name"]),
+          },
+        });
+      })
+      .catch((error) => {
+        message({
+          type: "error",
+          error,
+          title: "Жагсаалт татаж чадсангүй",
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    API.getLessonType({ module_id: module })
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_type: _.orderBy(res, ["type_name"]),
+          },
+        });
+      })
+      .catch((error) => {
+        message({
+          type: "error",
+          error,
+          title: "Жагсаалт татаж чадсангүй",
+        });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -63,69 +126,53 @@ const LessonTypeYear = () => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        // API.deleteItemWarehouse(item.warehouse_id)
-        //   .then(() => {
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай устгагдлаа",
-        //     });
-        //     dispatch({ type: "REFRESH" });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Ажлын байр устгаж чадсангүй",
-        //     });
-        //   });
-        message({
-          type: "error",
-          title: "Амжилттай устгагдлаа",
-        });
+        API.deleteTypeYear(item.id)
+          .then(() => {
+            message({
+              type: "success",
+              title: "Амжилттай устгагдлаа",
+            });
+            dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
+          })
+          .catch((error) => {
+            message({
+              type: "error",
+              error,
+              title: " Устгаж чадсангүй",
+            });
+          });   
       }
     });
   };
   const updateItem = (item) => {
-    // API.getWarehouseItemID(item.warehouse_id)
-    //   .then((res) => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: {
-    //     list_lesson_ID: {
-    //       res
-    //     },
-    //   },
-    // });
+    dispatch({
+      type: "STATE",
+      data: {
+        selected_typeyear: item,
+      },
+    });
     //     //loadItemTypeList(res.itemtypeid);
     dispatch({
       type: "STATE",
       data: { modal: true },
     });
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
+
   };
   const save = () => {
     var error = [];
-    state.place_name || error.push("Танхим:");
-    // const data=  { hour: state.selected_typeyear.hour,
-    //   limit:state.selected_typeyear.limit,
-    //   percent: state.selected_typeyear.percent,
-    //   place_id:state.selected_typeyear.place_id,
-    //   point:state.selected_typeyear.point,
-    //   price_emc: state.selected_typeyear.price_emc,
-    //   price_organization:state.selected_typeyear.price_organization,
-    //   type_id:state.selected_typeyear.type_id,
-    //   year: state.selected_typeyear.year }
-
+    state.state.selected_typeyear.type_id || error.push("Сургалтын төрөл:")||
+    state.selected_typeyear.place_id || error.push("Танхим:")
+    const data = {
+      hour: state.selected_typeyear.hour,
+      limit: state.selected_typeyear.limit,
+      percent: state.selected_typeyear.percent,
+      place_id: state.selected_typeyear.place_id,
+      point: state.selected_typeyear.point,
+      price_emc: state.selected_typeyear.price_emc,
+      price_organization: state.selected_typeyear.price_organization,
+      type_id: state.selected_typeyear.type_id,
+      year: date,
+    };
 
     if (error.length > 0) {
       message({
@@ -145,9 +192,9 @@ const LessonTypeYear = () => {
           </div>
         ),
       });
-    } else if (state.placeID === null) {
+    } else if (state.id === null) {
       API.postTypeYear({
-       
+        ...data,
       })
         .then(() => {
           dispatch({
@@ -156,7 +203,7 @@ const LessonTypeYear = () => {
               refresh: state.refresh + 1,
             },
           });
-          dispatch({ type: "CLEAR_PLACE" });
+          dispatch({ type: "CLEAR_TYPEYEAR" });
           dispatch({ type: "STATE", data: { modal: false } });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
         })
@@ -168,31 +215,30 @@ const LessonTypeYear = () => {
           });
         });
     } else {
-      API.putPlace(state.placeID, {
-        place_name: state.place_name,
-      })
-        .then(() => {
-          dispatch({
-            type: "STATE",
-            data: {
-              refresh: state.refresh + 1,
-            },
-          });
-          dispatch({ type: "STATE", data: { modal: false } });
-          message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-        })
-        .catch((error) => {
-          message({
-            type: "error",
-            error,
-            title: error.response.data.msg,
-          });
-        });
+      // API.putPlace(state.selected_typeyear.id, {
+      //   place_name: state.place_name,
+      // })
+      //   .then(() => {
+      //     dispatch({
+      //       type: "STATE",
+      //       data: {
+      //         refresh: state.refresh + 1,
+      //       },
+      //     });
+      //     dispatch({ type: "STATE", data: { modal: false } });
+      //     message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+      //   })
+      //   .catch((error) => {
+      //     message({
+      //       type: "error",
+      //       error,
+      //       title: error.response.data.msg,
+      //     });
+      //   });
     }
   };
   const memo_table = useMemo(() => {
     var result = state.list_typeyear;
-  
 
     if (search) {
       result = _.filter(result, (a) =>
@@ -225,11 +271,14 @@ const LessonTypeYear = () => {
               />
             </div>
             <div className="flex items-center gap-2 ">
-              {/* {checkRole(["xx_act_add"]) && ( */}
+              {checkRole(["type_year_add"]) && (
               <div
                 title="Нэмэх"
                 className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
                 onClick={() => {
+                  dispatch({
+                    type: "CLEAR_TYPEYEAR",
+                  });
                   dispatch({
                     type: "STATE",
                     data: { modal: true },
@@ -238,7 +287,7 @@ const LessonTypeYear = () => {
               >
                 <i className="ft-plus" />
               </div>
-              {/* )} */}
+               )} 
             </div>
           </div>
         }
@@ -352,7 +401,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center text-center"
           bodyClassName="flex items-center justify-center"
         />
-     <Column
+        <Column
           sortable
           header="Сургалтын үргэлжлэх хугацаа"
           field="hour"
@@ -361,7 +410,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center text-center"
           bodyClassName="flex items-center justify-center "
         />
-         <Column
+        <Column
           sortable
           header="Сургалтын үнэ"
           field="price_emc"
@@ -370,7 +419,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-           <Column
+        <Column
           sortable
           header="Сургалтын үнэ /Гаднын байгууллага/"
           field="price_organization"
@@ -379,7 +428,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-         <Column
+        <Column
           sortable
           header="Шалгалтын оноо"
           field="percent"
@@ -388,7 +437,7 @@ const LessonTypeYear = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-          <Column
+        <Column
           sortable
           header="Тэнцэх хувь"
           field="point"
@@ -406,23 +455,23 @@ const LessonTypeYear = () => {
           body={(item) => {
             return (
               <div className="flex items-center justify-center gap-2">
-                {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
+                {checkRole(["type_year_edit"]) && (
                 <button
                   className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                   onClick={() => updateItem(item)}
                 >
                   <i className="ft-edit" />
                 </button>
-                {/* )}
+               )}
 
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
+                  {checkRole(["type_year_delete"]) && ( 
                 <button
                   className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                   onClick={() => deleteItem(item)}
                 >
                   <i className="ft-trash-2" />
                 </button>
-                {/* )} */}
+                )} 
               </div>
             );
           }}
@@ -430,9 +479,7 @@ const LessonTypeYear = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_organization, search, first, per_page]);
-
- 
+  }, [state.list_typeyear, search, first, per_page]);
 
   return (
     <>
@@ -441,8 +488,8 @@ const LessonTypeYear = () => {
         width={700}
         title={
           <div className="text-center">
-            Сургалтын давтамж
-            {state.list_organization.id ? " засварлах " : " бүртгэх "} цонх
+            Сургалтийн төрөл
+            {state.selected_typeyear.id ? " засварлах " : " бүртгэх "} цонх
           </div>
         }
         visible={state.modal}
@@ -456,16 +503,174 @@ const LessonTypeYear = () => {
       >
         <div className="flex flex-col justify-start text-xs">
           <span className="font-semibold pb-1">
-            Сургалтын давтамж:<b className="ml-1 text-red-500">*</b>
+            Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Select
+            className="w-full text-xs mt-1"
+            placeholder="Сонгоно уу."
+            value={state.selected_typeyear.type_id}
+            onChange={async (value) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    type_id: value,
+                  },
+                },
+              });
+            }}
+          >
+            {_.map(state.list_type, (item) => (
+              <Option className="text-xs" key={item.id} value={item.id}>
+                {item.type_name}
+              </Option>
+            ))}
+          </Select>
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Танхим:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Select
+            className="w-full text-xs mt-1"
+            placeholder="Сонгоно уу."
+            value={state.selected_typeyear.place_id}
+            onChange={(value) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    place_id: value,
+                  },
+                },
+              });
+            }}
+          >
+            {_.map(state.list_place, (item) => (
+              <Option className="text-xs" key={item.id} value={item.id}>
+                {item.place_name}
+              </Option>
+            ))}
+          </Select>
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Суух ажилчидын тоо:<b className="ml-1 text-red-500">*</b>
           </span>
           <Input
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
-            defaultValue={state.list_organization.name}
+            value={state.selected_typeyear.limit}
             onChange={(e) => {
               dispatch({
                 type: "STATE",
-                data: { lessonsName: e.target.value },
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    limit: e.target.value,
+                  },
+                },
+              });
+            }}
+          />
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Сургалтын үргэлжлэх хугацаа:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            value={state.selected_typeyear.hour}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    hour: e.target.value,
+                  },
+                },
+              });
+            }}
+          />
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Сургалтын үнэ:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            value={state.selected_typeyear.price_emc}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    price_emc: e.target.value,
+                  },
+                },
+              });
+            }}
+          />
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Сургалтын үнэ /Гадны байгууллага/:
+            <b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            value={state.selected_typeyear.price_organization}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    price_organization: e.target.value,
+                  },
+                },
+              });
+            }}
+          />
+          <div className="my-1 " />
+          <span className="font-semibold pb-1">
+            Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            value={state.selected_typeyear.percent}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    percent: e.target.value,
+                  },
+                },
+              });
+            }}
+          />
+          <div className="my-2 " />
+          <span className="font-semibold pb-1">
+            Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <Input
+            size="small"
+            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            value={state.selected_typeyear.point}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  selected_typeyear: {
+                    ...state.selected_typeyear,
+                    point: e.target.value,
+                  },
+                },
               });
             }}
           />
@@ -483,6 +688,34 @@ const LessonTypeYear = () => {
       </Modal>
 
       <div className="card flex justify-center text-xs rounded p-2">
+        <div className="md:flex justify-startrounded gap-4 mt-2">
+          <Select
+            className="rounded-md md:w-64 "
+            placeholder="Сонгоно уу."
+            value={module}
+            onChange={(value) => {
+              setModule(value);
+            }}
+          >
+            {_.map(state.list_module, (item) => (
+              <Option className="text-xs" key={item.id} value={item.id}>
+                {item.module_name}
+              </Option>
+            ))}
+          </Select>
+          <DatePicker
+            size="large"
+            defaultValue={dayjs(date, yearFormat)}
+            format={yearFormat}
+            picker="year"
+            className="rounded-md h-10 md:w-32   "
+            onChange={(e) => {
+              setDate(e.$y);
+            }}
+          />
+        </div>
+
+        <div className="my-2 border border-gray-100" />
         <Spin
           tip="Уншиж байна."
           className="min-h-full first-line:bg-opacity-80"

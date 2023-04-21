@@ -294,7 +294,7 @@ const Interval = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_organization, search, first, per_page]);
+  }, [state.list_interval, search, first, per_page]);
 
   const save = () => {
     var error = [];
