@@ -26,7 +26,7 @@ const Navbar = () => {
       });
       setMenu(menu1);
     }
-    console.log(menu)
+    console.log(menu);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.tn]);
 
@@ -57,11 +57,14 @@ const Navbar = () => {
               return item.children.length === 0 ? (
                 <li className="nav-item" data-menu="dropdown" key={item.id}>
                   <Link to={"/" + item.menu_link}>
-                    <i className={
-                      "side-menu__icon" +
-                      (item.description === null ? "" : " " + item.description)
-                    }
-></i>
+                    <i
+                      className={
+                        "side-menu__icon" +
+                        (item.description === null
+                          ? ""
+                          : " " + item.description)
+                      }
+                    ></i>
                     {item.caption}
                   </Link>
                 </li>
@@ -81,11 +84,14 @@ const Navbar = () => {
                       console.log(index);
                     }}
                   >
-                    <i className={
-                      "side-menu__icon" +
-                      (item.description === null ? "" : " " + item.description)
-                    }
-></i>
+                    <i
+                      className={
+                        "side-menu__icon" +
+                        (item.description === null
+                          ? ""
+                          : " " + item.description)
+                      }
+                    ></i>
                     {item.caption}
                   </Link>
                   <ul
@@ -124,27 +130,31 @@ const Navbar = () => {
           data-menu="menu-container"
         >
           <ul
-            className="navigation-main nav navbar-nav "
+            className="navigation-main nav navbar-nav space-x-4"
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
             {menu.map((item) => {
               return item.children.length === 0 ? (
                 <li
-                  className="dropdown nav-item uppercase"
                   data-menu="dropdown"
                   key={item.id}
+                  className={
+                    "dropdown  nav-item uppercase " +
+                    (user.current.menu1ID === item.id
+                      ? " sidebar-group-active active"
+                      : "")
+                  }
                 >
-                  <Link
-                    to={"/" + item.menu_link}
-                    className="dropdown-toggle nav-link d-flex align-items-center"
-                    data-toggle="dropdown"
-                  >
-                    <i className={
-                      "side-menu__icon" +
-                      (item.description === null ? "" : " " + item.description)
-                    }
-></i>
+                  <Link to={"/" + item.menu_link} data-toggle="dropdown">
+                    <i
+                      className={
+                        "side-menu__icon" +
+                        (item.description === null
+                          ? ""
+                          : " " + item.description)
+                      }
+                    ></i>
                     <span data-i18n="Dashboard">{item.caption}</span>
                   </Link>
                 </li>
@@ -159,14 +169,19 @@ const Navbar = () => {
                     className="dropdown-toggle nav-link d-flex align-items-center"
                     data-toggle="dropdown"
                   >
-                    <i className={
-                      "side-menu__icon" +
-                      (item.description === null ? "" : " " + item.description)
-                    }
-></i>
+                    <i
+                      className={
+                        "side-menu__icon" +
+                        (item.description === null
+                          ? ""
+                          : " " + item.description)
+                      }
+                    ></i>
                     <span data-i18n="Apps" className="uppercase">
                       {item.caption}
                     </span>
+
+                    <i className="ft-chevron-right ml-2" />
                   </a>
 
                   <ul className="dropdown-menu">

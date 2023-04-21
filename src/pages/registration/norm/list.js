@@ -88,7 +88,6 @@ const List = () => {
     });
   };
   const updateItem = (item) => {
-    console.log("item: ", item);
     // API.getLessonTypeID(item.id)
     //   .then((res) => {
     //     dispatch({
@@ -165,7 +164,6 @@ const List = () => {
     setdraw((prev) => prev + 1);
   };
 
-  console.log("state.list_position: ", state.list_position);
   const memo_table = useMemo(() => {
     var result = state.list_position;
 

@@ -69,24 +69,13 @@ const Header = (props) => {
                   aria-labelledby="dropdownBasic2"
                 >
                   <div
-                    className="custom-switch custom-switch-secondary dropdown-item"
+                    className="dropdown-item"
                     style={{ paddingLeft: "56px" }}
                   >
-                    <input
-                      type="checkbox"
-                      id="color-switch-2"
-                      value={props.mode}
-                      checked={props.mode}
-                      onChange={() => props.setMode(!props.mode)}
-                      className="custom-control-input"
-                    />
-                    <label
-                      htmlFor="color-switch-2"
-                      className="custom-control-label mr-1"
-                    >
-                      <span>{props.mode ? "Хар" : "Цагаан"}</span>
-                    </label>
+                    <br />
+                    <span className="text-left text-muted font-small-1">.</span>
                   </div>
+                  <div className="dropdown-divider"></div>
                   <a
                     className="dropdown-item"
                     href="/"

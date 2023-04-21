@@ -144,25 +144,7 @@ const Component = () => {
       footer={null}
     >
       <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
-          Сургалтын нэр:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
-          value={state.type_name}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                type_name: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0 ">
           Сургалтын бүлэг:
         </span>
         <div className="w-full md:min-w-[200px]">
@@ -188,8 +170,25 @@ const Component = () => {
           </Select>
         </div>
       </div>
+      <div className="w-full p-1 flex flex-col justify-start ">
+        <span className="list-group-item-text grey darken-2 m-0">
+          Сургалтын нэр:<b className="ml-1 text-red-500">*</b>
+        </span>
+        <Input
+          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          value={state.type_name}
+          onChange={(e) => {
+            dispatch({
+              type: "STATE",
+              data: {
+                type_name: e.target.value,
+              },
+            });
+          }}
+        />
+      </div>
       <div className="w-full p-1 flex flex-col justify-start">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын давтамж:
         </span>
         <div className="w-full md:min-w-[200px]">
@@ -216,7 +215,7 @@ const Component = () => {
         </div>
       </div>
       <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0">
           Сургалт үргэлжлэх хугацаа:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
@@ -233,7 +232,7 @@ const Component = () => {
         />
       </div>
       <div className="w-full p-1 flex flex-col justify-start">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0">
           Үнэ /Бүтцийн нэгжүүдэд/:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
@@ -250,7 +249,7 @@ const Component = () => {
         />
       </div>
       <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0">
           Үнэ /Гадны байгууллагуудад/:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
@@ -267,7 +266,7 @@ const Component = () => {
         />
       </div>
       <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="font-semibold w-52 md:w-max pr-3 pb-1 italic text-slate-500">
+        <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын тайлбар:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input

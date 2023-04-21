@@ -109,7 +109,6 @@ export async function getModul() {
   return response.data;
 }
 
-
 // interval
 
 export async function getInterval() {
@@ -124,14 +123,15 @@ export async function getPerson() {
   return response.data;
 }
 
-
 // Сургалтын төрөл жилээр
 
 export async function getTypeYear(params) {
-  const response = await API().get("/type/year",{params:{
-    module_id: 1,
-    year: 2023
-  }});
+  const response = await API().get("/type/year", {
+    params: {
+      module_id: 1,
+      year: 2023,
+    },
+  });
   return response.data;
 }
 export async function postTypeYear(data) {
