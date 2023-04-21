@@ -22,7 +22,7 @@ const Modul = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getModul()
+    API.getModule()
       .then((res) => {
         dispatch({
           type: "STATE",
