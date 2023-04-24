@@ -17,6 +17,7 @@ const _state = {
 
   refresh: 0,
   modal: false,
+  modal1: false,
   id: null,
   module_id: null,
   interval_id: null,
