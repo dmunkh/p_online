@@ -405,13 +405,13 @@ const Training = () => {
       <div className="card flex p-2 border rounded text-xs">
         <div className="flex flex-col rounded">
           <div className="card flex justify-center text-xs rounded p-2">
-            <Spin
+            {/* <Spin
               tip="Уншиж байна."
               className="min-h-full first-line:bg-opacity-80"
               spinning={loading}
-            >
-              {memo_table}
-            </Spin>
+            > */}
+            {memo_table}
+            {/* </Spin> */}
           </div>
         </div>
       </div>

@@ -52,7 +52,8 @@ const Index = () => {
     <div className="card ">
       <Header />
       <div className=" card-content card-body">
-        {state.change_btn ? <Calendar /> : <Training />}
+        <Training />
+        {/* {state.change_btn ? <Calendar /> : <Training />} */}
       </div>
     </div>
   );

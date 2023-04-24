@@ -4,7 +4,7 @@ import moment from "moment";
 import { useTrainingContext } from "../../../contexts/trainingContext";
 
 import Module from "src/components/custom/module";
-import Type from "src/components/custom/type";
+import TypeYear from "src/components/custom/typeYear";
 
 const Header = () => {
   const { state, dispatch } = useTrainingContext();
@@ -83,12 +83,11 @@ const Header = () => {
               Сургалтын төрөл:
             </span>
             <div className="w-full md:min-w-[200px]">
-              <Type
-                module_id={state?.moduleid}
-                value={state.modaltypeid}
-                onChange={(value) => {
-                  dispatch({ type: "STATE", data: { modaltypeid: value } });
-                }}
+              <TypeYear
+                value={state.moduleid}
+                onChange={(value) =>
+                  dispatch({ type: "STATE", data: { modaltypeid: value } })
+                }
               />
             </div>
             <button
