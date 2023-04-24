@@ -22,7 +22,7 @@ const DepartmentTseh = (props) => {
       allowClear
       placeholder="Сонгоно уу."
       optionFilterProp="children"
-      className="w-full"
+      className="w-full "
       {...props}
     >
       {_.map(list, (item) => {

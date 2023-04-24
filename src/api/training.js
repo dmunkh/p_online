@@ -8,3 +8,11 @@ export async function getLesson(params) {
   });
   return response.data;
 }
+export async function putLesson(id, data) {
+  const response = await API().put("/lesson/" + id, data);
+  return response.data;
+}
+export async function deleteLesson(id) {
+  const response = await API().delete("/lesson/" + id);
+  return response.data;
+}
