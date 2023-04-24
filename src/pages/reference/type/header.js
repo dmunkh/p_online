@@ -62,9 +62,9 @@ const Header = () => {
                   });
                 }}
               >
-                {_.map(state?.list_module, (item) => (
+                {_.map(state?.list_module, (item, index) => (
                   <Select.Option
-                    key={item.id}
+                    key={index}
                     value={item.id}
                     className="text-sm"
                   >

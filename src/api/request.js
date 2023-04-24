@@ -99,8 +99,8 @@ export async function getTypeYearID(id) {
   return response.data;
 }
 
-export async function putTypeYear(data) {
-  const response = await API().post("/type/year", data);
+export async function putTypeYear(id,data) {
+  const response = await API().put("/type/year/"+id, data);
   return response.data;
 }
 
@@ -164,8 +164,8 @@ export async function getPerson() {
   return response.data;
 }
 
-export async function putPerson(id) {
-  const response = await API().put("/person/"+id);
+export async function putPerson(id, data) {
+  const response = await API().put("/person/"+id, data);
 
   return response.data;
 }

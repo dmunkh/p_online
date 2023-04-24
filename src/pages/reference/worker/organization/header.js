@@ -1,9 +1,9 @@
 import React from "react";
 import { DatePicker, Select } from "antd";
 import moment from "moment";
-import { useReferenceContext } from "../../../contexts/referenceContext";
-import { useUserContext } from "../../../contexts/userContext";
-import * as API from "../../../api/request";
+import { useReferenceContext } from "src/contexts/referenceContext";
+import { useUserContext } from "src/contexts/userContext";
+import * as API from "src/api/request";
 import _ from "lodash";
 
 import { useLayoutEffect } from "react";
@@ -50,7 +50,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="mb-2 pb-2 flex flex-col md:flex-row gap-5 border-b">
+    <div className="my-3  flex flex-col md:flex-row gap-5 ml-5">
       <div className="flex flex-col md:justify-between md:flex-row md:items-center gap-3  pb-2">
         <div className="flex flex-col md:flex-row md:items-center gap-2">
           <div className="w-full flex items-center gap-3 pr-3">
@@ -90,8 +90,8 @@ const Header = () => {
                   });
                 }}
               >
-                {_.map(state?.list_organization, (item) => (
-                  <Select.Option key={item.id} value={item.id}>
+                {_.map(state?.list_organization, (item, index) => (
+                  <Select.Option key={index} value={item.id}>
                     {item.organization_name}
                   </Select.Option>
                 ))}

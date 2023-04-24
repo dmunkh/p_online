@@ -8,13 +8,12 @@ import FormContextProvider from "../contexts/formContext";
 import LessonType from "../pages/reference/type/lessonsType";
 import LessonRegister from "../pages/reference/lessonsRegister";
 import Chamber from "../pages/reference/place";
-import Organization from "../pages/reference/organizations";
-import Employee from "../pages/reference/worker/employee";
+import Employee from "../pages/reference/worker/organization/list";
 import Interval from "../pages/reference/interval";
 import Worker from "../pages/registration/worker2";
 import Place from "../pages/reference/place";
 import Module from "../pages/reference/module";
-import LessonTypeYear from "../pages/reference/lessontypeyear";
+import LessonTypeYear from "../pages/reference/typeYear/list";
 
 const Reference = () => {
   const data = [
@@ -47,14 +46,6 @@ const Reference = () => {
       component: (
         <UseReferenceContext>
           <Chamber />
-        </UseReferenceContext>
-      ),
-    },
-    {
-      path: "/reference/organization",
-      component: (
-        <UseReferenceContext>
-          <Organization />
         </UseReferenceContext>
       ),
     },

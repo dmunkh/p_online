@@ -73,11 +73,13 @@
       margin-right: 0.5rem; }
       .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) {
         background-color: #EFDEFF;
+      
         border-radius: 0.35rem; }
         .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) > a {
           color: #7441DB; }
       .horizontal-menu .navbar-horizontal .main-menu-content > ul > li:hover:not(.active) {
         background-color: #E7E9EC;
+        color: #7441DB;
         border-radius: 0.35rem; }
       .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.show .dropdown-menu {
         animation: 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0s normal forwards 1 fadein; }
