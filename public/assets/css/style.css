@@ -77,3 +77,8 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   .p-rowgroup-header {
 	background: #f0f8ff !important;
   }
+  
+ .box-shadow-custom 
+  {
+    box-shadow: 1px 2px 9px #F4AAB9,
+      }

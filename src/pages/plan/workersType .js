@@ -292,7 +292,7 @@ const Workers = () => {
                     });
                   }}
                 >
-                  <i className="fe fe-trash-2" />
+                  <i className="ft-trash-2" />
                 </button>
               );
             }}

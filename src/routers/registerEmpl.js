@@ -2,18 +2,27 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseReferenceContext from "../contexts/referenceContext";
+import UserRegisterEmplContext from "../contexts/registerEmplContext";
 
-import LessonType from "../pages/reference/type/lessonsType";
+import Workers from "../pages/workers/index";
+import WorkerRegister from "../pages/workers/register";
 
 const RegisterEmpl = () => {
   const data = [
     {
-      path: "/reference/lesson",
+      path: "/register",
       component: (
-        <UseReferenceContext>
-          <LessonType />
-        </UseReferenceContext>
+        <UserRegisterEmplContext>
+          <Workers />
+        </UserRegisterEmplContext>
+      ),
+    },
+    {
+      path: "/worker/register",
+      component: (
+        <UserRegisterEmplContext>
+          <WorkerRegister />
+        </UserRegisterEmplContext>
       ),
     },
   ];

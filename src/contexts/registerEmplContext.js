@@ -1,5 +1,6 @@
 import React, { useContext, useReducer } from "react";
 import { reducer } from "../reducers/registerEmplReducer";
+import moment from "moment";
 
 const context = React.createContext();
 
@@ -7,6 +8,8 @@ const _state = {
   list: [],
   refresh: 0,
   modal: false,
+  moduleid: null,
+  date: moment(),
 };
 
 export const useRegisterEmplContext = () => {

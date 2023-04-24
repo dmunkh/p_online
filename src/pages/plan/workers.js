@@ -304,7 +304,7 @@ const Workers = () => {
                           });
                         }}
                       >
-                        <i className="fe fe-plus" />
+                        <i className="fa fa-plus" />
                       </button>
                     );
                   }}
