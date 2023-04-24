@@ -19,6 +19,9 @@ a:active {
 a:hover {
     color: #8741ff;
 }
+.element.style {
+    overflow: hidden;
+}
 /* .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) > link {
     color: #7441DB;
 } */

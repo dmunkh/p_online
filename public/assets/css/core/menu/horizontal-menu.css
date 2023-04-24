@@ -10,7 +10,7 @@
 ==========================================================================================*/
 /* Shadows (from mdl http://www.getmdl.io/) */
 .horizontal-menu.navbar-sticky:not(.auth-page):not(.navbar-static) .main-panel, .horizontal-menu:not(.auth-page):not(.navbar-static) .main-panel {
-  margin-top: 4rem; }
+  margin-top: 3rem; }
 
 .horizontal-menu.navbar-sticky.page-scrolled:not(.layout-dark) nav.header-navbar {
   background-color: #fff; }
@@ -221,7 +221,7 @@
 
 @media (max-width: 1199.98px) {
   .horizontal-layout .navbar.header-navbar.navbar-horizontal {
-    top: -5rem; } }
+    top: -7rem; } }
 
 /*=========================================================================================
 	File Name: vertical-overlay-menu.scss

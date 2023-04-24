@@ -12,9 +12,9 @@ import * as API from "src/api/request";
 import Header from "./header";
 import _ from "lodash";
 import Swal from "sweetalert2";
-import Employee from "../employee/list";
+import Employee from "./employee/list";
 import Modal from "./modal";
-import EmpModal from "../employee/modal";
+import EmpModal from "./employee/modal";
 
 export default function List() {
   const { message, checkRole } = useUserContext();
@@ -193,7 +193,7 @@ export default function List() {
     );
   }
   return (
-    <div className="flex flex-col rounded">
+    <div className="card flex justify-center text-xs rounded p-2">
       <Header />
       <div className=" text-xs rounded p-2">
         <Spin
