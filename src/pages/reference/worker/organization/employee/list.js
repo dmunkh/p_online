@@ -127,6 +127,11 @@ export default function Employee({ data }) {
         responsiveLayout="scroll"
         header={header}
         value={empList}
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Мэдээлэл олдсонгүй...
+          </div>
+        }
       >
         <Column
           header="№"

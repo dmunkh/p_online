@@ -23,7 +23,7 @@ export default function List() {
   const [expandedRows, setExpandedRows] = useState(null);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
-  const [per_page, set_per_page] = useState(20);
+  const [per_page, set_per_page] = useState(10);
   const toast = useRef(null);
   useEffect(() => {
     API.getOrganization()
