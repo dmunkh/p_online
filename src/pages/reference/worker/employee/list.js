@@ -13,11 +13,11 @@ import Swal from "sweetalert2";
 import _ from "lodash";
 
 export default function Employee({ data }) {
-  const { message, checkRole } = useUserContext();
+  const { message, checkRole , user} = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const [empList, setEmpList] = useState([]);
   const [search, setSearch] = useState("");
-
+console.log(user.current)
   useLayoutEffect(() => {
     API.getPerson()
       .then(async (res) => {

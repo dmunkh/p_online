@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../contexts/userContext";
+
 import _ from "lodash";
 
 const Navbar = () => {
@@ -166,7 +167,7 @@ const Navbar = () => {
                             : " " + item.description)
                         }
                       ></i>
-                       
+
                       <span data-i18n="Apps" className=" md:uppercase text-sm">
                         {item.caption}
                       </span>
