@@ -35,7 +35,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        className="main-menu menu-light menu-fixed menu-shadow app-sidebar menu-native-scroll "
+        className="main-menu menu-light menu-fixed menu-shadow app-sidebar "
         role="navigation"
         data-menu="menu-wrapper"
         data-background-color="man-of-steel"

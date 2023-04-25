@@ -13,11 +13,10 @@ import Swal from "sweetalert2";
 import _ from "lodash";
 
 export default function Employee({ data }) {
-  const { message, checkRole , user} = useUserContext();
+  const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const [empList, setEmpList] = useState([]);
   const [search, setSearch] = useState("");
-console.log(user.current)
   useLayoutEffect(() => {
     API.getPerson()
       .then(async (res) => {
@@ -128,6 +127,11 @@ console.log(user.current)
         responsiveLayout="scroll"
         header={header}
         value={empList}
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Мэдээлэл олдсонгүй...
+          </div>
+        }
       >
         <Column
           header="№"

@@ -26,13 +26,13 @@ const Layout = ({ children }) => {
     <div
       className={`horizontal-layout horizontal-menu horizontal-menu-padding 2-columns navbar-sticky ${
         isCollapsed
-          ? "vertical-layout vertical-overlay-menu fixed-navbar pace-done menu-hide text-sm"
+          ? "vertical-layout vertical-overlay-menu fixed-navbar pace-done menu-hide text-sm "
           : "vertical-layout vertical-overlay-menu fixed-navbar pace-done menu-open text-sm"
       }`}
       data-open="hover"
       data-menu="horizontal-menu"
       data-col="2-columns"
-      style={isCollapsed ? { overflow: "auto" } : { overflow: "hidden" }}
+      style={isCollapsed ? { overflow: "hidden" } : { overflow: "hidden" }}
     >
       <Header
         rightbarToggle={rightbarToggle}
