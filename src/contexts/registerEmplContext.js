@@ -8,8 +8,14 @@ const _state = {
   list: [],
   refresh: 0,
   modal: false,
+  modaltransfer: false,
+  modaltransferTypeYear: null,
   moduleid: null,
+  list_checked: [],
+  list_position: [],
   date: moment(),
+  selectedpositionname: null,
+  tns: null,
 };
 
 export const useRegisterEmplContext = () => {

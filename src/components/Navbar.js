@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../contexts/userContext";
+
 import _ from "lodash";
 
 const Navbar = () => {
@@ -8,7 +9,8 @@ const Navbar = () => {
 
   const [menu, setMenu] = useState([]);
   const [dropdown, setDropDown] = useState(null);
-
+  const [selectedMenu, setSelectedMenu] = useState(null);
+  console.log(window.location.pathname.split("/")[1]);
   useEffect(() => {
     if (user.tn !== 0) {
       var allMenu = user.usermenu;
@@ -134,39 +136,56 @@ const Navbar = () => {
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            {menu.map((item) => {
+            {menu.map((item, index) => {
+              if (item.menu_link === window.location.pathname.split("/")[1]) {
+              }
+
               return item.children.length === 0 ? (
                 <li
-                  data-menu="dropdown"
                   key={item.id}
-                  className={
-                    "dropdown  nav-item uppercase " +
-                    (user.current.menu1ID === item.id
-                      ? " sidebar-group-active active"
-                      : "")
-                  }
+                  className={`dropdown nav-item ${
+                    selectedMenu
+                      ? selectedMenu === index
+                        ? "sidebar-group-active active"
+                        : ""
+                      : window.location.pathname.split("/")[1] ===
+                        item.menu_link
+                      ? "sidebar-group-active active"
+                      : ""
+                  } `}
                 >
-                  <Link to={"/" + item.menu_link} data-toggle="dropdown">
-                    <i
-                      className={
-                        "side-menu__icon" +
-                        (item.description === null
-                          ? ""
-                          : " " + item.description)
-                      }
-                    ></i>
-                    <span data-i18n="Dashboard">{item.caption}</span>
-                  </Link>
+                  <div className="dropdown-toggle nav-link d-flex align-items-center">
+                    <Link
+                      to={"/" + item.menu_link}
+                      onClick={() => setSelectedMenu(index)}
+                    >
+                      <i
+                        className={
+                          "side-menu__icon " +
+                          (item.description === null
+                            ? ""
+                            : " " + item.description)
+                        }
+                      ></i>
+
+                      <span data-i18n="Apps" className=" md:uppercase text-sm">
+                        {item.caption}
+                      </span>
+                    </Link>
+                  </div>
                 </li>
               ) : (
                 <li
-                  className="dropdown nav-item "
-                  data-menu="dropdown"
+                  className={`dropdown nav-item `}
                   key={item.id}
+                  data-menu="dropdown"
                 >
-                  <a
-                    href={"/"}
-                    className="dropdown-toggle nav-link d-flex align-items-center"
+                  <div
+                    className={`dropdown-toggle nav-link d-flex align-items-center ${
+                      item.menu_link === window.location.pathname.split("/")[1]
+                        ? "bg-[#EFDEFF] rounded "
+                        : ""
+                    } `}
                     data-toggle="dropdown"
                   >
                     <i
@@ -177,12 +196,12 @@ const Navbar = () => {
                           : " " + item.description)
                       }
                     ></i>
-                    <span data-i18n="Apps" className="uppercase">
+                    <span data-i18n="Apps" className="md:uppercase text-sm">
                       {item.caption}
                     </span>
 
                     <i className="ft-chevron-right ml-2" />
-                  </a>
+                  </div>
 
                   <ul className="dropdown-menu">
                     {item.children.map((child) => {
@@ -190,8 +209,8 @@ const Navbar = () => {
                         <li data-menu="" key={child.id}>
                           <Link
                             to={`/${child.menu_link} `}
+                            onClick={() => setSelectedMenu(index)}
                             className="dropdown-item d-flex align-items-center"
-                            data-toggle="dropdown"
                           >
                             <i className="ft-arrow-right submenu-icon"></i>
                             <span data-i18n="Email">{child.caption}</span>

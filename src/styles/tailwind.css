@@ -2,14 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.p-rowgroup-header {
-    background: #F0E6FC !important;
-}
-.pi {
-    font-size: 11px;
-    color: blue;
 
-}
 .p-checkbox .p-checkbox-box {
     border: 2px solid #ced4da;
     background: #ffffff;
@@ -19,22 +12,29 @@
     border-radius: 6px;
     transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
-.horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) > link {
-    color: #7441DB;
+a:active {
+    color: #8741ff;
 }
-.horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) {
+
+a:hover {
+    color: #8741ff;
+}
+/* .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) > link {
+    color: #7441DB;
+} */
+/* .horizontal-menu .navbar-horizontal .main-menu-content > ul > li.active:not(.dropdown-submenu) {
     background-color: #EFDEFF;
     border-radius: 0.55rem;
 }
 .horizontal-menu .navbar-horizontal .main-menu-content > ul > li {
     margin-right: 0.5rem;
-}
-.horizontal-menu .navbar-horizontal .main-menu-content .nav-link {
+} */
+/* .horizontal-menu .navbar-horizontal .main-menu-content .nav-link {
     padding: 0.5rem .75rem .45rem;
     font-weight: 500;
     color: #342E49;
-}
-.horizontal-menu .navbar-horizontal .main-menu-content > ul > li {
+} */
+/* .horizontal-menu .navbar-horizontal .main-menu-content > ul > li {
     margin-right: 0.5rem;
 }
 .horizontal-menu .navbar-horizontal .dropdown .dropdown-menu {
@@ -77,4 +77,4 @@
     border: 1px solid #E0E0E0;
     border-radius: 0.35rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+} */

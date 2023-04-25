@@ -6,6 +6,7 @@ import UserRegisterEmplContext from "../contexts/registerEmplContext";
 
 import Workers from "../pages/workers/index";
 import WorkerRegister from "../pages/workers/register";
+import WorkerList from "../pages/workers/register/index";
 
 const RegisterEmpl = () => {
   const data = [
@@ -22,6 +23,14 @@ const RegisterEmpl = () => {
       component: (
         <UserRegisterEmplContext>
           <WorkerRegister />
+        </UserRegisterEmplContext>
+      ),
+    },
+    {
+      path: "/worker/register/worker",
+      component: (
+        <UserRegisterEmplContext>
+          <WorkerList />
         </UserRegisterEmplContext>
       ),
     },

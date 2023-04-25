@@ -9,7 +9,6 @@ import { useUserContext } from "src/contexts/userContext";
 import { useNavigate } from "react-router-dom";
 // import Swal from "sweetalert2";
 // import moment from "moment";
-import events from "../workers/events";
 
 const List = () => {
   const navigate = useNavigate();
@@ -91,7 +90,7 @@ const List = () => {
                           key={item.id}
                           className="list-group-item  hover:bg-[#dedbf1] cursor-pointer"
                           onClick={(value) => {
-                            navigate("/worker/register?id=" + item.id);
+                            navigate("/worker/register/worker?id=" + item.id);
                             console.log("partner");
                           }}
                         >

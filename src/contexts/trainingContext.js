@@ -8,6 +8,10 @@ const _state = {
   refresh: 0,
   modal: false,
   change_year: null,
+  change_btn: false,
+
+  moduleid: null,
+  modaltypeid: null,
 };
 
 export const useTrainingContext = () => {

@@ -9,6 +9,7 @@ const TypeList = (props) => {
 
   useLayoutEffect(() => {
     console.log(props.module_id);
+
     API.getTypesYear({ module_id: _.toInteger(props.module_id) }).then(
       (res) => {
         setList(res);

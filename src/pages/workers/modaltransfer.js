@@ -5,7 +5,7 @@ import { Select, InputNumber } from "antd";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import DepartmentTseh from "src/components/custom/departmentTseh";
-import Department from "src/pages/workers/department";
+import TypeYear from "src/components/custom/typeYear";
 import _ from "lodash";
 
 import moment from "moment";
@@ -25,18 +25,17 @@ const ModalNormDetail = () => {
       <hr className="my-2" />
       <div className="flex items-center">
         <span className="w-1/3 font-semibold">
-          Бүтцийн нэгж:<b className="ml-1 text-red-500">*</b>
+          Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
         </span>
-        <DepartmentTseh
-          value={state.modaltypeid}
+        <TypeYear
+          module_id="1"
+          value={state.modaltransferTypeYear}
           onChange={(value) => {
-            dispatch({ type: "STATE", data: { modaltypeid: value } });
+            dispatch({ type: "STATE", data: { modaltransferTypeYear: value } });
           }}
         />
       </div>
       <hr className="my-2" />
-
-      <Department />
 
       <hr className="my-2" />
       <button

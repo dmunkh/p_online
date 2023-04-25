@@ -2,18 +2,18 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseReferenceContext from "../contexts/referenceContext";
+import UseTrainingContext from "src/contexts/trainingContext";
 
-import LessonType from "../pages/reference/type/lessonsType";
+import TrainingList from "../pages/registration/training/index";
 
 const Training = () => {
   const data = [
     {
-      path: "/reference/lesson",
+      path: "/training",
       component: (
-        <UseReferenceContext>
-          <LessonType />
-        </UseReferenceContext>
+        <UseTrainingContext>
+          <TrainingList />
+        </UseTrainingContext>
       ),
     },
   ];

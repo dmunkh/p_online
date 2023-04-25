@@ -1,82 +1,57 @@
-import React, { useState, useLayoutEffect, useRef } from "react";
-import { useUserContext } from "src/contexts/userContext";
-import { useReferenceContext } from "src/contexts/referenceContext";
-import Module from "src/components/custom/module";
-import Modal from "./modal";
-
-import * as API from "src/api/request";
-import { Select, Input, DatePicker } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-
+import React, { useState, useMemo, useLayoutEffect } from "react";
+import { useUserContext } from "../../../contexts/userContext";
+import { useTrainingContext } from "../../../contexts/trainingContext";
+import * as API from "src/api/training";
+import { Spin, Select, Input } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import dayjs from "dayjs";
 
+import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import moment from "moment";
 import Swal from "sweetalert2";
 
-const List = () => {
+const Training = () => {
   const { message, checkRole } = useUserContext();
-  const { state, dispatch } = useReferenceContext();
-  const toast = useRef(null);
+  const { state, dispatch } = useTrainingContext();
+
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
-  const yearFormat = "YYYY";
-  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
-  const [module, setModule] = useState(1);
 
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getTypesYear(module, date)
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_typeyear: _.orderBy(res, ["type_name"]),
-          },
-        });
+    state.module_id &&
+      API.getLesson({
+        year: state.change_year,
+        module_id: state.module_id,
       })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_typeyear: [],
-          },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Сургалтын төрлийн жагсаалт татаж чадсангүй",
-        });
-      })
-      .finally(() => setLoading(false));
-
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_training: _.orderBy(res, ["id"]),
+            },
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_training: [],
+            },
+          });
+          message({
+            type: "error",
+            error,
+            title: "Сургалтын төрөл жагсаалт татаж чадсангүй",
+          });
+        })
+        .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, module, date]);
+  }, [state.refresh, state.change_year, state.module_id]);
 
-  useLayoutEffect(() => {
-    API.getType({ module_id: module })
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_type: _.orderBy(res, ["type_name"]),
-          },
-        });
-      })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const deleteItem = (item) => {
     Swal.fire({
       text: "Устгахдаа итгэлтэй байна уу?",
@@ -89,7 +64,7 @@ const List = () => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        API.deleteTypeYear(item.id)
+        API.deleteLesson(item.id)
           .then(() => {
             message({
               type: "success",
@@ -101,64 +76,85 @@ const List = () => {
             message({
               type: "error",
               error,
-              title: " Устгаж чадсангүй",
+              title: "Сургалтын төрөл устгаж чадсангүй",
             });
           });
+        message({
+          type: "error",
+          title: "Амжилттай устгагдлаа",
+        });
       }
     });
   };
   const updateItem = (item) => {
-    dispatch({
-      type: "STATE",
-      data: {
-        selected_typeyear: item,
-      },
-    });
-    //     //loadItemTypeList(res.itemtypeid);
-    dispatch({
-      type: "STATE",
-      data: { modal: true },
-    });
+    API.putLesson(item.id)
+      .then((res) => {
+        dispatch({
+          type: "SET_TYPE",
+          data: {
+            id: res.id,
+            module_id: res.module_id,
+            interval_id: res.interval_id,
+            type_name: res.type_name,
+            price_emc: res.price_emc,
+            price_organization: res.price_organization,
+            hour: res.hour,
+            description: res.description,
+            interval_name: res.interval_name,
+            time: res.time,
+          },
+        });
+        dispatch({
+          type: "STATE",
+          data: { modal: true },
+        });
+        //loadItemTypeList(res.itemtypeid);
+      })
+      .catch((error) => {
+        message({
+          type: "error",
+          error,
+          title: "Мэдээлэл татаж чадсангүй.",
+        });
+        dispatch({
+          type: "CLEAR",
+        });
+      });
   };
 
-  var result = state.list_typeyear;
-  if (search) {
-    result = _.filter(result, (a) =>
-      _.includes(_.toLower(a.type_name), _.toLower(search))
-    );
-  }
-  return (
-    <div className="card flex justify-center text-xs rounded p-2">
-      <div className="md:flex justify-start rounded gap-4 my-3 mx-2 md:w-1/5">
-        <DatePicker
-          size="large"
-          defaultValue={dayjs(date, yearFormat)}
-          format={yearFormat}
-          picker="year"
-          className="h-9    "
-          onChange={(e) => {
-            setDate(e.$y);
-          }}
-        />
-        <div className="w-full md:min-w-[200px]">
-          <Module
-            value={module}
-            onChange={(value) => {
-              setModule(value);
-            }}
-          />
-        </div>
-      </div>
+  const memo_table = useMemo(() => {
+    var result = state.list_training;
+
+    if (state.selected_moduleID)
+      result = _.filter(result, (a) => a.module_id === state.selected_moduleID);
+
+    if (search) {
+      result = _.filter(
+        result,
+        (a) =>
+          _.includes(_.toLower(a.type_name), _.toLower(search)) ||
+          _.includes(_.toLower(a.begin_date), _.toLower(search)) ||
+          _.includes(_.toLower(a.end_date), _.toLower(search)) ||
+          _.includes(_.toLower(a.place_name), _.toLower(search)) ||
+          _.includes(_.toLower(a.limit), _.toLower(search)) ||
+          _.includes(_.toLower(a.hour), _.toLower(search)) ||
+          _.includes(_.toLower(a.limit), _.toLower(search)) ||
+          _.includes(_.toLower(a.point), _.toLower(search)) ||
+          _.includes(_.toLower(a.percent), _.toLower(search))
+      );
+    }
+
+    return (
       <DataTable
         scrollable
         dataKey="id"
         size="small"
         stripedRows
         showGridlines
-        className="w-full "
+        className="w-full text-sm"
         sortMode="single"
         removableSort
-        scrollHeight={window.innerHeight - 275}
+        scrollHeight={window.innerHeight - 400}
         responsiveLayout="scroll"
         value={result}
         header={
@@ -173,13 +169,13 @@ const List = () => {
               />
             </div>
             <div className="flex items-center gap-2 ">
-              {checkRole(["type_year_add"]) && (
+              {checkRole(["lesson_add"]) && (
                 <div
                   title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     dispatch({
-                      type: "CLEAR_TYPEYEAR",
+                      type: "CLEAR_TYPE",
                     });
                     dispatch({
                       type: "STATE",
@@ -187,7 +183,7 @@ const List = () => {
                     });
                   }}
                 >
-                  <i className="ft-plus" />
+                  <i className="fa fa-plus" />
                 </div>
               )}
             </div>
@@ -281,92 +277,113 @@ const List = () => {
           sortable
           header="Сургалтын төрөл"
           field="type_name"
-          style={{ minWidth: "400px", maxWidth: "400px" }}
+          style={{ minWidth: "150px" }}
           className="text-xs "
-          headerClassName="flex items-center justify-left"
-          bodyClassName="flex items-center justify-start text-left"
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start "
+        />
+        <Column
+          sortable
+          header="Эхлэх огноо"
+          field="begin_date"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center "
+        />
+
+        <Column
+          sortable
+          header="Дуусах огноо"
+          field="end_date"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
         />
         <Column
           sortable
           header="Танхим"
           field="place_name"
+          style={{ minWidth: "150px" }}
           className="text-xs "
-          headerClassName="flex items-center justify-left"
-          bodyClassName="flex items-center justify-start text-left"
-        />
-        <Column
-          sortable
-          header="Суух ажилчидын тоо	"
-          field="limit"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center text-center"
+          headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center"
         />
         <Column
           sortable
-          header="Сургалтын үргэлжлэх хугацаа"
+          header="Суух ажилчдын тоо"
+          field="limit"
+          style={{ minWidth: "150px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
+        />
+        <Column
+          sortable
+          header="Сургалтын цаг"
           field="hour"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          style={{ minWidth: "150px" }}
           className="text-xs "
-          headerClassName="flex items-center justify-center text-center"
-          bodyClassName="flex items-center justify-center "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
         />
         <Column
           sortable
-          header="Сургалтын үнэ"
-          field="price_emc"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          header="Сургалтын тайлбар"
+          field="description"
+          style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
+          bodyClassName="flex items-center justify-start text-left"
         />
         <Column
           sortable
-          header="Сургалтын үнэ /Гаднын байгууллага/"
-          field="price_organization"
-          style={{ minWidth: "120px", maxWidth: "120px" }}
+          header="Ирц"
+          field="attendance"
+          style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
+          bodyClassName="flex items-center justify-start text-left"
         />
         <Column
           sortable
           header="Шалгалтын оноо"
-          field="percent"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          field="point"
+          style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
+          bodyClassName="flex items-center justify-start text-left"
         />
         <Column
           sortable
           header="Тэнцэх хувь"
-          field="point"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          field="percent"
+          style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center "
+          bodyClassName="flex items-center justify-start text-left"
         />
+
         <Column
           align="center"
           header="Үйлдэл"
           className="text-xs"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          style={{ minWidth: "90px", maxWidth: "90px" }}
           headerClassName="flex items-center justify-center"
           body={(item) => {
             return (
               <div className="flex items-center justify-center gap-2">
-                {checkRole(["type_year_edit"]) && (
+                {checkRole(["lesson_edit"]) && (
                   <button
-                    className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => updateItem(item)}
                   >
                     <i className="ft-edit" />
                   </button>
                 )}
 
-                {checkRole(["type_year_delete"]) && (
+                {checkRole(["lesson_delete"]) && (
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => deleteItem(item)}
@@ -379,9 +396,27 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal />
-    </div>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_training, search, first, per_page]);
+
+  return (
+    <>
+      <div className="card flex p-2 border rounded text-xs">
+        <div className="flex flex-col rounded">
+          <div className="card flex justify-center text-xs rounded p-2">
+            {/* <Spin
+              tip="Уншиж байна."
+              className="min-h-full first-line:bg-opacity-80"
+              spinning={loading}
+            > */}
+            {memo_table}
+            {/* </Spin> */}
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
-export default React.memo(List);
+export default React.memo(Training);

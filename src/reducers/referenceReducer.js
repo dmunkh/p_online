@@ -22,6 +22,7 @@ export const reducer = (state, action) => {
     case "CLEAR_TYPE":
       return {
         ...state,
+        
         id: null,
         module_id: null,
         interval_id: null,
@@ -33,12 +34,40 @@ export const reducer = (state, action) => {
         interval_name: null,
         time: null,
       };
+
     case "CLEAR_PLACE":
       return {
         ...state,
         placeID: null,
         place_name: "",
       };
+      case "CLEAR_TYPEYEAR":
+      return {
+        ...state,
+        selected_typeyear: {
+          id:null,
+          type_name:"",
+          hour: null,
+          limit: null,
+          percent: null,
+          place_id:null,
+          point: null,
+          price_emc: null,
+          price_organization: null,
+          type_id: null,
+          year: null,}
+      };
+      case "CLEAR_EMPLOYEE":
+        return {
+          ...state,
+          selected_employee:{
+            id:null,
+            organization_id: null,
+            position_name:"",
+            register_number:null,
+            short_name:null,
+          }
+        };
 
     default:
       return state;

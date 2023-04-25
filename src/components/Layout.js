@@ -4,6 +4,7 @@ import Header from "./Header";
 import RightBar from "./RightBar";
 import NavBar from "./Navbar";
 
+
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
@@ -20,26 +21,6 @@ const Layout = ({ children }) => {
   const [mode, setMode] = useState(
     localStorage.getItem("srs-theme") === "dark" ? true : false
   );
-
-  // useEffect(() => {
-  //   if (user.tn !== 0) {
-  //     var allMenu = user.usermenu;
-  //     var menu1 = _.sortBy(
-  //       user.usermenu.filter((a) => a.parent_id === 0),
-  //       ["ordern"]
-  //     );
-  //     _.map(menu1, (item) => {
-  //       var menu2 = _.orderBy(
-  //         allMenu.filter((a) => a.parent_id === item.id),
-  //         ["ordern"],
-  //         ["asc"]
-  //       );
-  //       item.children = menu2;
-  //     });
-  //     setMenu(menu1);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [user.tn]);
 
   return (
     <div
