@@ -8,11 +8,24 @@ export async function getLesson(params) {
   });
   return response.data;
 }
-export async function putLesson(id, data) {
-  const response = await API().put("/lesson/" + id, data);
+export async function getLessonID(id) {
+  const response = await API().get("/lesson/" + id);
+  return response.data;
+}
+export async function putLesson(id, params) {
+  const response = await API().put("/lesson/" + id, { ...params });
+  return response.data;
+}
+export async function postLesson(params) {
+  const response = await API().post("/lesson", params);
   return response.data;
 }
 export async function deleteLesson(id) {
   const response = await API().delete("/lesson/" + id);
+  return response.data;
+}
+
+export async function getLessonTypeID(id) {
+  const response = await API().get("/type/year/" + id);
   return response.data;
 }

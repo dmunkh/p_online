@@ -11,7 +11,6 @@ const TypeList = (props) => {
     props.module_id !== undefined &&
       API.getType({ module_id: props.module_id }).then((res) => {
         setList(res);
-        console.log("res: ", res);
 
         if (res.length > 0 && !props.value) props.onChange(res[0].id);
       });

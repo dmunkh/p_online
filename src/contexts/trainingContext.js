@@ -1,5 +1,6 @@
 import React, { useContext, useReducer } from "react";
-import { reducer } from "../reducers/trainingReducer";
+import { reducer } from "src/reducers/trainingReducer";
+import moment from "moment";
 
 const context = React.createContext();
 
@@ -7,11 +8,24 @@ const _state = {
   list_training: [],
   refresh: 0,
   modal: false,
-  change_year: null,
+  change_year: moment(),
   change_btn: false,
 
   moduleid: null,
-  modaltypeid: null,
+  type_id: null,
+
+  id: null,
+  begin_date: moment(),
+  end_date: moment(),
+  hour: null,
+  limit: null,
+  percent: null,
+  place_id: null,
+  point: null,
+  price_emc: null,
+  price_organization: null,
+  year: moment(),
+  type_name: null,
 };
 
 export const useTrainingContext = () => {

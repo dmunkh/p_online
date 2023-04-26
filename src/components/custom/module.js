@@ -19,7 +19,6 @@ const DepartmentTseh = (props) => {
   return (
     <Select
       showSearch
-      allowClear
       placeholder="Сонгоно уу."
       optionFilterProp="children"
       className="w-full "

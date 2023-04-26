@@ -16,6 +16,7 @@ import { Row } from "primereact/row";
 
 import { Spin, Input, Modal, Select, InputNumber, Checkbox } from "antd";
 import moment from "moment";
+import lesson from "src/components/custom/lesson";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -40,8 +41,8 @@ const List = () => {
   useEffect(() => {
     setLoading(true);
     API.getWorkers({
-      department_id: 10,
-      lesson_id: 1,
+      department_id: state.department,
+      lesson_id: state.lessonid,
     })
       .then((res) => {
         setList(_.orderBy(res, ["department_code"]));

@@ -16,6 +16,9 @@ const _state = {
   date: moment(),
   selectedpositionname: null,
   tns: null,
+  lessonid: null,
+  lessonlist: [],
+  lessonlistfilter: [],
 };
 
 export const useRegisterEmplContext = () => {

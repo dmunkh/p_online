@@ -7,7 +7,7 @@ import { Select, Input, Modal } from "antd";
 
 import _ from "lodash";
 
-const Component = () => {
+const Component = (data) => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
@@ -66,7 +66,7 @@ const Component = () => {
           });
         });
     } else {
-      console.log(state.id);
+
       API.putPerson(state.selected_employee.id, {
         ...data,
       })
@@ -122,6 +122,15 @@ const Component = () => {
               optionFilterProp="children"
               value={state.selected_employee.organization_id}
               onChange={(value) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    selected_employee: {
+                      organization_id: data.organization_id,
+                    },
+                  },
+                });
+
                 dispatch({
                   type: "STATE",
                   data: {

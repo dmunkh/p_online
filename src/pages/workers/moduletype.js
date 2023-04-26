@@ -7,6 +7,7 @@ import { DatePicker } from "antd";
 import _ from "lodash";
 import { useUserContext } from "src/contexts/userContext";
 import * as API from "src/api/request";
+import moment from "moment";
 
 const Moduletype = () => {
   const { user, message, checkRole } = useUserContext();
@@ -14,15 +15,15 @@ const Moduletype = () => {
   const [list, setList] = useState([]);
 
   useLayoutEffect(() => {
-    API.getType({ module_id: 1 }).then((res) => {
+    API.getTypesYear({
+      year: moment(state.date).format("Y"),
+      module_id: state.moduletypeid,
+    }).then((res) => {
       setList(res);
-
-      if (res.length > 0)
-        dispatch({ type: "STATE", data: { moduletypeid: res[0].id } });
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state.moduletypeid]);
 
   return (
     <div classNameName="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
@@ -42,13 +43,37 @@ const Moduletype = () => {
               <span className="text-base">Сургалтууд</span>
 
               <ul className="list-group mb-3">
+                <li
+                  className="list-group-item hover:bg-[#dedbf1] cursor-pointer"
+                  style={{ paddingTop: "5px", paddingBottom: "2px" }}
+                  onClick={(value) => {
+                    dispatch({
+                      type: "STATE",
+                      data: { lessonlistfilter: state.lessonlist },
+                    });
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>Нийт сургалт</span>
+                  <span class="badge bg-light-primary float-right">4</span>
+                </li>
+                <hr></hr>
                 {_.map(list, (item) => {
                   return (
                     <li
                       className="list-group-item hover:bg-[#dedbf1] cursor-pointer"
                       style={{ paddingTop: "5px", paddingBottom: "2px" }}
                       onClick={(value) => {
-                        console.log("test");
+                        var result = [];
+                        result = state.lessonlist;
+
+                        var filter = _.filter(
+                          result,
+                          (a) => a.type_id === item.type_id
+                        );
+                        dispatch({
+                          type: "STATE",
+                          data: { lessonlistfilter: filter },
+                        });
                       }}
                     >
                       <span>{item.type_name}</span>
@@ -56,46 +81,8 @@ const Moduletype = () => {
                         {item.id}
                       </span>
                     </li>
-                    // <Option key={item.id} value={item.id}>
-                    //   {item.id} | {item.type_name}
-                    // </Option>
                   );
                 })}
-
-                {/* <li className="list-group-item">
-                  <span>Apex Angular</span>
-                  <span className="badge bg-light-primary float-right">
-                    2.5k
-                  </span>
-                </li>
-                <li className="list-group-item">
-                  <span>Vuexy VueJS</span>
-                  <span className="badge bg-light-info float-right">3.7k</span>
-                </li>
-                <li className="list-group-item">
-                  <span>Frest HTML</span>
-                  <span className="badge bg-light-warning float-right">
-                    2.3k
-                  </span>
-                </li>
-                <li className="list-group-item">
-                  <span>Modern Angular</span>
-                  <span className="badge bg-light-success float-right">
-                    4.1k
-                  </span>
-                </li>
-                <li className="list-group-item">
-                  <span>Frest Sketch</span>
-                  <span className="badge bg-light-secondary float-right">
-                    2.8k
-                  </span>
-                </li>
-                <li className="list-group-item">
-                  <span>Materialize HTML</span>
-                  <span className="badge bg-light-danger float-right">
-                    5.6k
-                  </span>
-                </li> */}
               </ul>
             </div>
           </div>

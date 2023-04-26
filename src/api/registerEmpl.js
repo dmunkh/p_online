@@ -2,7 +2,7 @@ import { API } from "./request";
 
 export async function getLesson(params) {
   const response = await API().get("/lesson", {
-    params: { year: 2023, module_id: 1 },
+    params: { ...params },
   });
   return response.data;
 }

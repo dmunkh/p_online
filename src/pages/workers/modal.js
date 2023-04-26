@@ -44,7 +44,7 @@ const ModalNormDetail = () => {
         onClick={() => {
           console.log(_.join(state.list_checked, ","));
           API.postWorker({
-            lesson_id: 1,
+            lesson_id: state.lessonid,
             tns: _.join(state.list_checked, ","),
           })
             .then((res) => {

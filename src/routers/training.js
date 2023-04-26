@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 
 import UseTrainingContext from "src/contexts/trainingContext";
 
-import TrainingList from "../pages/registration/training/index";
+import TrainingList from "src/pages/registration/training/index";
 
 const Training = () => {
   const data = [
