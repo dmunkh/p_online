@@ -76,7 +76,8 @@ const List = () => {
         });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [module]);
+
   const deleteItem = (item) => {
     Swal.fire({
       text: "Устгахдаа итгэлтэй байна уу?",
@@ -144,7 +145,8 @@ const List = () => {
           <Module
             value={module}
             onChange={(value) => {
-              setModule(value);
+              console.log(value)
+             setModule(value)
             }}
           />
         </div>
@@ -181,6 +183,7 @@ const List = () => {
                     dispatch({
                       type: "CLEAR_TYPEYEAR",
                     });
+                   
                     dispatch({
                       type: "STATE",
                       data: { modal: true },
