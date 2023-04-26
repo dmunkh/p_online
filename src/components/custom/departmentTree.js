@@ -25,7 +25,6 @@ const Departmenttree = (props) => {
       setList(result);
 
       if (result?.length > 0 && !props.value) {
-        console.log("check check");
         var department = _.find(result, {
           departmentcode: user?.info?.tseh_code,
         });

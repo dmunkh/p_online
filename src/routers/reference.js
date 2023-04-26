@@ -2,18 +2,18 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseReferenceContext from "../contexts/referenceContext";
-import FormContextProvider from "../contexts/formContext";
+import UseReferenceContext from "src/contexts/referenceContext";
+import FormContextProvider from "src/contexts/formContext";
 
-import LessonType from "../pages/reference/type/lessonsType";
-import LessonRegister from "../pages/reference/lessonsRegister";
-import Chamber from "../pages/reference/place";
-import Employee from "../pages/reference/worker/organization/list";
-import Interval from "../pages/reference/interval";
-import Worker from "../pages/registration/worker2";
-import Place from "../pages/reference/place";
-import Module from "../pages/reference/module";
-import LessonTypeYear from "../pages/reference/typeYear/list";
+import LessonType from "src/pages/reference/type/lessonsType";
+import LessonRegister from "src/pages/reference/lessonsRegister";
+import Chamber from "src/pages/reference/place";
+import Employee from "src/pages/reference/worker/organization/list";
+import Interval from "src/pages/reference/interval";
+import Worker from "src/pages/registration/worker2";
+import Place from "src/pages/reference/place";
+import Module from "src/pages/reference/module";
+import LessonTypeYear from "src/pages/reference/typeYear/list";
 
 const Reference = () => {
   const data = [

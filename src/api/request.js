@@ -79,15 +79,11 @@ export async function getType(params) {
 
 // Сургалтын төрөл жилээр - TypeYear
 
-export async function getTypesYear(module_id, date) {
-  const response = await API().get("/type/year",{params:{
-    module_id: module_id,
-    year: date
-  }});
+export async function getTypesYear(params) {
+  const response = await API().get("/type/year", { params: { ...params } });
 
   return response.data;
 }
-
 
 export async function deleteTypeYear(id) {
   const response = await API().delete("/type/year/" + id);
@@ -95,12 +91,12 @@ export async function deleteTypeYear(id) {
 }
 
 export async function getTypeYearID(id) {
-  const response = await API().get("/type/year/"+id);
+  const response = await API().get("/type/year/" + id);
   return response.data;
 }
 
-export async function putTypeYear(id,data) {
-  const response = await API().put("/type/year/"+id, data);
+export async function putTypeYear(id, data) {
+  const response = await API().put("/type/year/" + id, data);
   return response.data;
 }
 
@@ -165,7 +161,7 @@ export async function getPerson() {
 }
 
 export async function putPerson(id, data) {
-  const response = await API().put("/person/"+id, data);
+  const response = await API().put("/person/" + id, data);
 
   return response.data;
 }
@@ -178,12 +174,3 @@ export async function deletePerson(id) {
   const response = await API().delete("/person/" + id);
   return response.data;
 }
-
-
-
-
-
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-

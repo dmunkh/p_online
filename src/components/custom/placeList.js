@@ -3,29 +3,27 @@ import * as API from "src/api/request";
 import _ from "lodash";
 import { Select } from "antd";
 
-const TypeList = (props) => {
+const PlaceList = (props) => {
   const [list, setList] = useState([]);
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    props.module_id &&
-      API.getTypesYear({ module_id: props.module_id, year: props.year }).then(
-        (res) => {
-          setList(res);
+    API.getPlaces().then((res) => {
+      setList(res);
 
-          if (res.length > 0 && !props.value) props.onChange(res[0].id);
-        }
-      );
+      if (res.length > 0 && !props.value) props.onChange(res[0].id);
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.module_id, props.year]);
+  }, []);
 
   return (
     <div>
       <Select
         showSearch
-        className="w-full"
+        allowClear
         placeholder="Сонгоно уу."
+        className="w-full"
         optionFilterProp="children"
         style={{ minWidth: 450 }}
         {...props}
@@ -33,7 +31,7 @@ const TypeList = (props) => {
         {_.map(list, (item) => {
           return (
             <Option key={item.id} value={item.id}>
-              {item.id} | {item.type_name}
+              {item.id} | {item.place_name}
             </Option>
           );
         })}
@@ -42,4 +40,4 @@ const TypeList = (props) => {
   );
 };
 
-export default React.memo(TypeList);
+export default React.memo(PlaceList);
