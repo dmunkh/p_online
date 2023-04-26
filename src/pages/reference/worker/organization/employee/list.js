@@ -17,7 +17,6 @@ export default function Employee({ data }) {
   const { state, dispatch } = useReferenceContext();
   const [empList, setEmpList] = useState([]);
   const [search, setSearch] = useState("");
-
   useLayoutEffect(() => {
     API.getPerson()
       .then(async (res) => {
@@ -76,25 +75,33 @@ export default function Employee({ data }) {
     });
 
     console.log(state.modal);
-  };
+  };   
   const header = (
-    <div className="flex  md:justify-between gap-2 ">
-      <Input
+    <div className="flex  md:justify-end gap-2 ">
+      {/* <Input
         placeholder="Хайх..."
         prefix={<SearchOutlined />}
         className="md:w-1/5 w-2/5 rounded-lg"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-      />
+      /> */}
       {checkRole(["person_add"]) && (
         <div className="mt-1">
           <div
             title="Ажилтан нэмэх"
-            className="p-1 flex justify-center items-center font-semibold  border-1 border-teal-400 rounded-full bg-teal-500 text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-10"
+            className="p-1 text-xs flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-6"
             onClick={() => {
               dispatch({
                 type: "CLEAR_EMPLOYEE",
               });
+              dispatch({
+                type:"STATE",
+                data:{
+                  selected_employee:{
+                    organization_id: data.organization_id
+                  }
+                }
+              })
               dispatch({
                 type: "STATE",
                 data: { modal: true },
@@ -128,6 +135,11 @@ export default function Employee({ data }) {
         responsiveLayout="scroll"
         header={header}
         value={empList}
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Мэдээлэл олдсонгүй...
+          </div>
+        }
       >
         <Column
           header="№"
@@ -172,7 +184,7 @@ export default function Employee({ data }) {
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["person_edit"]) && (
                   <button
-                    className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-purple-400 bg-purple-500 hover:scale-125 text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => updateItem(item)}
                   >
                     <i className="ft-edit" />
@@ -181,7 +193,7 @@ export default function Employee({ data }) {
 
                 {checkRole(["person_delete"]) && (
                   <button
-                    className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-red-400 bg-red-500 hover:scale-125 text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => deleteItem(item)}
                   >
                     <i className="ft-trash-2" />

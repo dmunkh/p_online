@@ -12,9 +12,9 @@ import * as API from "src/api/request";
 import Header from "./header";
 import _ from "lodash";
 import Swal from "sweetalert2";
-import Employee from "../employee/list";
+import Employee from "./employee/list";
 import Modal from "./modal";
-import EmpModal from "../employee/modal";
+import EmpModal from "./employee/modal";
 
 export default function List() {
   const { message, checkRole } = useUserContext();
@@ -23,7 +23,7 @@ export default function List() {
   const [expandedRows, setExpandedRows] = useState(null);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
-  const [per_page, set_per_page] = useState(20);
+  const [per_page, set_per_page] = useState(10);
   const toast = useRef(null);
   useEffect(() => {
     API.getOrganization()
@@ -94,7 +94,7 @@ export default function List() {
   const onRowExpand = (event) => {
     toast.current.show({
       severity: "info",
-      summary: "Product Expanded",
+      summary: "Ажилчид",
       detail: event.data.name,
       life: 3000,
     });
@@ -103,7 +103,7 @@ export default function List() {
   const onRowCollapse = (event) => {
     toast.current.show({
       severity: "success",
-      summary: "Product Collapsed",
+      summary: "Байгууллага",
       detail: event.data.name,
       life: 3000,
     });
@@ -167,7 +167,7 @@ export default function List() {
         <div className="mt-1">
         <div
           title="Байгууллага нэмэх"
-          className="p-1.5  flex items-center justify-center font-semibold rounded-full border-1 border-teal-400  bg-teal-500 text-white 0 focus:outline-none duration-300 cursor-pointer mr-7"
+          className="p-1 text-xs flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-16"
           onClick={() => {
             dispatch({
               type: "STATE",
@@ -193,7 +193,7 @@ export default function List() {
     );
   }
   return (
-    <div className="flex flex-col rounded">
+    <div className="card flex justify-center text-xs rounded p-2">
       <Header />
       <div className=" text-xs rounded p-2">
         <Spin
@@ -292,6 +292,7 @@ export default function List() {
               field="organization_name"
               header="Байгуулгын нэр"
               sortable
+              className="text-sm"
               filterField="representative"
               showFilterMenu={false}
               filterMenuStyle={{ width: "14rem" }}
@@ -301,13 +302,14 @@ export default function List() {
             <Column
               header="Үйлдэл"
               style={{ width: "10rem" }}
+              className="text-sm"
               body={(item) => {
                 return (
                   <div className="flex items-center justify-left gap-2">
                     {checkRole(["person_edit"]) && (
                       <button
                         title="Байгууллага засах"
-                        className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-purple-400 bg-purple-500 hover:scale-125 text-white focus:outline-none duration-300"
+                        className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                         onClick={() => updateItem(item)}
                       >
                         <i className="ft-edit" />
@@ -317,7 +319,7 @@ export default function List() {
                     {checkRole(["person_delete"]) && (
                       <button
                         title="Байгууллага устгах"
-                        className="p-1 flex items-center justify-center font-semibold  rounded-full border-3 border-red-400 bg-red-500 hover:scale-125 text-white focus:outline-none duration-300"
+                        className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                         onClick={() => deleteItem(item)}
                       >
                         <i className="ft-trash-2" />

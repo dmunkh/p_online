@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../contexts/userContext";
+
 import _ from "lodash";
 
 const Navbar = () => {
@@ -34,7 +35,7 @@ const Navbar = () => {
   return (
     <>
       <div
-        className="main-menu menu-light menu-fixed menu-shadow app-sidebar menu-native-scroll "
+        className="main-menu menu-light menu-fixed menu-shadow app-sidebar "
         role="navigation"
         data-menu="menu-wrapper"
         data-background-color="man-of-steel"
@@ -166,7 +167,7 @@ const Navbar = () => {
                             : " " + item.description)
                         }
                       ></i>
-                       
+
                       <span data-i18n="Apps" className=" md:uppercase text-sm">
                         {item.caption}
                       </span>
