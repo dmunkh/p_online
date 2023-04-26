@@ -7,7 +7,7 @@ import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import {  Select, Input, Modal } from "antd";
+import {  Select, InputNumber, Modal } from "antd";
 
 import { Toast } from "primereact/toast";
 
@@ -108,17 +108,17 @@ const Component = () => {
           // message({ type: "success", title: "Амжилттай хадгалагдлаа" });
         })
         .catch((error) => {
-          toast.current.show({
-            severity: "error",
-            summary: "Алдаа",
-            detail: error.response.data.msg,
-          });
-
-          // message({
-          //   type: "error",
-          //   error,
-          //   title: error.response.data.msg,
+          // toast.current.show({
+          //   severity: "error",
+          //   summary: "Алдаа",
+          //   detail: error.response.data.msg,
           // });
+
+          message({
+            type: "error",
+            error,
+            title: error.response.data.msg,
+          });
         });
     } else {
       API.putTypeYear(state.selected_typeyear.id, {
@@ -185,6 +185,7 @@ const Component = () => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
+              console.log(state.list_type)
               dispatch({
                 type: "STATE",
                 data: {
@@ -232,7 +233,7 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Суух ажилчидын тоо:<b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.limit}
@@ -252,7 +253,7 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Сургалтын үргэлжлэх хугацаа:<b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.hour}
@@ -272,7 +273,7 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Сургалтын үнэ:<b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.price_emc}
@@ -293,7 +294,7 @@ const Component = () => {
             Сургалтын үнэ /Гадны байгууллага/:
             <b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.price_organization}
@@ -313,7 +314,7 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.percent}
@@ -333,7 +334,7 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
           </span>
-          <Input
+          <InputNumber
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.point}
@@ -357,7 +358,7 @@ const Component = () => {
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
           onClick={() => save(state, dispatch, date, toast)}
         >
-          <i className="fas fa-save" />
+          {/* <i className="ft-save" /> */}
           <span className="ml-2">Хадгалах</span>
         </button>
         <Toast ref={toast} />
