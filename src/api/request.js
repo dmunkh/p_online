@@ -79,10 +79,10 @@ export async function getType(params) {
 
 // Сургалтын төрөл жилээр - TypeYear
 
-export async function getTypesYear(module_id) {
+export async function getTypesYear(module_id, date) {
   const response = await API().get("/type/year",{params:{
     module_id: module_id,
-    year: 2023
+    year: date
   }});
 
   return response.data;
