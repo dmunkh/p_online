@@ -88,7 +88,7 @@ const List = () => {
             responsiveLayout="scroll"
             sortMode="multiple"
             scrollHeight={window.innerHeight - 360}
-            globalFilterFields={["tn", "shortname", "position_namemn"]}
+            globalFilterFields={["type_name"]}
             emptyMessage={
               <div className="text-xs text-orange-500 italic font-semibold">
                 Мэдээлэл олдсонгүй...
@@ -173,62 +173,53 @@ const List = () => {
               headerClassName="flex items-center justify-center"
               body={(item) => {
                 return (
-                  !item.enddate && (
-                    <div className="flex items-center justify-center gap-2">
-                      {checkRole(["product_plan_edit"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {}}
-                        >
-                          <i className="fe fe-edit" />
-                        </button>
-                      )}
-
-                      {checkRole(["product_plan_delete"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {
-                            Swal.fire({
-                              text:
-                                item.department_name +
-                                "-г ХСБ-ний жагсаалтаас хасах уу",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonColor: "#1890ff",
-                              cancelButtonColor: "rgb(244, 106, 106)",
-                              confirmButtonText: "Тийм",
-                              cancelButtonText: "Үгүй",
-                              reverseButtons: true,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                // API.deletePlan(item.id)
-                                //   .then(() => {
-                                //     dispatch({
-                                //       type: "STATE",
-                                //       data: { refresh: state.refresh + 1 },
-                                //     });
-                                //     message({
-                                //       type: "success",
-                                //       title: "Амжилттай устгагдлаа..",
-                                //     });
-                                //   })
-                                //   .catch((error) => {
-                                //     message({
-                                //       type: "error",
-                                //       error,
-                                //       title:
-                                //         "Албан тушаалаас норм хасаж чадсангүй",
-                                //     });
-                                //   });
-                              }
-                            });
-                          }}
-                        >
-                          <i className="fe fe-trash-2" />
-                        </button>
-                      )}
-                    </div>
-                  )
+                  <div className="flex items-center justify-center gap-2">
+                    {checkRole(["norm_delete"]) && (
+                      <button
+                        className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                        onClick={() => {
+                          Swal.fire({
+                            text: item.type_name + "-г хасах уу",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#1890ff",
+                            cancelButtonColor: "rgb(244, 106, 106)",
+                            confirmButtonText: "Тийм",
+                            cancelButtonText: "Үгүй",
+                            reverseButtons: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              API.deleteNorm({
+                                department_id: state.department_id,
+                                position_id: state.position_id,
+                                type_id: item.type_id,
+                              })
+                                .then(() => {
+                                  dispatch({
+                                    type: "STATE",
+                                    data: { refresh: state.refresh + 1 },
+                                  });
+                                  message({
+                                    type: "success",
+                                    title: "Амжилттай устгагдлаа..",
+                                  });
+                                })
+                                .catch((error) => {
+                                  message({
+                                    type: "error",
+                                    error,
+                                    title:
+                                      "Албан тушаалаас норм хасаж чадсангүй",
+                                  });
+                                });
+                            }
+                          });
+                        }}
+                      >
+                        <i className="ft-trash-2" />
+                      </button>
+                    )}
+                  </div>
                 );
               }}
             />

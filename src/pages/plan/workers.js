@@ -52,6 +52,9 @@ const Workers = () => {
       <Header />
       <div className="flex flex-col md:flex-row gap-2 ">
         <div className="md:w-2/3">
+          <WorkerType />
+        </div>
+        <div className="md:w-2/3">
           <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
             <DataTable
               size="small"
@@ -88,42 +91,6 @@ const Workers = () => {
                       dispatch({ type: "STATE", data: { tn: null } });
                     }}
                   />
-                  <div className="flex items-center gap-3">
-                    {checkRole(["product_plan_edit"]) && (
-                      <div
-                        title="Нэмэх"
-                        className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                        onClick={() => {
-                          // dispatch({
-                          //   type: "STATE",
-                          //   data: { rightdrawer: true },
-                          // });
-                          dispatch({
-                            type: "STATE",
-                            data: { modal: true },
-                          });
-                          dispatch({
-                            type: "STATE",
-                            data: { modalcheck: 1 },
-                          });
-                          dispatch({
-                            type: "STATE",
-                            data: { modalselected_department: [] },
-                          });
-                          dispatch({
-                            type: "STATE",
-                            data: { modalplancount: 0 },
-                          });
-                          dispatch({
-                            type: "STATE",
-                            data: { modalcompany: null },
-                          });
-                        }}
-                      >
-                        <i className="fa fa-plus" />
-                      </div>
-                    )}
-                  </div>
                 </div>
               }
               rowGroupHeaderTemplate={(data) => {
@@ -312,10 +279,6 @@ const Workers = () => {
               )}
             </DataTable>
           </Spin>
-        </div>
-
-        <div className="md:w-2/3">
-          <WorkerType />
         </div>
       </div>
     </div>

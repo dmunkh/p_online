@@ -29,7 +29,6 @@ const Header = () => {
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
       <div className="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
         <span className="md:w-[40px] font-semibold">Огноо:</span>
-
         <DatePicker
           allowClear={false}
           picker="year"
@@ -42,7 +41,6 @@ const Header = () => {
             });
           }}
         />
-
         <div className="flex items-center w-full  md:w-[500px] text-xs gap-2">
           <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
           <Department

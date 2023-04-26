@@ -15,22 +15,8 @@ const { Option } = Select;
 const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
-  const [list, setList] = useState([]);
 
   // const { state, dispatch } = useUserContext();
-
-  useEffect(() => {
-    API.getType({ module_id: 1 })
-      .then((res) => {
-        setList(_.orderBy(res, ["type_name"]));
-      })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {});
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.department]);
 
   return (
     <div className="flex flex-col text-xs">
@@ -90,7 +76,7 @@ const ModalNormDetail = () => {
           }
         }}
       >
-        <i className="fas fa-save" />
+        <i className="ft-save" />
         <span className="ml-2">Хадгалах</span>
       </button>
     </div>

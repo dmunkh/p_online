@@ -111,8 +111,9 @@ const List = () => {
                                 <i className="ft-check primary font-small-2 mr-1"></i>
                                 <span>
                                   <i className="ft-users"></i> Суудлын тоо:{" "}
-                                  {item.limit}, <i className="ft-clock "></i>{" "}
-                                  Сургалтын цаг: {item.hour}
+                                  {item.limit}/{item.count_register},{" "}
+                                  <i className="ft-clock "></i> Сургалтын цаг:{" "}
+                                  {item.hour}
                                 </span>
                                 <span className="float-right primary">
                                   <i className="font-medium-1 icon-pin"></i>

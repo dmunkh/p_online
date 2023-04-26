@@ -11,8 +11,11 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MODAL from "src/pages/workers/modal";
 import MODALTRANSFER from "src/pages/workers/modaltransfer";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 
 import { Spin, Input, Modal, Select, InputNumber, Checkbox } from "antd";
+import moment from "moment";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -93,6 +96,7 @@ const List = () => {
         return "success";
     }
   };
+
   // const getSeverity = (status) => {
   //   switch (status) {
   //     case "unqualified":
@@ -149,6 +153,17 @@ const List = () => {
           responsiveLayout="scroll"
           rowHover
           rowGroupMode="subheader"
+          footerColumnGroup={
+            <ColumnGroup>
+              <Row>
+                <Column
+                  footer="Нийт ажилтнууд:"
+                  footerStyle={{ textAlign: "right" }}
+                />
+                <Column colSpan={9} footer={list.length} />
+              </Row>
+            </ColumnGroup>
+          }
           groupRowsBy="negj_name"
           sortMode="single"
           sortField="tseh_name"
@@ -160,7 +175,7 @@ const List = () => {
           // rowGroupFooterTemplate={footerTemplate}
           globalFilterFields={["tn", "short_name", "position_name"]}
           header={
-            <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
+            <div className="flex items-center justify-between  text-xs">
               <Input.Search
                 className="md:w-80"
                 placeholder="Хайх..."
@@ -212,10 +227,10 @@ const List = () => {
           <Column
             field="status"
             header="Ирц"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
+            style={{ minWidth: "200px", maxWidth: "200px" }}
             body={(data) => {
               return (
-                <>
+                <div className="flex flex-wrap items-center gap-2 text-xs">
                   {_.map(data.attendance, (item) => (
                     <Checkbox
                       key={item.id}
@@ -245,9 +260,15 @@ const List = () => {
                         }
                         // check_position(e, item)
                       }
-                    />
+                    >
+                      <span className="text-xs">
+                        {moment(item.attendance_date).format(
+                          "YYYY.MM.DD HH:mm"
+                        )}
+                      </span>
+                    </Checkbox>
                   ))}
-                </>
+                </div>
               );
             }}
           />
