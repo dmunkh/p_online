@@ -2,9 +2,9 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import UseReferenceContext from "../contexts/referenceContext";
+import UseReferenceContext from "src/contexts/referenceContext";
 
-import LessonType from "../pages/reference/type/lessonsType";
+import LessonType from "src/pages/reference/type/lessonsType";
 
 const RegisterEmpl = () => {
   const data = [

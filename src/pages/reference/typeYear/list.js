@@ -31,7 +31,7 @@ const List = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    API.getTypesYear(module, date)
+    API.getTypesYear({ module_id: module, year: date })
       .then((res) => {
         dispatch({
           type: "STATE",

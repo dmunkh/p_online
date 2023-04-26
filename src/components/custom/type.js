@@ -4,7 +4,6 @@ import _ from "lodash";
 import { Select } from "antd";
 
 const TypeList = (props) => {
-  console.log("props: ", props);
   const [list, setList] = useState([]);
   const { Option } = Select;
 
@@ -12,7 +11,6 @@ const TypeList = (props) => {
     props.module_id !== undefined &&
       API.getType({ module_id: props.module_id }).then((res) => {
         setList(res);
-        console.log("res: ", res);
 
         if (res.length > 0 && !props.value) props.onChange(res[0].id);
       });
