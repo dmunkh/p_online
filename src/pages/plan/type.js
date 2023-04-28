@@ -79,7 +79,7 @@ const List = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.moduleid]);
+  }, [state.moduleid, state.date, state.department_id]);
 
   return (
     <>
