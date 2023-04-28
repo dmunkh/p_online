@@ -130,6 +130,7 @@ const List = () => {
             dataKey="id"
             filters={search}
             scrollable
+            rowHover
             removableSort
             showGridlines
             className="text-xs mt-2"

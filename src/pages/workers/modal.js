@@ -28,9 +28,9 @@ const ModalNormDetail = () => {
           Бүтцийн нэгж:<b className="ml-1 text-red-500">*</b>
         </span>
         <DepartmentTseh
-          value={state.modaltypeid}
+          value={state.department}
           onChange={(value) => {
-            dispatch({ type: "STATE", data: { modaltypeid: value } });
+            dispatch({ type: "STATE", data: { department: value } });
           }}
         />
       </div>

@@ -22,6 +22,7 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  console.log(state.isapprove);
 
   useEffect(() => {
     // dispatch({
@@ -220,7 +221,8 @@ const Workers = () => {
                 className="text-xs"
                 headerClassName="flex items-center justify-center"
               />
-              {checkRole(["plan_add"]) && (
+
+              {!state.isapprove && checkRole(["plan_add"]) && (
                 <Column
                   align="center"
                   header=""

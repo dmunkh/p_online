@@ -10,6 +10,7 @@ const _state = {
   modal: false,
   modaltransfer: false,
   modaltransferTypeYear: null,
+  modaltypeid: null,
   moduleid: null,
   list_checked: [],
   list_position: [],

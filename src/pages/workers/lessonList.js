@@ -29,22 +29,23 @@ const List = () => {
     //   data: { loading: true },
     // });
     setLoading(true);
-    API.getLesson({
-      year: moment(state.date).format("Y"),
-      module_id: state.moduletypeid,
-    })
-      .then((res) => {
-        console.log("resssssss", res);
-        dispatch({ type: "STATE", data: { lessonlist: res } });
-        dispatch({ type: "STATE", data: { lessonlistfilter: res } });
-        setList(res);
+    state.moduletypeid &&
+      API.getLesson({
+        year: moment(state.date).format("Y"),
+        module_id: state.moduletypeid,
       })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((res) => {
+          console.log("resssssss", res);
+          dispatch({ type: "STATE", data: { lessonlist: res } });
+          dispatch({ type: "STATE", data: { lessonlistfilter: res } });
+          setList(res);
+        })
+        .catch((error) =>
+          message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
+        )
+        .finally(() => {
+          setLoading(false);
+        });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.department, state.date, state.moduletypeid]);
 
@@ -92,7 +93,10 @@ const List = () => {
                             navigate("/worker/register/worker?id=" + item.id);
                             dispatch({
                               type: "STATE",
-                              data: { lessonid: item.id },
+                              data: {
+                                lessonid: item.id,
+                                modaltypeid: item.type_id,
+                              },
                             });
                           }}
                         >
@@ -115,7 +119,12 @@ const List = () => {
                                   <i className="ft-users"></i> Суудлын тоо:{" "}
                                   {item.limit}/{item.count_register},{" "}
                                   <i className="ft-clock "></i> Сургалтын цаг:{" "}
-                                  {item.hour}
+                                  {item.hour},{" "}
+                                  <span className="text-blue-900 !important">
+                                    {" "}
+                                    <i className="ft-edit text-blue-800 bg-blend-color-dodge "></i>{" "}
+                                  </span>
+                                  Ирцийн бүртгэл: {item.hour}
                                 </span>
                                 <span className="float-right primary">
                                   <i className="font-medium-1 icon-pin"></i>

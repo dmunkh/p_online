@@ -35,3 +35,19 @@ export async function deletePlanWorker(id) {
   const response = await API().delete("/plan/worker/" + id);
   return response.data;
 }
+
+export async function postPlanApprove(params) {
+  const response = await API().post("/plan/approve", {
+    ...params,
+  });
+  return response.data;
+}
+
+export async function getPlanApprove(params) {
+  const response = await API().get("/plan/approve", {
+    params: {
+      ...params,
+    },
+  });
+  return response.data;
+}

@@ -35,9 +35,9 @@ const Department = () => {
 
     setLoading(true);
     API.getPlanNot({
-      department_id: 10,
-      type_id: 1,
-      year: 2023,
+      department_id: state.department,
+      type_id: state.modaltypeid,
+      year: moment(state.date).format("Y"),
     })
       .then((res) => {
         setList(_.orderBy(res, ["department_code"], ["firstname"]));
@@ -49,7 +49,7 @@ const Department = () => {
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.department_id, state.date, state.moduleid, state.refresh]);
+  }, [state.department, state.date, state.moduleid, state.refresh]);
 
   const check_position = (e, item) => {
     var result = state.list_checked;

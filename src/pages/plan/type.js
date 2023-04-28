@@ -7,7 +7,7 @@ import _ from "lodash";
 import { FilterMatchMode } from "primereact/api";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/planhab/modal";
+import MODAL from "src/pages/plan/modal";
 import { useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
@@ -29,8 +29,6 @@ const List = () => {
     //   type: "STATE",
     //   data: { loading: true },
     // });
-
-    console.log(state.department_id);
     if (state.moduleid && state.department_id) {
       setLoading(true);
       API.getPlan({
@@ -60,6 +58,29 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.department_id, state.date, state.moduleid]);
 
+  useEffect(() => {
+    if (state.moduleid && state.department_id) {
+      API.getPlanApprove({
+        year: moment(state.date).format("Y"),
+        module_id: state.moduleid,
+        department_id: state.department_id,
+      })
+        .then((res) => {
+          console.log(res);
+          dispatch({
+            type: "STATE",
+            data: {
+              isapprove: res[0]?.is_closed,
+            },
+          });
+        })
+        .catch((error) => message({ type: "error", error, title: "" }))
+        .finally(() => {});
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.moduleid]);
+
   return (
     <>
       <Modal
@@ -69,7 +90,9 @@ const List = () => {
         visible={state.modal}
         // visible={true}
         onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
-        title={"ХСБ-ний 1 ажилтан авах тоо бүртгэл"}
+        title={
+          moment(state.date).format("Y") + " оны төлөвлөгөөг баталгаажуулах уу"
+        }
         closeIcon={<div className="">x</div>}
         footer={false}
       >
@@ -113,6 +136,30 @@ const List = () => {
                     dispatch({ type: "STATE", data: { tn: null } });
                   }}
                 />
+
+                <div className="flex items-center justify-between gap-2">
+                  {console.log(state.isapprove)}
+                  {!state.isapprove ? (
+                    <div
+                      title="Нэмэх"
+                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                      onClick={() => {
+                        console.log("TEST");
+                        dispatch({ type: "STATE", data: { modal: true } });
+                      }}
+                    >
+                      <i className="fa fa-edit" />
+                    </div>
+                  ) : (
+                    <div
+                      title="Баталгаажуулах"
+                      className="p-1 flex items-center justify-center font-semibold text-green-700 border-2 border-green-500 rounded-full"
+                    >
+                      <i className="fa fa-check" />
+                      Баталгаажсан
+                    </div>
+                  )}
+                </div>
               </div>
             }
             rowGroupHeaderTemplate={(data) => {

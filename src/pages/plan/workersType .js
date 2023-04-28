@@ -210,7 +210,7 @@ const Workers = () => {
           className="text-xs"
           headerClassName="flex items-center justify-center"
         />
-        {checkRole(["plan_delete"]) && (
+        {!state.isapprove && checkRole(["plan_delete"]) && (
           <Column
             align="center"
             header=""

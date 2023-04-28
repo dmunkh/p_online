@@ -15,12 +15,13 @@ const Moduletype = () => {
   const [list, setList] = useState([]);
 
   useLayoutEffect(() => {
-    API.getTypesYear({
-      year: moment(state.date).format("Y"),
-      module_id: state.moduletypeid,
-    }).then((res) => {
-      setList(res);
-    });
+    state.moduletypeid &&
+      API.getTypesYear({
+        year: moment(state.date).format("Y"),
+        module_id: state.moduletypeid,
+      }).then((res) => {
+        setList(res);
+      });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.moduletypeid]);
