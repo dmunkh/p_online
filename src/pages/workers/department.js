@@ -2,20 +2,19 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Spin, Input, Select, Checkbox } from "antd";
-
 import _ from "lodash";
-import { SearchOutlined } from "@ant-design/icons";
+// import { SearchOutlined } from "@ant-design/icons";
 import * as API from "src/api/plan";
-import { Row } from "primereact/row";
+// import { Row } from "primereact/row";
 
-import { ColumnGroup } from "primereact/columngroup";
+// import { ColumnGroup } from "primereact/columngroup";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
 
 const Department = () => {
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -28,11 +27,6 @@ const Department = () => {
   const [checkAll, setCheckAll] = useState(false);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     setLoading(true);
     API.getPlanNot({
       department_id: state.department,
@@ -100,25 +94,9 @@ const Department = () => {
                   let _search = { ...search };
                   _search["global"].value = e.target.value;
                   setSearch(_search);
-                  // dispatch({ type: "STATE", data: { tn: null } });
                 }}
               />
             </div>
-            {/* <div className="flex items-center gap-3 ">
-              <img
-                alt=""
-                title="Excel татах"
-                src="/assets/images/excel.png"
-                className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                // onClick={() => exportToExcel(result)}
-              /> */}
-            {/* <img
-                    alt=""
-                    title="Pdf татах"
-                    src="/assets/images/pdf.png"
-                    className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                    onClick={() => exportToPdf()}
-                  /> */}
           </div>
         }
         rowClassName={(data) => {
@@ -296,29 +274,6 @@ const Department = () => {
                     type: "STATE",
                     data: { selectedpositionname: item.positionname },
                   });
-                  // API.getPositionNormList({
-                  //   departmentid: item.departmentid,
-                  //   positionid: item.positionid,
-                  // })
-                  //   .then((res) => {
-                  //     dispatch({
-                  //       type: "STATE",
-                  //       data: {
-                  //         list_norm: _.orderBy(res, ["itemtypeid", "itemname"]),
-                  //       },
-                  //     });
-                  //   })
-                  //   .catch((error) => {
-                  //     dispatch({ type: "STATE", data: { list_norm: [] } });
-                  //     message({
-                  //       type: "error",
-                  //       error,
-                  //       title: "Албан тушаалын нормын мэдээлэл татаж чадсангүй",
-                  //     });
-                  //   })
-                  //   .finally(() => {
-                  //     setLoading(false);
-                  //   });
                 }}
               >
                 {item.position_namemn}

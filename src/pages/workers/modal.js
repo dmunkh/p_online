@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import * as API from "src/api/registerEmpl";
-import { Select, InputNumber } from "antd";
+
 // import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
@@ -8,15 +8,9 @@ import DepartmentTseh from "src/components/custom/departmentTseh";
 import Department from "src/pages/workers/department";
 import _ from "lodash";
 
-import moment from "moment";
-// import _ from "lodash";
-
-const { Option } = Select;
-
 const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
-  const [list, setList] = useState([]);
 
   // const { state, dispatch } = useUserContext();
 
@@ -42,7 +36,6 @@ const ModalNormDetail = () => {
       <button
         className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
         onClick={() => {
-          console.log(_.join(state.list_checked, ","));
           API.postWorker({
             lesson_id: state.lessonid,
             tns: _.join(state.list_checked, ","),

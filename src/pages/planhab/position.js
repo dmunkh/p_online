@@ -8,11 +8,11 @@ import { FilterMatchMode } from "primereact/api";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import MODAL from "src/pages/planhab/modal";
 import { useUserContext } from "src/contexts/userContext";
-import Swal from "sweetalert2";
-import moment from "moment";
+// import Swal from "sweetalert2";
+// import moment from "moment";
 
 const List = () => {
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -22,10 +22,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
     setLoading(true);
 
     state.department &&
@@ -212,10 +208,6 @@ const List = () => {
               sortable
               className="text-xs"
               headerClassName="flex items-center justify-center"
-
-              // body={(rowData) => {
-              //   return <>{rowData.company_name}</>;
-              // }}
             />
 
             <Column

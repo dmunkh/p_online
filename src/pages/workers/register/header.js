@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import Department from "src/components/custom/departmentTseh";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
-import Module from "src/components/custom/module";
-import Type from "src/components/custom/type";
+// import Module from "src/components/custom/module";
+// import Type from "src/components/custom/type";
 import { DatePicker } from "antd";
 import _ from "lodash";
 import { useUserContext } from "src/contexts/userContext";
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, message, checkRole } = useUserContext();
+  const { user } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
 
   useEffect(() => {
@@ -61,13 +61,6 @@ const Header = () => {
             }
           />
         </div>
-        {/* <span className="font-semibold whitespace-nowrap">Модуль:</span>
-        <Module
-          value={state.moduletypeid}
-          onChange={(value) =>
-            dispatch({ type: "STATE", data: { moduletypeid: value } })
-          }
-        /> */}
       </div>
     </div>
   );

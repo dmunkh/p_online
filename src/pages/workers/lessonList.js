@@ -2,32 +2,22 @@ import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { Spin } from "antd";
 import _ from "lodash";
-// import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
-
 import { useUserContext } from "src/contexts/userContext";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+// import { FilterMatchMode } from "primereact/api";
 // import Swal from "sweetalert2";
 // import moment from "moment";
 
 const List = () => {
   const navigate = useNavigate();
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
-  // const [search, setSearch] = useState({
-  //   global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-  // });
-  // const [first, set_first] = useState(0);
-  // const [per_page, set_per_page] = useState(50);
+
   const [loading, setLoading] = useState(false);
-  const [list, setList] = useState([]);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
     setLoading(true);
     state.moduletypeid &&
       API.getLesson({
@@ -35,10 +25,8 @@ const List = () => {
         module_id: state.moduletypeid,
       })
         .then((res) => {
-          console.log("resssssss", res);
           dispatch({ type: "STATE", data: { lessonlist: res } });
           dispatch({ type: "STATE", data: { lessonlistfilter: res } });
-          setList(res);
         })
         .catch((error) =>
           message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -78,11 +66,6 @@ const List = () => {
                   className="bg-opacity-80"
                   spinning={loading}
                 >
-                  {console.log(
-                    "filterrrrrrr",
-                    state.lessonlist,
-                    state.lessonlistfilter
-                  )}
                   <div className="users-list-padding position-relative ps ps--active-y  ">
                     {_.map(state.lessonlistfilter, (item) => {
                       return (

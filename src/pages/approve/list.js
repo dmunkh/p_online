@@ -6,8 +6,6 @@ import { Spin, Modal, Input, Switch, DatePicker } from "antd";
 import _ from "lodash";
 import { FilterMatchMode } from "primereact/api";
 import Module from "src/components/custom/module";
-import TypeYear from "src/components/custom/typeYear";
-import DepartmentTree from "src/components/custom/departmentTree";
 import MODAL from "src/pages/planhab/modal";
 import { useUserContext } from "src/contexts/userContext";
 
@@ -15,28 +13,21 @@ import { useUserContext } from "src/contexts/userContext";
 import moment from "moment";
 
 const List = () => {
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
 
   const [module, setModule] = useState(null);
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
-  const [first, set_first] = useState(0);
+
   const [date, setDate] = useState(moment());
-  const [per_page, set_per_page] = useState(50);
+
   const [loading, setLoading] = useState(false);
   const [loadingbtn, setLoadingbtn] = useState(false);
   const [list, setList] = useState([]);
   const [refresh, setRefresh] = useState(0);
-  const [typeyear, settypeYear] = useState(null);
-  const [checked, setChecked] = useState(false);
-  const [department, setDepartment] = useState(null);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
     if (date && module) {
       setLoading(true);
       setLoadingbtn(true);
@@ -93,9 +84,6 @@ const List = () => {
         style={{ width: "600" }}
         width={800}
         height={550}
-        // visible={state.modal}
-        // visible={true}
-        // onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
         title={"Сургалтын төрөл нэмэх"}
         closeIcon={<div className="">x</div>}
         footer={false}
@@ -167,11 +155,6 @@ const List = () => {
                 </div>
               );
             }}
-            // rowClassName={(data) => {
-            //   var result = "cursor-pointer";
-            //   if (state.id === data.id) result = " bg-blue-500 text-white";
-            //   return result;
-            // }}
           >
             <Column
               align="center"
@@ -214,17 +197,11 @@ const List = () => {
               body={(item) => {
                 return (
                   <div className="flex items-center justify-center gap-3">
-                    {/* <InputSwitch
-                          checkedChildren={
-                            <i className="fa fa-check bg-green-500" />
-                          }
-                          unCheckedChildren={
-                            <i className="fa fa-times bg-red-400" />
-                          }
-                          checked={item.is_closed}
-                          onChange={(value) => PlanApprove(item.id, value)}
-                        /> */}
-                    <Spin tip="." className="bg-opacity-80" spinning={loading}>
+                    <Spin
+                      tip="."
+                      className="bg-opacity-80"
+                      spinning={loadingbtn}
+                    >
                       <Switch
                         checkedChildren={
                           <i className="fa fa-check  text-green-600" />

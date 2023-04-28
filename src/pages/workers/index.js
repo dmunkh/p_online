@@ -1,5 +1,4 @@
 import React from "react";
-import Position from "src/pages/planhab/position";
 import LessonList from "src/pages/workers/lessonList";
 import Header from "src/pages/workers/header";
 import ModuleType from "src/pages/workers/moduletype";
@@ -14,7 +13,6 @@ const Index = () => {
           </div>
           <div className="lg:w-3/4">
             <Header />
-
             <LessonList />
           </div>
         </div>

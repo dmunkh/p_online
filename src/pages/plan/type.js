@@ -9,13 +9,11 @@ import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/plan/modal";
 import { useNavigate } from "react-router-dom";
-
-import Swal from "sweetalert2";
 import moment from "moment";
 
 const List = () => {
   const navigate = useNavigate();
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -25,10 +23,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
     if (state.moduleid && state.department_id) {
       setLoading(true);
       API.getPlan({
@@ -66,7 +60,6 @@ const List = () => {
         department_id: state.department_id,
       })
         .then((res) => {
-          console.log(res);
           dispatch({
             type: "STATE",
             data: {
@@ -138,27 +131,27 @@ const List = () => {
                 />
 
                 <div className="flex items-center justify-between gap-2">
-                  {console.log(state.isapprove)}
-                  {!state.isapprove ? (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                      onClick={() => {
-                        console.log("TEST");
-                        dispatch({ type: "STATE", data: { modal: true } });
-                      }}
-                    >
-                      <i className="fa fa-edit" />
-                    </div>
-                  ) : (
-                    <div
-                      title="Баталгаажуулах"
-                      className="p-1 flex items-center justify-center font-semibold text-green-700 border-2 border-green-500 rounded-full"
-                    >
-                      <i className="fa fa-check" />
-                      Баталгаажсан
-                    </div>
-                  )}
+                  {state.department_id > 0 ? (
+                    !state.isapprove ? (
+                      <div
+                        title="Нэмэх"
+                        className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                        onClick={() => {
+                          dispatch({ type: "STATE", data: { modal: true } });
+                        }}
+                      >
+                        <i className="fa fa-edit" />
+                      </div>
+                    ) : (
+                      <div
+                        title="Баталгаажуулах"
+                        className="p-1 flex items-center justify-center font-semibold text-green-700 border-2 border-green-500 rounded-full"
+                      >
+                        <i className="fa fa-check" />
+                        Баталгаажсан
+                      </div>
+                    )
+                  ) : null}
                 </div>
               </div>
             }

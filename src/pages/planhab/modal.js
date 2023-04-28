@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import * as API from "src/api/planhab";
-import { Select, InputNumber } from "antd";
-// import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import Type from "src/components/custom/type";
-import _ from "lodash";
 
-import moment from "moment";
 // import _ from "lodash";
-
-const { Option } = Select;
 
 const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
-
-  // const { state, dispatch } = useUserContext();
 
   return (
     <div className="flex flex-col text-xs">

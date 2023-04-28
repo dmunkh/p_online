@@ -8,7 +8,6 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import { useUserContext } from "src/contexts/userContext";
-import Header from "src/pages/plan/id/header";
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -23,11 +22,6 @@ const Workers = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),
@@ -94,21 +88,6 @@ const Workers = () => {
             </div>
           );
         }}
-        // rowClassName={(data) => {
-        //   var result = "cursor-pointer";
-        //   if (state.id === data.id) result = " bg-blue-500 color:red";
-        //   return result;
-        // }}
-        // onRowClick={(e) => {
-        //   dispatch({
-        //     type: "STATE",
-        //     data: {
-        //       id: e.data.id,
-        //       position_id: e.data.positionid,
-        //       department_id: e.data.departmentid,
-        //     },
-        //   });
-        // }}
         rows={per_page}
         first={first}
         onPage={(event) => {

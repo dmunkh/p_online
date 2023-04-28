@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { FilterMatchMode } from "primereact/api";
 import _ from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
-import { SearchOutlined } from "@ant-design/icons";
-import { Tag } from "primereact/tag";
 import Swal from "sweetalert2";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -14,28 +12,25 @@ import MODALTRANSFER from "src/pages/workers/modaltransfer";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
-import { Spin, Input, Modal, Select, InputNumber, Checkbox } from "antd";
+import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
 import moment from "moment";
-import lesson from "src/components/custom/lesson";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
-  const toast = useRef(null);
-
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const [first, set_first] = useState(0);
-  const [per_page, set_per_page] = useState(50);
+  // const [first, set_first] = useState(0);
+  // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
-  const [isDialog, setIsDialog] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [indeterminate, setIndeterminate] = useState(false);
-  const [checkAll, setCheckAll] = useState(false);
+  // const [isDialog, setIsDialog] = useState(false);
+  // const [selected, setSelected] = useState(null);
+  // const [indeterminate, setIndeterminate] = useState(false);
+  // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
 
   useEffect(() => {
@@ -87,16 +82,16 @@ const List = () => {
     return total;
   };
 
-  const getRepeat = (status) => {
-    // eslint-disable-next-line default-case
-    switch (status) {
-      case "false":
-        return "danger";
+  // const getRepeat = (status) => {
+  //   // eslint-disable-next-line default-case
+  //   switch (status) {
+  //     case "false":
+  //       return "danger";
 
-      case "true":
-        return "success";
-    }
-  };
+  //     case "true":
+  //       return "success";
+  //   }
+  // };
 
   // const getSeverity = (status) => {
   //   switch (status) {

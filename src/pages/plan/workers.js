@@ -22,14 +22,8 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-  console.log(state.isapprove);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     setLoading(true);
     API.getPlanNot({
       year: moment(state.date).format("Y"),
@@ -103,21 +97,6 @@ const Workers = () => {
                   </div>
                 );
               }}
-              // rowClassName={(data) => {
-              //   var result = "cursor-pointer";
-              //   if (state.id === data.id) result = " bg-blue-500 color:red";
-              //   return result;
-              // }}
-              // onRowClick={(e) => {
-              //   dispatch({
-              //     type: "STATE",
-              //     data: {
-              //       id: e.data.id,
-              //       position_id: e.data.positionid,
-              //       department_id: e.data.departmentid,
-              //     },
-              //   });
-              // }}
               rows={per_page}
               first={first}
               onPage={(event) => {
