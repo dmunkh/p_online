@@ -8,7 +8,7 @@ const Index = () => {
   return (
     <div className="card ">
       <Header />
-      <div className=" card-content card-body">
+      <div className="p-1">
         {state.change_btn ? <Calendar /> : <Listtraining />}
       </div>
     </div>

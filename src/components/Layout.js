@@ -4,7 +4,6 @@ import Header from "./Header";
 import RightBar from "./RightBar";
 import NavBar from "./Navbar";
 
-
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 

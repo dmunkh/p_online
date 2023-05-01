@@ -8,19 +8,19 @@ const TypeList = (props) => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    API.getTypesYear({ module_id: _.toInteger(props.module_id) }).then(
-      (res) => {
-        setList(res);
+    // API.getTypesYear({ module_id: _.toInteger(props.module_id) }).then(
+    //   (res) => {
+    //     setList(res);
 
-        if (res.length > 0 && !props.value) props.onChange(res[0].id);
-      }
-    );
+    //     if (res.length > 0 && !props.value) props.onChange(res[0].type_id);
+    //   }
+    // );
     props.module_id &&
       API.getTypesYear({ module_id: props.module_id, year: props.year }).then(
         (res) => {
           setList(res);
 
-          if (res.length > 0 && !props.value) props.onChange(res[0].id);
+          if (res.length > 0 && !props.value) props.onChange(res[0].type_id);
         }
       );
 
@@ -39,8 +39,8 @@ const TypeList = (props) => {
       >
         {_.map(list, (item) => {
           return (
-            <Option key={item.id} value={item.id}>
-              {item.id} | {item.type_name}
+            <Option key={item.type_id} value={item.type_id}>
+              {item.type_id} | {item.type_name}
             </Option>
           );
         })}
