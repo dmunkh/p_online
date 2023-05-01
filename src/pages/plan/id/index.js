@@ -10,7 +10,7 @@ const Index = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const queryParams = new URLSearchParams(window.location.search);
-  console.log(queryParams);
+
   //   queryParams.get("id") &&
   //     dispatch({ type: "STATE", data: { department: queryParams.get("id") } });
 

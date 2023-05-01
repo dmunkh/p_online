@@ -53,7 +53,6 @@ const List = () => {
   }, [state.department_id, state.date, state.moduleid]);
 
   useEffect(() => {
-    console.log("isapprove", state.moduleid, state.department_id);
     if (state.moduleid && state.department_id) {
       API.getPlanApprove({
         year: moment(state.date).format("Y"),
@@ -61,7 +60,6 @@ const List = () => {
         department_id: state.department_id,
       })
         .then((res) => {
-          console.log("isapprove", res);
           dispatch({
             type: "STATE",
             data: {

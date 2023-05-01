@@ -24,7 +24,6 @@ const Header = () => {
         department_id: state.department_id,
       })
         .then((res) => {
-          console.log("isapprove", res);
           dispatch({
             type: "STATE",
             data: {
