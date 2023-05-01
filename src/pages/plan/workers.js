@@ -253,7 +253,7 @@ const Workers = () => {
                           });
                         }}
                       >
-                        <i className="fa fa-plus" />
+                        <i className="ft-plus" />
                       </button>
                     );
                   }}

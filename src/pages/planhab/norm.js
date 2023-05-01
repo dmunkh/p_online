@@ -116,7 +116,7 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        <i className="fa fa-plus" />
+                        <i className="ft-plus" />
                       </div>
                     </div>
                   )}
