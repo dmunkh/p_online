@@ -1,0 +1,24 @@
+.scrollbar {
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  ::-webkit-scrollbar {
+  
+    width: 4px;
+  
+    border-radius: 4px;
+  
+    background-color: rgba(186, 186, 186, 0.103);
+  
+  }
+  
+  ::-webkit-scrollbar-thumb {
+  
+    border-radius: 2px;
+  
+    background-color: #d0cece;
+  
+  }
+  
+  .pi {font-size: 0.6rem !important}

@@ -165,27 +165,26 @@ export default function List() {
       />
       {checkRole(["person_add"]) && (
         <div className="mt-1">
-        <div
-          title="Байгууллага нэмэх"
-          className="p-1 text-xs flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-16"
-          onClick={() => {
-            dispatch({
-              type: "STATE",
-              data: { organizationID: null, organization_name: "" },
-            });
+          <div
+            title="Байгууллага нэмэх"
+            className="p-1 text-xs flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-16"
+            onClick={() => {
+              dispatch({
+                type: "STATE",
+                data: { organizationID: null, organization_name: "" },
+              });
 
-            dispatch({
-              type: "STATE",
-              data: { modal1: true },
-            });
-          }}
-        >
-          <i className="ft-plus" /> 
-        </div>
+              dispatch({
+                type: "STATE",
+                data: { modal1: true },
+              });
+            }}
+          >
+            <i className="ft-plus" />
+          </div>
         </div>
       )}
     </div>
-    
   );
   if (search) {
     result = _.filter(result, (a) =>

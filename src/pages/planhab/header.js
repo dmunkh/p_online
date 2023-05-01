@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import Department from "src/components/custom/departmentTseh";
 import { usePlanHabContext } from "src/contexts/planhabContext";
-import Module from "src/components/custom/module";
-import Type from "src/components/custom/type";
+// import Module from "src/components/custom/module";
+// import Type from "src/components/custom/type";
 import _ from "lodash";
 import { useUserContext } from "src/contexts/userContext";
 
 const Header = () => {
-  const { user, message, checkRole } = useUserContext();
+  const { user } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
 
   useEffect(() => {

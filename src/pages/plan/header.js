@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useUserContext } from "src/contexts/userContext";
+import React from "react";
+// import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
-import Tree from "src/components/custom/departmentTree";
-import * as API from "src/api/request";
+// import Tree from "src/components/custom/departmentTree";
+// import * as API from "src/api/request";
 
-import { Select, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import Department from "src/components/custom/departmentTseh";
-import _ from "lodash";
+// import _ from "lodash";
 
 const Header = () => {
-  const { user, message } = useUserContext();
   const { state, dispatch } = usePlanContext();
-
-  const [open, setOpen] = useState(false);
 
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">

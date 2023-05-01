@@ -12,7 +12,6 @@ const Index = () => {
         <div className="md:w-2/3">
           <Position />
         </div>
-
         <div className="md:w-2/3">{/* <Norm /> */}</div>
       </div>
     </div>

@@ -70,6 +70,11 @@ export async function getModule() {
   const response = await API().get("/module");
   return response.data;
 }
+
+export async function getModul() {
+  const response = await API().get("/module");
+  return response.data;
+}
 // Сургалтын төрөл - Type
 
 export async function getType(params) {
@@ -81,7 +86,6 @@ export async function getType(params) {
 
 export async function getTypesYear(params) {
   const response = await API().get("/type/year", { params: { ...params } });
-
   return response.data;
 }
 

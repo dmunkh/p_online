@@ -8,7 +8,6 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import { useUserContext } from "src/contexts/userContext";
-import Header from "src/pages/plan/id/header";
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -23,11 +22,6 @@ const Workers = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),
@@ -71,55 +65,20 @@ const Workers = () => {
           </div>
         }
         header={
-          <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
-            <Input.Search
-              className="md:w-80"
-              placeholder="Хайх..."
-              value={search.global.value}
-              onChange={(e) => {
-                let _search = { ...search };
-                _search["global"].value = e.target.value;
-                setSearch(_search);
-                dispatch({ type: "STATE", data: { tn: null } });
-              }}
-            />
-            <div className="flex items-center gap-3">
-              {checkRole(["product_plan_edit"]) && (
-                <div
-                  title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                  onClick={() => {
-                    // dispatch({
-                    //   type: "STATE",
-                    //   data: { rightdrawer: true },
-                    // });
-                    dispatch({
-                      type: "STATE",
-                      data: { modal: true },
-                    });
-                    dispatch({
-                      type: "STATE",
-                      data: { modalcheck: 1 },
-                    });
-                    dispatch({
-                      type: "STATE",
-                      data: { modalselected_department: [] },
-                    });
-                    dispatch({
-                      type: "STATE",
-                      data: { modalplancount: 0 },
-                    });
-                    dispatch({
-                      type: "STATE",
-                      data: { modalcompany: null },
-                    });
-                  }}
-                >
-                  <i className="fa fa-plus" />
-                </div>
-              )}
-            </div>
-          </div>
+          <Input.Search
+            className="md:w-80"
+            placeholder="Хайх..."
+            value={search.global.value}
+            onChange={(e) => {
+              let _search = { ...search };
+              _search["global"].value = e.target.value;
+              setSearch(_search);
+              dispatch({ type: "STATE", data: { tn: null } });
+            }}
+          />
+          // <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
+
+          // </div>
         }
         rowGroupHeaderTemplate={(data) => {
           return (
@@ -130,21 +89,6 @@ const Workers = () => {
             </div>
           );
         }}
-        // rowClassName={(data) => {
-        //   var result = "cursor-pointer";
-        //   if (state.id === data.id) result = " bg-blue-500 color:red";
-        //   return result;
-        // }}
-        // onRowClick={(e) => {
-        //   dispatch({
-        //     type: "STATE",
-        //     data: {
-        //       id: e.data.id,
-        //       position_id: e.data.positionid,
-        //       department_id: e.data.departmentid,
-        //     },
-        //   });
-        // }}
         rows={per_page}
         first={first}
         onPage={(event) => {
@@ -246,7 +190,7 @@ const Workers = () => {
           className="text-xs"
           headerClassName="flex items-center justify-center"
         />
-        {checkRole(["plan_add"]) && (
+        {!state.isapprove && checkRole(["plan_delete"]) && (
           <Column
             align="center"
             header=""
@@ -292,7 +236,7 @@ const Workers = () => {
                     });
                   }}
                 >
-                  <i className="fe fe-trash-2" />
+                  <i className="ft-trash-2" />
                 </button>
               );
             }}

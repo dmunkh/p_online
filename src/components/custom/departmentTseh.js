@@ -11,10 +11,20 @@ const DepartmentTseh = (props) => {
 
   useLayoutEffect(() => {
     API.getUserDepartment().then((res) => {
+      var result = res;
+
+      result.push({
+        departmentcode: -1,
+        departmentlevelid: 2,
+        departmentname: "Бүгд",
+        id: -1,
+        paranetid: 0,
+      });
+
       setList(
         _.orderBy(
           _.filter(
-            res,
+            result,
             (a) => a.departmentlevelid > 1 && a.departmentlevelid < 5
           ),
           ["departmentcode"]

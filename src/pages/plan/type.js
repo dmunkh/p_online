@@ -7,15 +7,13 @@ import _ from "lodash";
 import { FilterMatchMode } from "primereact/api";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/planhab/modal";
+import MODAL from "src/pages/plan/modal";
 import { useNavigate } from "react-router-dom";
-
-import Swal from "sweetalert2";
 import moment from "moment";
 
 const List = () => {
   const navigate = useNavigate();
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -25,11 +23,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     if (state.moduleid && state.department_id) {
       setLoading(true);
       API.getPlan({
@@ -59,6 +52,28 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.department_id, state.date, state.moduleid]);
 
+  useEffect(() => {
+    if (state.moduleid && state.department_id) {
+      API.getPlanApprove({
+        year: moment(state.date).format("Y"),
+        module_id: state.moduleid,
+        department_id: state.department_id,
+      })
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              isapprove: res[0]?.is_closed,
+            },
+          });
+        })
+        .catch((error) => message({ type: "error", error, title: "" }))
+        .finally(() => {});
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.moduleid, state.date, state.department_id]);
+
   return (
     <>
       <Modal
@@ -68,7 +83,9 @@ const List = () => {
         visible={state.modal}
         // visible={true}
         onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
-        title={"ХСБ-ний 1 ажилтан авах тоо бүртгэл"}
+        title={
+          moment(state.date).format("Y") + " оны төлөвлөгөөг баталгаажуулах уу"
+        }
         closeIcon={<div className="">x</div>}
         footer={false}
       >
@@ -93,14 +110,14 @@ const List = () => {
             rowGroupMode="subheader"
             groupRowsBy="departmentname"
             scrollHeight={window.innerHeight - 360}
-            globalFilterFields={["tn", "shortname", "position_namemn"]}
+            globalFilterFields={["type_name"]}
             emptyMessage={
               <div className="text-xs text-orange-500 italic font-semibold">
                 Мэдээлэл олдсонгүй...
               </div>
             }
             header={
-              <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
+              <div className="flex items-center justify-between  pb-2  text-xs">
                 <Input.Search
                   className="md:w-80"
                   placeholder="Хайх..."
@@ -112,41 +129,29 @@ const List = () => {
                     dispatch({ type: "STATE", data: { tn: null } });
                   }}
                 />
-                <div className="flex items-center gap-3">
-                  {checkRole(["product_plan_edit"]) && (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                      onClick={() => {
-                        // dispatch({
-                        //   type: "STATE",
-                        //   data: { rightdrawer: true },
-                        // });
-                        dispatch({
-                          type: "STATE",
-                          data: { modal: true },
-                        });
-                        dispatch({
-                          type: "STATE",
-                          data: { modalcheck: 1 },
-                        });
-                        dispatch({
-                          type: "STATE",
-                          data: { modalselected_department: [] },
-                        });
-                        dispatch({
-                          type: "STATE",
-                          data: { modalplancount: 0 },
-                        });
-                        dispatch({
-                          type: "STATE",
-                          data: { modalcompany: null },
-                        });
-                      }}
-                    >
-                      <i className="fa fa-plus" />
-                    </div>
-                  )}
+
+                <div className="flex items-center justify-between gap-2">
+                  {state.department_id > 0 ? (
+                    !state.isapprove ? (
+                      <div
+                        title="Нэмэх"
+                        className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                        onClick={() => {
+                          dispatch({ type: "STATE", data: { modal: true } });
+                        }}
+                      >
+                        <i className="fa fa-edit" />
+                      </div>
+                    ) : (
+                      <div
+                        title="Баталгаажуулах"
+                        className="p-1 flex items-center justify-center font-semibold text-green-700 border-2 border-green-500 rounded-full"
+                      >
+                        <i className="fa fa-check" />
+                        Баталгаажсан
+                      </div>
+                    )
+                  ) : null}
                 </div>
               </div>
             }
@@ -159,21 +164,6 @@ const List = () => {
                 </div>
               );
             }}
-            // rowClassName={(data) => {
-            //   var result = "cursor-pointer";
-            //   if (state.id === data.id) result = " bg-blue-500 color:red";
-            //   return result;
-            // }}
-            // onRowClick={(e) => {
-            //   dispatch({
-            //     type: "STATE",
-            //     data: {
-            //       id: e.data.id,
-            //       position_id: e.data.positionid,
-            //       department_id: e.data.departmentid,
-            //     },
-            //   });
-            // }}
             rows={per_page}
             first={first}
             onPage={(event) => {
@@ -249,7 +239,7 @@ const List = () => {
               body={(data, row) => row.rowIndex + 1}
             />
             <Column
-              header="Сургалтын нэр"
+              header="Төлөвлөгөөт сургалтын нэр"
               field="type_name"
               sortable
               className="text-xs"
@@ -280,108 +270,6 @@ const List = () => {
               className="text-xs"
               headerClassName="flex items-center justify-center"
               style={{ minWidth: "150px", maxWidth: "150px" }}
-            />
-            <Column
-              align="center"
-              header=""
-              className="text-xs"
-              style={{ minWidth: "70px", maxWidth: "70px" }}
-              headerClassName="flex items-center justify-center"
-              body={(item) => {
-                return (
-                  !item.enddate && (
-                    <div className="flex items-center justify-center gap-2">
-                      {checkRole(["product_plan_edit"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {
-                            dispatch({
-                              type: "STATE",
-                              data: {
-                                modaldepartment: item.department_code,
-                              },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: {
-                                id: item.id,
-                              },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: {
-                                modalselected_department: item.department_code,
-                              },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: { modalcompany: item.product_id },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: { modalplancount: item.plan_count },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: { modal: true },
-                            });
-                            dispatch({
-                              type: "STATE",
-                              data: { modalcheck: 2 },
-                            });
-                          }}
-                        >
-                          <i className="fe fe-edit" />
-                        </button>
-                      )}
-
-                      {checkRole(["product_plan_delete"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {
-                            Swal.fire({
-                              text:
-                                item.department_name +
-                                "-г ХСБ-ний жагсаалтаас хасах уу",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonColor: "#1890ff",
-                              cancelButtonColor: "rgb(244, 106, 106)",
-                              confirmButtonText: "Тийм",
-                              cancelButtonText: "Үгүй",
-                              reverseButtons: true,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                // API.deletePlan(item.id)
-                                //   .then(() => {
-                                //     dispatch({
-                                //       type: "STATE",
-                                //       data: { refresh: state.refresh + 1 },
-                                //     });
-                                //     message({
-                                //       type: "success",
-                                //       title: "Амжилттай устгагдлаа..",
-                                //     });
-                                //   })
-                                //   .catch((error) => {
-                                //     message({
-                                //       type: "error",
-                                //       error,
-                                //       title:
-                                //         "Албан тушаалаас норм хасаж чадсангүй",
-                                //     });
-                                //   });
-                              }
-                            });
-                          }}
-                        >
-                          <i className="fe fe-trash-2" />
-                        </button>
-                      )}
-                    </div>
-                  )
-                );
-              }}
             />
           </DataTable>
         </Spin>

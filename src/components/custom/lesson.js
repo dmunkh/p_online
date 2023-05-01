@@ -8,6 +8,8 @@ const TypeList = (props) => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
+    console.log(props.module_id);
+
     API.getTypesYear({ module_id: _.toInteger(props.module_id) }).then(
       (res) => {
         setList(res);
@@ -15,23 +17,15 @@ const TypeList = (props) => {
         if (res.length > 0 && !props.value) props.onChange(res[0].id);
       }
     );
-    props.module_id &&
-      API.getTypesYear({ module_id: props.module_id, year: props.year }).then(
-        (res) => {
-          setList(res);
-
-          if (res.length > 0 && !props.value) props.onChange(res[0].id);
-        }
-      );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.module_id, props.year]);
+  }, []);
 
   return (
     <div>
       <Select
         showSearch
-        className="w-full"
+        allowClear
         placeholder="Сонгоно уу."
         optionFilterProp="children"
         style={{ minWidth: 450 }}

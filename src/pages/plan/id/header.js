@@ -24,7 +24,7 @@ const Header = () => {
           className="px-3 flex items-center justify-center text-blue-700 text-lg border rounded-md cursor-pointer hover:scale-110 duration-300 h-10"
           onClick={() => navigate("/plan")}
         >
-          <i className="fas fa-arrow-left" />
+          <i className="fa fa-arrow-left" />
         </div>
       </div>
       <div className="flex items-center justify-between text-xs gap-2">

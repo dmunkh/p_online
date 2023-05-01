@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as API from "src/api/planhab";
-import * as API1 from "src/api/reference";
+
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Modal, Input, Select } from "antd";
-import _ from "lodash";
+import { Spin, Modal, Input } from "antd";
+
 import { FilterMatchMode } from "primereact/api";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import MODAL from "src/pages/planhab/modal";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
-import moment from "moment";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -18,8 +17,7 @@ const List = () => {
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
-  const [first, set_first] = useState(0);
-  const [per_page, set_per_page] = useState(50);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -88,14 +86,14 @@ const List = () => {
             responsiveLayout="scroll"
             sortMode="multiple"
             scrollHeight={window.innerHeight - 360}
-            globalFilterFields={["tn", "shortname", "position_namemn"]}
+            globalFilterFields={["type_name"]}
             emptyMessage={
               <div className="text-xs text-orange-500 italic font-semibold">
                 Мэдээлэл олдсонгүй...
               </div>
             }
             header={
-              <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
+              <div className="flex items-center justify-between  pb-2   text-xs">
                 <Input.Search
                   className="md:w-80"
                   placeholder="Хайх..."
@@ -173,62 +171,53 @@ const List = () => {
               headerClassName="flex items-center justify-center"
               body={(item) => {
                 return (
-                  !item.enddate && (
-                    <div className="flex items-center justify-center gap-2">
-                      {checkRole(["product_plan_edit"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {}}
-                        >
-                          <i className="ft-edit" />
-                        </button>
-                      )}
-
-                      {checkRole(["product_plan_delete"]) && (
-                        <button
-                          className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                          onClick={() => {
-                            Swal.fire({
-                              text:
-                                item.department_name +
-                                "-г ХСБ-ний жагсаалтаас хасах уу",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonColor: "#1890ff",
-                              cancelButtonColor: "rgb(244, 106, 106)",
-                              confirmButtonText: "Тийм",
-                              cancelButtonText: "Үгүй",
-                              reverseButtons: true,
-                            }).then((result) => {
-                              if (result.isConfirmed) {
-                                // API.deletePlan(item.id)
-                                //   .then(() => {
-                                //     dispatch({
-                                //       type: "STATE",
-                                //       data: { refresh: state.refresh + 1 },
-                                //     });
-                                //     message({
-                                //       type: "success",
-                                //       title: "Амжилттай устгагдлаа..",
-                                //     });
-                                //   })
-                                //   .catch((error) => {
-                                //     message({
-                                //       type: "error",
-                                //       error,
-                                //       title:
-                                //         "Албан тушаалаас норм хасаж чадсангүй",
-                                //     });
-                                //   });
-                              }
-                            });
-                          }}
-                        >
-                          <i className="ft-trash-2" />
-                        </button>
-                      )}
-                    </div>
-                  )
+                  <div className="flex items-center justify-center gap-2">
+                    {checkRole(["norm_delete"]) && (
+                      <button
+                        className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                        onClick={() => {
+                          Swal.fire({
+                            text: item.type_name + "-г хасах уу",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#1890ff",
+                            cancelButtonColor: "rgb(244, 106, 106)",
+                            confirmButtonText: "Тийм",
+                            cancelButtonText: "Үгүй",
+                            reverseButtons: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              API.deleteNorm({
+                                department_id: state.department_id,
+                                position_id: state.position_id,
+                                type_id: item.type_id,
+                              })
+                                .then(() => {
+                                  dispatch({
+                                    type: "STATE",
+                                    data: { refresh: state.refresh + 1 },
+                                  });
+                                  message({
+                                    type: "success",
+                                    title: "Амжилттай устгагдлаа..",
+                                  });
+                                })
+                                .catch((error) => {
+                                  message({
+                                    type: "error",
+                                    error,
+                                    title:
+                                      "Албан тушаалаас норм хасаж чадсангүй",
+                                  });
+                                });
+                            }
+                          });
+                        }}
+                      >
+                        <i className="ft-trash-2" />
+                      </button>
+                    )}
+                  </div>
                 );
               }}
             />

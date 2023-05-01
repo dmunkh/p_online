@@ -1,36 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import * as API from "src/api/planhab";
-import { Select, InputNumber } from "antd";
-// import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import Type from "src/components/custom/type";
-import _ from "lodash";
 
-import moment from "moment";
 // import _ from "lodash";
-
-const { Option } = Select;
 
 const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
-  const [list, setList] = useState([]);
-
-  // const { state, dispatch } = useUserContext();
-
-  useEffect(() => {
-    API.getType({ module_id: 1 })
-      .then((res) => {
-        setList(_.orderBy(res, ["type_name"]));
-      })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {});
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.department]);
 
   return (
     <div className="flex flex-col text-xs">

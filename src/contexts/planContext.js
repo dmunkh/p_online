@@ -10,7 +10,10 @@ const _state = {
   modal: false,
   date: moment(),
   department: null,
+  moduleid: null,
   typeid: null,
+  module_name: null,
+  isapprove: null,
 };
 
 export const usePlanContext = () => {
