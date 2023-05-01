@@ -215,7 +215,7 @@ const Training = () => {
                     });
                   }}
                 >
-                  <i className="fa fa-plus" />
+                  <i className="ft-plus" />
                 </div>
               )}
             </div>

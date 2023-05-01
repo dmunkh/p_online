@@ -58,7 +58,7 @@ const Header = () => {
 
             <DatePicker
               allowClear={false}
-              className="w-full md:w-[150px] text-xs rounded-lg"
+              className="w-full md:w-[150px] text-xs "
               picker="year"
               format="YYYY"
               value={state.change_year}

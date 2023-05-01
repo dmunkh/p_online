@@ -90,7 +90,7 @@ const ModalNormDetail = () => {
           }
         }}
       >
-        <i className="fas fa-save" />
+        <i className="ft-save" />
         <span className="ml-2">Хадгалах</span>
       </button>
     </div>
