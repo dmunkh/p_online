@@ -74,19 +74,20 @@ const Workers = () => {
                 </div>
               }
               header={
-                <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
-                  <Input.Search
-                    className="md:w-80"
-                    placeholder="Хайх..."
-                    value={search.global.value}
-                    onChange={(e) => {
-                      let _search = { ...search };
-                      _search["global"].value = e.target.value;
-                      setSearch(_search);
-                      dispatch({ type: "STATE", data: { tn: null } });
-                    }}
-                  />
-                </div>
+                <Input.Search
+                  className="md:w-80"
+                  placeholder="Хайх..."
+                  value={search.global.value}
+                  onChange={(e) => {
+                    let _search = { ...search };
+                    _search["global"].value = e.target.value;
+                    setSearch(_search);
+                    dispatch({ type: "STATE", data: { tn: null } });
+                  }}
+                />
+                // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
+
+                // </div>
               }
               rowGroupHeaderTemplate={(data) => {
                 return (

@@ -11,7 +11,7 @@ const Index = () => {
           <div className="lg:w-1/4">
             <ModuleType />
           </div>
-          <div className="lg:w-3/4">
+          <div className="lg:w-3/4 mt-3">
             <Header />
             <LessonList />
           </div>

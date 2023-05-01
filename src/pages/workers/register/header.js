@@ -28,7 +28,7 @@ const Header = () => {
   }, [state?.list_department]);
 
   return (
-    <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
+    <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 ">
       <div className="flex item-center gap-2 ">
         <div
           title="Буцах"

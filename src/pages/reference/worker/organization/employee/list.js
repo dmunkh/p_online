@@ -184,7 +184,7 @@ export default function Employee({ data }) {
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["person_edit"]) && (
                   <button
-                  className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => updateItem(item)}
                   >
                     <i className="ft-edit" />
