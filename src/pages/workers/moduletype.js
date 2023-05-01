@@ -1,16 +1,16 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import Department from "src/components/custom/departmentTseh";
+import React, { useLayoutEffect, useState } from "react";
+// import Department from "src/components/custom/departmentTseh";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import Module from "src/components/custom/module";
-import Type from "src/components/custom/type";
-import { DatePicker } from "antd";
+// import Type from "src/components/custom/type";
+// import { DatePicker } from "antd";
 import _ from "lodash";
-import { useUserContext } from "src/contexts/userContext";
+// import { useUserContext } from "src/contexts/userContext";
 import * as API from "src/api/request";
 import moment from "moment";
 
 const Moduletype = () => {
-  const { user, message, checkRole } = useUserContext();
+  // const { user, message, checkRole } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [list, setList] = useState([]);
 
@@ -45,7 +45,7 @@ const Moduletype = () => {
 
               <ul className="list-group mb-3">
                 <li
-                  className="list-group-item hover:bg-[#dedbf1] cursor-pointer"
+                  className="list-group-item bg-slate-200 hover:bg-[#dedbf1] cursor-pointer"
                   style={{ paddingTop: "5px", paddingBottom: "2px" }}
                   onClick={(value) => {
                     dispatch({
@@ -54,7 +54,7 @@ const Moduletype = () => {
                     });
                   }}
                 >
-                  <span style={{ fontWeight: 600 }}>Нийт сургалт</span>
+                  <span style={{ fontWeight: 600 }}>НИЙТ СУРГАЛТ</span>
                   <span class="badge bg-light-primary float-right">4</span>
                 </li>
                 <hr></hr>

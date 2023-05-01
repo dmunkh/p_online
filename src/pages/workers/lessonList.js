@@ -55,7 +55,7 @@ const List = () => {
     padding: "10px",
   };
   return (
-    <div className="row">
+    <div className="row mt-3">
       <div className="col-12">
         <div className="card" style={divStyles}>
           <div className="card-content">

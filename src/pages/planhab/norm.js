@@ -93,7 +93,7 @@ const List = () => {
               </div>
             }
             header={
-              <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
+              <div className="flex items-center justify-between  pb-2   text-xs">
                 <Input.Search
                   className="md:w-80"
                   placeholder="Хайх..."
