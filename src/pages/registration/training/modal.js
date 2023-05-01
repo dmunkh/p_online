@@ -1,7 +1,7 @@
 import React from "react";
 import { Input, Modal, DatePicker } from "antd";
 import Module from "src/components/custom/module";
-import TypeYear from "src/components/custom/typeYear";
+import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
 import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
@@ -13,12 +13,11 @@ import moment from "moment";
 const Component = () => {
   const { state, dispatch } = useTrainingContext();
   const { message } = useUserContext();
-
   const save = () => {
     var error = [];
     state.place_id || error.push("Сургалтын танхим");
-    state.begin_date || error.push("Сургалтын эхлэх хугацаа");
-    state.end_date || error.push("Сургалтын дуусах хугацаа");
+    // state.begin_date || error.push("Сургалтын эхлэх хугацаа");
+    // state.end_date || error.push("Сургалтын дуусах хугацаа");
     state.limit || error.push("Суух ажилчдын тоо ");
     state.hour || error.push("Сургалт үргэлжлэх хугацаа");
     state.point || error.push("Шалгалтын оноо");
@@ -97,9 +96,9 @@ const Component = () => {
       width={850}
       title={
         <div className="text-center">
-          {state.id
-            ? `${state.type_name}  засварлах цонх`
-            : `Сургалтын төрөл бүртгэх цонх`}
+          {state.id !== null
+            ? `${state.type_name}   засварлах цонх`
+            : "Сургалтын төрөл бүртгэх цонх"}
         </div>
       }
       visible={state.modal}
@@ -130,7 +129,7 @@ const Component = () => {
         <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
         </span>
-        <TypeYear
+        <Type
           module_id={state.moduleid}
           year={moment(state.change_year).format("YYYY")}
           value={state.type_id}
@@ -157,7 +156,7 @@ const Component = () => {
           Сургалтын цаг:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200  "
           value={state.hour}
           onChange={(e) => {
             dispatch({
@@ -174,7 +173,7 @@ const Component = () => {
           Суух ажилчдын тоо:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200 "
           value={state.limit}
           onChange={(e) => {
             dispatch({
@@ -191,7 +190,7 @@ const Component = () => {
           Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200"
           value={state.point}
           onChange={(e) => {
             dispatch({
@@ -208,7 +207,7 @@ const Component = () => {
           Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200 "
           value={state.percent}
           onChange={(e) => {
             dispatch({
@@ -278,7 +277,7 @@ const Component = () => {
           Үнэ /Бүтцийн нэгжүүдэд/:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200  "
           value={state.price_emc}
           onChange={(e) => {
             dispatch({
@@ -295,7 +294,7 @@ const Component = () => {
           Үнэ /Гадны байгууллагуудад/:<b className="ml-1 text-red-500">*</b>
         </span>
         <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+          className=" p-1 w-full text-gray-900 border border-gray-200"
           value={state.price_organization}
           onChange={(e) => {
             dispatch({
