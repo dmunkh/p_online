@@ -21,7 +21,7 @@ const Moduletype = () => {
         year: moment(state.date).format("Y"),
         module_id: state.moduletypeid,
       }).then((res) => {
-        setList(res);
+        setList(_.orderBy(res, "type_name"));
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,7 +89,7 @@ const Moduletype = () => {
                     >
                       <span>{item.type_name}</span>
                       <span className="badge bg-light-primary float-right">
-                        {item.count_lesson}
+                        {_.replace(item.count_lesson, "0", "-")}
                       </span>
                     </li>
                   );

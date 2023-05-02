@@ -77,6 +77,12 @@ const List = () => {
                             dispatch({
                               type: "STATE",
                               data: {
+                                limit_count: item.limit,
+                              },
+                            });
+                            dispatch({
+                              type: "STATE",
+                              data: {
                                 lessonid: item.id,
                                 modaltypeid: item.type_id,
                               },

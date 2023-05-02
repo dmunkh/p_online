@@ -20,6 +20,8 @@ const _state = {
   lessonid: null,
   lessonlist: [],
   lessonlistfilter: [],
+  limit_count: null,
+  list_count: null,
 };
 
 export const useRegisterEmplContext = () => {

@@ -35,10 +35,12 @@ const ModalNormDetail = () => {
             department_id: state.department_id,
           })
             .then((res) => {
+              dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
               dispatch({ type: "STATE", data: { modal: false } });
+
               message({
                 type: "success",
-                title: "Уншлаа",
+                title: "Баталгаажуулалт амжилттай",
               });
             })
             .catch((error) =>

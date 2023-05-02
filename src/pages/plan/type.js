@@ -71,7 +71,7 @@ const List = () => {
         .finally(() => {});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.moduleid, state.date, state.department_id]);
+  }, [state.moduleid, state.date, state.department_id, state.refresh]);
 
   return (
     <>
@@ -133,7 +133,7 @@ const List = () => {
                   {state.department_id > 0 ? (
                     !state.isapprove ? (
                       <div
-                        title="Нэмэх"
+                        title="Баталгаажуулах"
                         className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
                         onClick={() => {
                           dispatch({ type: "STATE", data: { modal: true } });

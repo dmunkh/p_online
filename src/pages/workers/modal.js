@@ -9,7 +9,7 @@ import Department from "src/pages/workers/department";
 import _ from "lodash";
 
 const ModalNormDetail = () => {
-  const { message } = useUserContext();
+  const { message, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
 
   // const { state, dispatch } = useUserContext();
@@ -33,33 +33,66 @@ const ModalNormDetail = () => {
       <Department />
 
       <hr className="my-2" />
-      <button
-        className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-        onClick={() => {
-          API.postWorker({
-            lesson_id: state.lessonid,
-            tns: _.join(state.list_checked, ","),
-          })
-            .then((res) => {
-              dispatch({
-                type: "STATE",
-                data: { refresh: state.refresh + 1, modaltypeid: null },
-              });
+      {checkGroup([173, 306, 307, 378, 386, 387]) ? (
+        <button
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+          onClick={() => {
+            API.postWorker({
+              lesson_id: state.lessonid,
+              tns: _.join(state.list_checked, ","),
             })
-            .catch((error) =>
-              message({
-                type: "error",
-                error,
-                title: "Хадгалж чадсангүй",
+              .then((res) => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                });
               })
-            )
-            .finally(() => {});
-          dispatch({ type: "STATE", data: { modal: false } });
-        }}
-      >
-        <i className="fa fa-save" />
-        <span className="ml-2">Хадгалах</span>
-      </button>
+              .catch((error) =>
+                message({
+                  type: "error",
+                  error,
+                  title: "Хадгалж чадсангүй",
+                })
+              )
+              .finally(() => {});
+            dispatch({ type: "STATE", data: { modal: false } });
+          }}
+        >
+          <i className="fa fa-save" />
+          <span className="ml-2">Хадгалах</span>
+        </button>
+      ) : state.limit_count - state.list_count - state.list_checked.length <
+        0 ? (
+        <span className="text-red-500">"Бүртгэх ажилтны лимит хэтэрлээ"</span>
+      ) : (
+        <button
+          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+          onClick={() => {
+            API.postWorker({
+              lesson_id: state.lessonid,
+              tns: _.join(state.list_checked, ","),
+            })
+              .then((res) => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                });
+              })
+              .catch((error) =>
+                message({
+                  type: "error",
+                  error,
+                  title: "Хадгалж чадсангүй",
+                })
+              )
+              .finally(() => {});
+            dispatch({ type: "STATE", data: { modal: false } });
+          }}
+        >
+          <i className="fa fa-save" />
+          <span className="ml-2">Хадгалах</span>
+        </button>
+      )}
     </div>
   );
 };
