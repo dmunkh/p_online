@@ -250,9 +250,10 @@ const List = () => {
                     onClick={() => {
                       dispatch({
                         type: "STATE",
-                        data: { typeid: rowData.type_id },
+                        data: { typeid: rowData.type_id, single_page: true },
                       });
-                      navigate("/plan/workers?id=" + rowData.type_id);
+
+                      // navigate("/plan/workers?id=" + rowData.type_id);
                     }}
                   >
                     <span className="">{rowData.type_name}</span>

@@ -15,6 +15,21 @@ const Header = () => {
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
       <div className="flex items-center justify-between text-xs gap-2">
+        <div className="flex item-center gap-2 ">
+          {state.single_page ? (
+            <div
+              title="Буцах"
+              className="px-3 flex items-center justify-center text-blue-700 text-lg border rounded-md cursor-pointer hover:scale-110 duration-300 h-10"
+              onClick={() =>
+                dispatch({ type: "STATE", data: { single_page: false } })
+              }
+            >
+              <i className="fa fa-arrow-left" />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
         <span className="md:w-[50px] font-semibold">Огноо:</span>
         <div className="w-full md:min-w-[100px] ">
           <DatePicker
@@ -43,13 +58,20 @@ const Header = () => {
         />
       </div>
       <div className="flex items-center w-full  md:w-[250px] text-xs gap-2">
-        <span className="font-semibold whitespace-nowrap">Модуль:</span>
-        <Module
-          value={state.moduleid}
-          onChange={(value) =>
-            dispatch({ type: "STATE", data: { moduleid: value } })
-          }
-        />
+        {!state.single_page ? (
+          <>
+            {" "}
+            <span className="font-semibold whitespace-nowrap">Модуль:</span>
+            <Module
+              value={state.moduleid}
+              onChange={(value) =>
+                dispatch({ type: "STATE", data: { moduleid: value } })
+              }
+            />
+          </>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

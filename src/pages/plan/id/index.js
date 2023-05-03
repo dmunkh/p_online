@@ -17,7 +17,7 @@ const Index = () => {
   return (
     <div className=" card flex p-2 border rounded text-xs">
       <Header />
-      INDEX ID
+
       <div className="flex flex-col md:flex-row gap-2 ">
         <div className="md:w-2/3">{/* <Workers /> */}</div>
 

@@ -22,6 +22,8 @@ const _state = {
   lessonlistfilter: [],
   limit_count: null,
   list_count: null,
+
+  single_page: false,
 };
 
 export const useRegisterEmplContext = () => {

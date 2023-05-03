@@ -71,6 +71,13 @@ export async function getModule() {
   return response.data;
 }
 
+//Хэрэглэгчийн сургалтын бүлэг - Мodule
+
+export async function getUserModule() {
+  const response = await API().get("/user/module");
+  return response.data;
+}
+
 export async function getModul() {
   const response = await API().get("/module");
   return response.data;
