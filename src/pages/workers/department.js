@@ -9,6 +9,7 @@ import * as API from "src/api/plan";
 
 // import { ColumnGroup } from "primereact/columngroup";
 import moment from "moment";
+import * as REQ from "src/api/request";
 import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
@@ -28,10 +29,8 @@ const Department = () => {
 
   useEffect(() => {
     setLoading(true);
-    API.getPlanNot({
+    REQ.getWorkers({
       department_id: state.department,
-      type_id: state.modaltypeid,
-      year: moment(state.date).format("Y"),
     })
       .then((res) => {
         setList(_.orderBy(res, ["department_code"], ["firstname"]));
