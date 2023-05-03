@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Spin, Input, Select } from "antd";
 import _ from "lodash";
 import * as API from "src/api/plan";
+import * as REQ from "src/api/request";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
@@ -25,9 +26,7 @@ const Workers = () => {
 
   useEffect(() => {
     setLoading(true);
-    API.getPlanNot({
-      year: moment(state.date).format("Y"),
-      type_id: state.typeid,
+    REQ.getWorkers({
       department_id: state.department_id,
     })
       .then((res) => {
@@ -42,11 +41,17 @@ const Workers = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.department_id, state.date, state.moduleid, state.refresh]);
 
-  return (
-    <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
+  const memo_table = useMemo(() => {
+    var result = list;
+
+    if (state?.list_planworker?.length > 0) {
+      result = _.filter(result, (a) => !state.list_planworker.includes(a.tn));
+    }
+
+    return (
       <DataTable
         size="small"
-        value={list}
+        value={result}
         dataKey="id"
         filters={search}
         paginator
@@ -250,6 +255,13 @@ const Workers = () => {
           />
         )}
       </DataTable>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list, search, first, per_page, state.list_planworker]);
+
+  return (
+    <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
+      {memo_table}
     </Spin>
   );
 };

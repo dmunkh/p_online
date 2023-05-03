@@ -23,7 +23,7 @@ const _state = {
   limit_count: null,
   list_count: null,
 
-  single_page: false,
+  list_planworker: [],
 };
 
 export const useRegisterEmplContext = () => {

@@ -185,3 +185,11 @@ export async function deletePerson(id) {
   const response = await API().delete("/person/" + id);
   return response.data;
 }
+
+// Бүцтйин нэгжийн ажилтнууд
+export async function getWorkers(params) {
+  const response = await API().get("/general/department/workers", {
+    params: { ...params },
+  });
+  return response.data;
+}
