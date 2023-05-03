@@ -35,6 +35,11 @@ const Department = () => {
       department_id: state.department,
     })
       .then((res) => {
+        console.log(state.list_planworker);
+        dispatch({
+          type: "STATE",
+          data: { list_planworker: _.map(res, (item) => item.tn) },
+        });
         setList(_.orderBy(res, ["department_code"], ["firstname"]));
       })
       .catch((error) =>
@@ -67,7 +72,6 @@ const Department = () => {
 
   return (
     <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
-      Plan
       <DataTable
         scrollable
         dataKey="id"

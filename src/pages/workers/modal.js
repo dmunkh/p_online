@@ -58,6 +58,7 @@ const ModalNormDetail = () => {
             }
             checked={checked}
             onChange={(value) => {
+              dispatch({ type: "STATE", data: { list_checked: [] } });
               setChecked(value);
               setLoadingbtn(true);
               PlanApprove(value);

@@ -33,7 +33,13 @@ const Department = () => {
       department_id: state.department,
     })
       .then((res) => {
-        setList(_.orderBy(res, ["department_code"], ["firstname"]));
+        setList(
+          _.orderBy(
+            _.filter(res, (a) => !state.list_planworker.includes(a.tn)),
+            ["department_code"],
+            ["firstname"]
+          )
+        );
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
