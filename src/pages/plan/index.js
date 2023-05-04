@@ -14,7 +14,9 @@ const Index = () => {
         <div className="md:w-2/3">
           {state.single_page ? <WorkersType /> : <Position />}
         </div>
-        <div className="md:w-2/3">{state.single_page ? <Workers /> : ""}</div>
+        <div className="md:w-2/3">
+          {!state.isapprove && state.single_page ? <Workers /> : ""}
+        </div>
       </div>
     </div>
   );

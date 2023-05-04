@@ -25,13 +25,6 @@ const List = () => {
         module_id: state.moduletypeid,
       })
         .then((res) => {
-          dispatch({
-            type: "STATE",
-            data: {
-              list_typeworker: _.map(res, (item) => item.tn),
-            },
-          });
-          console.log(res, state.list_typeworker);
           dispatch({ type: "STATE", data: { lessonlist: res } });
           dispatch({ type: "STATE", data: { lessonlistfilter: res } });
         })
@@ -62,7 +55,7 @@ const List = () => {
     padding: "10px",
   };
   return (
-    <div className="row mt-3">
+    <div className="row">
       <div className="col-12 ">
         {/* <div className="flex items-center justify-between  text-xs text-white">
           ...
@@ -99,7 +92,11 @@ const List = () => {
                           key={item.id}
                           className="list-group-item  hover:bg-[#dedbf1] cursor-pointer"
                           onClick={(value) => {
-                            navigate("/worker/register/worker?id=" + item.id);
+                            // navigate("/worker/register/worker?id=" + item.id);
+                            dispatch({
+                              type: "STATE",
+                              data: { single_page: true },
+                            });
                             dispatch({
                               type: "STATE",
                               data: {

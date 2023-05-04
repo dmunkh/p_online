@@ -25,12 +25,12 @@ const Moduletype = () => {
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.moduletypeid]);
+  }, [state.moduletypeid, state.date]);
 
   return (
     <div classNameName="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
       <div classNameName="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
-        <span className="text-base">Модуль</span>
+        <span className="text-sm">Модуль</span>
 
         <Module
           value={state.moduletypeid}
@@ -42,8 +42,7 @@ const Moduletype = () => {
         <div className="card">
           <div className="card-content">
             <div className="card-body" style={{ padding: 0 }}>
-              <span className="text-base">Сургалтууд</span>
-
+              <span className="text-sm">Сургалтууд</span>
               <ul className="list-group mb-3">
                 <li
                   className="list-group-item bg-slate-200 hover:bg-[#dedbf1] cursor-pointer"
