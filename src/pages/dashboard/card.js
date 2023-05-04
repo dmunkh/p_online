@@ -36,7 +36,7 @@ const Card = () => {
           await res.map((el) => {
             // eslint-disable-next-line no-sequences
             lebel.push(el.count_all === 0 ? 0.0001 : el.count_all);
-            chartsdata.push(el.module_name);
+            chartsdata.push( el.module_name);
             labelcount.push(el.count_unique === 0 ? 0.0001 : el.count_unique);
             return true;
           });
@@ -71,7 +71,7 @@ const Card = () => {
           await res.map((el) => {
             console.log(el);
             // eslint-disable-next-line no-sequences
-            labels.push(_.concat(el.count_all, el.departmentname));
+            labels.push( el.departmentname);
             chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);
             chartsdata2.push(el.count_unique === 0 ? 5 : el.count_unique);
 
