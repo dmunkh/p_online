@@ -8,7 +8,7 @@ const DepartmentTseh = (props) => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    API.getModule().then((res) => {
+    API.getUserModule().then((res) => {
       setList(res);
       if (res.length > 0 && !props.value) props.onChange(res[0].id);
     });

@@ -1,82 +1,83 @@
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
-import Header from "src/pages/registration/training/header";
 import * as API from "src/api/training";
 import _ from "lodash";
-import { Spin, Badge, Calendar } from "antd";
+import { Badge, Calendar, Typography } from "antd";
 import Swal from "sweetalert2";
 import moment from "moment";
 import dayjs from "dayjs";
-
+const { Title, Paragraph, Text, Link } = Typography;
 const Calendars = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useTrainingContext();
   const [value, setValue] = useState(() => dayjs("2017-01-25"));
   const [loading, setLoading] = useState(false);
-  // const getListData = (value) => {
-  //   let listData;
-  //   switch (value.date()) {
-  //     case 1:
-  //       listData = [
-  //         {
-  //           type: "warning",
-  //           content: "This is warning event.",
-  //         },
-  //         {
-  //           type: "success",
-  //           content: "This is usual event.",
-  //         },
-  //       ];
-  //       break;
-  //     case 2:
-  //       listData = [
-  //         {
-  //           type: "warning",
-  //           content: "This is warning event.",
-  //         },
-  //         {
-  //           type: "success",
-  //           content: "This is usual event.",
-  //         },
-  //         {
-  //           type: "error",
-  //           content: "This is error event.",
-  //         },
-  //       ];
-  //       break;
-  //     case 15:
-  //       listData = [
-  //         {
-  //           type: "warning",
-  //           content: "This is warning event",
-  //         },
-  //         {
-  //           type: "success",
-  //           content: "This is very long usual event。。....",
-  //         },
-  //         {
-  //           type: "error",
-  //           content: "This is error event 1.",
-  //         },
-  //         {
-  //           type: "error",
-  //           content: "This is error event 2.",
-  //         },
-  //         {
-  //           type: "error",
-  //           content: "This is error event 3.",
-  //         },
-  //         {
-  //           type: "error",
-  //           content: "This is error event 4.",
-  //         },
-  //       ];
-  //       break;
-  //     default:
-  //   }
-  //   return listData || [];
-  // };
+
+  const getListData = (value) => {
+    console.log("value: ", value);
+    let listData;
+    switch (value.date()) {
+      case 1:
+        listData = [
+          {
+            type: "warning",
+            content: "This is warning event.",
+          },
+          {
+            type: "success",
+            content: "This is usual event.",
+          },
+        ];
+        break;
+      case 16:
+        listData = [
+          {
+            type: "warning",
+            content: "This is warning event.",
+          },
+          {
+            type: "success",
+            content: "This is usual event.",
+          },
+          {
+            type: "error",
+            content: "This is error event.",
+          },
+        ];
+        break;
+      case 15:
+        listData = [
+          {
+            type: "warning",
+            content: "This is warning event",
+          },
+          {
+            type: "success",
+            content: "This is very long usual event。。....",
+          },
+          {
+            type: "error",
+            content: "This is error event 1.",
+          },
+          {
+            type: "error",
+            content: "This is error event 2.",
+          },
+          {
+            type: "error",
+            content: "This is error event 3.",
+          },
+          {
+            type: "error",
+            content: "This is error event 4.",
+          },
+        ];
+        break;
+      default:
+    }
+    return listData || [];
+  };
   // const getMonthData = (value) => {
   //   if (value.month() === 5) {
   //     return 1394;
@@ -145,11 +146,47 @@ const Calendars = () => {
   //   return info.originNode;
   // };
 
-  const onPanelChange = (newValue) => {
-    setValue(newValue);
-    console.log("newValue: ", newValue);
+  const monthCellRender = (value) => {
+    const num = getMonthData(value);
+    return num ? (
+      <div className="notes-month">
+        <section>{num}</section>
+        <span>Backlog number</span>
+      </div>
+    ) : null;
   };
+  const dateCellRender = (value) => {
+    const listData = getListData(value);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content}>
+            <Badge status={item.type} text={item.content} />
+          </li>
+        ))}
+      </ul>
+    );
+  };
+  const getMonthData = (value) => {
+    if (value.month() === 8) {
+      return 1394;
+    }
+  };
+
+  // const onPanelChange = (value: dayjs, mode: CalendarMode) => {
+  //   console.log(value.format("YYYY-MM-DD"), mode);
+  // };
+
   const memo_calendar = useMemo(() => {
+    var result = state.list_training;
+    var mm = moment(state?.change_year).format("MM");
+    if (mm)
+      result = _.filter(
+        result,
+        (a) => moment(a.begin_date).format("MM") === mm
+      );
+    console.log("result: ", result);
+
     return (
       <div className="flex  gap-5 p-4">
         <div className="w-1/6 ">
@@ -253,34 +290,34 @@ const Calendars = () => {
           >
             <Calendar
               mode="month"
+              type="date"
               value={state.begin_date}
+              onChange={(e) => {
+                console.log("eeeeeeeee", e);
+              }}
               //onPanelChange={onPanelChange}
               dateCellRender={(date) => {
-                console.log("object", date.format("D"));
-                const list = state.list_training.filter(
+                console.log("object", date);
+                const list = result.filter(
                   (el) =>
-                    moment(el.begin_date).format("YYYY.MM.DD") ===
+                    moment(el.begin_date).format("YYYY.MM.DD") >=
                     moment(date).format("YYYY.MM.DD")
                 );
+                // if (info.type === 'date') return dateCellRender(current);
+                // if (info.type === 'month') return monthCellRender(current);
+                // return info.originNode;
                 return (
                   <ul className="events">
-                    <i className="pi pi-check"></i>
                     {list.map((item) => {
                       return (
                         <li key={item.id} className="text-xs">
-                          <Badge
-                            className="text-[10px] font-semibold border-b py-1"
-                            status={item.id}
-                            text={item.type_name}
-                          />
+                          <Link
+                            className={item.type_id === 16 ? " green" : " red"}
+                            key={item.id}
+                          >
+                            <i className="pi pi-check">{item.type_name}</i>
+                          </Link>
                         </li>
-
-                        // <div
-                        //   key={index}
-                        //   className="text-[10px] font-semibold border-b py-1"
-                        // >
-                        //   {item.type_name}
-                        // </div>
                       );
                     })}
                   </ul>
@@ -292,7 +329,7 @@ const Calendars = () => {
       </div>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_training]);
+  }, [state.list_training, state.change_year]);
 
   return (
     <div className="">

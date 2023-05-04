@@ -91,6 +91,10 @@ const Training = () => {
   };
   const updateItem = (item) => {
     dispatch({
+      type: "STATE",
+      data: { timeRegister: false },
+    });
+    dispatch({
       type: "SET_LESSON",
       data: {
         id: item.id,
@@ -200,32 +204,36 @@ const Training = () => {
                     dispatch({
                       type: "CLEAR_LESSON",
                     });
-                    setEdit(false);
-                    API.getLessonTypeID(state?.type_id).then((res) => {
-                      dispatch({
-                        type: "SET_LESSON",
-                        data: {
-                          type_name: res.type_name,
-
-                          begin_date: res.begin_date,
-                          end_date: res.end_date,
-                          hour: res.hour,
-                          limit: res.limit,
-                          //   percent: res.percent,
-                          place_id: res.place_id,
-                          point: res.point,
-                          //   price_emc: res.price_emc,
-                          //   price_organization: res.price_organization,
-                          year: res.year,
-                          type_id: state?.type_id,
-                        },
-                      });
-                      dispatch({
-                        type: "STATE",
-                        data: { modal: true },
-                      });
-                      //loadItemTypeList(res.itemtypeid);
+                    dispatch({
+                      type: "STATE",
+                      data: { timeRegister: false },
                     });
+                    setEdit(false);
+                    // API.getLessonTypeID(state?.type_id).then((res) => {
+                    //   dispatch({
+                    //     type: "SET_LESSON",
+                    //     data: {
+                    //       type_name: res.type_name,
+
+                    //       begin_date: res.begin_date,
+                    //       end_date: res.end_date,
+                    //       hour: res.hour,
+                    //       limit: res.limit,
+                    //       //   percent: res.percent,
+                    //       place_id: res.place_id,
+                    //       point: res.point,
+                    //       //   price_emc: res.price_emc,
+                    //       //   price_organization: res.price_organization,
+                    //       year: res.year,
+                    //       type_id: state?.type_id,
+                    //     },
+                    //   });
+                    //   dispatch({
+                    //     type: "STATE",
+                    //     data: { modal: true },
+                    //   });
+                    //   //loadItemTypeList(res.itemtypeid);
+                    // });
 
                     dispatch({
                       type: "STATE",

@@ -20,6 +20,10 @@ const _state = {
   lessonid: null,
   lessonlist: [],
   lessonlistfilter: [],
+  limit_count: null,
+  list_count: null,
+
+  list_planworker: [],
 };
 
 export const useRegisterEmplContext = () => {

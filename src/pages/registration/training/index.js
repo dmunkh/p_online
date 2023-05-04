@@ -9,8 +9,8 @@ const Index = () => {
     <div className="card ">
       <Header />
       <div className="p-1">
-        <Listtraining />
-        {/* {state.change_btn ? <Calendars /> : <Listtraining />} */}
+        {/* <Listtraining /> */}
+        {state.change_btn ? <Calendars /> : <Listtraining />}
       </div>
     </div>
   );

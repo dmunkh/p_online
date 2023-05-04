@@ -13,6 +13,7 @@ const Moduletype = () => {
   // const { user, message, checkRole } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [list, setList] = useState([]);
+  const [type_id, setType_id] = useState(null);
 
   useLayoutEffect(() => {
     state.moduletypeid &&
@@ -20,7 +21,7 @@ const Moduletype = () => {
         year: moment(state.date).format("Y"),
         module_id: state.moduletypeid,
       }).then((res) => {
-        setList(res);
+        setList(_.orderBy(res, "type_name"));
       });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,16 +53,24 @@ const Moduletype = () => {
                       type: "STATE",
                       data: { lessonlistfilter: state.lessonlist },
                     });
+                    setType_id(null);
                   }}
                 >
-                  <span style={{ fontWeight: 600 }}>НИЙТ СУРГАЛТ</span>
-                  <span className="badge bg-light-primary float-right">4</span>
+                  <span className="text-xs font-bold">НИЙТ СУРГАЛТ</span>
+                  <span class="badge bg-light-primary float-right font-bold border-1 text-sx border-gray-500">
+                    {_.sumBy(_.map(list, (a) => a.count_lesson))}
+                  </span>
                 </li>
                 <hr></hr>
                 {_.map(list, (item) => {
                   return (
                     <li
-                      className="list-group-item hover:bg-[#dedbf1] cursor-pointer"
+                      className={
+                        "list-group-item hover:bg-[#dedbf1] cursor-pointer " +
+                        (type_id === item.type_id
+                          ? " text-blue-500 font-bold"
+                          : "")
+                      }
                       style={{ paddingTop: "5px", paddingBottom: "2px" }}
                       onClick={(value) => {
                         var result = [];
@@ -71,6 +80,7 @@ const Moduletype = () => {
                           result,
                           (a) => a.type_id === item.type_id
                         );
+                        setType_id(item.type_id);
                         dispatch({
                           type: "STATE",
                           data: { lessonlistfilter: filter },
@@ -79,7 +89,7 @@ const Moduletype = () => {
                     >
                       <span>{item.type_name}</span>
                       <span className="badge bg-light-primary float-right">
-                        {item.id}
+                        {_.replace(item.count_lesson, "0", "-")}
                       </span>
                     </li>
                   );

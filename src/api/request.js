@@ -71,6 +71,13 @@ export async function getModule() {
   return response.data;
 }
 
+//Хэрэглэгчийн сургалтын бүлэг - Мodule
+
+export async function getUserModule() {
+  const response = await API().get("/user/module");
+  return response.data;
+}
+
 export async function getModul() {
   const response = await API().get("/module");
   return response.data;
@@ -176,5 +183,25 @@ export async function postPerson(data) {
 }
 export async function deletePerson(id) {
   const response = await API().delete("/person/" + id);
+  return response.data;
+}
+
+// Хянах самбар
+
+export async function getControlPanel(params) {
+  const response = await API().get("/dashboard/plan/count", { params: { ...params } });
+  return response.data;
+}
+
+export async function getControlDepartment(params) {
+  console.log(params)
+  const response = await API().get("/dashboard/plan/module/department/count", { params: { ...params } });
+  return response.data;
+}
+// Бүцтйин нэгжийн ажилтнууд
+export async function getWorkers(params) {
+  const response = await API().get("/general/department/workers", {
+    params: { ...params },
+  });
   return response.data;
 }

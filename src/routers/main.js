@@ -2,13 +2,13 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import Me from "../pages/Index";
 
+import Dashboard from "src/pages/dashboard";
 
 const Main = () => {
   const data = [
-    { path: "/hello/ddd", component: <Me /> },
-    // { path: "/dashboard", component: <Dashboard /> },
+    { path: "/dashboard", component: <Dashboard /> },
+    
   ];
   return (
     <Routes>

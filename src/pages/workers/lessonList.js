@@ -56,7 +56,26 @@ const List = () => {
   };
   return (
     <div className="row mt-3">
-      <div className="col-12">
+      <div className="col-12 ">
+        {/* <div className="flex items-center justify-between  text-xs text-white">
+          ...
+          <div className="flex items-center justify-between gap-2 text-black mr-3">
+            <div
+              title="Нэмэх"
+              className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+              onClick={() => {
+                dispatch({ type: "CLEAR" });
+                dispatch({
+                  type: "STATE",
+                  data: { list_checked: [] },
+                });
+                dispatch({ type: "STATE", data: { modal: true } });
+              }}
+            >
+              <i className="ft-filter" /> Бүгд
+            </div>
+          </div>
+        </div> */}
         <div className="card" style={divStyles}>
           <div className="card-content">
             <div className="card-body" style={{ padding: "3px" }}>
@@ -74,6 +93,12 @@ const List = () => {
                           className="list-group-item  hover:bg-[#dedbf1] cursor-pointer"
                           onClick={(value) => {
                             navigate("/worker/register/worker?id=" + item.id);
+                            dispatch({
+                              type: "STATE",
+                              data: {
+                                limit_count: item.limit,
+                              },
+                            });
                             dispatch({
                               type: "STATE",
                               data: {

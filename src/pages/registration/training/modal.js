@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Input, Modal, DatePicker, Switch, Button } from "antd";
+import { Input, Modal, DatePicker, Switch } from "antd";
 import Module from "src/components/custom/module";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
@@ -9,27 +9,22 @@ import * as API from "src/api/training";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import _ from "lodash";
-import { useLayoutEffect } from "react";
 import moment from "moment";
-import dayjs from "dayjs";
 import Swal from "sweetalert2";
 
 import { Dialog } from "primereact/dialog";
 import { Calendar } from "primereact/calendar";
-import { InputMask } from "primereact/inputmask";
 
 const Component = (props) => {
   const { state, dispatch } = useTrainingContext();
   const { message, checkRole } = useUserContext();
-  const [timeRegister, setTimeRegister] = useState(false);
+  //const [timeRegister, setTimeRegister] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [value, setValue] = useState("");
   const [add, setAdd] = useState(false);
 
-  const [date, setDate] = useState(
-    moment(Date.now()).format("YYYY.MM.DD HH:MM")
-  );
-
+  const [date, setDate] = useState(null);
+  // moment(Date.now()).utc().format("YYYY.MM.DD HH:MM")
   const [visible, setVisible] = useState(false);
 
   const save = () => {
@@ -175,11 +170,13 @@ const Component = (props) => {
   const updateItem = (item) => {
     console.log("item: 3333", item);
     setAdd(false);
-    setDate(item.attendance_date);
+    setDate(moment(item.attendance_date).utc().format("YYYY.MM.DD HH:mm"));
     dispatch({
       type: "STATE",
       data: {
-        attendance_date: item.attendance_date,
+        attendance_date: moment(item.attendance_date)
+          .utc()
+          .format("YYYY.MM.DD HH:mm"),
       },
     });
     dispatch({
@@ -197,7 +194,7 @@ const Component = (props) => {
     setVisible(true);
   };
   const dateBodyTemplate = (rowData) => {
-    return moment(rowData.attendance_date).format("YYYY.MM.DD HH:MM");
+    return moment(rowData.attendance_date).utc().format("YYYY.MM.DD HH:mm");
   };
   const memo_table = useMemo(() => {
     return (
@@ -293,94 +290,75 @@ const Component = (props) => {
   }, [state.list_attendance_date, state.refresh]);
 
   const footerContent = (
-    <div>
-      <div className="actions clearfix">
-        <ul role="menu" aria-label="Pagination">
-          <li
-            onClick={() => {
-              console.log("state.type_id: ", state.type_id);
-              var data = {
-                lesson_id: state.id,
-                attendance_date: moment(state.attendance_date).format(
-                  "YYYY.MM.DD HH:MM"
-                ),
-              };
-              if (add) {
-                console.log("add: ", add, data);
-                API.postAttendance(data)
-                  .then(() => {
-                    dispatch({
-                      type: "STATE",
-                      data: { refresh: state.refresh + 1 },
-                    });
+    <div className="actions clearfix">
+      <button
+        className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
+        onClick={() => {
+          console.log("state.type_id: ", state.type_id);
+          var data = {
+            lesson_id: state.id,
+            attendance_date: moment(state.attendance_date).format(
+              "YYYY.MM.DD HH:mm"
+            ),
+          };
+          if (add) {
+            console.log("add: ", add, data);
+            API.postAttendance(data)
+              .then(() => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1 },
+                });
 
-                    message({
-                      type: "success",
-                      title: "Амжилттай хадгалагдлаа.",
-                    });
-                    dispatch({
-                      type: "CLEAR_LESSON",
-                    });
-                  })
-                  .catch((error) => {
-                    message({
-                      type: "error",
-                      error,
-                      title: "Засварлаж чадсангүй",
-                    });
-                  });
-              } else if (!add && state.attendance_id) {
-                console.log("state.attendance_id: ", state.attendance_id);
-                API.putAttendance(state.attendance_id, data)
-                  .then(() => {
-                    dispatch({
-                      type: "STATE",
-                      data: { refresh: state.refresh + 1 },
-                    });
+                message({
+                  type: "success",
+                  title: "Амжилттай хадгалагдлаа.",
+                });
+                dispatch({
+                  type: "CLEAR_LESSON",
+                });
+              })
+              .catch((error) => {
+                message({
+                  type: "error",
+                  error,
+                  title: "Засварлаж чадсангүй",
+                });
+              });
+          } else if (!add && state.attendance_id) {
+            console.log("state.attendance_id: ", state.attendance_id);
+            API.putAttendance(state.attendance_id, data)
+              .then(() => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1 },
+                });
 
-                    message({
-                      type: "success",
-                      title: "Амжилттай засварлагдлаа.",
-                    });
-                    dispatch({
-                      type: "CLEAR_LESSON",
-                    });
-                  })
-                  .catch((error) => {
-                    message({
-                      type: "error",
-                      error,
-                      title: "Засварлаж чадсангүй",
-                    });
-                  });
-              }
+                message({
+                  type: "success",
+                  title: "Амжилттай засварлагдлаа.",
+                });
+                dispatch({
+                  type: "CLEAR_LESSON",
+                });
+              })
+              .catch((error) => {
+                message({
+                  type: "error",
+                  error,
+                  title: "Засварлаж чадсангүй",
+                });
+              });
+          }
 
-              setVisible(false);
-            }}
-          >
-            <a href="#next" role="menuitem" className="btn btn-primary">
-              Хадгалах
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {/* <Button
-        label="Хаах"
-        size="small"
-        icon="pi pi-times"
-        onClick={() => setVisible(false)}
-        className="p-button-text btn btn-primary"
-      />
-      <Button
-        label="Хадгалах"
-        size="small"
-        icon="pi pi-check"
-        onClick={() => setVisible(false)}
-        autoFocus
-      /> */}
+          setVisible(false);
+        }}
+      >
+        <span className="ml-2">Хадгалах</span>
+      </button>
     </div>
   );
+
   return (
     <>
       <Modal
@@ -411,9 +389,13 @@ const Component = (props) => {
             <Switch
               checkedChildren={<i className="fa fa-check  text-indigo-500" />}
               unCheckedChildren={<i className="fa fa-times " />}
-              checked={timeRegister}
+              checked={state.timeRegister}
               onChange={(value) => {
-                setTimeRegister(value);
+                dispatch({
+                  type: "STATE",
+                  data: { timeRegister: value },
+                });
+                //setTimeRegister(value);
               }}
             />
           </div>
@@ -449,7 +431,7 @@ const Component = (props) => {
             />
           </div>
         </div>
-        {!timeRegister && (
+        {!state.timeRegister && (
           <div>
             <div className="w-full p-1 flex flex-col justify-start">
               <span className="list-group-item-text grey darken-2 m-0">
@@ -606,7 +588,7 @@ const Component = (props) => {
             </div>
           </div>
         )}
-        {timeRegister && (
+        {state.timeRegister && (
           <div>
             <div className="w-full p-1 flex flex-col justify-start">
               {memo_table}
@@ -615,13 +597,15 @@ const Component = (props) => {
         )}
 
         <div className="my-3 border " />
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-          onClick={() => save()}
-        >
-          <i className="ft-save" />
-          <span className="ml-2">Хадгалах</span>
-        </button>
+        {!state.timeRegister && (
+          <button
+            className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+            onClick={() => save()}
+          >
+            <i className="ft-save" />
+            <span className="ml-2">Хадгалах</span>
+          </button>
+        )}
       </Modal>
       <Dialog
         header="Ирцийн огноо"
@@ -631,31 +615,47 @@ const Component = (props) => {
         className="max-w-sm md:w-2/4 text-xs "
         footer={footerContent}
       >
-        <div className="">
+        <div>
+          {/* <Calendar
+            mode="month"
+            value={state.attendance_date}
+            onChange={(date) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  attendance_date: moment(date).format("YYYY.MM.DD HH:mm"),
+                },
+              });
+            }}
+            dateCellRender={(date) => {
+             
+            }}
+          /> */}
           <Calendar
-            value={state.attendance_date.toString().replace("T", " ")}
+            value={state.attendance_date}
             inline
             showTime
-            hourFormat="24"
+            hourFormat="12"
             className="text-xs pb-2"
-            showWeek
             // dateFormat="YYYY.MM.DD HH:MM"
             onChange={(e) => {
-              setDate(e.value);
+              setDate("");
+              setDate(moment(e.value).format("YYYY.MM.DD"));
 
               dispatch({
                 type: "STATE",
                 data: {
-                  attendance_date: moment(e.value)
+                  attendance_date: `${moment(date)
                     .utc()
-                    .format("YYYY.MM.DD HH:MM:SS"),
+                    .format("YYYY.MM.DD")
+                    .toString()},
+                  ${moment(e.value).utc().format("HH:mm")}`,
                 },
               });
               console.log(
-                "e.value: ",
-                e.value,
-                "66666",
-                state.attendance_date.toString().replace("T", " ")
+                '"YYYY.MM.DD"): ',
+                moment(date).utc().format("YYYY.MM.DD"),
+                moment(e.value).utc().format("HH:mm")
               );
             }}
             showIcon

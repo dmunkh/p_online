@@ -16,7 +16,7 @@ import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
 import moment from "moment";
 
 const List = () => {
-  const { message, checkRole } = useUserContext();
+  const { message, checkRole, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -32,6 +32,7 @@ const List = () => {
   // const [indeterminate, setIndeterminate] = useState(false);
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
+  const [list_count, setList_count] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +41,23 @@ const List = () => {
       lesson_id: state.lessonid,
     })
       .then((res) => {
+        // dispatch({ type: "STATE", data: { list_count: res.length } });
         setList(_.orderBy(res, ["department_code"]));
+      })
+      .catch((error) =>
+        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
+      )
+      .finally(() => {
+        setLoading(false);
+      });
+
+    API.getWorkers({
+      department_id: 0,
+      lesson_id: state.lessonid,
+    })
+      .then((res) => {
+        dispatch({ type: "STATE", data: { list_count: res.length } });
+        // setList(_.orderBy(res, ["department_code"]));
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -183,23 +200,53 @@ const List = () => {
                   dispatch({ type: "STATE", data: { tn: null } });
                 }}
               />
+
               <div className="flex items-center gap-3">
-                {/* {checkRole(["norm_add"]) && state.position_id && ( */}
                 <div className="flex items-center justify-between gap-2">
-                  <div
-                    title="Нэмэх"
-                    className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                    onClick={() => {
-                      dispatch({ type: "CLEAR" });
-                      dispatch({
-                        type: "STATE",
-                        data: { list_checked: [] },
-                      });
-                      dispatch({ type: "STATE", data: { modal: true } });
-                    }}
-                  >
-                    <i className="fa fa-plus" />
-                  </div>
+                  {checkGroup([173, 306, 307, 378, 386, 387]) ? (
+                    <>
+                      <i className="ft-users text-lg" />
+                      <div
+                        title="Нэмэх"
+                        className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                        onClick={() => {
+                          dispatch({ type: "CLEAR" });
+                          dispatch({
+                            type: "STATE",
+                            data: { list_checked: [] },
+                          });
+                          dispatch({ type: "STATE", data: { modal: true } });
+                        }}
+                      >
+                        {state.limit_count}/{state.list_count}{" "}
+                        <i className="ft-plus" />
+                      </div>
+                    </>
+                  ) : state.limit_count - state.list_count > 0 ? (
+                    <div
+                      title="Нэмэх"
+                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                      onClick={() => {
+                        dispatch({ type: "CLEAR" });
+                        dispatch({
+                          type: "STATE",
+                          data: { list_checked: [] },
+                        });
+                        dispatch({ type: "STATE", data: { modal: true } });
+                      }}
+                    >
+                      <i className="ft-users" /> {state.limit_count}/
+                      {state.list_count} <i className="ft-plus" />
+                    </div>
+                  ) : (
+                    <div
+                      title="Нэмэх"
+                      className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
+                    >
+                      <i className="ft-user-check" /> {state.limit_count} /{" "}
+                      {state.list_count}{" "}
+                    </div>
+                  )}
                 </div>
                 {/* )} */}
               </div>

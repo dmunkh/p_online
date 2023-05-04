@@ -1,20 +1,43 @@
 import React, { useState, useEffect } from "react";
+import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
-import * as API from "src/api/request";
+// import * as API from "src/api/request";
 import { useNavigate } from "react-router-dom";
 
 import { Select, DatePicker } from "antd";
 import Department from "src/components/custom/departmentTseh";
 import _ from "lodash";
+import moment from "moment";
 
 const Header = () => {
   const navigate = useNavigate();
   const { user, message } = useUserContext();
   const { state, dispatch } = usePlanContext();
 
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (state.moduleid && state.department_id) {
+      API.getPlanApprove({
+        year: moment(state.date).format("Y"),
+        module_id: state.moduleid,
+        department_id: state.department_id,
+      })
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              isapprove: res[0]?.is_closed,
+            },
+          });
+        })
+        .catch((error) => message({ type: "error", error, title: "" }))
+        .finally(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.moduleid, state.date, state.department_id]);
+
+  // const [open, setOpen] = useState(false);
 
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">

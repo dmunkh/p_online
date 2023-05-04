@@ -12,6 +12,7 @@ const _state = {
   change_btn: false,
 
   moduleid: null,
+  timeRegister: false,
 
   id: null,
   begin_date: moment(),
