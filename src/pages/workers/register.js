@@ -228,8 +228,7 @@ const List = () => {
               />
 
               <div className="flex items-center gap-3">
-                <>
-                  <i className="ft-log-in text-lg" />
+                {checkRole(["register_attendance_crud"]) && (
                   <div
                     title="Ирц бүртгэх"
                     className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
@@ -242,10 +241,12 @@ const List = () => {
                       dispatch({ type: "STATE", data: { modal_att: true } });
                     }}
                   >
-                    {state.limit_count}/{state.list_count}{" "}
+                    {/* {state.limit_count}/{state.list_count}{" "} */}
+                    <i className="ft-log-in text-sm" />
                     <i className="ft-plus" />
                   </div>
-                </>
+                )}
+
                 <div className="flex items-center justify-between gap-2">
                   {checkGroup([173, 306, 307, 378, 386, 387]) ? (
                     <>
@@ -311,85 +312,89 @@ const List = () => {
           />
           <Column field="short_name" header="Овог нэр" />
           <Column field="position_name" header="Албан тушаал" />
-          <Column
-            field="status"
-            header="Ирц"
-            style={{ minWidth: "200px", maxWidth: "200px" }}
-            body={(data) => {
-              return (
-                <div className="flex flex-wrap items-center gap-2 text-xs">
-                  {_.map(data.attendance, (item) => (
-                    <Checkbox
-                      key={item.id}
-                      checked={item.checked}
-                      onChange={
-                        (e) => {
-                          var result = list;
+          {checkRole(["register_attendance_crud"]) && (
+            <Column
+              field="status"
+              header="Ирц"
+              style={{ minWidth: "200px", maxWidth: "200px" }}
+              body={(data) => {
+                return (
+                  <div className="flex items-left gap-2 text-xs">
+                    {_.map(data.attendance, (item) => (
+                      <Checkbox
+                        key={item.id}
+                        checked={item.checked}
+                        onChange={
+                          (e) => {
+                            var result = list;
 
-                          var index = _.findIndex(result, {
-                            id: data.id,
-                          });
-                          var index1 = _.findIndex(result[index].attendance, {
-                            id: item.id,
-                          });
+                            var index = _.findIndex(result, {
+                              id: data.id,
+                            });
+                            var index1 = _.findIndex(result[index].attendance, {
+                              id: item.id,
+                            });
 
-                          result[index].attendance[index1].checked =
-                            e.target.checked;
+                            result[index].attendance[index1].checked =
+                              e.target.checked;
 
-                          setList(result);
-                          setDraw(draw + 1);
+                            setList(result);
+                            setDraw(draw + 1);
 
-                          API.postAttendance({
-                            attendance_id: item.id,
-                            checked: e.target.checked,
-                            register_id: data.id,
-                          });
+                            API.postAttendance({
+                              attendance_id: item.id,
+                              checked: e.target.checked,
+                              register_id: data.id,
+                            });
+                          }
+                          // check_position(e, item)
                         }
-                        // check_position(e, item)
+                      >
+                        <span className="text-xs">
+                          {moment(item.attendance_date).format(
+                            "YYYY.MM.DD HH:mm"
+                          )}
+                        </span>
+                      </Checkbox>
+                    ))}
+                  </div>
+                );
+              }}
+            />
+          )}
+          {checkRole(["register_repeat_crud"]) && (
+            <Column
+              field="is_repeat"
+              align="center"
+              header="Давтан эсэх"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              className="text-xs w-[100px]"
+              body={(item) => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    checked={item.is_repeat}
+                    onChange={
+                      (e) => {
+                        var result = list;
+                        var index = _.findIndex(list, { id: item.id });
+                        result[index].is_repeat = e.target.checked;
+
+                        setList(result);
+                        setDraw(draw + 1);
+
+                        API.putWorker(item.id, {
+                          is_repeat: e.target.checked,
+                          point: _.toInteger(item.point),
+                        });
                       }
-                    >
-                      <span className="text-xs">
-                        {moment(item.attendance_date).format(
-                          "YYYY.MM.DD HH:mm"
-                        )}
-                      </span>
-                    </Checkbox>
-                  ))}
-                </div>
-              );
-            }}
-          />
-          <Column
-            field="is_repeat"
-            align="center"
-            header="Давтан эсэх"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
-            className="text-xs w-[100px]"
-            body={(item) => {
-              return (
-                <Checkbox
-                  key={item.id}
-                  checked={item.is_repeat}
-                  onChange={
-                    (e) => {
-                      var result = list;
-                      var index = _.findIndex(list, { id: item.id });
-                      result[index].is_repeat = e.target.checked;
-
-                      setList(result);
-                      setDraw(draw + 1);
-
-                      API.putWorker(item.id, {
-                        is_repeat: e.target.checked,
-                        point: _.toInteger(item.point),
-                      });
+                      // check_position(e, item)
                     }
-                    // check_position(e, item)
-                  }
-                />
-              );
-            }}
-          />
+                  />
+                );
+              }}
+            />
+          )}
 
           <Column
             field="point"
