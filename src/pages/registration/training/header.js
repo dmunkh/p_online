@@ -10,10 +10,10 @@ const Header = () => {
   const { state, dispatch } = useTrainingContext();
   const [checked, setChecked] = useState(false);
   return (
-    <div className="flex   ">
+    <div className="flex border-b  ">
       <div className="flex flex-col md:flex-row md:items-center gap-3">
         <div className="w-full flex items-center pl-2">
-          <span className="pr-3 font-semibold text-xs">Он:</span>
+          <span className="pr-3 font-semibold text-xs">Огноо:</span>
 
           <DatePicker
             allowClear={false}

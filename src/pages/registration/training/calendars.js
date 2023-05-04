@@ -15,7 +15,6 @@ const Calendars = () => {
   const [loading, setLoading] = useState(false);
 
   const getListData = (value) => {
-    console.log("value: ", value);
     let listData;
     switch (value.date()) {
       case 1:
@@ -140,7 +139,6 @@ const Calendars = () => {
   // };
 
   // const cellRender = (current, info) => {
-  //   console.log("current, info: ", current, info);
   //   if (info.type === "date") return dateCellRender(current);
   //   if (info.type === "month") return monthCellRender(current);
   //   return info.originNode;
@@ -185,7 +183,6 @@ const Calendars = () => {
         result,
         (a) => moment(a.begin_date).format("MM") === mm
       );
-    console.log("result: ", result);
 
     return (
       <div className="flex  gap-5 p-4">
@@ -297,7 +294,6 @@ const Calendars = () => {
               }}
               //onPanelChange={onPanelChange}
               dateCellRender={(date) => {
-                console.log("object", date);
                 const list = result.filter(
                   (el) =>
                     moment(el.begin_date).format("YYYY.MM.DD") >=

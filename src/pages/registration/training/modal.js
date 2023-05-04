@@ -1,5 +1,13 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Input, Modal, DatePicker, Switch } from "antd";
+import {
+  Input,
+  Modal,
+  DatePicker,
+  Switch,
+  Modal as CalModal,
+  Space,
+} from "antd";
+
 import Module from "src/components/custom/module";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
@@ -11,20 +19,14 @@ import { Column } from "primereact/column";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
-
+import dayjs from "dayjs";
 import { Dialog } from "primereact/dialog";
 import { Calendar } from "primereact/calendar";
 
 const Component = (props) => {
   const { state, dispatch } = useTrainingContext();
   const { message, checkRole } = useUserContext();
-  //const [timeRegister, setTimeRegister] = useState(false);
-  const [refresh, setRefresh] = useState(0);
-  const [value, setValue] = useState("");
   const [add, setAdd] = useState(false);
-
-  const [date, setDate] = useState(null);
-  // moment(Date.now()).utc().format("YYYY.MM.DD HH:MM")
   const [visible, setVisible] = useState(false);
 
   const save = () => {
@@ -104,6 +106,7 @@ const Component = (props) => {
         });
     }
   };
+
   // жагсаалт
   useEffect(() => {
     //setLoading(true);
@@ -112,7 +115,6 @@ const Component = (props) => {
         lesson_id: state.id,
       })
         .then((res) => {
-          console.log("res: ++++", res);
           dispatch({
             type: "STATE",
             data: {
@@ -167,30 +169,27 @@ const Component = (props) => {
       }
     });
   };
+
   const updateItem = (item) => {
-    console.log("item: 3333", item);
+    console.log(
+      "item: ",
+      moment(item.attendance_date).format("YYYY.MM.DD HH:mm:ss")
+    );
     setAdd(false);
-    setDate(moment(item.attendance_date).utc().format("YYYY.MM.DD HH:mm"));
     dispatch({
       type: "STATE",
       data: {
-        attendance_date: moment(item.attendance_date)
-          .utc()
-          .format("YYYY.MM.DD HH:mm"),
+        attendance_id: null,
+        attendance_date: moment(),
       },
     });
     dispatch({
       type: "STATE",
       data: {
         attendance_id: item.id,
+        attendance_date: dayjs(item.attendance_date, "YYYY.MM.DD HH:mm:ss"),
       },
     });
-    // dispatch({
-    //   type: "STATE",
-    //   data: {
-    //     less_id: item.lesson_id,
-    //   },
-    // });
     setVisible(true);
   };
   const dateBodyTemplate = (rowData) => {
@@ -294,7 +293,6 @@ const Component = (props) => {
       <button
         className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
         onClick={() => {
-          console.log("state.type_id: ", state.type_id);
           var data = {
             lesson_id: state.id,
             attendance_date: moment(state.attendance_date).format(
@@ -302,7 +300,6 @@ const Component = (props) => {
             ),
           };
           if (add) {
-            console.log("add: ", add, data);
             API.postAttendance(data)
               .then(() => {
                 dispatch({
@@ -326,7 +323,6 @@ const Component = (props) => {
                 });
               });
           } else if (!add && state.attendance_id) {
-            console.log("state.attendance_id: ", state.attendance_id);
             API.putAttendance(state.attendance_id, data)
               .then(() => {
                 dispatch({
@@ -358,7 +354,78 @@ const Component = (props) => {
       </button>
     </div>
   );
+  const onChange = (value, dateString) => {
+    console.log("dateString: ", dateString);
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_date: dateString,
+      },
+    });
+  };
+  const onOk = (value) => {
+    console.log("dateString: ", value);
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_date: moment(value).format("YYYY.MM.DD HH:mm"),
+      },
+    });
 
+    var data = {
+      lesson_id: state.id,
+      attendance_date: moment(state.attendance_date).format("YYYY.MM.DD HH:mm"),
+    };
+    if (add) {
+      API.postAttendance(data)
+        .then(() => {
+          dispatch({
+            type: "STATE",
+            data: { refresh: state.refresh + 1 },
+          });
+
+          message({
+            type: "success",
+            title: "Амжилттай хадгалагдлаа.",
+          });
+          dispatch({
+            type: "CLEAR_LESSON",
+          });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Засварлаж чадсангүй",
+          });
+        });
+    } else if (!add && state.attendance_id) {
+      API.putAttendance(state.attendance_id, data)
+        .then(() => {
+          dispatch({
+            type: "STATE",
+            data: { refresh: state.refresh + 1 },
+          });
+
+          message({
+            type: "success",
+            title: "Амжилттай засварлагдлаа.",
+          });
+          dispatch({
+            type: "CLEAR_LESSON",
+          });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Засварлаж чадсангүй",
+          });
+        });
+    }
+
+    setVisible(false);
+  };
   return (
     <>
       <Modal
@@ -607,7 +674,34 @@ const Component = (props) => {
           </button>
         )}
       </Modal>
-      <Dialog
+
+      <CalModal
+        centered
+        className="max-w-sm md:w-2/4 text-xs "
+        title={
+          <div className="text-center">
+            {state.id
+              ? `${state.type_name} ирцийн огноо засварлах цонх`
+              : "Ирцийн огноо бүртгэх цонх"}
+          </div>
+        }
+        visible={visible}
+        onCancel={() => {
+          setVisible(false);
+        }}
+        // footer={footerContent}
+      >
+        <Space direction="vertical" size={12}>
+          <DatePicker
+            showTime
+            //defaultValue={dayjs(state.attendance_date, "YYYY.MM.DD HH:mm:ss")}
+            onChange={onChange}
+            onOk={onOk}
+          />
+        </Space>
+      </CalModal>
+
+      {/* <Dialog
         header="Ирцийн огноо"
         body={dateBodyTemplate}
         visible={visible}
@@ -616,52 +710,27 @@ const Component = (props) => {
         footer={footerContent}
       >
         <div>
-          {/* <Calendar
-            mode="month"
-            value={state.attendance_date}
-            onChange={(date) => {
-              dispatch({
-                type: "STATE",
-                data: {
-                  attendance_date: moment(date).format("YYYY.MM.DD HH:mm"),
-                },
-              });
-            }}
-            dateCellRender={(date) => {
-             
-            }}
-          /> */}
+          
           <Calendar
-            value={state.attendance_date}
+             value={state.attendance_date}
             inline
             showTime
-            hourFormat="12"
+            hourFormat="24"
             className="text-xs pb-2"
             // dateFormat="YYYY.MM.DD HH:MM"
             onChange={(e) => {
-              setDate("");
-              setDate(moment(e.value).format("YYYY.MM.DD"));
-
+              console.log("e: ", e);
               dispatch({
                 type: "STATE",
                 data: {
-                  attendance_date: `${moment(date)
-                    .utc()
-                    .format("YYYY.MM.DD")
-                    .toString()},
-                  ${moment(e.value).utc().format("HH:mm")}`,
+                  attendance_date: e.value,
                 },
               });
-              console.log(
-                '"YYYY.MM.DD"): ',
-                moment(date).utc().format("YYYY.MM.DD"),
-                moment(e.value).utc().format("HH:mm")
-              );
             }}
             showIcon
           ></Calendar>
         </div>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };
