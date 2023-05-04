@@ -401,9 +401,9 @@ const List = () => {
             header="Шалгалтын оноо"
             style={{ width: "150px" }}
             body={(data, row) => {
-              return (
+              return checkRole["register_point_crud"] ? (
                 <InputNumber
-                  max={20}
+                  max={200}
                   align="center"
                   value={data.point}
                   onChange={(value) => {
@@ -434,6 +434,8 @@ const List = () => {
                     // });
                   }}
                 />
+              ) : (
+                data.point
               );
             }}
           />
