@@ -99,11 +99,30 @@ const Card = () => {
     return (
       <div className=" md:grid grid-cols-5 gap-5 mb-4 ">
         {_.map(data, (item) => (
-          <div className=" mt-4 " key={item.id} onClick={() =>{ setModule(item.id); setModuleName(item.module_name); }}>
+          <div
+            className=" mt-4 "
+            key={item.id}
+            onClick={() => {
+              setModule(item.id);
+              setModuleName(item.module_name);
+            }}
+          >
             <div className=" cursor-pointer group flex flex-col justify-between  rounded-xl bg-white p-4 shadow-xl transition-shadow   border border-gray-100 hover:scale-110">
-              <div className="">
+              <div className="w-full mt-2 inline-flex items-center gap-2 text-bold text-lg text-blue-400  ">
+                <p className="font-medium  w-full"> {item.module_name}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-w-full transition-all group-hover:ms-3 rtl:rotate-180 animated-pulse"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </div>
+
+              <div className="mt-4 border-t-2 border-blue-100 py-2">
                 <div className="flex justify-center items-center gap-2 ">
-                    <i className="pi pi-users"  style={{ fontSize: '2.5rem' }} /> 
                   <p className="text-sm font-bold uppercase text-gray-600">
                     Нийт:
                   </p>
@@ -112,7 +131,6 @@ const Card = () => {
                   </h3>
                 </div>
                 <div className="flex justify-center items-center gap-2">
-                <i className="pi pi-users"  style={{ fontSize: '2.5rem' }}/> 
                   <p className="text-sm font-semi-bold uppercase text-gray-600">
                     Ажилтнуудын тоо :
                   </p>
@@ -120,27 +138,12 @@ const Card = () => {
                     {item.count_unique}
                   </h3>
                 </div>
-
-                <div className="mt-4 border-t-2 border-blue-100 py-2">
-                  <div className="w-full mt-2 inline-flex items-center gap-2 text-blue-500 animate-pulse  ">
-                    <p className="font-medium  w-full"> {item.module_name}</p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-w-full transition-all group-hover:ms-3 rtl:rotate-180 "
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </div>
-                </div>
               </div>
-
-              <p className="text-xs whitespace-pre-wrap  font-medium text-gray-500">
-                Сургалтанд хамрагдах ажилчидын тоо :
-              </p>
             </div>
+
+            {/* <p className="text-xs whitespace-pre-wrap  font-medium text-gray-500">
+                Сургалтанд хамрагдах ажилтнууд :
+              </p> */}
           </div>
         ))}
       </div>
@@ -153,7 +156,7 @@ const Card = () => {
         <div className="w-full inline-flex items-center gap-2 text-bold  text-emerald-600">
           <Tag
             className="mr-2"
-            severity="success"
+            severity="info"
             icon="pi pi-chart-line"
             value="Нийт"
           ></Tag>
@@ -186,7 +189,7 @@ const Card = () => {
     return (
       <div className="card  p-4 ">
         <div className="w-full  inline-flex items-center gap-2 text-red-500   ">
-          <Tag severity="danger" value="Давхацсан" icon="pi pi-check"></Tag>
+          <Tag severity="info" value="Ажилтнуудын тоо" icon="pi pi-check"></Tag>
         </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2"></div>
         <Chart
@@ -214,7 +217,9 @@ const Card = () => {
   const barchart = useMemo(() => {
     return (
       <div className="card  p-4">
-        <div className="w-full inline-flex items-center gap-2 text-bold  "><Tag severity="info" value={modulename} className=" px-5" ></Tag></div>
+        <div className="w-full inline-flex items-center gap-2 text-bold  ">
+          <Tag severity="info" value={modulename} className=" px-5"></Tag>
+        </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2 "></div>
         <Chart
           className="p-2"
@@ -244,7 +249,6 @@ const Card = () => {
     <div className="md:px-20">
       <div className="card ">
         <div className="md:w-1/3 md:flex justify-start gap-5 p-3 ">
-         
           <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
@@ -255,7 +259,7 @@ const Card = () => {
               setDate(e.$y);
             }}
           />
-           <DepartmentTseh
+          <DepartmentTseh
             value={tseh}
             onChange={(value) => {
               setTseh(value);
@@ -265,10 +269,9 @@ const Card = () => {
       </div>
       {cards}
       <div className="md:grid grid-cols-4 gap-5 pb-4">
-          {donut1}
-          {donut2}
-       <div className="col-span-2"> {barchart}</div>
-       
+        {donut1}
+        {donut2}
+        <div className="col-span-2"> {barchart}</div>
       </div>
     </div>
   );
