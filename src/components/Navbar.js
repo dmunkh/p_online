@@ -47,7 +47,7 @@ const Navbar = () => {
         }}
       >
         <div
-          className="navbar-container main-menu-content center-layout sidebar-content"
+          className="navbar-container main-menu-content center-layout sidebar-content "
           data-menu="menu-container"
         >
           <ul
@@ -132,7 +132,7 @@ const Navbar = () => {
           data-menu="menu-container"
         >
           <ul
-            className="navigation-main nav navbar-nav space-x-4"
+            className="navigation-main nav navbar-nav space-x-4 cursor-pointer"
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >

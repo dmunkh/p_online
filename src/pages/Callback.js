@@ -15,7 +15,7 @@ const Callback = () => {
       if (res.status === 200) {
         window.localStorage.clear();
         localStorage.setItem("token", res.data.token);
-        window.location.replace("/me");
+        window.location.replace("/dashboard");
       }
     });
   }

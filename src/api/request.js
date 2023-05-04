@@ -178,3 +178,16 @@ export async function deletePerson(id) {
   const response = await API().delete("/person/" + id);
   return response.data;
 }
+
+// Хянах самбар
+
+export async function getControlPanel(params) {
+  const response = await API().get("/dashboard/plan/count", { params: { ...params } });
+  return response.data;
+}
+
+export async function getControlDepartment(params) {
+  console.log(params)
+  const response = await API().get("/dashboard/plan/module/department/count", { params: { ...params } });
+  return response.data;
+}
