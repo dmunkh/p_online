@@ -18,13 +18,17 @@ const Header = () => {
           <DatePicker
             allowClear={false}
             className="w-full md:w-[150px] text-xs"
-            picker="year"
-            format="YYYY"
+            picker={state.change_btn ? "month" : "year"}
+            format={state.change_btn ? "YYYY.MM" : "YYYY"}
             value={state.change_year}
             onChange={(date) =>
               dispatch({
                 type: "STATE",
-                data: { change_year: moment(date, "YYYY") },
+                data: {
+                  change_year: state.change_btn
+                    ? moment(date, "YYYY.MM")
+                    : moment(date, "YYYY"),
+                },
               })
             }
           />
@@ -46,15 +50,18 @@ const Header = () => {
           <div className=" flex items-center  ml-10 form-group">
             <div className="flex justify-content-center">
               <InputSwitch
-                checked={checked}
+                checked={state.change_btn}
                 onChange={(e) => {
                   setChecked(e.value);
-                  dispatch({ type: "STATE", data: { change_btn: checked } });
+                  dispatch({
+                    type: "STATE",
+                    data: { change_btn: e.value ? true : false },
+                  });
                 }}
               />
             </div>
             <span className="pr-3 font-semibold text-xs pl-5">
-              {checked ? " " : "Каленьдар "}
+              {!state.change_btn ? "Жагсаалт " : "Каленьдар "}
             </span>
           </div>
         </div>

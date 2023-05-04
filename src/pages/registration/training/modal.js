@@ -1,18 +1,32 @@
-import React from "react";
-import { Input, Modal, DatePicker } from "antd";
+import React, { useState, useMemo, useEffect } from "react";
+import { Input, Modal, DatePicker, Switch } from "antd";
 import Module from "src/components/custom/module";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
 import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
 import * as API from "src/api/training";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 import _ from "lodash";
-import { useLayoutEffect } from "react";
 import moment from "moment";
+import Swal from "sweetalert2";
 
-const Component = () => {
+import { Dialog } from "primereact/dialog";
+import { Calendar } from "primereact/calendar";
+
+const Component = (props) => {
   const { state, dispatch } = useTrainingContext();
-  const { message } = useUserContext();
+  const { message, checkRole } = useUserContext();
+  //const [timeRegister, setTimeRegister] = useState(false);
+  const [refresh, setRefresh] = useState(0);
+  const [value, setValue] = useState("");
+  const [add, setAdd] = useState(false);
+
+  const [date, setDate] = useState(null);
+  // moment(Date.now()).utc().format("YYYY.MM.DD HH:MM")
+  const [visible, setVisible] = useState(false);
+
   const save = () => {
     var error = [];
     state.place_id || error.push("Сургалтын танхим");
@@ -90,233 +104,565 @@ const Component = () => {
         });
     }
   };
-  return (
-    <Modal
-      centered
-      width={850}
-      title={
-        <div className="text-center">
-          {state.id !== null
-            ? `${state.type_name}   засварлах цонх`
-            : "Сургалтын төрөл бүртгэх цонх"}
-        </div>
-      }
-      visible={state.modal}
-      onCancel={() => {
-        dispatch({
-          type: "STATE",
-          data: { modal: false },
+  // жагсаалт
+  useEffect(() => {
+    //setLoading(true);
+    state.id &&
+      API.getAttendanceID({
+        lesson_id: state.id,
+      })
+        .then((res) => {
+          console.log("res: ++++", res);
+          dispatch({
+            type: "STATE",
+            data: {
+              list_attendance_date: _.orderBy(res, ["id"]),
+            },
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_attendance_date: [],
+            },
+          });
+          message({
+            type: "error",
+            error,
+            title: " жагсаалт татаж чадсангүй",
+          });
         });
-      }}
-      className="text-sm tracking-wide"
-      footer={null}
-    >
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0 ">
-          Сургалтын бүлэг:
-        </span>
-        <div className="w-full md:min-w-[200px]">
-          <Module
-            value={state.moduleid}
-            disabled
-            onChange={(value) => {
-              dispatch({ type: "STATE", data: { moduleid: value } });
-            }}
-          />
-        </div>
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Type
-          module_id={state.moduleid}
-          year={moment(state.change_year).format("YYYY")}
-          value={state.type_id}
-          onChange={(value) => {
-            dispatch({ type: "STATE", data: { type_id: value } });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Сургалтын танхим:
-        </span>
-        <div className="w-full md:min-w-[200px]">
-          <PlaceList
-            value={state.place_id}
-            onChange={(value) => {
-              dispatch({ type: "STATE", data: { place_id: value } });
-            }}
-          />
-        </div>
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Сургалтын цаг:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200  "
-          value={state.hour}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                hour: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Суух ажилчдын тоо:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 "
-          value={state.limit}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                limit: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200"
-          value={state.point}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                point: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200 "
-          value={state.percent}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                percent: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Эхлэх хугацаа:<b className="ml-1 text-red-500">*</b>
-        </span>
 
-        <DatePicker
-          allowClear={false}
-          className="w-full md:w-[100px] text-xs"
-          format={"YYYY.MM.DD"}
-          value={moment(state.begin_date)}
-          onChange={(date) => {
-            dispatch({
-              type: "STATE",
-              data: { begin_date: moment(date) },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Дуусах хугацаа:<b className="ml-1 text-red-500">*</b>
-        </span>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.refresh, state.id]);
 
-        <DatePicker
-          allowClear={false}
-          className="w-full md:w-[100px] text-xs"
-          format={"YYYY.MM.DD"}
-          value={moment(state.end_date)}
-          onChange={(date) => {
-            dispatch({
-              type: "STATE",
-              data: { end_date: moment(date) },
+  const deleteItem = (item) => {
+    Swal.fire({
+      text: "Устгахдаа итгэлтэй байна уу?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        API.deleteAttendance(item.id)
+          .then(() => {
+            message({
+              type: "success",
+              title: "Амжилттай устгагдлаа",
             });
+            dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
+          })
+          .catch((error) => {
+            message({
+              type: "error",
+              error,
+              title: "Сургалтын төрөл устгаж чадсангүй",
+            });
+          });
+      }
+    });
+  };
+  const updateItem = (item) => {
+    console.log("item: 3333", item);
+    setAdd(false);
+    setDate(moment(item.attendance_date).utc().format("YYYY.MM.DD HH:mm"));
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_date: moment(item.attendance_date)
+          .utc()
+          .format("YYYY.MM.DD HH:mm"),
+      },
+    });
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_id: item.id,
+      },
+    });
+    // dispatch({
+    //   type: "STATE",
+    //   data: {
+    //     less_id: item.lesson_id,
+    //   },
+    // });
+    setVisible(true);
+  };
+  const dateBodyTemplate = (rowData) => {
+    return moment(rowData.attendance_date).utc().format("YYYY.MM.DD HH:mm");
+  };
+  const memo_table = useMemo(() => {
+    return (
+      <DataTable
+        size="small"
+        value={state.list_attendance_date}
+        responsiveLayout="scroll"
+        showGridlines
+        scrollable
+        scrollHeight={window.innerHeight - 218}
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Хоосон байна...
+          </div>
+        }
+        header={
+          <div className="flex items-center justify-end">
+            {checkRole(["lesson_add"]) && (
+              <div
+                title="Нэмэх"
+                className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                onClick={() => {
+                  setAdd(true);
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      attendance_id: null,
+                      attendance_date: moment(),
+                    },
+                  });
+                  setVisible(true);
+                }}
+              >
+                <i className="ft-plus" />
+              </div>
+            )}
+          </div>
+        }
+        sortMode="multiple"
+        removableSort
+      >
+        <Column
+          header="№"
+          align="center"
+          style={{ minWidth: "50px", maxWidth: "50px" }}
+          className="text-xs"
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
+          body={(data, row) => row.rowIndex + 1}
+        />
+        <Column
+          header="Ирцийн огноо"
+          headerClassName="text-xs min-w-[10%] justify-center"
+          align="center"
+          field="attendance_date"
+          className="text-xs min-w-[10%]"
+          body={dateBodyTemplate}
+        />
+
+        <Column
+          align="center"
+          header="Үйлдэл"
+          className="text-xs"
+          style={{ minWidth: "90px", maxWidth: "90px" }}
+          headerClassName="flex items-center justify-center"
+          body={(item) => {
+            return (
+              <div className="flex items-center justify-center gap-2">
+                {checkRole(["lesson_edit"]) && (
+                  <button
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    onClick={() => updateItem(item)}
+                  >
+                    <i className="ft-edit" />
+                  </button>
+                )}
+
+                {checkRole(["lesson_delete"]) && (
+                  <button
+                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    onClick={() => deleteItem(item)}
+                  >
+                    <i className="ft-trash-2" />
+                  </button>
+                )}
+              </div>
+            );
           }}
         />
-      </div>
-      {/* <div className="flex items-center justify-between text-xs gap-2">
-        <span className="md:w-[50px] font-semibold">Дуусах хугацаа:</span>
-        <div className="w-full md:min-w-[100px] ">
-          <DatePicker
-            allowClear={false}
-            className="w-full md:w-[100px] text-xs"
-            format="YYYY.MM.DD"
-            value={state.end_date}
+      </DataTable>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_attendance_date, state.refresh]);
+
+  const footerContent = (
+    <div className="actions clearfix">
+      <button
+        className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
+        onClick={() => {
+          console.log("state.type_id: ", state.type_id);
+          var data = {
+            lesson_id: state.id,
+            attendance_date: moment(state.attendance_date).format(
+              "YYYY.MM.DD HH:mm"
+            ),
+          };
+          if (add) {
+            console.log("add: ", add, data);
+            API.postAttendance(data)
+              .then(() => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1 },
+                });
+
+                message({
+                  type: "success",
+                  title: "Амжилттай хадгалагдлаа.",
+                });
+                dispatch({
+                  type: "CLEAR_LESSON",
+                });
+              })
+              .catch((error) => {
+                message({
+                  type: "error",
+                  error,
+                  title: "Засварлаж чадсангүй",
+                });
+              });
+          } else if (!add && state.attendance_id) {
+            console.log("state.attendance_id: ", state.attendance_id);
+            API.putAttendance(state.attendance_id, data)
+              .then(() => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1 },
+                });
+
+                message({
+                  type: "success",
+                  title: "Амжилттай засварлагдлаа.",
+                });
+                dispatch({
+                  type: "CLEAR_LESSON",
+                });
+              })
+              .catch((error) => {
+                message({
+                  type: "error",
+                  error,
+                  title: "Засварлаж чадсангүй",
+                });
+              });
+          }
+
+          setVisible(false);
+        }}
+      >
+        <span className="ml-2">Хадгалах</span>
+      </button>
+    </div>
+  );
+
+  return (
+    <>
+      <Modal
+        centered
+        width={850}
+        title={
+          <div className="text-center">
+            {state.id
+              ? `${state.type_name}  засварлах цонх`
+              : "Сургалтын төрөл бүртгэх цонх"}
+          </div>
+        }
+        visible={state.modal}
+        onCancel={() => {
+          dispatch({
+            type: "STATE",
+            data: { modal: false },
+          });
+        }}
+        className="text-sm tracking-wide z-20"
+        footer={null}
+      >
+        {props.setedit && (
+          <div className=" p-1 flex  justify-end gap-3 ">
+            <span className="list-group-item-text grey darken-2 m-0 ">
+              Ирцийн бүртгэл:
+            </span>
+            <Switch
+              checkedChildren={<i className="fa fa-check  text-indigo-500" />}
+              unCheckedChildren={<i className="fa fa-times " />}
+              checked={state.timeRegister}
+              onChange={(value) => {
+                dispatch({
+                  type: "STATE",
+                  data: { timeRegister: value },
+                });
+                //setTimeRegister(value);
+              }}
+            />
+          </div>
+        )}
+
+        <div className="my-3 border " />
+        <div className="w-full p-1 flex flex-col justify-start ">
+          <span className="list-group-item-text grey darken-2 m-0 ">
+            Сургалтын бүлэг:
+          </span>
+          <div className="w-full md:min-w-[200px]">
+            <Module
+              value={state.moduleid}
+              disabled
+              onChange={(value) => {
+                dispatch({ type: "STATE", data: { moduleid: value } });
+              }}
+            />
+          </div>
+        </div>
+        <div className="w-full p-1 flex flex-col justify-start ">
+          <span className="list-group-item-text grey darken-2 m-0">
+            Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <div className="w-full md:min-w-[200px]">
+            <Type
+              module_id={state.moduleid}
+              year={moment(state.change_year).format("YYYY")}
+              value={state.type_id}
+              onChange={(value) => {
+                dispatch({ type: "STATE", data: { type_id: value } });
+              }}
+            />
+          </div>
+        </div>
+        {!state.timeRegister && (
+          <div>
+            <div className="w-full p-1 flex flex-col justify-start">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Сургалтын танхим:
+              </span>
+              <div className="w-full md:min-w-[200px]">
+                <PlaceList
+                  value={state.place_id}
+                  onChange={(value) => {
+                    dispatch({ type: "STATE", data: { place_id: value } });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Сургалтын цаг:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200  "
+                value={state.hour}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      hour: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Суух ажилчдын тоо:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200 "
+                value={state.limit}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      limit: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200"
+                value={state.point}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      point: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200 "
+                value={state.percent}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      percent: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Эхлэх хугацаа:<b className="ml-1 text-red-500">*</b>
+              </span>
+
+              <DatePicker
+                allowClear={false}
+                className="w-full md:w-[100px] text-xs"
+                format={"YYYY.MM.DD"}
+                value={moment(state.begin_date)}
+                onChange={(date) => {
+                  dispatch({
+                    type: "STATE",
+                    data: { begin_date: moment(date) },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Дуусах хугацаа:<b className="ml-1 text-red-500">*</b>
+              </span>
+
+              <DatePicker
+                allowClear={false}
+                className="w-full md:w-[100px] text-xs"
+                format={"YYYY.MM.DD"}
+                value={moment(state.end_date)}
+                onChange={(date) => {
+                  dispatch({
+                    type: "STATE",
+                    data: { end_date: moment(date) },
+                  });
+                }}
+              />
+            </div>
+
+            <div className="w-full p-1 flex flex-col justify-start">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Үнэ /Бүтцийн нэгжүүдэд/:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200  "
+                value={state.price_emc}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      price_emc: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Үнэ /Гадны байгууллагуудад/:
+                <b className="ml-1 text-red-500">*</b>
+              </span>
+              <Input
+                className=" p-1 w-full text-gray-900 border border-gray-200"
+                value={state.price_organization}
+                onChange={(e) => {
+                  dispatch({
+                    type: "STATE",
+                    data: {
+                      price_organization: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+          </div>
+        )}
+        {state.timeRegister && (
+          <div>
+            <div className="w-full p-1 flex flex-col justify-start">
+              {memo_table}
+            </div>
+          </div>
+        )}
+
+        <div className="my-3 border " />
+        {!state.timeRegister && (
+          <button
+            className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
+            onClick={() => save()}
+          >
+            <i className="ft-save" />
+            <span className="ml-2">Хадгалах</span>
+          </button>
+        )}
+      </Modal>
+      <Dialog
+        header="Ирцийн огноо"
+        body={dateBodyTemplate}
+        visible={visible}
+        onHide={() => setVisible(false)}
+        className="max-w-sm md:w-2/4 text-xs "
+        footer={footerContent}
+      >
+        <div>
+          {/* <Calendar
+            mode="month"
+            value={state.attendance_date}
             onChange={(date) => {
               dispatch({
                 type: "STATE",
-                data: { end_date: moment(date) },
+                data: {
+                  attendance_date: moment(date).format("YYYY.MM.DD HH:mm"),
+                },
               });
             }}
-          />
+            dateCellRender={(date) => {
+             
+            }}
+          /> */}
+          <Calendar
+            value={state.attendance_date}
+            inline
+            showTime
+            hourFormat="12"
+            className="text-xs pb-2"
+            // dateFormat="YYYY.MM.DD HH:MM"
+            onChange={(e) => {
+              setDate("");
+              setDate(moment(e.value).format("YYYY.MM.DD"));
+
+              dispatch({
+                type: "STATE",
+                data: {
+                  attendance_date: `${moment(date)
+                    .utc()
+                    .format("YYYY.MM.DD")
+                    .toString()},
+                  ${moment(e.value).utc().format("HH:mm")}`,
+                },
+              });
+              console.log(
+                '"YYYY.MM.DD"): ',
+                moment(date).utc().format("YYYY.MM.DD"),
+                moment(e.value).utc().format("HH:mm")
+              );
+            }}
+            showIcon
+          ></Calendar>
         </div>
-      </div> */}
-      <div className="w-full p-1 flex flex-col justify-start">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Үнэ /Бүтцийн нэгжүүдэд/:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200  "
-          value={state.price_emc}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                price_emc: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0">
-          Үнэ /Гадны байгууллагуудад/:<b className="ml-1 text-red-500">*</b>
-        </span>
-        <Input
-          className=" p-1 w-full text-gray-900 border border-gray-200"
-          value={state.price_organization}
-          onChange={(e) => {
-            dispatch({
-              type: "STATE",
-              data: {
-                price_organization: e.target.value,
-              },
-            });
-          }}
-        />
-      </div>
-
-      <div className="my-3 border " />
-
-      <button
-        className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-        onClick={() => save()}
-      >
-        <i className="ft-save" />
-        <span className="ml-2">Хадгалах</span>
-      </button>
-    </Modal>
+      </Dialog>
+    </>
   );
 };
 
