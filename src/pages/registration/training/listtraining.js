@@ -89,11 +89,13 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
+    console.log(item.type_name);
     dispatch({
       type: "SET_LESSON",
       data: {
-        type_name: item.type_name,
         id: item.id,
+        type_name: item.type_name,
+        type_id: item.type_id,
         begin_date: item.begin_date,
         end_date: item.end_date,
         hour: item.hour,
@@ -104,13 +106,13 @@ const Training = () => {
         price_emc: item.price_emc,
         price_organization: item.price_organization,
         year: item.year,
-        type_id: item.type_id,
       },
     });
     dispatch({
       type: "STATE",
       data: { modal: true },
     });
+    console.log("state fdk.jdjfdkjf ", state.type_name);
     // API.getLessonID(item.id)
     //   .then((res) => {
 
@@ -500,9 +502,9 @@ const Training = () => {
   return (
     <>
       <Modal />
-      <div className="card flex p-2 border rounded text-xs">
-        <div className="flex flex-col rounded">
-          <div className="card flex justify-center text-xs rounded p-2">
+      <div className="flex  text-xs">
+        <div className="flex flex-col ">
+          <div className="flex justify-center text-xs  ">
             {/* <Spin
               tip="Уншиж байна."
               className="min-h-full first-line:bg-opacity-80"

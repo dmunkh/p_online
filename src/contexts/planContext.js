@@ -14,6 +14,8 @@ const _state = {
   typeid: null,
   module_name: null,
   isapprove: null,
+
+  single_page: false,
 };
 
 export const usePlanContext = () => {

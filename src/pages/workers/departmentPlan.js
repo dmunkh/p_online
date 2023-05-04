@@ -5,11 +5,11 @@ import { Spin, Input, Select, Checkbox } from "antd";
 import _ from "lodash";
 // import { SearchOutlined } from "@ant-design/icons";
 import * as API from "src/api/plan";
+
 // import { Row } from "primereact/row";
 
 // import { ColumnGroup } from "primereact/columngroup";
 import moment from "moment";
-import * as REQ from "src/api/request";
 import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
@@ -29,17 +29,18 @@ const Department = () => {
 
   useEffect(() => {
     setLoading(true);
-    REQ.getWorkers({
+    API.getPlanWorker({
+      year: moment(state.date).format("Y"),
+      type_id: state.modaltypeid,
       department_id: state.department,
     })
       .then((res) => {
-        setList(
-          _.orderBy(
-            _.filter(res, (a) => !state.list_planworker.includes(a.tn)),
-            ["department_code"],
-            ["firstname"]
-          )
-        );
+        console.log(state.list_planworker);
+        dispatch({
+          type: "STATE",
+          data: { list_planworker: _.map(res, (item) => item.tn) },
+        });
+        setList(_.orderBy(res, ["department_code"], ["firstname"]));
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -277,7 +278,7 @@ const Department = () => {
           sortable
           // align="center"
           header="Овог нэр"
-          field="shortname"
+          field="short_name"
           style={{ minWidth: "150px", maxWidth: "150px" }}
           className="text-xs"
           headerClassName="flex items-center justify-center"
@@ -286,7 +287,7 @@ const Department = () => {
         <Column
           sortable
           header="Албан тушаалын нэр"
-          field="position_namemn"
+          field="position_name"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
@@ -302,7 +303,7 @@ const Department = () => {
                   });
                 }}
               >
-                {item.position_namemn}
+                {item.position_name}
               </span>
             );
           }}

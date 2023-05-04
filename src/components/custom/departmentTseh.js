@@ -5,7 +5,7 @@ import { Select } from "antd";
 import { useUserContext } from "src/contexts/userContext";
 
 const DepartmentTseh = (props) => {
-  const { user } = useUserContext();
+  const { user, checkGroup } = useUserContext();
   const [list, setList] = useState([]);
   const { Option } = Select;
 
@@ -13,13 +13,14 @@ const DepartmentTseh = (props) => {
     API.getUserDepartment().then((res) => {
       var result = res;
 
-      result.push({
-        departmentcode: -1,
-        departmentlevelid: 2,
-        departmentname: "Бүгд",
-        id: -1,
-        paranetid: 0,
-      });
+      checkGroup([173, 306, 307, 378, 386, 387]) &&
+        result.push({
+          departmentcode: -1,
+          departmentlevelid: 2,
+          departmentname: "Бүгд",
+          id: -1,
+          paranetid: 0,
+        });
 
       setList(
         _.orderBy(
