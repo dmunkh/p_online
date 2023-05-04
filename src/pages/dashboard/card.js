@@ -11,7 +11,7 @@ import moment from "moment";
 
 import _ from "lodash";
 
-const Card = (props) => {
+const Card = () => {
   const { message } = useUserContext();
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
@@ -21,6 +21,7 @@ const Card = (props) => {
   const [module_name, setModule_name] = useState();
   const [count_unique, setCount_unique] = useState();
   const [modul, setModule] = useState(1);
+  const [modulename, setModuleName] = useState("ХЭМАБ");
   const [barData1, setBarData1] = useState();
   const [barData2, setBarData2] = useState();
   const [barLabels, setBarLabels] = useState();
@@ -70,13 +71,13 @@ const Card = (props) => {
           await res.map((el) => {
             console.log(el);
             // eslint-disable-next-line no-sequences
-            labels.push(el.departmentname);
+            labels.push(_.concat(el.count_all, el.departmentname));
             chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);
             chartsdata2.push(el.count_unique === 0 ? 5 : el.count_unique);
 
             return true;
           });
-       
+
           setBarData1(chartsdata1);
           setBarData2(chartsdata2);
           setBarLabels(labels);
@@ -96,28 +97,26 @@ const Card = (props) => {
   }, [date, tseh, modul]);
   const cards = useMemo(() => {
     return (
-      <div className="md:flex justify-between ">
+      <div className=" md:grid grid-cols-5 gap-5 mb-4 ">
         {_.map(data, (item) => (
-          <div
-            className="flex justify-center gap-5 mt-4  "
-            key={item.id}
-            onClick={() => setModule(item.id)}
-          >
+          <div className=" mt-4 " key={item.id} onClick={() =>{ setModule(item.id); setModuleName(item.module_name); }}>
             <div className=" cursor-pointer group flex flex-col justify-between  rounded-xl bg-white p-4 shadow-xl transition-shadow   border border-gray-100 hover:scale-110">
               <div className="">
                 <div className="flex justify-center items-center gap-2 ">
+                    <i className="pi pi-users"  style={{ fontSize: '2.5rem' }} /> 
                   <p className="text-sm font-bold uppercase text-gray-600">
                     Нийт:
                   </p>
-                  <h3 className="text-2xl font-bold text-emerald-600 hover:scale-110 ">
+                  <h3 className="text-2xl font-bold text-[#14b8a6] hover:scale-110 ">
                     {item.count_all}
                   </h3>
                 </div>
                 <div className="flex justify-center items-center gap-2">
-                  <p className="text-xs font-bold uppercase text-gray-600">
-                    Давхардсан:
+                <i className="pi pi-users"  style={{ fontSize: '2.5rem' }}/> 
+                  <p className="text-sm font-semi-bold uppercase text-gray-600">
+                    Ажилтнуудын тоо :
                   </p>
-                  <h3 className="text-xl font-bold text-red-500 hover:scale-110">
+                  <h3 className="text-xl font-bold text-gray-600 hover:scale-110">
                     {item.count_unique}
                   </h3>
                 </div>
@@ -150,7 +149,7 @@ const Card = (props) => {
 
   const donut1 = useMemo(() => {
     return (
-      <div className="card flex justify-content-center md:w-1/4 p-4">
+      <div className="card  p-4">
         <div className="w-full inline-flex items-center gap-2 text-bold  text-emerald-600">
           <Tag
             className="mr-2"
@@ -170,10 +169,11 @@ const Card = (props) => {
                 backgroundColor: [
                   "#64B5F6",
                   "#1976D2",
-                  "#EF6C00",
+                  "#818cf8",
                   "#FFD54F",
-                  "#455A64",
+                  "#14b8a6",
                 ],
+                valueTemplate: count,
               },
             ],
           }}
@@ -184,7 +184,7 @@ const Card = (props) => {
   });
   const donut2 = useMemo(() => {
     return (
-      <div className="card flex justify-content-center text-bold md:w-1/4 p-4 ">
+      <div className="card  p-4 ">
         <div className="w-full  inline-flex items-center gap-2 text-red-500   ">
           <Tag severity="danger" value="Давхацсан" icon="pi pi-check"></Tag>
         </div>
@@ -199,9 +199,9 @@ const Card = (props) => {
                 backgroundColor: [
                   "#64B5F6",
                   "#1976D2",
-                  "#EF6C00",
+                  "#818cf8",
                   "#FFD54F",
-                  "#455A64",
+                  "#14b8a6",
                 ],
               },
             ],
@@ -213,25 +213,25 @@ const Card = (props) => {
   });
   const barchart = useMemo(() => {
     return (
-      <div className="card flex justify-content-center md:w-[700px] p-4">
-        <div className="w-full inline-flex items-center gap-2 text-bold  text-emerald-600"></div>
-        <div className="mt-5 border-t-2 border-blue-100 py-2 "></div>
+      <div className="card  p-4">
+        <div className="w-full inline-flex items-center gap-2 text-bold  "><Tag severity="info" value={modulename} className=" px-5" ></Tag></div>
+        <div className="mt-2 border-t-2 border-blue-100 py-2 "></div>
         <Chart
-        className="p-2"
+          className="p-2"
           type="bar"
           data={{
             labels: barLabels,
             datasets: [
               {
                 label: "Нийт",
-                backgroundColor: ["#22C55E"],
-                borderColor: ["#22C55E"],
+                backgroundColor: ["#38bdf8"],
+                borderColor: ["#38bdf8"],
                 data: barData1,
               },
               {
                 label: "Давхацсан",
-                backgroundColor: ["#EF4444"],
-                borderColor: ["#EF4444"],
+                backgroundColor: ["#14b8a6"],
+                borderColor: ["#14b8a6"],
                 data: barData2,
               },
             ],
@@ -243,14 +243,8 @@ const Card = (props) => {
   return (
     <div className="md:px-20">
       <div className="card ">
-        <div className="md:w-1/2 md:flex justify-start gap-5 p-2">
-          <DepartmentTseh
-            value={tseh}
-            onChange={(value) => {
-              console.log(value);
-              setTseh(value);
-            }}
-          />
+        <div className="md:w-1/3 md:flex justify-start gap-5 p-3 ">
+         
           <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
@@ -261,13 +255,20 @@ const Card = (props) => {
               setDate(e.$y);
             }}
           />
+           <DepartmentTseh
+            value={tseh}
+            onChange={(value) => {
+              setTseh(value);
+            }}
+          />
         </div>
       </div>
       {cards}
-      <div className="md:flex gap-5 pb-4">
-        {donut1}
-        {donut2}
-        {barchart}
+      <div className="md:grid grid-cols-4 gap-5 pb-4">
+          {donut1}
+          {donut2}
+       <div className="col-span-2"> {barchart}</div>
+       
       </div>
     </div>
   );
