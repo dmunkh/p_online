@@ -82,7 +82,7 @@ const ModalNormDetail = () => {
               .then((res) => {
                 dispatch({
                   type: "STATE",
-                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                  data: { refresh: state.refresh + 1 },
                 });
               })
               .catch((error) =>
@@ -113,7 +113,7 @@ const ModalNormDetail = () => {
               .then((res) => {
                 dispatch({
                   type: "STATE",
-                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                  data: { refresh: state.refresh + 1 },
                 });
               })
               .catch((error) =>

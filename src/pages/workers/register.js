@@ -42,6 +42,17 @@ const List = () => {
     })
       .then((res) => {
         // dispatch({ type: "STATE", data: { list_count: res.length } });
+
+        dispatch({
+          type: "STATE",
+          data: {
+            list_typeworker: _.map(res, (item) => {
+              console.log(item.tn);
+              return item.tn;
+            }),
+          },
+        });
+
         setList(_.orderBy(res, ["department_code"]));
       })
       .catch((error) =>
@@ -137,7 +148,7 @@ const List = () => {
         visible={state.modal}
         // visible={true}
         onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
-        title={"Төлөвлөгөөт ажилтан бүртгэл"}
+        title={"Сургалтанд суух ажилтан бүртгэл"}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
