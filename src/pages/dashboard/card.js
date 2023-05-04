@@ -155,8 +155,8 @@ const Card = () => {
       <div className="card  p-4">
         <div className="w-full inline-flex items-center gap-2 text-bold  text-emerald-600">
           <Tag
-            className="mr-2"
-            severity="info"
+            className="mr-2 uppercase px-3"
+            severity="success"
             icon="pi pi-chart-line"
             value="Нийт"
           ></Tag>
@@ -189,7 +189,7 @@ const Card = () => {
     return (
       <div className="card  p-4 ">
         <div className="w-full  inline-flex items-center gap-2 text-red-500   ">
-          <Tag severity="info" value="Ажилтнуудын тоо" icon="pi pi-check"></Tag>
+          <Tag severity="warning" value="Ажилтнуудын тоо" icon="pi pi-check" className="px-3 uppercase"></Tag>
         </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2"></div>
         <Chart
@@ -218,7 +218,7 @@ const Card = () => {
     return (
       <div className="card  p-4">
         <div className="w-full inline-flex items-center gap-2 text-bold  ">
-          <Tag severity="info" value={modulename} className=" px-5"></Tag>
+          <Tag severity="info" value={modulename} className="uppercase px-5"></Tag>
         </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2 "></div>
         <Chart
