@@ -9,6 +9,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MODAL from "src/pages/workers/modal";
 import MODALTRANSFER from "src/pages/workers/modaltransfer";
+import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
@@ -157,6 +158,18 @@ const List = () => {
       <Modal
         width={800}
         height={600}
+        visible={state.modal_att}
+        // visible={true}
+        onCancel={() => dispatch({ type: "STATE", data: { modal_att: false } })}
+        title={"Ирц бүртгэл"}
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_ATT />
+      </Modal>
+      <Modal
+        width={800}
+        height={600}
         visible={state.modaltransfer}
         // visible={true}
         onCancel={() =>
@@ -213,6 +226,24 @@ const List = () => {
               />
 
               <div className="flex items-center gap-3">
+                <>
+                  <i className="ft-log-in text-lg" />
+                  <div
+                    title="Ирц бүртгэх"
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                    onClick={() => {
+                      dispatch({ type: "CLEAR" });
+                      dispatch({
+                        type: "STATE",
+                        data: { list_checked: [] },
+                      });
+                      dispatch({ type: "STATE", data: { modal_att: true } });
+                    }}
+                  >
+                    {state.limit_count}/{state.list_count}{" "}
+                    <i className="ft-plus" />
+                  </div>
+                </>
                 <div className="flex items-center justify-between gap-2">
                   {checkGroup([173, 306, 307, 378, 386, 387]) ? (
                     <>

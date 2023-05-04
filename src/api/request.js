@@ -189,18 +189,29 @@ export async function deletePerson(id) {
 // Хянах самбар
 
 export async function getControlPanel(params) {
-  const response = await API().get("/dashboard/plan/count", { params: { ...params } });
+  const response = await API().get("/dashboard/plan/count", {
+    params: { ...params },
+  });
   return response.data;
 }
 
 export async function getControlDepartment(params) {
-  console.log(params)
-  const response = await API().get("/dashboard/plan/module/department/count", { params: { ...params } });
+  console.log(params);
+  const response = await API().get("/dashboard/plan/module/department/count", {
+    params: { ...params },
+  });
   return response.data;
 }
 // Бүцтйин нэгжийн ажилтнууд
 export async function getWorkers(params) {
   const response = await API().get("/general/department/workers", {
+    params: { ...params },
+  });
+  return response.data;
+}
+
+export async function getWorkerTn(params) {
+  const response = await API().get("/general/worker", {
     params: { ...params },
   });
   return response.data;
