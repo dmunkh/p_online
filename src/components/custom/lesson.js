@@ -22,24 +22,23 @@ const TypeList = (props) => {
   }, []);
 
   return (
-    <div>
-      <Select
-        showSearch
-        allowClear
-        placeholder="Сонгоно уу."
-        optionFilterProp="children"
-        style={{ minWidth: 450 }}
-        {...props}
-      >
-        {_.map(list, (item) => {
-          return (
-            <Option key={item.id} value={item.id}>
-              {item.id} | {item.type_name}
-            </Option>
-          );
-        })}
-      </Select>
-    </div>
+    <Select
+      showSearch
+      allowClear
+      className="w-full"
+      placeholder="Сонгоно уу."
+      optionFilterProp="children"
+      style={{ minWidth: 450 }}
+      {...props}
+    >
+      {_.map(list, (item) => {
+        return (
+          <Option key={item.id} value={item.id}>
+            {item.id} | {item.type_name}
+          </Option>
+        );
+      })}
+    </Select>
   );
 };
 

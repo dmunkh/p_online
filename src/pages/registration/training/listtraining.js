@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
 import * as API from "src/api/training";
@@ -11,11 +11,12 @@ import _ from "lodash";
 import Swal from "sweetalert2";
 import moment from "moment";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
+import dayjs from "dayjs";
 
 const Training = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useTrainingContext();
-
+  const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
@@ -89,7 +90,6 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
-    console.log(item.type_name);
     dispatch({
       type: "SET_LESSON",
       data: {
@@ -110,24 +110,39 @@ const Training = () => {
     });
     dispatch({
       type: "STATE",
+      data: {
+        id: item.id,
+      },
+    });
+    dispatch({
+      type: "STATE",
+      data: {
+        type_name: item.type_name,
+      },
+    });
+    dispatch({
+      type: "STATE",
+      data: {
+        type_id: item.type_id,
+      },
+    });
+    dispatch({
+      type: "STATE",
+      data: {
+        place_id: item.place_id,
+      },
+    });
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_list: _.orderBy(item.attendance, ["id"]),
+      },
+    });
+    setEdit(true);
+    dispatch({
+      type: "STATE",
       data: { modal: true },
     });
-    console.log("state fdk.jdjfdkjf ", state.type_name);
-    // API.getLessonID(item.id)
-    //   .then((res) => {
-
-    //     //loadItemTypeList(res.itemtypeid);
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
   };
 
   const memo_table = useMemo(() => {
@@ -185,6 +200,7 @@ const Training = () => {
                     dispatch({
                       type: "CLEAR_LESSON",
                     });
+                    setEdit(false);
                     API.getLessonTypeID(state?.type_id).then((res) => {
                       dispatch({
                         type: "SET_LESSON",
@@ -429,12 +445,32 @@ const Training = () => {
         />
         <Column
           sortable
-          header="Сургалтын тайлбар"
+          header="Сургалтын ирц"
           field="description"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start text-left"
+          body={(data) => {
+            var result = data.attendance;
+            console.log("result: ", result);
+            return (
+              <div className="">
+                {_.map(_.orderBy(result, ["id"]), (item) => {
+                  return (
+                    <div key={item.id} className="flex flex-col justify-center">
+                      <span className="pl-3 justify-center">
+                        {item.id} -{" "}
+                        {moment(item.attendance_date).format(
+                          "YYYY.MM.DD  HH:MM"
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }}
         />
         {/* <Column
           sortable
@@ -501,7 +537,7 @@ const Training = () => {
 
   return (
     <>
-      <Modal />
+      <Modal setedit={edit} />
       <div className="flex  text-xs">
         <div className="flex flex-col ">
           <div className="flex justify-center text-xs  ">

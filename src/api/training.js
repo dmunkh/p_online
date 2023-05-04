@@ -29,3 +29,23 @@ export async function getLessonTypeID(id) {
   const response = await API().get("/type/year/" + id);
   return response.data;
 }
+export async function getAttendanceID(params) {
+  const response = await API().get("/attendance", {
+    params: {
+      ...params,
+    },
+  });
+  return response.data;
+}
+export async function postAttendance(params) {
+  const response = await API().post("/attendance", params);
+  return response.data;
+}
+export async function putAttendance(id, params) {
+  const response = await API().put("/attendance/" + id, { ...params });
+  return response.data;
+}
+export async function deleteAttendance(id) {
+  const response = await API().delete("/attendance/" + id);
+  return response.data;
+}

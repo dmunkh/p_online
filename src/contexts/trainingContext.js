@@ -12,7 +12,6 @@ const _state = {
   change_btn: false,
 
   moduleid: null,
-  type_id: null,
 
   id: null,
   begin_date: moment(),
@@ -26,6 +25,14 @@ const _state = {
   price_organization: null,
   year: moment(),
   type_name: null,
+  type_id: null,
+
+  attendance_date: moment(),
+  attendance_desc: null,
+  attendance_id: null,
+  attendance_list: [],
+  less_id: null,
+  list_attendance_date: [],
 };
 
 export const useTrainingContext = () => {

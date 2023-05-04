@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "src/pages/registration/training/header";
 import Listtraining from "src/pages/registration/training/listtraining";
-import Calendar from "src/pages/registration/training/calendar";
+import Calendars from "src/pages/registration/training/calendars";
 import { useTrainingContext } from "src/contexts/trainingContext";
 const Index = () => {
   const { state } = useTrainingContext();
@@ -9,7 +9,8 @@ const Index = () => {
     <div className="card ">
       <Header />
       <div className="p-1">
-        {state.change_btn ? <Calendar /> : <Listtraining />}
+        <Listtraining />
+        {/* {state.change_btn ? <Calendars /> : <Listtraining />} */}
       </div>
     </div>
   );

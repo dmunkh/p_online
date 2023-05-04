@@ -28,7 +28,7 @@ export const reducer = (state, action) => {
     case "CLEAR_LESSON":
       return {
         ...state,
-        id: null,
+
         begin_date: moment(),
         end_date: moment(),
         hour: null,
@@ -39,6 +39,7 @@ export const reducer = (state, action) => {
         price_emc: null,
         price_organization: null,
         year: null,
+        attendance_id: null,
       };
     default:
       return state;

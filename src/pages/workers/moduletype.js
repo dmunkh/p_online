@@ -27,8 +27,8 @@ const Moduletype = () => {
   }, [state.moduletypeid]);
 
   return (
-    <div classNameName="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
-      <div classNameName="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
+    <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
+      <div className="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
         <span className="text-base">Модуль</span>
 
         <Module
@@ -55,7 +55,7 @@ const Moduletype = () => {
                   }}
                 >
                   <span style={{ fontWeight: 600 }}>НИЙТ СУРГАЛТ</span>
-                  <span class="badge bg-light-primary float-right">4</span>
+                  <span className="badge bg-light-primary float-right">4</span>
                 </li>
                 <hr></hr>
                 {_.map(list, (item) => {
