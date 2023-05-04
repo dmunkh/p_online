@@ -24,6 +24,9 @@ const _state = {
   list_count: null,
 
   list_planworker: [],
+  list_typeworker: [],
+
+  modal_att: false,
 };
 
 export const useRegisterEmplContext = () => {

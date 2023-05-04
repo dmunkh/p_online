@@ -25,6 +25,13 @@ const List = () => {
         module_id: state.moduletypeid,
       })
         .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_typeworker: _.map(res, (item) => item.tn),
+            },
+          });
+          console.log(res, state.list_typeworker);
           dispatch({ type: "STATE", data: { lessonlist: res } });
           dispatch({ type: "STATE", data: { lessonlistfilter: res } });
         })

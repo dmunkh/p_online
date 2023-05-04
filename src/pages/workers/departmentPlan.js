@@ -35,15 +35,15 @@ const Department = () => {
       department_id: state.department,
     })
       .then((res) => {
-        console.log(state.list_planworker);
         dispatch({
           type: "STATE",
           data: { list_planworker: _.map(res, (item) => item.tn) },
         });
+
         setList(_.orderBy(res, ["department_code"], ["firstname"]));
       })
       .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
+        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй.." })
       )
       .finally(() => {
         setLoading(false);
