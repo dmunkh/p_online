@@ -461,7 +461,7 @@ const Training = () => {
           bodyClassName="flex items-center justify-start text-left"
           body={(data) => {
             var result = data.attendance;
-            console.log("result: ", result);
+        
             return (
               <div className="">
                 {_.map(_.orderBy(result, ["id"]), (item) => {
