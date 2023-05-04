@@ -234,7 +234,7 @@ const Card = () => {
                 data: barData1,
               },
               {
-                label: "Давхацсан",
+                label: "Ажилтнуудын тоо",
                 backgroundColor: ["#14b8a6"],
                 borderColor: ["#14b8a6"],
                 data: barData2,
