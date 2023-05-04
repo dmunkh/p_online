@@ -155,6 +155,7 @@ const List = () => {
       >
         <MODAL />
       </Modal>
+
       <Modal
         width={800}
         height={600}
@@ -167,6 +168,7 @@ const List = () => {
       >
         <MODAL_ATT />
       </Modal>
+
       <Modal
         width={800}
         height={600}
