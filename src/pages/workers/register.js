@@ -401,7 +401,7 @@ const List = () => {
             header="Шалгалтын оноо"
             style={{ width: "150px" }}
             body={(data, row) => {
-              return checkRole["register_point_crud"] ? (
+              return checkRole(["register_point_crud"]) ? (
                 <InputNumber
                   max={200}
                   align="center"
@@ -424,6 +424,15 @@ const List = () => {
                           e.target.value === null
                             ? null
                             : _.toInteger(e.target.value),
+                      }).then(() => {
+                        dispatch({
+                          type: "STATE",
+                          data: { refresh: state.refresh + 1 },
+                        });
+                        message({
+                          type: "success",
+                          title: "Амжилттай хадгалагдлаа",
+                        });
                       });
                     }
                   }}
@@ -449,7 +458,15 @@ const List = () => {
             header="Тэнцсэн эсэх"
             style={{ minWidth: "100px", maxWidth: "100px" }}
             body={(data) => {
-              return data.is_success ? "Тийм" : "Үгүй";
+              var result = "";
+              if (data.is_success !== null)
+                result = data.is_success ? (
+                  <i className="ft-check-circle text-2xl text-green-600" />
+                ) : (
+                  <i className="ft-x text-lg text-red-600 border-red-600 border rounded-full p-0.5" />
+                );
+
+              return result;
             }}
           />
           <Column
