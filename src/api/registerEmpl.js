@@ -44,3 +44,8 @@ export async function getAtt(params) {
   });
   return response.data;
 }
+
+export async function postAttendanceCard(params) {
+  const response = await API().post("/register/attendance/card", { ...params });
+  return response.data;
+}

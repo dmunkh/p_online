@@ -28,8 +28,8 @@ const Moduletype = () => {
   }, [state.moduletypeid]);
 
   return (
-    <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
-      <div className="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
+    <div classNameName="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
+      <div classNameName="flex items-center w-full  md:min-w-[100px] text-xs gap-2">
         <span className="text-base">Модуль</span>
 
         <Module

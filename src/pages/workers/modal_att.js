@@ -12,28 +12,34 @@ import Department from "src/pages/workers/department";
 import DepartmentPlan from "src/pages/workers/departmentPlan";
 import _ from "lodash";
 import moment from "moment";
-import { isNullOrUndef } from "chart.js/dist/helpers/helpers.core";
 
 const Modal_att = () => {
   const { message, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [checked, setChecked] = useState(false);
-  const [loadingbtn, setLoadingbtn] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [list, setList] = useState([]);
-  const [worker, setWorker] = useState();
+
   const { Option } = Select;
+
   const ref = useRef(null);
+
+  const [card, setCard] = useState({
+    modal: false,
+    list_attendace: [],
+    attendance: null,
+    tn: null,
+    info: null,
+  });
 
   // const { state, dispatch } = useUserContext();
 
   useEffect(() => {
     setLoading(true);
     API.getAtt({
-      lesson_id: 1,
+      lesson_id: state.lessonid,
     })
       .then((res) => {
-        setList(res);
+        setCard({ ...card, list_attendace: res });
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -44,26 +50,41 @@ const Modal_att = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.department_id, state.date, state.moduleid, state.refresh]);
 
-  const check_worker = (e) => {
+  const check_worker = (tn) => {
+    setCard({ ...card, tn: tn });
     ref.current.focus();
 
     REQ.getWorkerTn({
-      tn: e,
+      tn: tn,
     })
       .then((res) => {
-        setWorker(res);
+        setCard({ ...card, info: res });
+
+        API.postAttendanceCard({
+          lesson_id: state.lessonid,
+          attendance_id: card.attendance,
+          tn: tn,
+        })
+          .then((res) => {
+            dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
+            setCard({ ...card, info: null, tn: null });
+          })
+          .catch((error) =>
+            message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
+          )
+          .finally(() => {
+            setLoading(false);
+          });
       })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
+      .catch((error) => {
+        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" });
+        setCard({ ...card, info: null });
+      })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const PlanApprove = (id, ischecked) => {
-    setLoadingbtn(false);
-  };
   return (
     <div className="flex flex-col text-xs">
       <hr className="my-2" />
@@ -77,9 +98,10 @@ const Modal_att = () => {
           placeholder="Сонгоно уу."
           optionFilterProp="children"
           className="w-full"
-          // value={}
+          onChange={(value) => setCard({ ...card, attendance: value })}
+          value={card.attendance}
         >
-          {_.map(list, (item) => {
+          {_.map(card.list_attendace, (item) => {
             return (
               <Option key={item.id} value={item.id}>
                 {moment(item.attendance_date).format("YYYY.MM.DD HH:mm")}
@@ -89,36 +111,7 @@ const Modal_att = () => {
         </Select>
       </div>
       <hr className="my-2" />
-      <div className="flex justify-end">
-        {/* <InputSwitch
-          checked={checked}
-          onChange={(e) => {
-            setChecked(e.value);
-            dispatch({ type: "STATE", data: { change_btn: checked } });
-          }}
-        >
-          Нийт
-        </InputSwitch> */}
-        <Spin tip="." className="bg-opacity-80" spinning={loadingbtn}>
-          <Switch
-            className="bg-green-300"
-            checkedChildren={
-              <span className="text-blue-500 "> Нийт ажилтнууд</span>
-            }
-            unCheckedChildren={
-              <span className="text-blue-500 "> Төлөвлөгөөт ажилтнууд </span>
-            }
-            checked={checked}
-            onChange={(value) => {
-              dispatch({ type: "STATE", data: { list_checked: [] } });
-              setChecked(value);
-              setLoadingbtn(true);
-              PlanApprove(value);
-            }}
-          />
-        </Spin>
-      </div>
-      <hr className="my-2" />
+
       <div className="flex items-center">
         <span className="w-1/6 font-semibold">
           Карт уншуулах:<b className="ml-1 text-red-500">*</b>
@@ -128,73 +121,70 @@ const Modal_att = () => {
           id="message"
           name="message"
           className="w-full"
-          // value={val}
+          value={card.tn}
           onPressEnter={(e) => check_worker(e.target.value)}
         ></InputNumber>
       </div>
       <hr className="my-2" />
       <div className="w-full min-h-[150px] flex border rounded-2xl">
-        {state.list && (
-          <div className="w-1/4 flex flex-col items-center justify-center gap-2 font-semibold rounded-l-2xl text-center">
-            <Image
-              className="p-2 flex rounded-2xl"
-              src={
-                "https://minio-action.erdenetmc.mn/emp/" + worker?.tn + ".jpg"
-              }
-              alt="Image"
-              width="80"
-              height="60"
-            />
-          </div>
-        )}
-        {state.list && (
-          <div className="w-3/4 border-l rounded-r-2xl">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="p-1 text-center text-sm  w-12" colSpan={2}>
-                    Ажилтны мэдээлэл
-                  </th>
-                </tr>
-              </thead>
+        <div className="w-1/4 flex flex-col items-center justify-center gap-2 font-semibold rounded-l-2xl text-center">
+          <Image
+            className="p-2 flex rounded-2xl"
+            src={
+              "https://minio-action.erdenetmc.mn/emp/" + card.info?.tn + ".jpg"
+            }
+            alt="Image"
+            width="80"
+            height="60"
+          />
+        </div>
 
-              <tbody className="p-5">
-                <tr>
-                  <td className="p-2 text-left border text-gray-600 font-bold">
-                    БД:
-                  </td>
-                  <td className="p-2 text-left border font-bold">
-                    {worker?.tn}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 text-left border text-gray-600 font-bold">
-                    Овог нэр:
-                  </td>
-                  <td className="p-2 left-center text-black font-bold border">
-                    {worker?.shortname}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 text-left border text-gray-600 font-bold">
-                    Цех:
-                  </td>
-                  <td className="p-2 text-left b text-black font-bold border ">
-                    {worker?.tseh_namemn}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 text-left border text-gray-600 font-bold">
-                    Албан тушаал
-                  </td>
-                  <td className="p-2 t text-black text-left font-bold border">
-                    {worker?.position_namemn}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="w-3/4 border-l rounded-r-2xl">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="p-1 text-center text-sm  w-12" colSpan={2}>
+                  Ажилтны мэдээлэл
+                </th>
+              </tr>
+            </thead>
+
+            <tbody className="p-5">
+              <tr>
+                <td className="p-2 text-left border text-gray-600 font-bold">
+                  БД:
+                </td>
+                <td className="p-2 text-left border font-bold">
+                  {card.info?.tn}
+                </td>
+              </tr>
+              <tr>
+                <td className="p-2 text-left border text-gray-600 font-bold">
+                  Овог нэр:
+                </td>
+                <td className="p-2 left-center text-black font-bold border">
+                  {card.info?.shortname}
+                </td>
+              </tr>
+              <tr>
+                <td className="p-2 text-left border text-gray-600 font-bold">
+                  Цех:
+                </td>
+                <td className="p-2 text-left b text-black font-bold border ">
+                  {card.info?.tseh_namemn}
+                </td>
+              </tr>
+              <tr>
+                <td className="p-2 text-left border text-gray-600 font-bold">
+                  Албан тушаал
+                </td>
+                <td className="p-2 t text-black text-left font-bold border">
+                  {card.info?.position_namemn}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
