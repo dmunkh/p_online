@@ -31,7 +31,7 @@ const Department = () => {
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),
-      type_id: state.modaltypeid,
+      type_id: state.lesson.type_id,
       department_id: state.department,
     })
       .then((res) => {

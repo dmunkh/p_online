@@ -15,9 +15,10 @@ import { Row } from "primereact/row";
 
 import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
 import moment from "moment";
+import * as XLSX from "xlsx";
 
 const List = () => {
-  const { message, checkRole, checkGroup } = useUserContext();
+  const { user, message, checkRole, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -36,34 +37,36 @@ const List = () => {
   const [cnt, setCnt] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
-
-    API.getWorkers({
-      department_id: state.department,
-      lesson_id: state.lesson.id,
-    })
-      .then((res) => {
-        // res.list,
-        // res.limit,
-
-        dispatch({
-          type: "STATE",
-          data: {
-            lesson: res.lesson,
-            list_typeworker: _.map(res.list, (item) => {
-              return item.tn;
-            }),
-          },
-        });
-
-        setList(_.orderBy(res.list, ["department_code"]));
+    console.log(state.department);
+    if (state.department !== null) {
+      setLoading(true);
+      API.getWorkers({
+        department_id: state.department,
+        lesson_id: state.lesson.id,
       })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((res) => {
+          // res.list,
+          // res.limit,
+
+          dispatch({
+            type: "STATE",
+            data: {
+              lesson: res.lesson,
+              list_typeworker: _.map(res.list, (item) => {
+                return item.tn;
+              }),
+            },
+          });
+
+          setList(_.orderBy(res.list, ["department_code"]));
+        })
+        .catch((error) =>
+          message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.department, state.date]);
 
@@ -98,6 +101,66 @@ const List = () => {
     return total;
   };
 
+  const exportToExcel = (list) => {
+    let Heading = [
+      [
+        "№",
+        "Эдийн дугаар",
+        "Барааны нэр",
+        "Зардлын код",
+        "Хэмжих нэгж",
+        "Размер",
+        "Размерийн төрөл",
+        "ХХ-н нэр",
+        "Огноо",
+        "Огноо",
+      ],
+    ];
+    var result = _.map(list, (a, i) => {
+      return {
+        i: i + 1,
+        warehouse_item_code: a.warehouse_item_code,
+        warehouse_item_desc: a.warehouse_item_desc,
+        warehouse_class_code: a.warehouse_class_code,
+        item_unit_name: a.item_unit_name,
+        warehouse_razmer: a.warehouse_razmer,
+        warehouse_siz_type: a.warehouse_siz_type,
+        relation_count: a.relation_count,
+        warehouse_insertdate: a.warehouse_insertdate,
+        item_name: a.item_name,
+      };
+    });
+    // result.push({
+    //   i: "",
+    //   itemname: "Нийт",
+    //   time: "",
+    //   unitname: "",
+    //   sizemin: _.countBy(list, (a) => a.sizemin),
+    //   sizemax: _.countBy(list, (a) => a.sizemax),
+    //   sizestep: _.sumBy(list, (a) => a.sizestep),
+    //   relation_count: _.sumBy(list, (a) => a.relation_count),
+    // });
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Агуулахын лавлах_" +
+        user.tn +
+        " " +
+        moment().format("YYYY_MM_сар") +
+        ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
   // const getRepeat = (status) => {
   //   // eslint-disable-next-line default-case
   //   switch (status) {
@@ -140,7 +203,7 @@ const List = () => {
   };
 
   return (
-    <div className="p-2 rounded text-xs">
+    <div className="p-2 rounded text-xs max-h-[calc(100vh-250px)] overflow-auto">
       <Modal
         width={800}
         height={600}
@@ -214,20 +277,24 @@ const List = () => {
           onRowToggle={(e) => setExpandedRows(e.data)}
           rowGroupHeaderTemplate={headerTemplate}
           // rowGroupFooterTemplate={footerTemplate}
+          scrollable
+          height={window.innerHeight - 800}
           globalFilterFields={["tn", "short_name", "position_name"]}
           header={
             <div className="flex items-center justify-between  text-xs">
-              <Input.Search
-                className="md:w-80"
-                placeholder="Хайх..."
-                value={search.global.value}
-                onChange={(e) => {
-                  let _search = { ...search };
-                  _search["global"].value = e.target.value;
-                  setSearch(_search);
-                  dispatch({ type: "STATE", data: { tn: null } });
-                }}
-              />
+              <div>
+                <Input.Search
+                  className="md:w-80"
+                  placeholder="Хайх..."
+                  value={search.global.value}
+                  onChange={(e) => {
+                    let _search = { ...search };
+                    _search["global"].value = e.target.value;
+                    setSearch(_search);
+                    dispatch({ type: "STATE", data: { tn: null } });
+                  }}
+                />
+              </div>
 
               <div className="flex items-center gap-3">
                 {checkRole(["register_attendance_crud"]) && (
@@ -295,6 +362,14 @@ const List = () => {
                   )}
                 </div>
                 {/* )} */}
+
+                <img
+                  alt=""
+                  title="Excel татах"
+                  src="/img/excel.png"
+                  className="w-8 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+                  onClick={() => exportToExcel(list)}
+                />
               </div>
             </div>
           }
@@ -317,6 +392,7 @@ const List = () => {
           <Column
             field="status"
             header="Ирц"
+            sortOrder
             style={{ minWidth: "200px", maxWidth: "200px" }}
             body={(data) => {
               return (

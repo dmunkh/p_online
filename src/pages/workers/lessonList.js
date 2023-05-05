@@ -64,7 +64,7 @@ const List = () => {
               className="bg-opacity-80"
               spinning={loading}
             >
-              <div className="users-list-padding position-relative ps ps--active-y  ">
+              <div className="users-list-padding position-relative ps ps--active-y max-h-[calc(100vh-300px)] overflow-auto">
                 {_.map(state.lessonlistfilter, (item) => {
                   return (
                     <div
