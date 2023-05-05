@@ -15,10 +15,10 @@ const DepartmentTseh = (props) => {
 
       checkGroup([173, 306, 307, 378, 386, 387]) &&
         result.push({
-          departmentcode: -1,
+          departmentcode: 0,
           departmentlevelid: 2,
           departmentname: "Бүгд",
-          id: -1,
+          id: 0,
           paranetid: 0,
         });
 

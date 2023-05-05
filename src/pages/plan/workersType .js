@@ -22,6 +22,7 @@ const Workers = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
+    console.log(state.info_type);
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),
@@ -30,6 +31,7 @@ const Workers = () => {
     })
       .then((res) => {
         setList(_.orderBy(res, ["department_code"], ["firstname"]));
+
         dispatch({
           type: "STATE",
           data: { list_planworker: _.map(res, (item) => item.tn) },
@@ -69,20 +71,21 @@ const Workers = () => {
           </div>
         }
         header={
-          <Input.Search
-            className="md:w-80"
-            placeholder="Хайх..."
-            value={search.global.value}
-            onChange={(e) => {
-              let _search = { ...search };
-              _search["global"].value = e.target.value;
-              setSearch(_search);
-              dispatch({ type: "STATE", data: { tn: null } });
-            }}
-          />
-          // <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
-
-          // </div>
+          <div className="flex items-center justify-between  text-sm">
+            {state.info_type.year} оны {state.info_type.type_name}-нд хамрагдах
+            ажилтнууд
+            <Input.Search
+              className="md:w-80"
+              placeholder="Хайх..."
+              value={search.global.value}
+              onChange={(e) => {
+                let _search = { ...search };
+                _search["global"].value = e.target.value;
+                setSearch(_search);
+                dispatch({ type: "STATE", data: { tn: null } });
+              }}
+            />
+          </div>
         }
         rowGroupHeaderTemplate={(data) => {
           return (

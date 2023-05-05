@@ -71,7 +71,7 @@ const Card = () => {
           await res.map((el) => {
             console.log(el);
             // eslint-disable-next-line no-sequences
-            labels.push(_.concat(el.count_all, el.departmentname));
+            labels.push(el.departmentname);
             chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);
             chartsdata2.push(el.count_unique === 0 ? 5 : el.count_unique);
 
@@ -120,11 +120,13 @@ const Card = () => {
                   <path d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
-
+              <p className="text-sm whitespace-pre-wrap  font-medium text-gray-500">
+                Сургалтанд хамрагдах ажилтнуудын тоо 
+              </p>
               <div className="mt-4 border-t-2 border-blue-100 py-2">
                 <div className="flex justify-center items-center gap-2 ">
                   <p className="text-sm font-bold uppercase text-gray-600">
-                    Нийт:
+                   Давхардсан тоо:
                   </p>
                   <h3 className="text-2xl font-bold text-[#14b8a6] hover:scale-110 ">
                     {item.count_all}
@@ -132,7 +134,7 @@ const Card = () => {
                 </div>
                 <div className="flex justify-center items-center gap-2">
                   <p className="text-sm font-semi-bold uppercase text-gray-600">
-                    Ажилтнуудын тоо :
+                    Давхардаагүй тоо :
                   </p>
                   <h3 className="text-xl font-bold text-gray-600 hover:scale-110">
                     {item.count_unique}
@@ -140,10 +142,6 @@ const Card = () => {
                 </div>
               </div>
             </div>
-
-            {/* <p className="text-xs whitespace-pre-wrap  font-medium text-gray-500">
-                Сургалтанд хамрагдах ажилтнууд :
-              </p> */}
           </div>
         ))}
       </div>
@@ -155,8 +153,8 @@ const Card = () => {
       <div className="card  p-4">
         <div className="w-full inline-flex items-center gap-2 text-bold  text-emerald-600">
           <Tag
-            className="mr-2"
-            severity="info"
+            className="mr-2 uppercase px-3"
+            severity="success"
             icon="pi pi-chart-line"
             value="Нийт"
           ></Tag>
@@ -189,7 +187,12 @@ const Card = () => {
     return (
       <div className="card  p-4 ">
         <div className="w-full  inline-flex items-center gap-2 text-red-500   ">
-          <Tag severity="info" value="Ажилтнуудын тоо" icon="pi pi-check"></Tag>
+          <Tag
+            severity="warning"
+            value="Ажилтнуудын тоо"
+            icon="pi pi-check"
+            className="px-3 uppercase"
+          ></Tag>
         </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2"></div>
         <Chart
@@ -218,7 +221,11 @@ const Card = () => {
     return (
       <div className="card  p-4">
         <div className="w-full inline-flex items-center gap-2 text-bold  ">
-          <Tag severity="info" value={modulename} className=" px-5"></Tag>
+          <Tag
+            severity="info"
+            value={modulename}
+            className="uppercase px-5"
+          ></Tag>
         </div>
         <div className="mt-2 border-t-2 border-blue-100 py-2 "></div>
         <Chart
@@ -234,7 +241,7 @@ const Card = () => {
                 data: barData1,
               },
               {
-                label: "Давхацсан",
+                label: "Ажилтнуудын тоо",
                 backgroundColor: ["#14b8a6"],
                 borderColor: ["#14b8a6"],
                 data: barData2,

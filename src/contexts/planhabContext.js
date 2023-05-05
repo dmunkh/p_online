@@ -21,6 +21,8 @@ const _state = {
   department_id: null,
   position_id: null,
   moduleid: null,
+
+  info_position: [],
 };
 
 export const usePlanHabContext = () => {

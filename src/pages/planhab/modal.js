@@ -2,7 +2,7 @@ import React from "react";
 import * as API from "src/api/planhab";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanHabContext } from "src/contexts/planhabContext";
-import Type from "src/components/custom/type";
+import Type from "src/components/custom/typeYear";
 
 // import _ from "lodash";
 
@@ -19,6 +19,7 @@ const ModalNormDetail = () => {
           Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
         </span>
         <Type
+          year={2023}
           module_id={1}
           value={state.modaltypeid}
           onChange={(value) => {

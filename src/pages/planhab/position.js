@@ -83,7 +83,12 @@ const List = () => {
             rowGroupMode="subheader"
             groupRowsBy="departmentname"
             scrollHeight={window.innerHeight - 360}
-            globalFilterFields={["tn", "shortname", "positionname"]}
+            globalFilterFields={[
+              "tn",
+              "shortname",
+              "positionname",
+              "departmentname",
+            ]}
             emptyMessage={
               <div className="text-xs text-orange-500 italic font-semibold">
                 Мэдээлэл олдсонгүй...
@@ -125,6 +130,7 @@ const List = () => {
                   id: e.data.id,
                   position_id: e.data.positionid,
                   department_id: e.data.departmentid,
+                  info_position: e,
                 },
               });
             }}
@@ -213,6 +219,15 @@ const List = () => {
             <Column
               header="Ажилтны тоо"
               field="worker_count"
+              align="center"
+              sortable
+              className="text-xs"
+              headerClassName="flex items-center justify-center"
+              style={{ minWidth: "150px", maxWidth: "150px" }}
+            />
+            <Column
+              header="Сургалтын тоо"
+              field="count_norm"
               align="center"
               sortable
               className="text-xs"

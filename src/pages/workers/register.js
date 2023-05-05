@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { FilterMatchMode } from "primereact/api";
-import _ from "lodash";
+import _, { rest } from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
@@ -9,6 +9,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import MODAL from "src/pages/workers/modal";
 import MODALTRANSFER from "src/pages/workers/modaltransfer";
+import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
@@ -32,32 +33,30 @@ const List = () => {
   // const [indeterminate, setIndeterminate] = useState(false);
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
-  const [list_count, setList_count] = useState(0);
+  const [cnt, setCnt] = useState([]);
 
   useEffect(() => {
     setLoading(true);
-    API.getWorkers({
-      department_id: state.department,
-      lesson_id: state.lessonid,
-    })
-      .then((res) => {
-        // dispatch({ type: "STATE", data: { list_count: res.length } });
-        setList(_.orderBy(res, ["department_code"]));
-      })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
 
     API.getWorkers({
-      department_id: 0,
-      lesson_id: state.lessonid,
+      department_id: state.department,
+      lesson_id: state.lesson.id,
     })
       .then((res) => {
-        dispatch({ type: "STATE", data: { list_count: res.length } });
-        // setList(_.orderBy(res, ["department_code"]));
+        // res.list,
+        // res.limit,
+
+        dispatch({
+          type: "STATE",
+          data: {
+            lesson: res.lesson,
+            list_typeworker: _.map(res.list, (item) => {
+              return item.tn;
+            }),
+          },
+        });
+
+        setList(_.orderBy(res.list, ["department_code"]));
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -128,6 +127,17 @@ const List = () => {
   //       return null;
   //   }
   // };
+  const ss = (list) => {
+    var result = [];
+
+    _.map(list, (item) => {
+      _.map(item.attendance, (data) => {
+        data.checked && result.push(data.checked);
+      });
+    });
+
+    return result.length;
+  };
 
   return (
     <div className="p-2 rounded text-xs">
@@ -137,12 +147,26 @@ const List = () => {
         visible={state.modal}
         // visible={true}
         onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
-        title={"Төлөвлөгөөт ажилтан бүртгэл"}
+        title={"Сургалтанд суух ажилтан бүртгэл"}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
         <MODAL />
       </Modal>
+
+      <Modal
+        width={800}
+        height={600}
+        visible={state.modal_att}
+        // visible={true}
+        onCancel={() => dispatch({ type: "STATE", data: { modal_att: false } })}
+        title={"Ирц бүртгэл"}
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_ATT />
+      </Modal>
+
       <Modal
         width={800}
         height={600}
@@ -173,7 +197,11 @@ const List = () => {
                   footer="Нийт ажилтнууд:"
                   footerStyle={{ textAlign: "right" }}
                 />
-                <Column colSpan={9} footer={list.length} />
+                <Column colSpan={3} footer={list.length} />
+                <Column
+                  colSpan={7}
+                  footer={"Ирц: " + list.length + "/" + ss(list)}
+                />
               </Row>
             </ColumnGroup>
           }
@@ -202,6 +230,24 @@ const List = () => {
               />
 
               <div className="flex items-center gap-3">
+                {checkRole(["register_attendance_crud"]) && (
+                  <div
+                    title="Ирц бүртгэх"
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                    onClick={() => {
+                      dispatch({ type: "CLEAR" });
+                      dispatch({
+                        type: "STATE",
+                        data: { list_checked: [] },
+                      });
+                      dispatch({ type: "STATE", data: { modal_att: true } });
+                    }}
+                  >
+                    <i className="ft-log-in text-sm" />
+                    <i className="ft-plus" />
+                  </div>
+                )}
+
                 <div className="flex items-center justify-between gap-2">
                   {checkGroup([173, 306, 307, 378, 386, 387]) ? (
                     <>
@@ -218,11 +264,11 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        {state.limit_count}/{state.list_count}{" "}
+                        {state.lesson.limit}/{state.lesson.count_register}{" "}
                         <i className="ft-plus" />
                       </div>
                     </>
-                  ) : state.limit_count - state.list_count > 0 ? (
+                  ) : state.lesson.limit - state.lesson.count_register > 0 ? (
                     <div
                       title="Нэмэх"
                       className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
@@ -235,16 +281,16 @@ const List = () => {
                         dispatch({ type: "STATE", data: { modal: true } });
                       }}
                     >
-                      <i className="ft-users" /> {state.limit_count}/
-                      {state.list_count} <i className="ft-plus" />
+                      <i className="ft-users" /> {state.lesson.limit}/
+                      {state.lesson.count_register} <i className="ft-plus" />
                     </div>
                   ) : (
                     <div
                       title="Нэмэх"
                       className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
                     >
-                      <i className="ft-user-check" /> {state.limit_count} /{" "}
-                      {state.list_count}{" "}
+                      <i className="ft-user-check" /> {state.lesson.limit}/
+                      {state.lesson.count_register}
                     </div>
                   )}
                 </div>
@@ -267,13 +313,14 @@ const List = () => {
           />
           <Column field="short_name" header="Овог нэр" />
           <Column field="position_name" header="Албан тушаал" />
+
           <Column
             field="status"
             header="Ирц"
             style={{ minWidth: "200px", maxWidth: "200px" }}
             body={(data) => {
               return (
-                <div className="flex flex-wrap items-center gap-2 text-xs">
+                <div className="flex  items-left gap-2 text-xs">
                   {_.map(data.attendance, (item) => (
                     <Checkbox
                       key={item.id}
@@ -315,46 +362,49 @@ const List = () => {
               );
             }}
           />
-          <Column
-            field="is_repeat"
-            align="center"
-            header="Давтан эсэх"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
-            className="text-xs w-[100px]"
-            body={(item) => {
-              return (
-                <Checkbox
-                  key={item.id}
-                  checked={item.is_repeat}
-                  onChange={
-                    (e) => {
-                      var result = list;
-                      var index = _.findIndex(list, { id: item.id });
-                      result[index].is_repeat = e.target.checked;
 
-                      setList(result);
-                      setDraw(draw + 1);
+          {checkRole(["register_repeat_crud"]) && (
+            <Column
+              field="is_repeat"
+              align="center"
+              header="Давтан эсэх"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              className="text-xs w-[100px]"
+              body={(item) => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    checked={item.is_repeat}
+                    onChange={
+                      (e) => {
+                        var result = list;
+                        var index = _.findIndex(list, { id: item.id });
+                        result[index].is_repeat = e.target.checked;
 
-                      API.putWorker(item.id, {
-                        is_repeat: e.target.checked,
-                        point: _.toInteger(item.point),
-                      });
+                        setList(result);
+                        setDraw(draw + 1);
+
+                        API.putWorker(item.id, {
+                          is_repeat: e.target.checked,
+                          point: _.toInteger(item.point),
+                        });
+                      }
+                      // check_position(e, item)
                     }
-                    // check_position(e, item)
-                  }
-                />
-              );
-            }}
-          />
+                  />
+                );
+              }}
+            />
+          )}
 
           <Column
             field="point"
             header="Шалгалтын оноо"
             style={{ width: "150px" }}
             body={(data, row) => {
-              return (
+              return checkRole(["register_point_crud"]) ? (
                 <InputNumber
-                  max={20}
+                  max={200}
                   align="center"
                   value={data.point}
                   onChange={(value) => {
@@ -375,6 +425,15 @@ const List = () => {
                           e.target.value === null
                             ? null
                             : _.toInteger(e.target.value),
+                      }).then(() => {
+                        dispatch({
+                          type: "STATE",
+                          data: { refresh: state.refresh + 1 },
+                        });
+                        message({
+                          type: "success",
+                          title: "Амжилттай хадгалагдлаа",
+                        });
                       });
                     }
                   }}
@@ -385,6 +444,8 @@ const List = () => {
                     // });
                   }}
                 />
+              ) : (
+                data.point
               );
             }}
           />
@@ -398,7 +459,15 @@ const List = () => {
             header="Тэнцсэн эсэх"
             style={{ minWidth: "100px", maxWidth: "100px" }}
             body={(data) => {
-              return data.is_success ? "Тийм" : "Үгүй";
+              var result = "";
+              if (data.is_success !== null)
+                result = data.is_success ? (
+                  <i className="ft-check-circle text-2xl text-green-600" />
+                ) : (
+                  <i className="ft-x text-lg text-red-600 border-red-600 border rounded-full p-0.5" />
+                );
+
+              return result;
             }}
           />
           <Column
@@ -408,7 +477,7 @@ const List = () => {
             body={(item) => {
               return (
                 <div className="flex items-center justify-center gap-2">
-                  {checkRole(["type_edit"]) && (
+                  {/* {checkRole(["type_edit"]) && (
                     <button
                       className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                       onClick={() => {
@@ -420,7 +489,7 @@ const List = () => {
                     >
                       <i className="ft-edit" />
                     </button>
-                  )}
+                  )} */}
 
                   {checkRole(["type_delete"]) && (
                     <button

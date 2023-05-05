@@ -76,13 +76,13 @@ const ModalNormDetail = () => {
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {
             API.postWorker({
-              lesson_id: state.lessonid,
+              lesson_id: state.lesson.id,
               tns: _.join(state.list_checked, ","),
             })
               .then((res) => {
                 dispatch({
                   type: "STATE",
-                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                  data: { refresh: state.refresh + 1 },
                 });
               })
               .catch((error) =>
@@ -107,13 +107,13 @@ const ModalNormDetail = () => {
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {
             API.postWorker({
-              lesson_id: state.lessonid,
+              lesson_id: state.lesson.id,
               tns: _.join(state.list_checked, ","),
             })
               .then((res) => {
                 dispatch({
                   type: "STATE",
-                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                  data: { refresh: state.refresh + 1 },
                 });
               })
               .catch((error) =>
