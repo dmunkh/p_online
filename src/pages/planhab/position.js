@@ -130,6 +130,7 @@ const List = () => {
                   id: e.data.id,
                   position_id: e.data.positionid,
                   department_id: e.data.departmentid,
+                  info_position: e,
                 },
               });
             }}

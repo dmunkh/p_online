@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { FilterMatchMode } from "primereact/api";
-import _ from "lodash";
+import _, { rest } from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
@@ -33,43 +33,29 @@ const List = () => {
   // const [indeterminate, setIndeterminate] = useState(false);
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
-  const [list_count, setList_count] = useState(0);
+  const [cnt, setCnt] = useState([]);
 
   useEffect(() => {
     setLoading(true);
     API.getWorkers({
       department_id: state.department,
-      lesson_id: state.lessonid,
+      lesson_id: state.lesson.id,
     })
       .then((res) => {
-        // dispatch({ type: "STATE", data: { list_count: res.length } });
+        // res.list,
+        // res.limit,
 
         dispatch({
           type: "STATE",
           data: {
-            list_typeworker: _.map(res, (item) => {
-              console.log(item.tn);
+            lesson: res.lesson,
+            list_typeworker: _.map(res.list, (item) => {
               return item.tn;
             }),
           },
         });
 
-        setList(_.orderBy(res, ["department_code"]));
-      })
-      .catch((error) =>
-        message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-      )
-      .finally(() => {
-        setLoading(false);
-      });
-
-    API.getWorkers({
-      department_id: 0,
-      lesson_id: state.lessonid,
-    })
-      .then((res) => {
-        dispatch({ type: "STATE", data: { list_count: res.length } });
-        // setList(_.orderBy(res, ["department_code"]));
+        setList(_.orderBy(res.list, ["department_code"]));
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -140,6 +126,17 @@ const List = () => {
   //       return null;
   //   }
   // };
+  const ss = (list) => {
+    var result = [];
+
+    _.map(list, (item) => {
+      _.map(item.attendance, (data) => {
+        data.checked && result.push(data.checked);
+      });
+    });
+
+    return result.length;
+  };
 
   return (
     <div className="p-2 rounded text-xs">
@@ -199,7 +196,11 @@ const List = () => {
                   footer="Нийт ажилтнууд:"
                   footerStyle={{ textAlign: "right" }}
                 />
-                <Column colSpan={9} footer={list.length} />
+                <Column colSpan={3} footer={list.length} />
+                <Column
+                  colSpan={7}
+                  footer={"Ирц: " + list.length + "/" + ss(list)}
+                />
               </Row>
             </ColumnGroup>
           }
@@ -241,7 +242,6 @@ const List = () => {
                       dispatch({ type: "STATE", data: { modal_att: true } });
                     }}
                   >
-                    {/* {state.limit_count}/{state.list_count}{" "} */}
                     <i className="ft-log-in text-sm" />
                     <i className="ft-plus" />
                   </div>
@@ -263,11 +263,11 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        {state.limit_count}/{state.list_count}{" "}
+                        {state.lesson.limit}/{state.lesson.count_register}{" "}
                         <i className="ft-plus" />
                       </div>
                     </>
-                  ) : state.limit_count - state.list_count > 0 ? (
+                  ) : state.lesson.limit - state.lesson.count_register > 0 ? (
                     <div
                       title="Нэмэх"
                       className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
@@ -280,16 +280,16 @@ const List = () => {
                         dispatch({ type: "STATE", data: { modal: true } });
                       }}
                     >
-                      <i className="ft-users" /> {state.limit_count}/
-                      {state.list_count} <i className="ft-plus" />
+                      <i className="ft-users" /> {state.lesson.limit}/
+                      {state.lesson.count_register} <i className="ft-plus" />
                     </div>
                   ) : (
                     <div
                       title="Нэмэх"
                       className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
                     >
-                      <i className="ft-user-check" /> {state.limit_count} /{" "}
-                      {state.list_count}{" "}
+                      <i className="ft-user-check" /> {state.lesson.limit}/
+                      {state.lesson.count_register}
                     </div>
                   )}
                 </div>
@@ -476,7 +476,7 @@ const List = () => {
             body={(item) => {
               return (
                 <div className="flex items-center justify-center gap-2">
-                  {checkRole(["type_edit"]) && (
+                  {/* {checkRole(["type_edit"]) && (
                     <button
                       className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                       onClick={() => {
@@ -488,7 +488,7 @@ const List = () => {
                     >
                       <i className="ft-edit" />
                     </button>
-                  )}
+                  )} */}
 
                   {checkRole(["type_delete"]) && (
                     <button

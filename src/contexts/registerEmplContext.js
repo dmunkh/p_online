@@ -5,30 +5,46 @@ import moment from "moment";
 const context = React.createContext();
 
 const _state = {
+  date: moment(),
+  module: null,
+  department: null,
   list: [],
   refresh: 0,
+
+  lessonlistfilter: [],
+  lessonlist: [],
+
+  lesson: null,
+
   modal: false,
   modaltransfer: false,
   modaltransferTypeYear: null,
-  modaltypeid: null,
   moduleid: null,
+  modaltypeid: null,
+
   list_checked: [],
   list_position: [],
-  date: moment(),
   selectedpositionname: null,
   tns: null,
-  lessonid: null,
-  lessonlist: [],
-  lessonlistfilter: [],
-  limit_count: null,
-  list_count: null,
 
   list_planworker: [],
   list_typeworker: [],
 
   modal_att: false,
+  info_type: [],
 
-  single_page: false,
+  page: {
+    date: moment(),
+    module: null,
+    department: null,
+    list: [],
+    list_filter: [],
+    filter: null,
+    refresh: 0,
+  },
+  register: {
+    list: [],
+  },
 };
 
 export const useRegisterEmplContext = () => {
