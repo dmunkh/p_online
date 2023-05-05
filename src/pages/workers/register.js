@@ -37,6 +37,7 @@ const List = () => {
 
   useEffect(() => {
     setLoading(true);
+
     API.getWorkers({
       department_id: state.department,
       lesson_id: state.lesson.id,
