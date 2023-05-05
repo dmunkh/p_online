@@ -312,56 +312,56 @@ const List = () => {
           />
           <Column field="short_name" header="Овог нэр" />
           <Column field="position_name" header="Албан тушаал" />
-          {checkRole(["register_attendance_crud"]) && (
-            <Column
-              field="status"
-              header="Ирц"
-              style={{ minWidth: "200px", maxWidth: "200px" }}
-              body={(data) => {
-                return (
-                  <div className="flex items-left gap-2 text-xs">
-                    {_.map(data.attendance, (item) => (
-                      <Checkbox
-                        key={item.id}
-                        checked={item.checked}
-                        onChange={
-                          (e) => {
-                            var result = list;
 
-                            var index = _.findIndex(result, {
-                              id: data.id,
-                            });
-                            var index1 = _.findIndex(result[index].attendance, {
-                              id: item.id,
-                            });
+          <Column
+            field="status"
+            header="Ирц"
+            style={{ minWidth: "200px", maxWidth: "200px" }}
+            body={(data) => {
+              return (
+                <div className="flex  items-left gap-2 text-xs">
+                  {_.map(data.attendance, (item) => (
+                    <Checkbox
+                      key={item.id}
+                      checked={item.checked}
+                      onChange={
+                        (e) => {
+                          var result = list;
 
-                            result[index].attendance[index1].checked =
-                              e.target.checked;
+                          var index = _.findIndex(result, {
+                            id: data.id,
+                          });
+                          var index1 = _.findIndex(result[index].attendance, {
+                            id: item.id,
+                          });
 
-                            setList(result);
-                            setDraw(draw + 1);
+                          result[index].attendance[index1].checked =
+                            e.target.checked;
 
-                            API.postAttendance({
-                              attendance_id: item.id,
-                              checked: e.target.checked,
-                              register_id: data.id,
-                            });
-                          }
-                          // check_position(e, item)
+                          setList(result);
+                          setDraw(draw + 1);
+
+                          API.postAttendance({
+                            attendance_id: item.id,
+                            checked: e.target.checked,
+                            register_id: data.id,
+                          });
                         }
-                      >
-                        <span className="text-xs">
-                          {moment(item.attendance_date).format(
-                            "YYYY.MM.DD HH:mm"
-                          )}
-                        </span>
-                      </Checkbox>
-                    ))}
-                  </div>
-                );
-              }}
-            />
-          )}
+                        // check_position(e, item)
+                      }
+                    >
+                      <span className="text-xs">
+                        {moment(item.attendance_date).format(
+                          "YYYY.MM.DD HH:mm"
+                        )}
+                      </span>
+                    </Checkbox>
+                  ))}
+                </div>
+              );
+            }}
+          />
+
           {checkRole(["register_repeat_crud"]) && (
             <Column
               field="is_repeat"

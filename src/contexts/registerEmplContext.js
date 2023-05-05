@@ -27,6 +27,8 @@ const _state = {
   list_typeworker: [],
 
   modal_att: false,
+
+  single_page: false,
 };
 
 export const useRegisterEmplContext = () => {

@@ -70,7 +70,7 @@ const Modal_att = () => {
         API.postAttendanceCard({
           lesson_id: state.lessonid,
           attendance_id: card.attendance,
-          tn: tn,
+          tn: _.toString(_.toInteger(tn)),
         })
           .then((res) => {
             dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
