@@ -461,17 +461,17 @@ const Training = () => {
           bodyClassName="flex items-center justify-start text-left"
           body={(data) => {
             var result = data.attendance;
-        
+
             return (
               <div className="">
                 {_.map(_.orderBy(result, ["id"]), (item) => {
                   return (
                     <div key={item.id} className="flex flex-col justify-center">
                       <span className="pl-3 justify-center">
-                        {item.id} -{" "}
-                        {moment(item.attendance_date).format(
-                          "YYYY.MM.DD  HH:MM"
-                        )}
+                        {item.id} -
+                        {moment(item.attendance_date)
+                          .utc()
+                          .format("YYYY.MM.DD  HH:mm")}
                       </span>
                     </div>
                   );
