@@ -10,7 +10,6 @@ const Navbar = () => {
   const [menu, setMenu] = useState([]);
   const [dropdown, setDropDown] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  console.log(window.location.pathname.split("/")[1]);
   useEffect(() => {
     if (user.tn !== 0) {
       var allMenu = user.usermenu;
