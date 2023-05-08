@@ -33,7 +33,10 @@ const Header = () => {
               title="Буцах"
               className="px-3 flex items-center justify-center text-blue-700 text-lg border rounded-md cursor-pointer hover:scale-110 duration-300 h-10"
               onClick={() =>
-                dispatch({ type: "STATE", data: { lesson: null } })
+                dispatch({
+                  type: "STATE",
+                  data: { lesson: null },
+                })
               }
             >
               <i className="fa fa-arrow-left" />

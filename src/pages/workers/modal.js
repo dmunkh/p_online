@@ -51,10 +51,10 @@ const ModalNormDetail = () => {
           <Switch
             className="bg-green-300"
             checkedChildren={
-              <span className="text-blue-500 "> Нийт ажилтнууд</span>
+              <span className="text-blue-500 "> Төлөвлөгөөт ажилтнууд</span>
             }
             unCheckedChildren={
-              <span className="text-blue-500 "> Төлөвлөгөөт ажилтнууд </span>
+              <span className="text-blue-500 "> Нийт ажилтнууд </span>
             }
             checked={checked}
             onChange={(value) => {

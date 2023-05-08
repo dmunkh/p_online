@@ -38,9 +38,13 @@ const Moduletype = () => {
               onClick={(value) => {
                 dispatch({
                   type: "STATE",
-                  data: { lessonlistfilter: state.lessonlist },
+                  data: {
+                    lessonlistfilter: state.lessonlist,
+                    selected_typeId: null,
+                  },
                 });
-                setType_id(null);
+
+                // setType_id(null);
               }}
             >
               <span className="text-xs font-bold">НИЙТ СУРГАЛТ</span>
@@ -55,7 +59,9 @@ const Moduletype = () => {
                   key={item.id}
                   className={
                     "list-group-item hover:bg-[#dedbf1] cursor-pointer flex items-center justify-between " +
-                    (type_id === item.type_id ? " text-blue-500 font-bold" : "")
+                    (state.selected_typeId === item.type_id
+                      ? " text-blue-500 font-bold"
+                      : "")
                   }
                   style={{ paddingTop: "5px", paddingBottom: "2px" }}
                   onClick={(value) => {
@@ -66,10 +72,13 @@ const Moduletype = () => {
                       result,
                       (a) => a.type_id === item.type_id
                     );
-                    setType_id(item.type_id);
+
                     dispatch({
                       type: "STATE",
-                      data: { lessonlistfilter: filter },
+                      data: {
+                        lessonlistfilter: filter,
+                        selected_typeId: item.type_id,
+                      },
                     });
                   }}
                 >
