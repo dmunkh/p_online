@@ -201,7 +201,7 @@ const Modul = () => {
 
   return (
     <>
-      <div className="card flex  text-xs h-screen  rounded p-2">
+      <div className="  text-xs  rounded p-2">
         <Spin
           tip="Уншиж байна."
           className="min-h-full first-line:bg-opacity-80"

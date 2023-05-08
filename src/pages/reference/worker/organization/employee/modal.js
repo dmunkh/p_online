@@ -6,6 +6,7 @@ import * as API from "src/api/request";
 import { Select, Input, Modal } from "antd";
 
 import _ from "lodash";
+import SaveButton from "src/components/SaveButton";
 
 const Component = (data) => {
   const { message } = useUserContext();
@@ -13,10 +14,14 @@ const Component = (data) => {
 
   const save = () => {
     var error = [];
-    // state.selected_employee.organization_id ||
-    //   error.push("Байгууллага:");
-    //   state.selected_employee.short_name ||
-    //   error.push("Нэр:");
+    state.organizationID ||
+      error.push("Байгууллага:");
+      state.selected_employee.position_name ||
+      error.push("Албан тушаал:");
+      state.selected_employee.register_number ||
+      error.push("Регистер:");
+      state.selected_employee.short_name ||
+      error.push("Нэр:");
     const data = {
       organization_id: state.organizationID,
       position_name: state.selected_employee.position_name,
@@ -178,29 +183,15 @@ const Component = (data) => {
           </div>
         </div>
         <hr className="my-2" />
-        <div className="flex gap-4">
-          <button
-            className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
+    
+          <SaveButton
             onClick={() => save()}
           >
-            {/* <i className="fas fa-save" /> */}
-            <span className="ml-2">Хадгалах</span>
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
-            onClick={() => {
-              dispatch({
-                type: "STATE",
-                data: {
-                  modal: false,
-                },
-              });
-            }}
-          >
-            <i className=" mr-2"></i>Хаах
-          </button>
-        </div>
+          
+           
+          </SaveButton>
+        
+   
       </Modal>
     </>
   );

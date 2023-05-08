@@ -27,6 +27,7 @@ const List = () => {
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
   const [module, setModule] = useState(1);
+  const [isPrice, setIsPrice] = useState(false);
 
   // жагсаалт
   useLayoutEffect(() => {
@@ -78,27 +79,34 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module]);
   useLayoutEffect(() => {
-    state.selected_typeyear.type_id &&
-      API.getTypes(state.selected_typeyear.type_id)
-        .then((res) => {
-          dispatch({
-            type: "STATE",
-            data: {
-              price_emc: res.price_emc,
-              price_organization: res.price_organization,
-            },
+    
+      state.selected_typeyear.type_id &&
+        API.getTypes(state.selected_typeyear.type_id)
+          .then((res) => {
+           
+            dispatch({
+              type: "STATE",
+              data: {
+                selected_typeyear: {
+                  ...state.selected_typeyear,
+                  price_emc: res.price_emc,
+                  price_organization: res.price_organization,
+                },
+              },
+            });
+          })
+          .catch((error) => {
+            message({
+              type: "error",
+              error,
+              title: "Жагсаалт татаж чадсангүй",
+            });
           });
-        })
-        .catch((error) => {
-          message({
-            type: "error",
-            error,
-            title: "Жагсаалт татаж чадсангүй",
-          });
-        });
-    console.log(state.price_emc);
+      console.log(state.price_emc);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selected_typeyear.type_id]);
+  , [state.selected_typeyear.type_id]);
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -153,7 +161,9 @@ const List = () => {
   }
   return (
     <div className="card flex justify-center text-xs rounded p-2">
-      <div className="md:flex justify-start rounded gap-4 my-3 mx-2 md:w-1/5">
+      <div className="md:flex justify-start rounded gap-4 my-3 mx-2 md:w-1/3">
+      <div className="w-full flex items-center pl-2">
+      <span className="pr-3 font-semibold text-xs">Огноо:</span>
         <DatePicker
           size="large"
           defaultValue={dayjs(date, yearFormat)}
@@ -164,14 +174,15 @@ const List = () => {
             setDate(e.$y);
           }}
         />
-        <div className="w-full md:min-w-[200px]">
+   <span className="px-3 font-semibold text-xs">Сургалтын бүлэг:</span>
           <Module
             value={module}
             onChange={(value) => {
               setModule(value);
             }}
           />
-        </div>
+      
+      </div>
       </div>
       <DataTable
         scrollable
@@ -404,7 +415,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal />
+      <Modal setIsPrice={setIsPrice} isPrice={isPrice} />
     </div>
   );
 };

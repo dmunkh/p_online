@@ -5,7 +5,6 @@ import * as API from "src/api/request";
 
 import { Select, InputNumber, Modal, Input } from "antd";
 
-
 import { Toast } from "primereact/toast";
 
 import _ from "lodash";
@@ -13,7 +12,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 const { Option } = Select;
 
-const Component = () => {
+const Component = ({ setIsPrice, isPrice }) => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
@@ -59,28 +58,20 @@ const Component = () => {
     };
 
     if (error.length > 0) {
-      toast.current.show({
-        sticky: true,
-        severity: "warn",
-        //   summary: "Дараах мэдээлэл дутуу байна",
-        className: "",
-        content: (
-          <div
-            className="flex flex-column align-items-center "
-            style={{ flex: "1" }}
-          >
-            <div className="text-center">
-              <div className="font-bold text-xl my-3">
-                Дараах мэдээлэл дутуу байна
+      message({
+        type: "warning",
+        title: (
+          <div className="text-orange-500 font-semibold">
+            Дараах мэдээлэл дутуу байна
+          </div>
+        ),
+        description: (
+          <div className="flex flex-col gap-1">
+            {_.map(error, (item, index) => (
+              <div key={index}>
+                - <span className="ml-1">{item}</span>
               </div>
-            </div>
-            <div className="flex gap-2">
-              {_.map(error, (item, index) => (
-                <div key={index}>
-                  - <span className="ml-1">{item}</span>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         ),
       });
@@ -98,12 +89,13 @@ const Component = () => {
           });
           dispatch({ type: "CLEAR_TYPEYEAR" });
           dispatch({ type: "STATE", data: { modal: false } });
-          toast.current.show({
-            severity: "success",
-            summary: "Амжилттай",
-            detail: "Амжилттай хадгалагдлаа",
-          });
-          // message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+          // toast.current.show({
+          //   severity: "success",
+          //   summary: "Амжилттай",
+          //   detail: "Амжилттай хадгалагдлаа",
+          // });
+          message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+          console.log(data)
         })
         .catch((error) => {
           // toast.current.show({
@@ -130,26 +122,27 @@ const Component = () => {
             },
           });
           dispatch({ type: "STATE", data: { modal: false } });
-          toast.current.show({
-            severity: "success",
-            summary: "Амжилттай",
-            detail: "Амжилттай хадгалагдлаа",
-          });
+          // toast.current.show({
+          //   severity: "success",
+          //   summary: "Амжилттай",
+          //   detail: "Амжилттай хадгалагдлаа",
+          // });
 
-          // message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+          message({ type: "success", title: "Амжилттай хадгалагдлаа" });
+          console.log(data)
         })
         .catch((error) => {
-          toast.current.show({
-            severity: "error",
-            summary: "Алдаа",
-            detail: error.response.data.msg,
-          });
-
-          // message({
-          //   type: "error",
-          //   error,
-          //   title: error.response.data.msg,
+          // toast.current.show({
+          //   severity: "error",
+          //   summary: "Алдаа",
+          //   detail: error.response.data.msg,
           // });
+
+          message({
+            type: "error",
+            error,
+            title: error.response.data.msg,
+          });
         });
     }
   };
@@ -183,6 +176,7 @@ const Component = () => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
+              setIsPrice(true);
               dispatch({
                 type: "STATE",
                 data: {
@@ -227,9 +221,7 @@ const Component = () => {
             ))}
           </Select>
           <div className="my-2 " />
-          <span className="font-semibold pb-1">
-            Суух ажилчидын тоо:
-          </span>
+          <span className="font-semibold pb-1">Суух ажилчидын тоо:</span>
           <Input
             type="number"
             size="small"
@@ -269,14 +261,14 @@ const Component = () => {
             }}
           />
           <div className="my-2 " />
-          <span className="font-semibold pb-1">
-            Сургалтын үнэ:
-          </span>
+          <span className="font-semibold pb-1">Сургалтын үнэ:</span>
           <Input
             type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
-            value={state.selected_typeyear.price_emc}
+            value={
+               state.selected_typeyear.price_emc
+            }
             onChange={(e) => {
               dispatch({
                 type: "STATE",
@@ -292,7 +284,6 @@ const Component = () => {
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үнэ /Гадны байгууллага/:
-           
           </span>
           <Input
             type="number"
@@ -307,15 +298,12 @@ const Component = () => {
                     ...state.selected_typeyear,
                     price_organization: e.target.value,
                   },
-
                 },
               });
             }}
           />
           <div className="my-1 " />
-          <span className="font-semibold pb-1">
-            Шалгалтын оноо:
-          </span>
+          <span className="font-semibold pb-1">Шалгалтын оноо:</span>
           <Input
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
@@ -333,9 +321,7 @@ const Component = () => {
             }}
           />
           <div className="my-2 " />
-          <span className="font-semibold pb-1">
-            Тэнцэх хувь:
-          </span>
+          <span className="font-semibold pb-1">Тэнцэх хувь:</span>
           <Input
             type="number"
             size="small"

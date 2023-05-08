@@ -254,23 +254,28 @@ const Card = () => {
   return (
     <div className="md:px-20">
       <div className="card ">
-        <div className="md:w-1/3 md:flex justify-start md:gap-5 p-3 ">
+        <div className="md:w-1/2 md:flex justify-start md:gap-2 p-2 ">
+
+        <div className="flex items-center  text-xs gap-2">
+          <span className="pr-3 font-semibold text-xs">Огноо:</span>
           <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
             format={yearFormat}
             picker="year"
-            className="h-9 w-32 "
+            className="h-9 w-full "
             onChange={(e) => {
               setDate(e.$y);
             }}
           />
+          <span className="pr-3 font-semibold text-xs">Бүтцийн нэгж:</span>
           <DepartmentTseh
             value={tseh}
             onChange={(value) => {
               setTseh(value);
             }}
           />
+          </div>
         </div>
       </div>
       {cards}

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useLayoutEffect } from "react";
 import { useUserContext } from "../../contexts/userContext";
 import { useReferenceContext } from "../../contexts/referenceContext";
 import * as API from "../../api/request";
-import { Spin, Select, Input, Modal } from "antd";
+import { Spin, Select, Input, Modal, Card } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { SearchOutlined } from "@ant-design/icons";
@@ -16,6 +16,7 @@ const Chamber = () => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
+  const [dataList, setDataList] = useState([]);
   const [per_page, set_per_page] = useState(50);
 
   // жагсаалт
@@ -342,7 +343,18 @@ const Chamber = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_chamber, search, first, per_page]);
-
+  const onInputChange = async (e) => {
+    const newPlaceName = e.target.value;
+    dispatch({
+      type: "STATE",
+      data: { place_name: e.target.value },
+    });
+    await setDataList(
+      _.filter(state.list_chamber, (a) =>
+        _.includes(_.toLower(a.place_name), _.toLower(newPlaceName))
+      )
+    );
+  };
   return (
     <>
       <Modal
@@ -369,15 +381,22 @@ const Chamber = () => {
           </span>
           <Input
             size="small"
-            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            className="p-1 mb-2 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.place_name}
-            onChange={(e) => {
-              dispatch({
-                type: "STATE",
-                data: { place_name: e.target.value },
-              });
-            }}
+            onChange={onInputChange}
           />
+          <Card
+          className="overflow-auto"
+            style={{
+              height: "100px",
+              width: "100%",
+            }}
+          >
+            {dataList.length > 0 &&
+              dataList.map((data) => {
+                return <p key={data.place_name}>{data.place_name}</p>;
+              })}
+          </Card>
         </div>
 
         <div className="my-3 border " />

@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import { Input, Modal } from "antd";
+import { Input, Modal, Card } from "antd";
 
 import _ from "lodash";
 
 const Component = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
-
+  const [dataList, setDataList] = useState([]);
   const save = () => {
     var error = [];
     state.organization_name || error.push("Байгууллага:");
@@ -83,6 +83,21 @@ const Component = () => {
         });
     }
   };
+  const onInputChange = async (e) => {
+    const newOrganizationName = e.target.value;
+    dispatch({
+      type: "STATE",
+      data: { organization_name: e.target.value },
+    });
+    await setDataList(
+      _.filter(state.list_organization, (a) =>
+        _.includes(
+          _.toLower(a.organization_name),
+          _.toLower(newOrganizationName)
+        )
+      )
+    );
+  };
 
   return (
     <>
@@ -110,15 +125,23 @@ const Component = () => {
           </span>
           <Input
             size="small"
-            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            className="p-1 mb-2 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.organization_name}
-            onChange={(e) => {
-              dispatch({
-                type: "STATE",
-                data: { organization_name: e.target.value },
-              });
-            }}
+            onChange={onInputChange}
           />
+          <Card
+            className="overflow-auto"
+            style={{
+              height: "100px",
+              width: "100%",
+            }}
+          >
+            {dataList.length > 0 &&
+              dataList.map((data) => {
+                return <p
+                key={data.id}>{data.organization_name}</p>;
+              })}
+          </Card>
         </div>
 
         <div className="my-3 border " />
