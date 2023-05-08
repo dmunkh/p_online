@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import UseTrainingContext from "src/contexts/trainingContext";
 
 import TrainingList from "src/pages/registration/training/index";
+import PlanReport from "src/pages/reports/index";
 
 const Training = () => {
   const data = [
@@ -13,6 +14,14 @@ const Training = () => {
       component: (
         <UseTrainingContext>
           <TrainingList />
+        </UseTrainingContext>
+      ),
+    },
+    {
+      path: "/planreport",
+      component: (
+        <UseTrainingContext>
+          <PlanReport />
         </UseTrainingContext>
       ),
     },

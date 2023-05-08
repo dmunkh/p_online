@@ -39,8 +39,8 @@ const TypeList = (props) => {
       >
         {_.map(list, (item) => {
           return (
-            <Option key={item.type_id} value={item.type_id}>
-              {item.type_id} | {item.type_name}
+            <Option key={item.id} value={item.id}>
+              {item.id} | {item.type_name}
             </Option>
           );
         })}

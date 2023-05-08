@@ -53,3 +53,9 @@ export async function getTypesYear(params) {
   const response = await API().get("/type/year", { params: { ...params } });
   return response.data;
 }
+export async function getReportPlan(params) {
+  const response = await API().get("/report/plan/count", {
+    params: { ...params },
+  });
+  return response.data;
+}

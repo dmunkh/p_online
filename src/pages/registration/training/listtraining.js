@@ -11,7 +11,7 @@ import _ from "lodash";
 import Swal from "sweetalert2";
 import moment from "moment";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
-import dayjs from "dayjs";
+
 
 const Training = () => {
   const { message, checkRole } = useUserContext();
