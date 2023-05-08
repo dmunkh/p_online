@@ -35,6 +35,7 @@ const _state = {
   less_id: null,
   list_attendance_date: [],
   attendance_hour: "",
+  attendance_minut: "",
 };
 
 export const useTrainingContext = () => {

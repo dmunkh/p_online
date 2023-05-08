@@ -13,19 +13,23 @@ import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { MultiSelect } from "primereact/multiselect";
-
-import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
+import { Dropdown } from "primereact/dropdown";
+import { Spin, Input, Modal, InputNumber, Checkbox, Select } from "antd";
 import moment from "moment";
 import * as XLSX from "xlsx";
+import { Tag } from "primereact/tag";
+import { InputText } from "primereact/inputtext";
 
 const List = () => {
   const { user, message, checkRole, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
   });
-
+  const [filters, setFilters] = useState({
+    status: { value: null, matchMode: FilterMatchMode.EQUALS },
+  });
+  const { Option } = Select;
   // const [first, set_first] = useState(0);
   // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
@@ -37,6 +41,14 @@ const List = () => {
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
   const [cnt, setCnt] = useState([]);
+
+  const [statuses] = useState([
+    "unqualified",
+    "qualified",
+    "new",
+    "negotiation",
+    "renewal",
+  ]);
 
   useEffect(() => {
     if (state.department !== null) {
@@ -158,24 +170,25 @@ const List = () => {
   //   }
   // };
 
-  // const getSeverity = (status) => {
-  //   switch (status) {
-  //     case "unqualified":
-  //       return "danger";
+  const getSeverity = (status) => {
+    // eslint-disable-next-line default-case
+    switch (status) {
+      case "unqualified":
+        return "danger";
 
-  //     case "qualified":
-  //       return "success";
+      case "qualified":
+        return "success";
 
-  //     case "new":
-  //       return "info";
+      case "new":
+        return "info";
 
-  //     case "negotiation":
-  //       return "warning";
+      case "negotiation":
+        return "warning";
 
-  //     case "renewal":
-  //       return null;
-  //   }
-  // };
+      case "renewal":
+        return null;
+    }
+  };
   const ss = (list) => {
     var result = [];
 
@@ -187,30 +200,30 @@ const List = () => {
 
     return result.length;
   };
-  const representatives = [
-    { name: "true", image: "amyelsner.png" },
-    { name: "false", image: "annafali.png" },
-  ];
-  const representativeFilterTemplate = (options) => {
+
+  const statusRowFilterTemplate = (options) => {
     return (
-      <MultiSelect
-        value={options.value}
-        options={representatives}
-        itemTemplate={representativesItemTemplate}
-        onChange={(e) => {
-          options.filterCallback(e.value.name);
+      <Select
+        className="md:w-[80px]"
+        onChange={(value) => {
+          console.log(value);
+          var result = list;
+          if (value === 1)
+            setList(_.filter(result, (a) => a.is_success === true));
+          if (value === 2)
+            setList(_.filter(result, (a) => a.is_success === false));
         }}
-        optionLabel="name"
-        placeholder="Any"
-        className="p-column-filter"
-      />
-    );
-  };
-  const representativesItemTemplate = (option) => {
-    return (
-      <div className="flex align-items-center gap-2">
-        <span>{option.name}</span>
-      </div>
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Тэнцсэн
+        </Option>
+        <Option key={3} value={3}>
+          Тэнцээгүй
+        </Option>
+      </Select>
     );
   };
 
@@ -257,11 +270,14 @@ const List = () => {
         <MODALTRANSFER />
       </Modal>
       <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}>
+        {console.log(state.lesson)}
         <DataTable
           value={list}
           filters={search}
           className="table-xs text-xs"
           size="small"
+          // filters={filters}
+          // filterDisplay="row"
           responsiveLayout="scroll"
           rowHover
           rowGroupMode="subheader"
@@ -293,44 +309,68 @@ const List = () => {
           height={window.innerHeight - 800}
           globalFilterFields={["tn", "short_name", "position_name"]}
           header={
-            <div className="flex items-center justify-between  text-xs">
+            <div className="flex flex-col gap-2">
               <div>
-                <Input.Search
-                  className="md:w-80"
-                  placeholder="Хайх..."
-                  value={search.global.value}
-                  onChange={(e) => {
-                    let _search = { ...search };
-                    _search["global"].value = e.target.value;
-                    setSearch(_search);
-                    dispatch({ type: "STATE", data: { tn: null } });
-                  }}
-                />
+                {state.lesson.type_name} ( {state.lesson.begin_date} |{" "}
+                {state.lesson.end_date} ) Сургалтын хугацаа: {state.lesson.hour}{" "}
+                цаг, Суудлын тоо: {state.lesson.limit}, Байршил:{" "}
+                {state.lesson.place_name}
               </div>
-
-              <div className="flex items-center gap-3">
-                {checkRole(["register_attendance_crud"]) && (
-                  <div
-                    title="Ирц бүртгэх"
-                    className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                    onClick={() => {
-                      dispatch({ type: "CLEAR" });
-                      dispatch({
-                        type: "STATE",
-                        data: { list_checked: [] },
-                      });
-                      dispatch({ type: "STATE", data: { modal_att: true } });
+              <div className="flex items-center justify-between  text-xs">
+                <div>
+                  <Input.Search
+                    className="md:w-80"
+                    placeholder="Хайх..."
+                    value={search.global.value}
+                    onChange={(e) => {
+                      let _search = { ...search };
+                      _search["global"].value = e.target.value;
+                      setSearch(_search);
+                      dispatch({ type: "STATE", data: { tn: null } });
                     }}
-                  >
-                    <i className="ft-log-in text-sm" />
-                    <i className="ft-plus" />
-                  </div>
-                )}
+                  />
+                </div>
 
-                <div className="flex items-center justify-between gap-2">
-                  {checkGroup([173, 306, 307, 378, 386, 387]) ? (
-                    <>
-                      <i className="ft-users text-lg" />
+                <div className="flex items-center gap-3">
+                  {checkRole(["register_attendance_crud"]) && (
+                    <div
+                      title="Ирц бүртгэх"
+                      className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                      onClick={() => {
+                        dispatch({ type: "CLEAR" });
+                        dispatch({
+                          type: "STATE",
+                          data: { list_checked: [] },
+                        });
+                        dispatch({ type: "STATE", data: { modal_att: true } });
+                      }}
+                    >
+                      <i className="ft-log-in text-sm" />
+                      <i className="ft-plus" />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between gap-2">
+                    {checkGroup([173, 306, 307, 378, 386, 387]) ? (
+                      <>
+                        <i className="ft-users text-lg" />
+                        <div
+                          title="Нэмэх"
+                          className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                          onClick={() => {
+                            dispatch({ type: "CLEAR" });
+                            dispatch({
+                              type: "STATE",
+                              data: { list_checked: [] },
+                            });
+                            dispatch({ type: "STATE", data: { modal: true } });
+                          }}
+                        >
+                          {state.lesson.limit}/{state.lesson.count_register}{" "}
+                          <i className="ft-plus" />
+                        </div>
+                      </>
+                    ) : state.lesson.limit - state.lesson.count_register > 0 ? (
                       <div
                         title="Нэмэх"
                         className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
@@ -343,45 +383,29 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        {state.lesson.limit}/{state.lesson.count_register}{" "}
-                        <i className="ft-plus" />
+                        <i className="ft-users" /> {state.lesson.limit}/
+                        {state.lesson.count_register} <i className="ft-plus" />
                       </div>
-                    </>
-                  ) : state.lesson.limit - state.lesson.count_register > 0 ? (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                      onClick={() => {
-                        dispatch({ type: "CLEAR" });
-                        dispatch({
-                          type: "STATE",
-                          data: { list_checked: [] },
-                        });
-                        dispatch({ type: "STATE", data: { modal: true } });
-                      }}
-                    >
-                      <i className="ft-users" /> {state.lesson.limit}/
-                      {state.lesson.count_register} <i className="ft-plus" />
-                    </div>
-                  ) : (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
-                    >
-                      <i className="ft-user-check" /> {state.lesson.limit}/
-                      {state.lesson.count_register}
-                    </div>
-                  )}
-                </div>
-                {/* )} */}
+                    ) : (
+                      <div
+                        title="Нэмэх"
+                        className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
+                      >
+                        <i className="ft-user-check" /> {state.lesson.limit}/
+                        {state.lesson.count_register}
+                      </div>
+                    )}
+                  </div>
+                  {/* )} */}
 
-                <img
-                  alt=""
-                  title="Excel татах"
-                  src="/img/excel.png"
-                  className="w-8 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                  onClick={() => exportToExcel(list)}
-                />
+                  <img
+                    alt=""
+                    title="Excel татах"
+                    src="/img/excel.png"
+                    className="w-8 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(list)}
+                  />
+                </div>
               </div>
             </div>
           }
@@ -586,9 +610,8 @@ const List = () => {
             field="is_success"
             header="Тэнцсэн эсэх"
             align="center"
-            filter
-            filterField="representative"
-            filterElement={representativeFilterTemplate}
+            // filter
+            // filterElement={statusRowFilterTemplate}
             className=" text-xs border"
             style={{ minWidth: "100px", maxWidth: "100px" }}
             body={(data) => {

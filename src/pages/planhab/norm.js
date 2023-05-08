@@ -111,6 +111,10 @@ const List = () => {
                           onClick={() => {
                             dispatch({ type: "CLEAR" });
                             dispatch({ type: "STATE", data: { modal: true } });
+                            dispatch({
+                              type: "STATE",
+                              data: { modaltypeid: null },
+                            });
                           }}
                         >
                           <i className="ft-plus" />

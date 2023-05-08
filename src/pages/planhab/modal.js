@@ -3,6 +3,7 @@ import * as API from "src/api/planhab";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import Type from "src/components/custom/typeYear";
+import moment from "moment";
 
 // import _ from "lodash";
 
@@ -19,7 +20,7 @@ const ModalNormDetail = () => {
           Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
         </span>
         <Type
-          year={2023}
+          year={moment(state.date).format("Y")}
           module_id={1}
           value={state.modaltypeid}
           onChange={(value) => {
@@ -57,7 +58,6 @@ const ModalNormDetail = () => {
           } else {
             message({
               type: "error",
-
               title: "Сургалтын төрөл сонгоно уу",
             });
           }
