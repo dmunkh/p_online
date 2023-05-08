@@ -74,7 +74,6 @@ export default function Employee({ data }) {
       data: { modal: true },
     });
 
-    console.log(state.modal);
   };   
   const header = (
     <div className="flex  md:justify-end gap-2 ">

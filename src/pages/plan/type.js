@@ -8,11 +8,9 @@ import { FilterMatchMode } from "primereact/api";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/plan/modal";
-import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 const List = () => {
-  const navigate = useNavigate();
   const { message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
@@ -23,7 +21,7 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (state.moduleid && state.department_id) {
+    if (state.moduleid && state.department_id !== null) {
       setLoading(true);
       API.getPlan({
         year: moment(state.date).format("Y"),
@@ -250,7 +248,11 @@ const List = () => {
                     onClick={() => {
                       dispatch({
                         type: "STATE",
-                        data: { typeid: rowData.type_id, single_page: true },
+                        data: {
+                          typeid: rowData.type_id,
+                          single_page: true,
+                          info_type: rowData,
+                        },
                       });
 
                       // navigate("/plan/workers?id=" + rowData.type_id);

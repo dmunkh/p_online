@@ -7,7 +7,7 @@ import {
   Modal as CalModal,
   Space,
 } from "antd";
-
+import { InputMask } from "primereact/inputmask";
 import Module from "src/components/custom/module";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
@@ -110,9 +110,9 @@ const Component = (props) => {
   // жагсаалт
   useEffect(() => {
     //setLoading(true);
-    state.id &&
+    state.less_id &&
       API.getAttendanceID({
-        lesson_id: state.id,
+        lesson_id: state.less_id,
       })
         .then((res) => {
           dispatch({
@@ -137,7 +137,7 @@ const Component = (props) => {
         });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.id]);
+  }, [state.refresh, state.less_id]);
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -171,23 +171,14 @@ const Component = (props) => {
   };
 
   const updateItem = (item) => {
-    console.log(
-      "item: ",
-      moment(item.attendance_date).format("YYYY.MM.DD HH:mm:ss")
-    );
     setAdd(false);
-    dispatch({
-      type: "STATE",
-      data: {
-        attendance_id: null,
-        attendance_date: moment(),
-      },
-    });
+
     dispatch({
       type: "STATE",
       data: {
         attendance_id: item.id,
-        attendance_date: dayjs(item.attendance_date, "YYYY.MM.DD HH:mm:ss"),
+        attendance_date: item.attendance_date, // moment(item.attendance_date).format("YYYY.MM.DD"),
+        attendance_hour: moment(item.attendance_date).utc().format("HH:mm"),
       },
     });
     setVisible(true);
@@ -222,6 +213,7 @@ const Component = (props) => {
                     data: {
                       attendance_id: null,
                       attendance_date: moment(),
+                      attendance_hour: null,
                     },
                   });
                   setVisible(true);
@@ -291,13 +283,13 @@ const Component = (props) => {
   const footerContent = (
     <div className="actions clearfix">
       <button
-        className="btn btn-primary marker:w-full py-2 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-md bg-violet-500 focus:outline-none duration-300 "
+        className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
         onClick={() => {
           var data = {
-            lesson_id: state.id,
-            attendance_date: moment(state.attendance_date).format(
-              "YYYY.MM.DD HH:mm"
-            ),
+            lesson_id: state.less_id,
+            attendance_date: `${moment(state.attendance_date).format(
+              "YYYY.MM.DD"
+            )} ${state.attendance_hour}`,
           };
           if (add) {
             API.postAttendance(data)
@@ -350,82 +342,12 @@ const Component = (props) => {
           setVisible(false);
         }}
       >
+        <i className="ft-save" />
         <span className="ml-2">Хадгалах</span>
       </button>
     </div>
   );
-  const onChange = (value, dateString) => {
-    console.log("dateString: ", dateString);
-    dispatch({
-      type: "STATE",
-      data: {
-        attendance_date: dateString,
-      },
-    });
-  };
-  const onOk = (value) => {
-    console.log("dateString: ", value);
-    dispatch({
-      type: "STATE",
-      data: {
-        attendance_date: moment(value).format("YYYY.MM.DD HH:mm"),
-      },
-    });
 
-    var data = {
-      lesson_id: state.id,
-      attendance_date: moment(state.attendance_date).format("YYYY.MM.DD HH:mm"),
-    };
-    if (add) {
-      API.postAttendance(data)
-        .then(() => {
-          dispatch({
-            type: "STATE",
-            data: { refresh: state.refresh + 1 },
-          });
-
-          message({
-            type: "success",
-            title: "Амжилттай хадгалагдлаа.",
-          });
-          dispatch({
-            type: "CLEAR_LESSON",
-          });
-        })
-        .catch((error) => {
-          message({
-            type: "error",
-            error,
-            title: "Засварлаж чадсангүй",
-          });
-        });
-    } else if (!add && state.attendance_id) {
-      API.putAttendance(state.attendance_id, data)
-        .then(() => {
-          dispatch({
-            type: "STATE",
-            data: { refresh: state.refresh + 1 },
-          });
-
-          message({
-            type: "success",
-            title: "Амжилттай засварлагдлаа.",
-          });
-          dispatch({
-            type: "CLEAR_LESSON",
-          });
-        })
-        .catch((error) => {
-          message({
-            type: "error",
-            error,
-            title: "Засварлаж чадсангүй",
-          });
-        });
-    }
-
-    setVisible(false);
-  };
   return (
     <>
       <Modal
@@ -433,7 +355,7 @@ const Component = (props) => {
         width={850}
         title={
           <div className="text-center">
-            {state.id
+            {state.less_id
               ? `${state.type_name}  засварлах цонх`
               : "Сургалтын төрөл бүртгэх цонх"}
           </div>
@@ -468,41 +390,58 @@ const Component = (props) => {
           </div>
         )}
 
-        <div className="my-3 border " />
-        <div className="w-full p-1 flex flex-col justify-start ">
-          <span className="list-group-item-text grey darken-2 m-0 ">
-            Сургалтын бүлэг:
-          </span>
-          <div className="w-full md:min-w-[200px]">
-            <Module
-              value={state.moduleid}
-              disabled
-              onChange={(value) => {
-                dispatch({ type: "STATE", data: { moduleid: value } });
-              }}
-            />
-          </div>
-        </div>
-        <div className="w-full p-1 flex flex-col justify-start ">
-          <span className="list-group-item-text grey darken-2 m-0">
-            Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
-          </span>
-          <div className="w-full md:min-w-[200px]">
-            <Type
-              module_id={state.moduleid}
-              year={moment(state.change_year).format("YYYY")}
-              value={state.type_id}
-              onChange={(value) => {
-                dispatch({ type: "STATE", data: { type_id: value } });
-              }}
-            />
-          </div>
-        </div>
         {!state.timeRegister && (
           <div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Сургалтын төрөл:<b className="ml-1 text-red-500">*</b>
+              </span>
+              <div className="w-full md:min-w-[200px]">
+                <Type
+                  module_id={state.moduleid}
+                  //disabled={props.setedit ? "true" : "false"}
+                  year={moment(state.change_year).format("YYYY")}
+                  value={state.id}
+                  onChange={(value) => {
+                    API.getLessonTypeID(value).then((res) => {
+                      dispatch({
+                        type: "SET_LESSON",
+                        data: {
+                          id: res.id,
+                          begin_date: res.begin_date,
+                          end_date: res.end_date,
+                          hour: res.hour,
+                          limit: res.limit,
+                          percent: res.percent,
+
+                          point: res.point,
+                          type_id: res.type_id,
+                          place_id: res.place_id,
+                          price_emc: res.price_emc,
+                          price_organization: res.price_organization,
+                        },
+                      });
+                      dispatch({
+                        type: "STATE",
+                        data: { id: res.id },
+                      });
+                      dispatch({
+                        type: "STATE",
+                        data: { type_id: res.type_id },
+                      });
+                      dispatch({
+                        type: "STATE",
+                        data: { modal: true },
+                      });
+                      //loadItemTypeList(res.itemtypeid);
+                    });
+                  }}
+                />
+              </div>
+            </div>
             <div className="w-full p-1 flex flex-col justify-start">
               <span className="list-group-item-text grey darken-2 m-0">
-                Сургалтын танхим:
+                Сургалтын танхим:<b className="ml-1 text-red-500">*</b>
               </span>
               <div className="w-full md:min-w-[200px]">
                 <PlaceList
@@ -513,12 +452,20 @@ const Component = (props) => {
                 />
               </div>
             </div>
+          </div>
+        )}
+        {!state.timeRegister && (
+          <div className="flex flex-col">
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
-                Сургалтын цаг:<b className="ml-1 text-red-500">*</b>
+                Сургалтын цаг:
               </span>
               <Input
+                disabled
                 className=" p-1 w-full text-gray-900 border border-gray-200  "
+                min={1}
+                max={900}
+                type="number"
                 value={state.hour}
                 onChange={(e) => {
                   dispatch({
@@ -532,10 +479,14 @@ const Component = (props) => {
             </div>
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
-                Суух ажилчдын тоо:<b className="ml-1 text-red-500">*</b>
+                Суух ажилчдын тоо:
               </span>
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200 "
+                min={1}
+                max={900}
+                type="number"
+                disabled
                 value={state.limit}
                 onChange={(e) => {
                   dispatch({
@@ -549,11 +500,15 @@ const Component = (props) => {
             </div>
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
-                Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
+                Шалгалтын оноо:
               </span>
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200"
                 value={state.point}
+                min={1}
+                disabled
+                max={900}
+                type="number"
                 onChange={(e) => {
                   dispatch({
                     type: "STATE",
@@ -566,11 +521,15 @@ const Component = (props) => {
             </div>
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
-                Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
+                Тэнцэх хувь:
               </span>
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200 "
                 value={state.percent}
+                disabled
+                min={1}
+                max={900}
+                type="number"
                 onChange={(e) => {
                   dispatch({
                     type: "STATE",
@@ -620,11 +579,13 @@ const Component = (props) => {
 
             <div className="w-full p-1 flex flex-col justify-start">
               <span className="list-group-item-text grey darken-2 m-0">
-                Үнэ /Бүтцийн нэгжүүдэд/:<b className="ml-1 text-red-500">*</b>
+                Үнэ /Бүтцийн нэгжүүдэд/:
               </span>
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200  "
                 value={state.price_emc}
+                type="number"
+                disabled
                 onChange={(e) => {
                   dispatch({
                     type: "STATE",
@@ -638,11 +599,12 @@ const Component = (props) => {
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
                 Үнэ /Гадны байгууллагуудад/:
-                <b className="ml-1 text-red-500">*</b>
               </span>
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200"
                 value={state.price_organization}
+                disabled
+                type="number"
                 onChange={(e) => {
                   dispatch({
                     type: "STATE",
@@ -677,7 +639,7 @@ const Component = (props) => {
 
       <CalModal
         centered
-        className="max-w-sm md:w-2/4 text-xs "
+        className="max-w-sm md:w-2/4 text-xs items-center"
         title={
           <div className="text-center">
             {state.id
@@ -689,16 +651,58 @@ const Component = (props) => {
         onCancel={() => {
           setVisible(false);
         }}
-        // footer={footerContent}
+        footer={footerContent}
       >
-        <Space direction="vertical" size={12}>
+        <div className="w-full p-1 flex flex-col justify-start ">
+          <span className="list-group-item-text grey darken-2 m-0">
+            Огноо:<b className="ml-1 text-red-500">*</b>
+          </span>
           <DatePicker
-            showTime
-            //defaultValue={dayjs(state.attendance_date, "YYYY.MM.DD HH:mm:ss")}
-            onChange={onChange}
-            onOk={onOk}
+            allowClear={false}
+            className="w-full md:w-[150px] text-xs"
+            format={"YYYY.MM.DD"}
+            value={moment(state.attendance_date)}
+            onChange={(date) =>
+              dispatch({
+                type: "STATE",
+                data: {
+                  attendance_date: date,
+                },
+              })
+            }
           />
-        </Space>
+        </div>
+
+        <div className="w-full p-1 flex flex-col justify-start ">
+          <span className="list-group-item-text grey darken-2 m-0">
+            Цаг:<b className="ml-1 text-red-500">*</b>
+          </span>
+          <InputMask
+            value={state.attendance_hour}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  attendance_hour: e.target.value,
+                },
+              });
+            }}
+            mask="99:99"
+            placeholder="99:99"
+          />
+          {/* <Input
+            className=" p-1 w-full text-gray-900 border border-gray-200  "
+            value={state.attendance_hour}
+            onChange={(e) => {
+              dispatch({
+                type: "STATE",
+                data: {
+                  attendance_hour: e.target.value,
+                },
+              });
+            }}
+          /> */}
+        </div>
       </CalModal>
 
       {/* <Dialog
@@ -719,7 +723,7 @@ const Component = (props) => {
             className="text-xs pb-2"
             // dateFormat="YYYY.MM.DD HH:MM"
             onChange={(e) => {
-              console.log("e: ", e);
+           
               dispatch({
                 type: "STATE",
                 data: {

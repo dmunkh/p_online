@@ -28,7 +28,7 @@ const Modal_att = () => {
 
   useEffect(() => {
     API.getAtt({
-      lesson_id: state.lessonid,
+      lesson_id: state.lesson.id,
     })
       .then((res) => {
         setCard({ ...card, list_attendace: res });
@@ -59,7 +59,6 @@ const Modal_att = () => {
 
     ref.current.focus();
 
-    console.log("carddd", card.tn, "att", card.attendance);
 
     REQ.getWorkerTn({
       tn: tn,
@@ -68,7 +67,7 @@ const Modal_att = () => {
         setCard({ ...card, info: res });
 
         API.postAttendanceCard({
-          lesson_id: state.lessonid,
+          lesson_id: state.lesson.id,
           attendance_id: card.attendance,
           tn: _.toString(_.toInteger(tn)),
         })

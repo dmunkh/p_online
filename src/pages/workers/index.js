@@ -11,11 +11,19 @@ const Index = () => {
     <>
       <div className="card flex justify-center rounded-md p-2 ">
         <Header />
-        <div className="flex flex-col lg:flex-row gap-2 text-xs">
-          <div className="lg:w-1/4">{!state.single_page && <ModuleType />}</div>
-          <div className="lg:w-3/4">{!state.single_page && <LessonList />}</div>
-        </div>
-        {state.single_page && <Register />}
+
+        {!state.lesson ? (
+          <div className="flex flex-col lg:flex-row gap-2 text-xs">
+            <div className="lg:w-1/4">
+              <ModuleType />
+            </div>
+            <div className="lg:w-3/4">
+              <LessonList />
+            </div>
+          </div>
+        ) : (
+          <Register />
+        )}
       </div>
     </>
   );

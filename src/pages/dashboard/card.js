@@ -69,7 +69,6 @@ const Card = () => {
         const labels = [];
         if (res.length > 0) {
           await res.map((el) => {
-            console.log(el);
             // eslint-disable-next-line no-sequences
             labels.push(el.departmentname);
             chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);

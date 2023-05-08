@@ -145,8 +145,7 @@ const List = () => {
           <Module
             value={module}
             onChange={(value) => {
-              console.log(value)
-             setModule(value)
+              setModule(value);
             }}
           />
         </div>
@@ -183,7 +182,7 @@ const List = () => {
                     dispatch({
                       type: "CLEAR_TYPEYEAR",
                     });
-                   
+
                     dispatch({
                       type: "STATE",
                       data: { modal: true },

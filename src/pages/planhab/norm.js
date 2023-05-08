@@ -21,11 +21,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: { loading: true },
-    // });
-
     state.department_id &&
       API.getNorm({
         department_id: state.department_id,
@@ -93,33 +88,36 @@ const List = () => {
               </div>
             }
             header={
-              <div className="flex items-center justify-between  pb-2   text-xs">
-                <Input.Search
-                  className="md:w-80"
-                  placeholder="Хайх..."
-                  value={search.global.value}
-                  onChange={(e) => {
-                    let _search = { ...search };
-                    _search["global"].value = e.target.value;
-                    setSearch(_search);
-                    dispatch({ type: "STATE", data: { tn: null } });
-                  }}
-                />
-                <div className="flex items-center gap-3">
-                  {checkRole(["norm_add"]) && state.position_id && (
-                    <div className="flex items-center justify-between gap-2">
-                      <div
-                        title="Нэмэх"
-                        className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                        onClick={() => {
-                          dispatch({ type: "CLEAR" });
-                          dispatch({ type: "STATE", data: { modal: true } });
-                        }}
-                      >
-                        <i className="ft-plus" />
+              <div className="flex flex-row items-center justify-between  text-xs gap-2">
+                {state?.info_position?.data?.positionname}
+                <div className="flex items-center justify-between  pb-2   text-xs">
+                  {/* <Input.Search
+                    className="md:w-80"
+                    placeholder="Хайх..."
+                    value={search.global.value}
+                    onChange={(e) => {
+                      let _search = { ...search };
+                      _search["global"].value = e.target.value;
+                      setSearch(_search);
+                      dispatch({ type: "STATE", data: { tn: null } });
+                    }}
+                  /> */}
+                  <div className="flex items-center gap-3">
+                    {checkRole(["norm_add"]) && state.position_id && (
+                      <div className="flex items-center justify-between gap-2">
+                        <div
+                          title="Нэмэх"
+                          className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                          onClick={() => {
+                            dispatch({ type: "CLEAR" });
+                            dispatch({ type: "STATE", data: { modal: true } });
+                          }}
+                        >
+                          <i className="ft-plus" />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             }
@@ -172,7 +170,7 @@ const List = () => {
               body={(item) => {
                 return (
                   <div className="flex items-center justify-center gap-2">
-                    {checkRole(["norm_delete"]) && (
+                    {item.type_id !== 1 && checkRole(["norm_delete"]) && (
                       <button
                         className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                         onClick={() => {

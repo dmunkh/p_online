@@ -10,7 +10,7 @@ const Header = () => {
   const { state, dispatch } = useTrainingContext();
   const [checked, setChecked] = useState(false);
   return (
-    <div className="flex border-b  ">
+    <div className="flex border-b pb-1">
       <div className="flex flex-col md:flex-row md:items-center gap-3">
         <div className="w-full flex items-center pl-2">
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
@@ -46,7 +46,7 @@ const Header = () => {
             />
           </div>
         </div>
-        <div className="flex items-center  ml-10 mt-3">
+        <div className=" items-center justify-center ml-10 hidden">
           <div className=" flex items-center  ml-10 form-group">
             <div className="flex justify-content-center">
               <InputSwitch
@@ -65,33 +65,6 @@ const Header = () => {
             </span>
           </div>
         </div>
-        {/* <div className="flex flex-col  md:flex-row md:items-center gap-3 ml-5">
-            <span className="md:w-max pr-3 font-semibold text-xs whitespace-nowrap">
-              Сургалтын төрөл:
-            </span>
-            <div className="w-full md:max-w-[450px]">
-              <TypeYear
-                module_id={state.moduleid}
-                year={moment(state.change_year).format("YYYY")}
-                value={state.type_id}
-                onChange={(value) => {
-                  dispatch({ type: "STATE", data: { type_id: value } });
-                }}
-              />
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary fc-button-active bg-primart-500"
-              placeholder="Bottom"
-              tooltip="Enter your username"
-              tooltipoptions={{ position: "bottom" }}
-              onClick={() => {
-                dispatch({ type: "STATE", data: { change_btn: true } });
-              }}
-            >
-              <i className="ft-calendar"></i>
-            </button>
-          </div> */}
       </div>
     </div>
   );

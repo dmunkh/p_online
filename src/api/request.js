@@ -199,7 +199,6 @@ export async function getControlPanel(params) {
 }
 
 export async function getControlDepartment(params) {
-  console.log(params);
   const response = await API().get("/dashboard/plan/module/department/count", {
     params: { ...params },
   });

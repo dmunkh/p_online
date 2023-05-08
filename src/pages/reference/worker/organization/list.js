@@ -111,11 +111,11 @@ export default function List() {
 
   // const expandAll = () => {
   //   let _expandedRows = {};
-  //   console.log(person);
+
   //   person.forEach((p) => (_expandedRows[`${p.organization_id}`] = true));
 
   //   setExpandedRows(_expandedRows);
-  //   console.log(_expandedRows);
+ 
   // };
 
   // const collapseAll = () => {
