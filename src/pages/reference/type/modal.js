@@ -52,18 +52,17 @@ const Component = () => {
   const save = () => {
     var error = [];
     state.type_name || error.push("Сургалтын нэр");
-    state.module_id || error.push("Сургалтын бүлэг");
+    state.selected_moduleID || error.push("Сургалтын бүлэг");
     state.interval_id || error.push("Сургалтын давтамж ");
     state.hour || error.push("Сургалт үргэлжлэх хугацаа");
-    state.price_emc || error.push("Үнэ /Бүтцийн нэгжүүдэд/ ");
-    state.price_organization || error.push("Үнэ /Гадны байгууллагуудад/ ");
+    // state.price_emc || error.push("Үнэ /Бүтцийн нэгжүүдэд/ ");
+    // state.price_organization || error.push("Үнэ /Гадны байгууллагуудад/ ");
 
     var data = {
       type_name: state.type_name,
-      module_id: state.module_id,
+      module_id: state.selected_moduleID,
       interval_id: state.interval_id,
-
-      hour: state.time,
+      hour: state.hour,
       price_emc: state.price_emc,
       price_organization: state.price_organization,
       description: state.description,
@@ -143,33 +142,7 @@ const Component = () => {
       className="text-sm tracking-wide"
       footer={null}
     >
-      <div className="w-full p-1 flex flex-col justify-start ">
-        <span className="list-group-item-text grey darken-2 m-0 ">
-          Сургалтын бүлэг:
-        </span>
-        <div className="w-full md:min-w-[200px]">
-          <Select
-            value={state.module_id}
-            placeholder="сонгох."
-            allowClear
-            className="w-full rounded-lg "
-            onChange={(value) => {
-              dispatch({
-                type: "STATE",
-                data: {
-                  module_id: value,
-                },
-              });
-            }}
-          >
-            {_.map(state.list_module, (item) => (
-              <Select.Option key={item.id} value={item.id}>
-                {item.module_name}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
-      </div>
+
       <div className="w-full p-1 flex flex-col justify-start ">
         <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын нэр:<b className="ml-1 text-red-500">*</b>
@@ -267,7 +240,7 @@ const Component = () => {
       </div>
       <div className="w-full p-1 flex flex-col justify-start ">
         <span className="list-group-item-text grey darken-2 m-0">
-          Сургалтын тайлбар:<b className="ml-1 text-red-500">*</b>
+          Сургалтын тайлбар:
         </span>
         <Input
           className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "

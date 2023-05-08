@@ -63,7 +63,7 @@ export const reducer = (state, action) => {
           selected_employee:{
             id:null,
             organization_id: null,
-            position_name:"",
+            position_name:null,
             register_number:null,
             short_name:null,
           }

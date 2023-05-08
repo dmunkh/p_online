@@ -65,16 +65,22 @@ export default function Employee({ data }) {
     });
   };
   const updateItem = (item) => {
+    console.log(item);
     dispatch({
       type: "STATE",
       data: { selected_employee: item },
     });
     dispatch({
       type: "STATE",
+      data: { organizationID: item.organization_id },
+    });
+    dispatch({
+      type: "STATE",
       data: { modal: true },
     });
 
-  };   
+    console.log(state.modal);
+  };
   const header = (
     <div className="flex  md:justify-end gap-2 ">
       {/* <Input
@@ -93,14 +99,14 @@ export default function Employee({ data }) {
               dispatch({
                 type: "CLEAR_EMPLOYEE",
               });
-              dispatch({
-                type:"STATE",
-                data:{
-                  selected_employee:{
-                    organization_id: data.organization_id
-                  }
-                }
-              })
+              // dispatch({
+              //   type:"STATE",
+              //   data:{
+              //     selected_employee:{
+              //       organization_id: data.organization_id
+              //     }
+              //   }
+              // })
               dispatch({
                 type: "STATE",
                 data: { modal: true },
@@ -147,21 +153,14 @@ export default function Employee({ data }) {
           body={(data, row) => row.rowIndex + 1}
         />
         <Column
-          field="organization_name"
-          style={{ minWidth: "150px", maxWidth: "400px" }}
-          className="text-xs "
-          header="Байгууллагын нэр"
-          sortable
-        ></Column>
-        <Column
           field="short_name"
+          style={{ minWidth: "150px", maxWidth: "400px" }}
           className="text-xs"
           header="Нэр"
           sortable
         ></Column>
         <Column
           field="position_name"
-          style={{ minWidth: "150px", maxWidth: "400px" }}
           className="text-xs"
           header="Албан тушаал"
           sortable
@@ -169,6 +168,7 @@ export default function Employee({ data }) {
 
         <Column
           field="register_number"
+          style={{ minWidth: "50px", maxWidth: "50px" }}
           className="text-xs "
           header="Регистерийн дугаар"
           sortable
@@ -183,7 +183,7 @@ export default function Employee({ data }) {
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["person_edit"]) && (
                   <button
-                  className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => updateItem(item)}
                   >
                     <i className="ft-edit" />
@@ -192,7 +192,7 @@ export default function Employee({ data }) {
 
                 {checkRole(["person_delete"]) && (
                   <button
-                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => deleteItem(item)}
                   >
                     <i className="ft-trash-2" />

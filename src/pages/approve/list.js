@@ -90,7 +90,7 @@ const List = () => {
       >
         <MODAL />
       </Modal>
-      <div className="card p-2 border rounded text-xs">
+      <div className="p-2 text-xs">
         <div className="flex gap-4">
           <div className="flex items-center md:w-[150px] text-xs gap-2">
             <span className="font-semibold whitespace-nowrap">Огноо:</span>

@@ -193,36 +193,7 @@ const Modul = () => {
           bodyClassName="flex items-center justify-start text-left"
         />
 
-        <Column
-          align="center"
-          header="Үйлдэл"
-          className="text-xs"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
-          headerClassName="flex items-center justify-center"
-          // body={(item) => {
-          //   return (
-          //     <div className="flex items-center justify-center gap-2">
-          //       {checkRole(["organization_edit"]) && (
-          //         <button
-          //           className="p-1 flex items-center justify-center font-semibold text-yellow-500 rounded-full border-2 border-yellow-500 hover:bg-yellow-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-          //           onClick={() => updateItem(item)}
-          //         >
-          //           <i className="ft-edit" />
-          //         </button>
-          //       )}
-
-          //       {checkRole(["organization_delete"]) && (
-          //         <button
-          //           className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-          //           onClick={() => deleteItem(item)}
-          //         >
-          //           <i className="ft-trash-2" />
-          //         </button>
-          //       )}
-          //     </div>
-          //   );
-          // }}
-        />
+        
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,7 +201,7 @@ const Modul = () => {
 
   return (
     <>
-      <div className="card flex justify-center text-xs rounded p-2">
+      <div className="card flex  text-xs h-screen  rounded p-2">
         <Spin
           tip="Уншиж байна."
           className="min-h-full first-line:bg-opacity-80"

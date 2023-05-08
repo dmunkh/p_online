@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
 
         <div className="main-panel">
           <div className="main-content">
-            <div className="content-wrapper">{children}</div>
+            <div className="content-wrapper"><div className="card h-screen">{children}</div></div>
           </div>
 
           <button className="btn btn-primary scroll-top" type="button">
@@ -57,9 +57,9 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      <div
+      {/* <div
         className={`sidenav-overlay ${isCollapsed ? "d-none" : "d-block"}`}
-      ></div>
+      ></div> */}
 
       <RightBar />
     </div>

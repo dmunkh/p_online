@@ -18,7 +18,7 @@ const Component = (data) => {
     //   state.selected_employee.short_name ||
     //   error.push("Нэр:");
     const data = {
-      organization_id: state.selected_employee.organization_id,
+      organization_id: state.organizationID,
       position_name: state.selected_employee.position_name,
       register_number: state.selected_employee.register_number,
       short_name: state.selected_employee.short_name,
@@ -56,7 +56,7 @@ const Component = (data) => {
           // dispatch({ type: "CLEAR_EMPLOYEE" });
           dispatch({ type: "STATE", data: { modal: false } });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-          dispatch({ type: "STATE", data: { refresh: state.refresh+1 } });
+          dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
         })
         .catch((error) => {
           message({
@@ -66,7 +66,6 @@ const Component = (data) => {
           });
         });
     } else {
-
       API.putPerson(state.selected_employee.id, {
         ...data,
       })
@@ -81,6 +80,7 @@ const Component = (data) => {
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
         })
         .catch((error) => {
+          console.log(state.selected_employee.id);
           message({
             type: "error",
             error,
@@ -97,7 +97,7 @@ const Component = (data) => {
         width={700}
         title={
           <div className="text-center">
-            Гадны ажилчид
+            Ажилтан
             {state.selected_employee.id ? " засварлах " : " бүртгэх "} цонх
           </div>
         }
@@ -111,44 +111,6 @@ const Component = (data) => {
         footer={null}
       >
         <div className="flex flex-col  text-xs">
-          <div className="flex  flex-col justify-start">
-            <span className="w-1/3 pb-1 font-semibold">
-              Байгууллага:<b className="ml-1 text-red-500">*</b>
-            </span>
-            <Select
-              className="w-full"
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              value={state.selected_employee.organization_id}
-              onChange={(value) => {
-                dispatch({
-                  type: "STATE",
-                  data: {
-                    selected_employee: {
-                      organization_id: data.organization_id,
-                    },
-                  },
-                });
-
-                dispatch({
-                  type: "STATE",
-                  data: {
-                    selected_employee: {
-                      ...state.selected_employee,
-                      organization_id: value,
-                    },
-                  },
-                });
-              }}
-            >
-              {_.map(state.list_organization, (item, index) => (
-                <Select.Option key={index} value={item.id}>
-                  {item.organization_name}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-          <hr className="my-2" />
           <div className="flex flex-col justify-start">
             <span className="font-semibold pb-1">
               Нэр :<b className="ml-1 text-red-500">*</b>
@@ -178,7 +140,7 @@ const Component = (data) => {
             <Input
               size="small"
               className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm "
-              defaultValue={state.selected_employee.position_name}
+              value={state.selected_employee.position_name}
               onChange={(e) => {
                 dispatch({
                   type: "STATE",
