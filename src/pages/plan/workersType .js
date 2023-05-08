@@ -22,7 +22,6 @@ const Workers = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    console.log(state.info_type);
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),

@@ -8,7 +8,6 @@ const TypeList = (props) => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    console.log(props.module_id);
 
     API.getTypesYear({ module_id: _.toInteger(props.module_id) }).then(
       (res) => {

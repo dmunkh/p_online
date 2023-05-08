@@ -10,7 +10,6 @@ const Navbar = () => {
   const [menu, setMenu] = useState([]);
   const [dropdown, setDropDown] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  console.log(window.location.pathname.split("/")[1]);
   useEffect(() => {
     if (user.tn !== 0) {
       var allMenu = user.usermenu;
@@ -28,7 +27,6 @@ const Navbar = () => {
       });
       setMenu(menu1);
     }
-    console.log(menu);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.tn]);
 
@@ -83,7 +81,6 @@ const Navbar = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       setDropDown(index === dropdown ? null : index);
-                      console.log(index);
                     }}
                   >
                     <i

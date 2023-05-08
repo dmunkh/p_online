@@ -57,7 +57,6 @@ const ModalNormDetail = () => {
           } else {
             message({
               type: "error",
-
               title: "Сургалтын төрөл сонгоно уу",
             });
           }

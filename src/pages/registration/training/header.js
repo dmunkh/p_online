@@ -10,7 +10,7 @@ const Header = () => {
   const { state, dispatch } = useTrainingContext();
   const [checked, setChecked] = useState(false);
   return (
-    <div className="flex border-b  ">
+    <div className="flex border-b pb-1">
       <div className="flex flex-col md:flex-row md:items-center gap-3">
         <div className="w-full flex items-center pl-2">
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
@@ -46,7 +46,7 @@ const Header = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-center ml-10">
+        <div className=" items-center justify-center ml-10 hidden">
           <div className=" flex items-center  ml-10 form-group">
             <div className="flex justify-content-center">
               <InputSwitch

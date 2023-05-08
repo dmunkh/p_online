@@ -270,6 +270,7 @@ const List = () => {
         <MODALTRANSFER />
       </Modal>
       <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}>
+        {console.log(state.lesson)}
         <DataTable
           value={list}
           filters={search}
@@ -308,44 +309,68 @@ const List = () => {
           height={window.innerHeight - 800}
           globalFilterFields={["tn", "short_name", "position_name"]}
           header={
-            <div className="flex items-center justify-between  text-xs">
+            <div className="flex flex-col gap-2">
               <div>
-                <Input.Search
-                  className="md:w-80"
-                  placeholder="Хайх..."
-                  value={search.global.value}
-                  onChange={(e) => {
-                    let _search = { ...search };
-                    _search["global"].value = e.target.value;
-                    setSearch(_search);
-                    dispatch({ type: "STATE", data: { tn: null } });
-                  }}
-                />
+                {state.lesson.type_name} ( {state.lesson.begin_date} |{" "}
+                {state.lesson.end_date} ) Сургалтын хугацаа: {state.lesson.hour}{" "}
+                цаг, Суудлын тоо: {state.lesson.limit}, Байршил:{" "}
+                {state.lesson.place_name}
               </div>
-
-              <div className="flex items-center gap-3">
-                {checkRole(["register_attendance_crud"]) && (
-                  <div
-                    title="Ирц бүртгэх"
-                    className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                    onClick={() => {
-                      dispatch({ type: "CLEAR" });
-                      dispatch({
-                        type: "STATE",
-                        data: { list_checked: [] },
-                      });
-                      dispatch({ type: "STATE", data: { modal_att: true } });
+              <div className="flex items-center justify-between  text-xs">
+                <div>
+                  <Input.Search
+                    className="md:w-80"
+                    placeholder="Хайх..."
+                    value={search.global.value}
+                    onChange={(e) => {
+                      let _search = { ...search };
+                      _search["global"].value = e.target.value;
+                      setSearch(_search);
+                      dispatch({ type: "STATE", data: { tn: null } });
                     }}
-                  >
-                    <i className="ft-log-in text-sm" />
-                    <i className="ft-plus" />
-                  </div>
-                )}
+                  />
+                </div>
 
-                <div className="flex items-center justify-between gap-2">
-                  {checkGroup([173, 306, 307, 378, 386, 387]) ? (
-                    <>
-                      <i className="ft-users text-lg" />
+                <div className="flex items-center gap-3">
+                  {checkRole(["register_attendance_crud"]) && (
+                    <div
+                      title="Ирц бүртгэх"
+                      className="p-1 flex items-center justify-center font-semibold text-green-500 border-2 border-green-500 rounded-full hover:bg-green-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                      onClick={() => {
+                        dispatch({ type: "CLEAR" });
+                        dispatch({
+                          type: "STATE",
+                          data: { list_checked: [] },
+                        });
+                        dispatch({ type: "STATE", data: { modal_att: true } });
+                      }}
+                    >
+                      <i className="ft-log-in text-sm" />
+                      <i className="ft-plus" />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between gap-2">
+                    {checkGroup([173, 306, 307, 378, 386, 387]) ? (
+                      <>
+                        <i className="ft-users text-lg" />
+                        <div
+                          title="Нэмэх"
+                          className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                          onClick={() => {
+                            dispatch({ type: "CLEAR" });
+                            dispatch({
+                              type: "STATE",
+                              data: { list_checked: [] },
+                            });
+                            dispatch({ type: "STATE", data: { modal: true } });
+                          }}
+                        >
+                          {state.lesson.limit}/{state.lesson.count_register}{" "}
+                          <i className="ft-plus" />
+                        </div>
+                      </>
+                    ) : state.lesson.limit - state.lesson.count_register > 0 ? (
                       <div
                         title="Нэмэх"
                         className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
@@ -358,45 +383,29 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        {state.lesson.limit}/{state.lesson.count_register}{" "}
-                        <i className="ft-plus" />
+                        <i className="ft-users" /> {state.lesson.limit}/
+                        {state.lesson.count_register} <i className="ft-plus" />
                       </div>
-                    </>
-                  ) : state.lesson.limit - state.lesson.count_register > 0 ? (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                      onClick={() => {
-                        dispatch({ type: "CLEAR" });
-                        dispatch({
-                          type: "STATE",
-                          data: { list_checked: [] },
-                        });
-                        dispatch({ type: "STATE", data: { modal: true } });
-                      }}
-                    >
-                      <i className="ft-users" /> {state.lesson.limit}/
-                      {state.lesson.count_register} <i className="ft-plus" />
-                    </div>
-                  ) : (
-                    <div
-                      title="Нэмэх"
-                      className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
-                    >
-                      <i className="ft-user-check" /> {state.lesson.limit}/
-                      {state.lesson.count_register}
-                    </div>
-                  )}
-                </div>
-                {/* )} */}
+                    ) : (
+                      <div
+                        title="Нэмэх"
+                        className="p-1 flex items-center justify-center font-semibold text-red-500 border-2 border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:scale-125 focus:outline-none duration-300"
+                      >
+                        <i className="ft-user-check" /> {state.lesson.limit}/
+                        {state.lesson.count_register}
+                      </div>
+                    )}
+                  </div>
+                  {/* )} */}
 
-                <img
-                  alt=""
-                  title="Excel татах"
-                  src="/img/excel.png"
-                  className="w-8 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                  onClick={() => exportToExcel(list)}
-                />
+                  <img
+                    alt=""
+                    title="Excel татах"
+                    src="/img/excel.png"
+                    className="w-8 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(list)}
+                  />
+                </div>
               </div>
             </div>
           }

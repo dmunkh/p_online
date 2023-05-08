@@ -81,7 +81,6 @@ const Component = (data) => {
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
         })
         .catch((error) => {
-          console.log(data);
           message({
             type: "error",
             error,

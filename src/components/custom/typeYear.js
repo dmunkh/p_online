@@ -18,9 +18,9 @@ const TypeList = (props) => {
     props.module_id &&
       API.getTypesYear({ module_id: props.module_id, year: props.year }).then(
         (res) => {
-          setList(_.orderBy(res, ["type_name"]));
+          setList(_.orderBy(res, ["id"]));
 
-          if (res.length > 0 && !props.value) props.onChange(res[0].type_id);
+          if (res.length > 0 && !props.value) props.onChange(res[0].id);
         }
       );
 

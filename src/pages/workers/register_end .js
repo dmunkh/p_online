@@ -37,7 +37,6 @@ const List = () => {
   const [cnt, setCnt] = useState([]);
 
   useEffect(() => {
-    console.log(state.lesson);
     if (state.department !== null) {
       setLoading(true);
       API.getWorkers({

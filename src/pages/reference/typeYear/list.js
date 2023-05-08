@@ -36,7 +36,7 @@ const List = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_typeyear: _.orderBy(res, ["type_name"]),
+            list_typeyear: _.orderBy(res, ["id"] , 'desc'),
           },
         });
       })
@@ -145,8 +145,7 @@ const List = () => {
           <Module
             value={module}
             onChange={(value) => {
-              console.log(value)
-             setModule(value)
+              setModule(value);
             }}
           />
         </div>
@@ -183,7 +182,7 @@ const List = () => {
                     dispatch({
                       type: "CLEAR_TYPEYEAR",
                     });
-                   
+
                     dispatch({
                       type: "STATE",
                       data: { modal: true },

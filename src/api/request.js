@@ -88,7 +88,10 @@ export async function getType(params) {
   const response = await API().get("type", { params: { ...params } });
   return response.data;
 }
-
+export async function getTypes(id) {
+  const response = await API().get("/type/" +id);
+  return response.data;
+}
 // Сургалтын төрөл жилээр - TypeYear
 
 export async function getTypesYear(params) {
@@ -196,7 +199,6 @@ export async function getControlPanel(params) {
 }
 
 export async function getControlDepartment(params) {
-  console.log(params);
   const response = await API().get("/dashboard/plan/module/department/count", {
     params: { ...params },
   });

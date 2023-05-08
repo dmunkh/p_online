@@ -90,6 +90,23 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
+   
+    API.getTypesYear({
+      module_id: state.moduleid,
+      year: moment(state.change_year).format("YYYY"),
+    })
+      .then((res) => {
+        var result = _.filter(res, (a) => a.type_id === state.type_id);
+
+        dispatch({
+          type: "STATE",
+          data: {
+            id: result[0].id,
+          },
+        });
+      })
+      .catch((error) => {});
+
     dispatch({
       type: "STATE",
       data: { timeRegister: false },
@@ -97,7 +114,6 @@ const Training = () => {
     dispatch({
       type: "SET_LESSON",
       data: {
-        id: item.id,
         type_name: item.type_name,
         type_id: item.type_id,
         begin_date: item.begin_date,
@@ -110,12 +126,13 @@ const Training = () => {
         price_emc: item.price_emc,
         price_organization: item.price_organization,
         year: item.year,
+        less_id: item.id,
       },
     });
     dispatch({
       type: "STATE",
       data: {
-        id: item.id,
+        less_id: item.id,
       },
     });
     dispatch({
@@ -181,7 +198,7 @@ const Training = () => {
         className="w-full text-sm"
         sortMode="single"
         removableSort
-        scrollHeight={window.innerHeight - 400}
+        scrollHeight={window.innerHeight - 280}
         responsiveLayout="scroll"
         value={result}
         header={
@@ -209,31 +226,6 @@ const Training = () => {
                       data: { timeRegister: false },
                     });
                     setEdit(false);
-                    // API.getLessonTypeID(state?.type_id).then((res) => {
-                    //   dispatch({
-                    //     type: "SET_LESSON",
-                    //     data: {
-                    //       type_name: res.type_name,
-
-                    //       begin_date: res.begin_date,
-                    //       end_date: res.end_date,
-                    //       hour: res.hour,
-                    //       limit: res.limit,
-                    //       //   percent: res.percent,
-                    //       place_id: res.place_id,
-                    //       point: res.point,
-                    //       //   price_emc: res.price_emc,
-                    //       //   price_organization: res.price_organization,
-                    //       year: res.year,
-                    //       type_id: state?.type_id,
-                    //     },
-                    //   });
-                    //   dispatch({
-                    //     type: "STATE",
-                    //     data: { modal: true },
-                    //   });
-                    //   //loadItemTypeList(res.itemtypeid);
-                    // });
 
                     dispatch({
                       type: "STATE",
@@ -312,74 +304,6 @@ const Training = () => {
             </Row>
           </ColumnGroup>
         }
-        paginator
-        rowHover
-        first={first}
-        rows={per_page}
-        onPage={(event) => {
-          set_first(event.first);
-          set_per_page(event.rows);
-        }}
-        paginatorTemplate={{
-          layout:
-            "RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink",
-          RowsPerPageDropdown: (options) => {
-            const dropdownOptions = [
-              { label: 10, value: 10 },
-              { label: 20, value: 20 },
-              { label: 50, value: 50 },
-              { label: 100, value: 100 },
-              { label: 200, value: 200 },
-              { label: 500, value: 500 },
-            ];
-            return (
-              <>
-                <span
-                  className="text-xs mx-1"
-                  style={{ color: "var(--text-color)", userSelect: "none" }}
-                >
-                  <span className="font-semibold">Нэг хуудсанд:</span>
-                </span>
-                <Select
-                  size="small"
-                  showSearch={false}
-                  value={options.value}
-                  onChange={(value) => {
-                    options.onChange({
-                      value: value,
-                    });
-                  }}
-                >
-                  {_.map(dropdownOptions, (item) => (
-                    <Select.Option key={item.value} value={item.value}>
-                      {item.value}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </>
-            );
-          },
-          CurrentPageReport: (options) => {
-            return (
-              <span
-                style={{
-                  color: "var(--text-color)",
-                  userSelect: "none",
-                  width: "200px",
-                  textAlign: "center",
-                }}
-              >
-                <span className="text-xs font-semibold">
-                  <span>
-                    {options.first} - {options.last}
-                  </span>
-                  <span className="ml-3">Нийт: {options.totalRecords}</span>
-                </span>
-              </span>
-            );
-          },
-        }}
-        paginatorClassName="justify-content-end"
         emptyMessage={
           <div className="text-xs text-orange-500 italic font-semibold">
             Мэдээлэл олдсонгүй...
@@ -409,7 +333,7 @@ const Training = () => {
           sortable
           header="Эхлэх огноо"
           field="begin_date"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "120px", maxWidth: "120px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
@@ -419,7 +343,7 @@ const Training = () => {
           sortable
           header="Дуусах огноо"
           field="end_date"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "120px", maxWidth: "120px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center"
@@ -431,13 +355,13 @@ const Training = () => {
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start"
         />
         <Column
           sortable
           header="Суух ажилчдын тоо"
           field="limit"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "120px", maxWidth: "120px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center"
@@ -446,7 +370,7 @@ const Training = () => {
           sortable
           header="Сургалтын цаг"
           field="hour"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "100px", maxWidth: "100px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center"
@@ -455,7 +379,7 @@ const Training = () => {
           sortable
           header="Сургалтын ирц"
           field="description"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "150px", maxWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start text-left"
@@ -468,7 +392,6 @@ const Training = () => {
                   return (
                     <div key={item.id} className="flex flex-col justify-center">
                       <span className="pl-3 justify-center">
-                        {item.id} -
                         {moment(item.attendance_date)
                           .utc()
                           .format("YYYY.MM.DD  HH:mm")}
@@ -493,7 +416,7 @@ const Training = () => {
           sortable
           header="Шалгалтын оноо"
           field="point"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "100px", maxWidth: "100px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center text-left"
@@ -502,7 +425,7 @@ const Training = () => {
           sortable
           header="Тэнцэх хувь"
           field="percent"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "100px", maxWidth: "100px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center text-left"
@@ -541,7 +464,7 @@ const Training = () => {
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_training, state.type_id, search, first, per_page]);
+  }, [state.list_training, state.type_id, search]);
 
   return (
     <>

@@ -49,3 +49,7 @@ export async function deleteAttendance(id) {
   const response = await API().delete("/attendance/" + id);
   return response.data;
 }
+export async function getTypesYear(params) {
+  const response = await API().get("/type/year", { params: { ...params } });
+  return response.data;
+}

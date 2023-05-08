@@ -60,13 +60,7 @@ const Layout = ({ children }) => {
       <div
         className={`sidenav-overlay ${isCollapsed ? "d-none" : "d-block"}`}
       ></div>
-      <button
-        className="btn btn-primary scroll-top"
-        type="button"
-        style={{ display: "inline-block" }}
-      >
-        <i className="ft-arrow-up"></i>
-      </button>
+
       <RightBar />
     </div>
   );

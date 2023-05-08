@@ -18,7 +18,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("LESSONLIST", state.selected_typeId);
     setLoading(true);
     state.moduletypeid &&
       API.getLesson({

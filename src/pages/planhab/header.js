@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Department from "src/components/custom/departmentTseh";
 import { usePlanHabContext } from "src/contexts/planhabContext";
+import { DatePicker } from "antd";
+
 // import Module from "src/components/custom/module";
 // import Type from "src/components/custom/type";
 import _ from "lodash";
@@ -27,6 +29,19 @@ const Header = () => {
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
       <div className="flex items-center w-full  md:min-w-[500px] text-xs gap-2">
+        <span className="md:w-[20px] font-semibold">Он:</span>
+        <DatePicker
+          allowClear={false}
+          picker="year"
+          format="YYYY"
+          value={state.date}
+          onChange={(date) => {
+            dispatch({
+              type: "STATE",
+              data: { date: date },
+            });
+          }}
+        />
         <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
         <Department
           value={state.department}

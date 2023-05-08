@@ -21,7 +21,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(state.info_position);
     state.department_id &&
       API.getNorm({
         department_id: state.department_id,
@@ -112,6 +111,10 @@ const List = () => {
                           onClick={() => {
                             dispatch({ type: "CLEAR" });
                             dispatch({ type: "STATE", data: { modal: true } });
+                            dispatch({
+                              type: "STATE",
+                              data: { modaltypeid: null },
+                            });
                           }}
                         >
                           <i className="ft-plus" />
