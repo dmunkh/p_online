@@ -90,7 +90,6 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
-   
     API.getTypesYear({
       module_id: state.moduleid,
       year: moment(state.change_year).format("YYYY"),
@@ -200,7 +199,7 @@ const Training = () => {
         removableSort
         scrollHeight={window.innerHeight - 280}
         responsiveLayout="scroll"
-        value={result}
+        value={_.orderBy(result, ["type_name"], ["begin_date"], ["desc"])}
         header={
           <div className="flex items-center justify-between">
             <div className="w-full md:max-w-[200px]">
@@ -246,7 +245,9 @@ const Training = () => {
             <React.Fragment>
               <span className="text-xs font-semibold">
                 <span>Сургалтын төрөл : {data.type_id}</span> |
-                <span className="ml-1">{data.type_name}</span>
+                <span className="ml-1">
+                  {data.type_name} - / {data.count_register} ш/
+                </span>
               </span>
             </React.Fragment>
           );

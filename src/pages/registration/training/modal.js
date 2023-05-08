@@ -1,14 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
-import {
-  Input,
-  Modal,
-  DatePicker,
-  Switch,
-  Modal as CalModal,
-  Space,
-} from "antd";
+import React, { useState, useMemo, useEffect, useLayoutEffect } from "react";
+import { Input, Modal, DatePicker, Switch, Modal as CalModal } from "antd";
 import { InputMask } from "primereact/inputmask";
-import Module from "src/components/custom/module";
+import { InputNumber } from "primereact/inputnumber";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
 import { useUserContext } from "src/contexts/userContext";
@@ -19,9 +12,6 @@ import { Column } from "primereact/column";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
-import { Dialog } from "primereact/dialog";
-import { Calendar } from "primereact/calendar";
 
 const Component = (props) => {
   const { state, dispatch } = useTrainingContext();
@@ -108,7 +98,7 @@ const Component = (props) => {
   };
 
   // жагсаалт
-  useEffect(() => {
+  useLayoutEffect(() => {
     //setLoading(true);
     state.less_id &&
       API.getAttendanceID({
@@ -171,6 +161,16 @@ const Component = (props) => {
   };
 
   const updateItem = (item) => {
+    console.log("item:``````` ", item);
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_id: null,
+        attendance_date: moment(),
+        attendance_hour: null,
+        attendance_minut: null,
+      },
+    });
     setAdd(false);
 
     dispatch({
@@ -178,9 +178,17 @@ const Component = (props) => {
       data: {
         attendance_id: item.id,
         attendance_date: item.attendance_date, // moment(item.attendance_date).format("YYYY.MM.DD"),
-        attendance_hour: moment(item.attendance_date).utc().format("HH:mm"),
+        attendance_hour: moment(item.attendance_date).utc().format("HH"),
+        attendance_minut: moment(item.attendance_date).utc().format("mm"),
       },
     });
+    dispatch({
+      type: "STATE",
+      data: {
+        attendance_hour: moment(item.attendance_date).utc().format("HH"),
+      },
+    });
+
     setVisible(true);
   };
   const dateBodyTemplate = (rowData) => {
@@ -214,6 +222,7 @@ const Component = (props) => {
                       attendance_id: null,
                       attendance_date: moment(),
                       attendance_hour: null,
+                      attendance_minut: null,
                     },
                   });
                   setVisible(true);
@@ -289,7 +298,7 @@ const Component = (props) => {
             lesson_id: state.less_id,
             attendance_date: `${moment(state.attendance_date).format(
               "YYYY.MM.DD"
-            )} ${state.attendance_hour}`,
+            )} ${state.attendance_hour}:${state.attendance_minut}`,
           };
           if (add) {
             API.postAttendance(data)
@@ -355,8 +364,8 @@ const Component = (props) => {
         width={850}
         title={
           <div className="text-center">
-            {state.less_id
-              ? `${state.type_name}  засварлах цонх`
+            {state?.id
+              ? `${state?.type_name}  засварлах цонх`
               : "Сургалтын төрөл бүртгэх цонх"}
           </div>
         }
@@ -461,7 +470,6 @@ const Component = (props) => {
                 Сургалтын цаг:
               </span>
               <Input
-                disabled
                 className=" p-1 w-full text-gray-900 border border-gray-200  "
                 min={1}
                 max={900}
@@ -486,7 +494,6 @@ const Component = (props) => {
                 min={1}
                 max={900}
                 type="number"
-                disabled
                 value={state.limit}
                 onChange={(e) => {
                   dispatch({
@@ -506,7 +513,6 @@ const Component = (props) => {
                 className=" p-1 w-full text-gray-900 border border-gray-200"
                 value={state.point}
                 min={1}
-                disabled
                 max={900}
                 type="number"
                 onChange={(e) => {
@@ -526,7 +532,6 @@ const Component = (props) => {
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200 "
                 value={state.percent}
-                disabled
                 min={1}
                 max={900}
                 type="number"
@@ -585,7 +590,6 @@ const Component = (props) => {
                 className=" p-1 w-full text-gray-900 border border-gray-200  "
                 value={state.price_emc}
                 type="number"
-                disabled
                 onChange={(e) => {
                   dispatch({
                     type: "STATE",
@@ -603,7 +607,6 @@ const Component = (props) => {
               <Input
                 className=" p-1 w-full text-gray-900 border border-gray-200"
                 value={state.price_organization}
-                disabled
                 type="number"
                 onChange={(e) => {
                   dispatch({
@@ -650,6 +653,14 @@ const Component = (props) => {
         visible={visible}
         onCancel={() => {
           setVisible(false);
+          dispatch({
+            type: "STATE",
+            data: {
+              attendance_date: moment(),
+              attendance_hour: null,
+              attendance_minut: null,
+            },
+          });
         }}
         footer={footerContent}
       >
@@ -673,35 +684,54 @@ const Component = (props) => {
           />
         </div>
 
-        <div className="w-full p-1 flex flex-col justify-start ">
-          <span className="list-group-item-text grey darken-2 m-0">
-            Цаг:<b className="ml-1 text-red-500">*</b>
-          </span>
-          <InputMask
-            value={state.attendance_hour}
-            onChange={(e) => {
-              dispatch({
-                type: "STATE",
-                data: {
-                  attendance_hour: e.target.value,
-                },
-              });
-            }}
-            mask="99:99"
-            placeholder="99:99"
-          />
-          {/* <Input
-            className=" p-1 w-full text-gray-900 border border-gray-200  "
-            value={state.attendance_hour}
-            onChange={(e) => {
-              dispatch({
-                type: "STATE",
-                data: {
-                  attendance_hour: e.target.value,
-                },
-              });
-            }}
-          /> */}
+        <div className="card flex flex-row justify-between gap-3">
+          <div className="flex flex-col justify-content-center w-1/2 pl-7 ">
+            <span className="list-group-item-text grey darken-2 m-0 pl-2">
+              Цаг:<b className="ml-1 text-red-500">*</b>
+            </span>
+            <InputNumber
+              style={{ width: "4rem" }}
+              min={0}
+              max={100}
+              showButtons
+              maxLength={2}
+              buttonLayout="vertical"
+              className="max-w-sm md:max-w-lg text-gray-900 border border-gray-200 w-max-[50] "
+              value={state.attendance_hour}
+              onValueChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    attendance_hour: e.value,
+                  },
+                });
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col w-1/2">
+            <span className="list-group-item-text grey darken-2 m-0 pl-2">
+              Минут:<b className="ml-1 text-red-500">*</b>
+            </span>
+            <InputNumber
+              className="max-w-sm md:max-w-lg text-gray-900 border border-gray-200  "
+              value={state.attendance_minut}
+              showButtons
+              buttonLayout="vertical"
+              style={{ width: "4rem" }}
+              maxLength={2}
+              min={0}
+              max={60}
+              onValueChange={(e) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    attendance_minut: e.value,
+                  },
+                });
+              }}
+            />
+          </div>
         </div>
       </CalModal>
 
