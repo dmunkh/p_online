@@ -1,13 +1,9 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import {  Select, InputNumber, Modal } from "antd";
+import { Select, InputNumber, Modal, Input } from "antd";
 
 import { Toast } from "primereact/toast";
 
@@ -17,7 +13,7 @@ import Swal from "sweetalert2";
 const { Option } = Select;
 
 const Component = () => {
-  const { message} = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
@@ -92,6 +88,7 @@ const Component = () => {
         ...data,
       })
         .then(() => {
+          console.log(data);
           dispatch({
             type: "STATE",
             data: {
@@ -185,7 +182,7 @@ const Component = () => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
-              console.log(state.list_type)
+              console.log(state.list_type);
               dispatch({
                 type: "STATE",
                 data: {
@@ -233,7 +230,8 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Суух ажилчидын тоо:<b className="ml-1 text-red-500">*</b>
           </span>
-          <InputNumber
+          <Input
+            type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.limit}
@@ -253,7 +251,8 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Сургалтын үргэлжлэх хугацаа:<b className="ml-1 text-red-500">*</b>
           </span>
-          <InputNumber
+          <Input
+            type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.hour}
@@ -273,7 +272,8 @@ const Component = () => {
           <span className="font-semibold pb-1">
             Сургалтын үнэ:<b className="ml-1 text-red-500">*</b>
           </span>
-          <InputNumber
+          <Input
+            type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.price_emc}
@@ -294,7 +294,8 @@ const Component = () => {
             Сургалтын үнэ /Гадны байгууллага/:
             <b className="ml-1 text-red-500">*</b>
           </span>
-          <InputNumber
+          <Input
+            type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.price_organization}
@@ -312,9 +313,9 @@ const Component = () => {
           />
           <div className="my-1 " />
           <span className="font-semibold pb-1">
-            Шалгалтын оноо:<b className="ml-1 text-red-500">*</b>
+            Шалгалтын оноо:
           </span>
-          <InputNumber
+          <Input
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.percent}
@@ -332,9 +333,10 @@ const Component = () => {
           />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
-            Тэнцэх хувь:<b className="ml-1 text-red-500">*</b>
+            Тэнцэх хувь:
           </span>
-          <InputNumber
+          <Input
+            type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.point}

@@ -36,7 +36,7 @@ const List = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_typeyear: _.orderBy(res, ["type_name"]),
+            list_typeyear: _.orderBy(res, ["id"] , 'desc'),
           },
         });
       })
