@@ -13,19 +13,23 @@ import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { MultiSelect } from "primereact/multiselect";
-
-import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
+import { Dropdown } from "primereact/dropdown";
+import { Spin, Input, Modal, InputNumber, Checkbox, Select } from "antd";
 import moment from "moment";
 import * as XLSX from "xlsx";
+import { Tag } from "primereact/tag";
+import { InputText } from "primereact/inputtext";
 
 const List = () => {
   const { user, message, checkRole, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
   });
-
+  const [filters, setFilters] = useState({
+    status: { value: null, matchMode: FilterMatchMode.EQUALS },
+  });
+  const { Option } = Select;
   // const [first, set_first] = useState(0);
   // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
@@ -37,6 +41,14 @@ const List = () => {
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
   const [cnt, setCnt] = useState([]);
+
+  const [statuses] = useState([
+    "unqualified",
+    "qualified",
+    "new",
+    "negotiation",
+    "renewal",
+  ]);
 
   useEffect(() => {
     if (state.department !== null) {
@@ -158,24 +170,25 @@ const List = () => {
   //   }
   // };
 
-  // const getSeverity = (status) => {
-  //   switch (status) {
-  //     case "unqualified":
-  //       return "danger";
+  const getSeverity = (status) => {
+    // eslint-disable-next-line default-case
+    switch (status) {
+      case "unqualified":
+        return "danger";
 
-  //     case "qualified":
-  //       return "success";
+      case "qualified":
+        return "success";
 
-  //     case "new":
-  //       return "info";
+      case "new":
+        return "info";
 
-  //     case "negotiation":
-  //       return "warning";
+      case "negotiation":
+        return "warning";
 
-  //     case "renewal":
-  //       return null;
-  //   }
-  // };
+      case "renewal":
+        return null;
+    }
+  };
   const ss = (list) => {
     var result = [];
 
@@ -187,31 +200,30 @@ const List = () => {
 
     return result.length;
   };
-  const representatives = [
-    { name: "true", image: "amyelsner.png" },
-    { name: "false", image: "annafali.png" },
-  ];
-  const representativeFilterTemplate = (options) => {
+
+  const statusRowFilterTemplate = (options) => {
     return (
-      <MultiSelect
-        value={options.value}
-        options={representatives}
-        itemTemplate={representativesItemTemplate}
-        onChange={(e) => {
-          console.log(e.value);
-          options.filterCallback(e.value.name);
+      <Select
+        className="md:w-[80px]"
+        onChange={(value) => {
+          console.log(value);
+          var result = list;
+          if (value === 1)
+            setList(_.filter(result, (a) => a.is_success === true));
+          if (value === 2)
+            setList(_.filter(result, (a) => a.is_success === false));
         }}
-        optionLabel="name"
-        placeholder="Any"
-        className="p-column-filter"
-      />
-    );
-  };
-  const representativesItemTemplate = (option) => {
-    return (
-      <div className="flex align-items-center gap-2">
-        <span>{option.name}</span>
-      </div>
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Тэнцсэн
+        </Option>
+        <Option key={3} value={3}>
+          Тэнцээгүй
+        </Option>
+      </Select>
     );
   };
 
@@ -263,6 +275,8 @@ const List = () => {
           filters={search}
           className="table-xs text-xs"
           size="small"
+          // filters={filters}
+          // filterDisplay="row"
           responsiveLayout="scroll"
           rowHover
           rowGroupMode="subheader"
@@ -587,9 +601,8 @@ const List = () => {
             field="is_success"
             header="Тэнцсэн эсэх"
             align="center"
-            filter
-            filterField="representative"
-            filterElement={representativeFilterTemplate}
+            // filter
+            // filterElement={statusRowFilterTemplate}
             className=" text-xs border"
             style={{ minWidth: "100px", maxWidth: "100px" }}
             body={(data) => {
