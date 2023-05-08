@@ -171,9 +171,8 @@ const Component = (props) => {
   };
 
   const updateItem = (item) => {
-    console.log("item: rrrrrr", item);
     setAdd(false);
-    var mm = moment(item.attendance_date).format("HH:mm");
+
     dispatch({
       type: "STATE",
       data: {
@@ -292,7 +291,6 @@ const Component = (props) => {
               "YYYY.MM.DD"
             )} ${state.attendance_hour}`,
           };
-          console.log("data: ", data);
           if (add) {
             API.postAttendance(data)
               .then(() => {
@@ -406,7 +404,6 @@ const Component = (props) => {
                   value={state.id}
                   onChange={(value) => {
                     API.getLessonTypeID(value).then((res) => {
-                      console.log("value: ", res);
                       dispatch({
                         type: "SET_LESSON",
                         data: {
@@ -683,7 +680,6 @@ const Component = (props) => {
           <InputMask
             value={state.attendance_hour}
             onChange={(e) => {
-              console.log("e.target.value: ", e.target.value);
               dispatch({
                 type: "STATE",
                 data: {
@@ -727,7 +723,7 @@ const Component = (props) => {
             className="text-xs pb-2"
             // dateFormat="YYYY.MM.DD HH:MM"
             onChange={(e) => {
-              console.log("e: ", e);
+           
               dispatch({
                 type: "STATE",
                 data: {

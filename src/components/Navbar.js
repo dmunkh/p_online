@@ -27,7 +27,6 @@ const Navbar = () => {
       });
       setMenu(menu1);
     }
-    console.log(menu);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.tn]);
 
@@ -82,7 +81,6 @@ const Navbar = () => {
                     onClick={(e) => {
                       e.preventDefault();
                       setDropDown(index === dropdown ? null : index);
-                      console.log(index);
                     }}
                   >
                     <i

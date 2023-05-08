@@ -198,7 +198,6 @@ const List = () => {
         options={representatives}
         itemTemplate={representativesItemTemplate}
         onChange={(e) => {
-          console.log(e.value);
           options.filterCallback(e.value.name);
         }}
         optionLabel="name"

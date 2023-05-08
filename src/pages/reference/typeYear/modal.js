@@ -1,13 +1,9 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import {  Select, InputNumber, Modal } from "antd";
+import { Select, InputNumber, Modal } from "antd";
 
 import { Toast } from "primereact/toast";
 
@@ -17,7 +13,7 @@ import Swal from "sweetalert2";
 const { Option } = Select;
 
 const Component = () => {
-  const { message} = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
@@ -185,7 +181,6 @@ const Component = () => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
-              console.log(state.list_type)
               dispatch({
                 type: "STATE",
                 data: {

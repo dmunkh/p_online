@@ -90,7 +90,7 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
-    console.log("item: //////////", item);
+   
     API.getTypesYear({
       module_id: state.moduleid,
       year: moment(state.change_year).format("YYYY"),

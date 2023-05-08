@@ -21,7 +21,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(state.info_position);
     state.department_id &&
       API.getNorm({
         department_id: state.department_id,

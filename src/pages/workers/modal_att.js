@@ -59,7 +59,6 @@ const Modal_att = () => {
 
     ref.current.focus();
 
-    console.log("carddd", card.tn, "att", card.attendance);
 
     REQ.getWorkerTn({
       tn: tn,
