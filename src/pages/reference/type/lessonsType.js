@@ -32,7 +32,7 @@ const LessonsType = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_type: _.orderBy(res, ["ID"]),
+              list_type: _.orderBy(res, ["id"], 'desc'),
             },
           });
         })
