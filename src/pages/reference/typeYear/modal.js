@@ -183,7 +183,6 @@ const Component = () => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
-              console.log(state.list_type);
               dispatch({
                 type: "STATE",
                 data: {
@@ -229,7 +228,7 @@ const Component = () => {
           </Select>
           <div className="my-2 " />
           <span className="font-semibold pb-1">
-            Суух ажилчидын тоо:<b className="ml-1 text-red-500">*</b>
+            Суух ажилчидын тоо:
           </span>
           <Input
             type="number"
@@ -250,7 +249,7 @@ const Component = () => {
           />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
-            Сургалтын үргэлжлэх хугацаа:<b className="ml-1 text-red-500">*</b>
+            Сургалтын үргэлжлэх хугацаа:
           </span>
           <Input
             type="number"
@@ -271,7 +270,7 @@ const Component = () => {
           />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
-            Сургалтын үнэ:<b className="ml-1 text-red-500">*</b>
+            Сургалтын үнэ:
           </span>
           <Input
             type="number"
@@ -293,7 +292,7 @@ const Component = () => {
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үнэ /Гадны байгууллага/:
-            <b className="ml-1 text-red-500">*</b>
+           
           </span>
           <Input
             type="number"
@@ -308,6 +307,7 @@ const Component = () => {
                     ...state.selected_typeyear,
                     price_organization: e.target.value,
                   },
+
                 },
               });
             }}

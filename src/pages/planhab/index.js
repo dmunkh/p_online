@@ -5,7 +5,7 @@ import Header from "src/pages/planhab/header";
 
 const Index = () => {
   return (
-    <div className=" card flex p-2 border rounded text-xs">
+    <div className=" p-2 text-xs">
       <Header />
 
       <div className="flex flex-col md:flex-row gap-2 ">

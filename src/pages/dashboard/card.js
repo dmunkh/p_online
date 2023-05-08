@@ -254,13 +254,13 @@ const Card = () => {
   return (
     <div className="md:px-20">
       <div className="card ">
-        <div className="md:w-1/3 md:flex justify-start gap-5 p-3 ">
+        <div className="md:w-1/3 md:flex justify-start md:gap-5 p-3 ">
           <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
             format={yearFormat}
             picker="year"
-            className="h-9 w-full "
+            className="h-9 w-32 "
             onChange={(e) => {
               setDate(e.$y);
             }}

@@ -374,7 +374,7 @@ const LessonsType = () => {
   return (
     <>
       <Modal />
-      <div className="card flex p-2 border rounded text-xs">
+      <div className=" p-2  text-xs">
         <div className="flex flex-col rounded">
           <Header />
           <div className="card flex justify-center text-xs rounded p-2">

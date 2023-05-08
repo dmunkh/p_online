@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import Module from "src/components/custom/module";
@@ -36,7 +36,7 @@ const List = () => {
         dispatch({
           type: "STATE",
           data: {
-            list_typeyear: _.orderBy(res, ["id"] , 'desc'),
+            list_typeyear: _.orderBy(res, ["id"], "desc"),
           },
         });
       })
@@ -77,6 +77,28 @@ const List = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module]);
+  useLayoutEffect(() => {
+    state.selected_typeyear.type_id &&
+      API.getTypes(state.selected_typeyear.type_id)
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              price_emc: res.price_emc,
+              price_organization: res.price_organization,
+            },
+          });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Жагсаалт татаж чадсангүй",
+          });
+        });
+    console.log(state.price_emc);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.selected_typeyear.type_id]);
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -115,6 +137,7 @@ const List = () => {
         selected_typeyear: item,
       },
     });
+
     //     //loadItemTypeList(res.itemtypeid);
     dispatch({
       type: "STATE",

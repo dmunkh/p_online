@@ -8,7 +8,7 @@ import { usePlanContext } from "src/contexts/planContext";
 const Index = () => {
   const { state, dispatch } = usePlanContext();
   return (
-    <div className=" card flex p-2 border rounded text-xs">
+    <div className=" p-2 text-xs">
       <Header />
       <div className="flex flex-col md:flex-row gap-2 ">
         <div className="md:w-2/3">

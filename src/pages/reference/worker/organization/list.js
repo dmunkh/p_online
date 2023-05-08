@@ -94,7 +94,7 @@ export default function List() {
   const onRowExpand = (event) => {
     toast.current.show({
       severity: "info",
-      summary: "Ажилчид",
+      summary: "Ажилтан",
       detail: event.data.name,
       life: 3000,
     });
@@ -108,19 +108,6 @@ export default function List() {
       life: 3000,
     });
   };
-
-  // const expandAll = () => {
-  //   let _expandedRows = {};
-
-  //   person.forEach((p) => (_expandedRows[`${p.organization_id}`] = true));
-
-  //   setExpandedRows(_expandedRows);
- 
-  // };
-
-  // const collapseAll = () => {
-  //   setExpandedRows(null);
-  // };
 
   const representativesItemTemplate = (option) => {
     return (
@@ -192,9 +179,9 @@ export default function List() {
     );
   }
   return (
-    <div className="card flex justify-center text-xs rounded p-2">
+    <div className="text-xs rounded p-2">
       <Header />
-      <div className=" text-xs rounded p-2">
+      <div className="text-xs rounded p-2">
         <Spin
           tip="Уншиж байна."
           className="min-h-full first-line:bg-opacity-80"
@@ -289,7 +276,7 @@ export default function List() {
 
             <Column
               field="organization_name"
-              header="Байгуулгын нэр"
+              header="Байгууллагын нэр"
               sortable
               className="text-sm"
               filterField="representative"

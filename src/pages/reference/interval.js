@@ -388,7 +388,7 @@ const Interval = () => {
         </button>
       </Modal>
 
-      <div className="card flex justify-center text-xs rounded p-2">
+      <div className="card h-screen flex  text-xs rounded p-2">
         <Spin
           tip="Уншиж байна."
           className="min-h-full first-line:bg-opacity-80"

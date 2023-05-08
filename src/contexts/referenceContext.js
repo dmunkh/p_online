@@ -12,7 +12,7 @@ const _state = {
 
   list_type: [],
   typeID: null,
-
+  list_types: [],
   list_lesson_ID: [],
 
   refresh: 0,
@@ -37,7 +37,7 @@ const _state = {
   selected_employee:{
     id:null,
     organization_id: null,
-    position_name:"",
+    position_name:null,
     register_number:null,
     short_name:null,
   },
@@ -46,6 +46,7 @@ const _state = {
   list_chamber: [],
   placeID: null,
   place_name: "",
+
 
   list_typeyear: [],
   selected_typeyear: {
