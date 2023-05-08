@@ -4,40 +4,50 @@
 
 
 .p-checkbox .p-checkbox-box {
-    border: 2px solid #ced4da;
-    background: #ffffff;
-    width: 18px;
-    height: 18px;
-    color: #495057;
-    border-radius: 6px;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border: 2px solid #ced4da;
+  background: #ffffff;
+  width: 18px;
+  height: 18px;
+  color: #495057;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
+
 a:active {
-    color: #8741ff;
+  color: #8741ff;
 }
 
 a:hover {
-    color: #8741ff;
+  color: #8741ff;
 }
+
 .element.style {
-    overflow: hidden;
+  overflow: hidden;
 }
+
 .events {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .events .ant-badge-status {
-    width: 100%;
-    overflow: hidden;
-    font-size: 12px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .notes-month {
-    font-size: 28px;
-    text-align: center;
-  }
-  .notes-month section {
-    font-size: 28px;
-  }
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.events .ant-badge-status {
+  width: 100%;
+  overflow: hidden;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.notes-month {
+  font-size: 28px;
+  text-align: center;
+}
+
+.notes-month section {
+  font-size: 28px;
+}
+
+.main-list {
+  scroll-behavior: smooth;
+}

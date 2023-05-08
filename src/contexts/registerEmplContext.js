@@ -15,6 +15,7 @@ const _state = {
   lessonlist: [],
 
   lesson: null,
+  selected_typeId: null,
 
   modal: false,
   modaltransfer: false,

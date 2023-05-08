@@ -51,6 +51,7 @@ const Header = () => {
       <div className="flex items-center w-full  md:w-[400px] text-xs gap-2">
         <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
         <Department
+          menu={1}
           value={state.department_id}
           onChange={(value) =>
             dispatch({ type: "STATE", data: { department_id: value } })

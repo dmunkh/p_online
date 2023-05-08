@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { Spin } from "antd";
 import _ from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
-import { useNavigate } from "react-router-dom";
+
 import moment from "moment";
 // import { FilterMatchMode } from "primereact/api";
 // import Swal from "sweetalert2";
 // import moment from "moment";
 
 const List = () => {
-  const navigate = useNavigate();
   const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
+  const ref = useRef();
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.log("LESSONLIST", state.selected_typeId);
     setLoading(true);
     state.moduletypeid &&
       API.getLesson({
@@ -25,8 +26,25 @@ const List = () => {
         module_id: state.moduletypeid,
       })
         .then((res) => {
-          dispatch({ type: "STATE", data: { lessonlist: res } });
-          dispatch({ type: "STATE", data: { lessonlistfilter: res } });
+          console.log(moment());
+
+          dispatch({
+            type: "STATE",
+            data: { lessonlist: _.orderBy(res, "begin_date") },
+          });
+
+          var result = [];
+
+          state.selected_typeId === null
+            ? (result = res)
+            : (result = _.filter(
+                res,
+                (a) => a.type_id === state.selected_typeId
+              ));
+          dispatch({
+            type: "STATE",
+            data: { lessonlistfilter: _.orderBy(result, "begin_date") },
+          });
         })
         .catch((error) =>
           message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -64,12 +82,21 @@ const List = () => {
               className="bg-opacity-80"
               spinning={loading}
             >
-              <div className="users-list-padding position-relative ps ps--active-y  ">
+              <div
+                className="users-list-padding position-relative ps ps--active-y max-h-[calc(100vh-300px)] overflow-auto main-list"
+                ref={ref}
+              >
                 {_.map(state.lessonlistfilter, (item) => {
                   return (
                     <div
                       key={"main_" + item.id}
-                      className="list-group-item  hover:bg-[#dedbf1] cursor-pointer"
+                      className={
+                        "list-group-item  hover:bg-[#dedbf1] cursor-pointer " +
+                        +(_.toInteger(moment(item.begin_date).format("M")) ===
+                        _.toInteger(moment().format("M"))
+                          ? " bg-orange-100"
+                          : "")
+                      }
                       onClick={() => {
                         dispatch({
                           type: "STATE",
@@ -83,27 +110,28 @@ const List = () => {
                         <span className="avatar avatar-md mr-2">
                           <img src="/img/safety_round.png" alt="Avatar" />
                           <span className="avatar-status-online"></span>
-                          <i></i>
                         </span>
                         <div className="media-body">
-                          <h4 className="list-group-item-heading mb-1">
+                          <h3 className="list-group-item-heading mb-1 text-sm">
                             {item.type_name}
                             <span className="font-small-2 float-right grey darken-1">
                               {item.begin_date} - {item.end_date}
                             </span>
-                          </h4>
+                          </h3>
                           <p className="list-group-item-text grey darken-2 m-0">
                             <i className="ft-check primary font-small-2 mr-1"></i>
                             <span>
+                              <i className="ft-calendar"></i> Огноо:{" "}
+                              {item.begin_date} - {item.end_date},{" "}
                               <i className="ft-users"></i> Суудлын тоо:{" "}
                               {item.limit}/{item.count_register},{" "}
                               <i className="ft-clock "></i> Сургалтын цаг:{" "}
                               {item.hour},{" "}
-                              <span className="text-blue-900 !important">
+                              {/* <span className="text-blue-900 !important">
                                 {" "}
                                 <i className="ft-edit text-blue-800 bg-blend-color-dodge "></i>{" "}
                               </span>
-                              Ирцийн бүртгэл: {item.hour}
+                              Ирцийн бүртгэл: {item.hour} */}
                             </span>
                             <span className="float-right primary">
                               <i className="font-medium-1 icon-pin"></i>

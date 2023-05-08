@@ -24,8 +24,8 @@ const ModalNormDetail = () => {
   };
   return (
     <div className="flex flex-col text-xs">
-      <hr className="my-2" />
-      <div className="flex items-center">
+      {/* <hr className="my-2" /> */}
+      {/* <div className="flex items-center">
         <span className="w-1/3 font-semibold">
           Бүтцийн нэгж:<b className="ml-1 text-red-500">*</b>
         </span>
@@ -35,8 +35,8 @@ const ModalNormDetail = () => {
             dispatch({ type: "STATE", data: { department: value } });
           }}
         />
-      </div>
-      <hr className="my-2" />
+      </div> */}
+      {/* <hr className="my-2" /> */}
       <div className="flex justify-end">
         {/* <InputSwitch
           checked={checked}
@@ -51,10 +51,10 @@ const ModalNormDetail = () => {
           <Switch
             className="bg-green-300"
             checkedChildren={
-              <span className="text-blue-500 "> Нийт ажилтнууд</span>
+              <span className="text-blue-500 "> Төлөвлөгөөт ажилтнууд</span>
             }
             unCheckedChildren={
-              <span className="text-blue-500 "> Төлөвлөгөөт ажилтнууд </span>
+              <span className="text-blue-500 "> Нийт ажилтнууд </span>
             }
             checked={checked}
             onChange={(value) => {

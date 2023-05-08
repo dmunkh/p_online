@@ -31,7 +31,7 @@ const Department = () => {
     setLoading(true);
     API.getPlanWorker({
       year: moment(state.date).format("Y"),
-      type_id: state.modaltypeid,
+      type_id: state.lesson.type_id,
       department_id: state.department,
     })
       .then((res) => {
@@ -104,24 +104,23 @@ const Department = () => {
               />
             </div>
 
-            {state.limit_count - state.list_count - state.list_checked.length <
+            {state.lesson.limit -
+              state.lesson.count_register -
+              state.list_checked.length <
             0 ? (
               <span className="text-red-500">
                 {" "}
                 <i className="ft-arrow-up"></i> Лимит хэтэрлээ ({" "}
-                {state.limit_count} /
-                {state.list_count + state.list_checked.length} )
-                {/* {state.limit_count -
-                  state.list_count -
-                  state.list_checked.length} */}
+                {state.lesson.limit} /
+                {state.lesson.count_register + state.list_checked.length} )
               </span>
             ) : (
               <span>
                 <span className="font-bold">
                   <i className="ft-user-plus"></i>
                 </span>{" "}
-                ( {state.limit_count} /
-                {state.list_count + state.list_checked.length} )
+                ( {state.lesson.limit} /
+                {state.lesson.count_register + state.list_checked.length} )
               </span>
             )}
           </div>
