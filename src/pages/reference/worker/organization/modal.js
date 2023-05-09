@@ -6,6 +6,7 @@ import * as API from "src/api/request";
 import { Input, Modal, Card } from "antd";
 
 import _ from "lodash";
+import SaveButton from "src/components/button/SaveButton";
 
 const Component = () => {
   const { message } = useUserContext();
@@ -143,16 +144,7 @@ const Component = () => {
               })}
           </Card>
         </div>
-
-        <div className="my-3 border " />
-
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
-          onClick={() => save()}
-        >
-          <i className="ft-save" />
-          <span className="ml-2">Хадгалах</span>
-        </button>
+        <SaveButton onClick={() => save()}/>
       </Modal>
     </>
   );

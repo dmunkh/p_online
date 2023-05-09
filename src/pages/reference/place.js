@@ -8,6 +8,8 @@ import { Column } from "primereact/column";
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
 import Swal from "sweetalert2";
+import SaveButton from "src/components/button/SaveButton";
+import PlusButton from "src/components/button/plusButton";
 
 const Chamber = () => {
   const { message, checkRole } = useUserContext();
@@ -195,23 +197,18 @@ const Chamber = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2 ">
+            <div className="flex items-center justify-center gap-2 ">
               {checkRole(["place_add"]) && (
-                <div
-                  title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                  onClick={() => {
-                    dispatch({
-                      type: "CLEAR_PLACE",
-                    });
-                    dispatch({
-                      type: "STATE",
-                      data: { modal: true },
-                    });
-                  }}
-                >
-                  <i className="ft-plus" />
-                </div>
+                <PlusButton  onClick={() => {
+                  dispatch({
+                    type: "CLEAR_PLACE",
+                  });
+                  dispatch({
+                    type: "STATE",
+                    data: { modal: true },
+                  });
+                }}/>
+               
               )}
             </div>
           </div>
@@ -386,7 +383,7 @@ const Chamber = () => {
             onChange={onInputChange}
           />
           <Card
-          className="overflow-auto"
+            className="overflow-auto"
             style={{
               height: "100px",
               width: "100%",
@@ -398,16 +395,7 @@ const Chamber = () => {
               })}
           </Card>
         </div>
-
-        <div className="my-3 border " />
-
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
-          onClick={() => save()}
-        >
-          <i className="fas fa-save" />
-          <span className="ml-2">Хадгалах</span>
-        </button>
+        <SaveButton onClick={() => save()} />
       </Modal>
       <div className="card flex justify-center text-xs rounded p-2">
         <Spin
