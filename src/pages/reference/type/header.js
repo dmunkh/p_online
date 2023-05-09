@@ -11,7 +11,7 @@ import Module from "src/components/custom/module";
 const Header = () => {
   const { state, dispatch } = useReferenceContext();
   const { message } = useUserContext();
-  const [module, setModule] = useState();
+
   //modul жагсаалт
   // useLayoutEffect(() => {
   //   API.getModule()
@@ -48,9 +48,14 @@ const Header = () => {
           Модуль:
         </span>
         <Module
-          value={module}
+          value={state.selected_moduleID}
           onChange={(value) => {
-            setModule(value);
+            dispatch({
+              type: "STATE",
+              data: {
+               selected_moduleID: value,
+              },
+            });
           }}
         />
       </div>
