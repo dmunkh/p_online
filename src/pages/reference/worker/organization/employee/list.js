@@ -65,7 +65,6 @@ export default function Employee({ data }) {
     });
   };
   const updateItem = (item) => {
-    console.log(item);
     dispatch({
       type: "STATE",
       data: { selected_employee: item },
@@ -78,8 +77,6 @@ export default function Employee({ data }) {
       type: "STATE",
       data: { modal: true },
     });
-
-    console.log(state.modal);
   };
   const header = (
     <div className="flex  md:justify-end gap-2 ">
@@ -126,8 +123,9 @@ export default function Employee({ data }) {
   }
   return (
     <div className="w-full p-1">
-      <div className="flex justify-between mr-5 pb-3 ">
-        <h5 className=" text-sm font-semibold">{data.organization_name}</h5>
+      <div className="flex justify-start gap-2 pb-3 ">
+        <h5 className=" text-sm font-semibold">{data.organization_name}:</h5>
+        <h5 className=" text-sm font-semibold"> {empList.length}</h5>
       </div>
       <DataTable
         dataKey="id"

@@ -129,6 +129,37 @@ const Component = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.less_id]);
 
+  // useEffect(() => {
+   
+  //   state.id &&     
+
+  //       API.getLessonTypeID(state.id).then((res) => {
+  //         dispatch({
+  //           type: "SET_LESSON",
+  //           data: {
+  //             id: res.id,
+  //             begin_date: res.begin_date,
+  //             end_date: res.end_date,
+  //             hour: res.hour,
+  //             limit: res.limit,
+  //             percent: res.percent,
+
+  //             point: res.point,
+  //             type_id: res.type_id,
+  //             place_id: res.place_id,
+  //             price_emc: res.price_emc,
+  //             price_organization: res.price_organization,
+  //           },
+  //         });
+  //         dispatch({
+  //           type: "STATE",
+  //           data: { type_id: res.type_id },
+  //         });
+  //       });
+          
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.id]);
+
   const deleteItem = (item) => {
     Swal.fire({
       text: "Устгахдаа итгэлтэй байна уу?",
@@ -161,7 +192,6 @@ const Component = (props) => {
   };
 
   const updateItem = (item) => {
-    console.log("item:``````` ", item);
     dispatch({
       type: "STATE",
       data: {
@@ -365,7 +395,7 @@ const Component = (props) => {
         title={
           <div className="text-center">
             {state?.id
-              ? `${state?.type_name}  засварлах цонх`
+              ? "Сургалтын төрөл засварлах цонх"
               : "Сургалтын төрөл бүртгэх цонх"}
           </div>
         }
@@ -410,40 +440,43 @@ const Component = (props) => {
                   module_id={state.moduleid}
                   //disabled={props.setedit ? "true" : "false"}
                   year={moment(state.change_year).format("YYYY")}
-                  value={state.id}
+                  value={state?.id}
                   onChange={(value) => {
-                    API.getLessonTypeID(value).then((res) => {
-                      dispatch({
-                        type: "SET_LESSON",
-                        data: {
-                          id: res.id,
-                          begin_date: res.begin_date,
-                          end_date: res.end_date,
-                          hour: res.hour,
-                          limit: res.limit,
-                          percent: res.percent,
-
-                          point: res.point,
-                          type_id: res.type_id,
-                          place_id: res.place_id,
-                          price_emc: res.price_emc,
-                          price_organization: res.price_organization,
-                        },
+                    
+                      // dispatch({
+                      //   type: "STATE",
+                      //   data: { id: value },
+                      // });
+                      API.getLessonTypeID(value).then((res) => {
+                        dispatch({
+                          type: "SET_LESSON",
+                          data: {
+                            id: res.id,
+                            begin_date: res.begin_date,
+                            end_date: res.end_date,
+                            hour: res.hour,
+                            limit: res.limit,
+                            percent: res.percent,
+              
+                            point: res.point,
+                            type_id: res.type_id,
+                            place_id: res.place_id,
+                            price_emc: res.price_emc,
+                            price_organization: res.price_organization,
+                          },
+                        });
+                        dispatch({
+                          type: "STATE",
+                          data: { type_id: res.type_id },
+                        });
                       });
-                      dispatch({
-                        type: "STATE",
-                        data: { id: res.id },
-                      });
-                      dispatch({
-                        type: "STATE",
-                        data: { type_id: res.type_id },
-                      });
+                     
                       dispatch({
                         type: "STATE",
                         data: { modal: true },
                       });
                       //loadItemTypeList(res.itemtypeid);
-                    });
+                   
                   }}
                 />
               </div>

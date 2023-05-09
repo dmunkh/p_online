@@ -9,9 +9,9 @@ import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
 
 import Swal from "sweetalert2";
+import SaveButton from "src/components/button/SaveButton";
 
 const LessonsRegister = () => {
-
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
@@ -606,15 +606,7 @@ const LessonsRegister = () => {
           </div>
         </div>
 
-        <div className="my-3 border " />
-
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-          onClick={() => save()}
-        >
-          <i className="fas fa-save" />
-          <span className="ml-2">Хадгалах</span>
-        </button>
+        <SaveButton onClick={() => save()} />
       </Modal>
 
       <div className="card flex justify-center text-xs rounded p-2">

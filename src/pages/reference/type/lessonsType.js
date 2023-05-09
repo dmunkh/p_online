@@ -20,7 +20,6 @@ const LessonsType = () => {
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
-
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
@@ -32,7 +31,7 @@ const LessonsType = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_type: _.orderBy(res, ["id"], 'desc'),
+              list_type: _.orderBy(res, ["id"], 'asc'),
             },
           });
         })
