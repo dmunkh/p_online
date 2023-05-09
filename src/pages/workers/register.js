@@ -206,7 +206,7 @@ const List = () => {
       <Select
         className="md:w-[80px]"
         onChange={(value) => {
-          console.log(value);
+     
           var result = list;
           if (value === 1)
             setList(_.filter(result, (a) => a.is_success === true));
@@ -270,7 +270,7 @@ const List = () => {
         <MODALTRANSFER />
       </Modal>
       <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}>
-        {console.log(state.lesson)}
+      
         <DataTable
           value={list}
           filters={search}

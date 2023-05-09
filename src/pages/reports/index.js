@@ -17,7 +17,7 @@ const Index = () => {
       module_id: state.moduleid,
     })
       .then((res) => {
-        console.log("res: rrrrrrrrrrrrr", res);
+      
         dispatch({
           type: "STATE",
           data: {

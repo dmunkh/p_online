@@ -161,7 +161,6 @@ const Component = (props) => {
   };
 
   const updateItem = (item) => {
-    console.log("item:``````` ", item);
     dispatch({
       type: "STATE",
       data: {

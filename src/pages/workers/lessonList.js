@@ -25,7 +25,7 @@ const List = () => {
         module_id: state.moduletypeid,
       })
         .then((res) => {
-          console.log(moment());
+         
 
           dispatch({
             type: "STATE",

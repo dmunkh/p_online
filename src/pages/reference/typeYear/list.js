@@ -15,9 +15,9 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
-import EditButton from "src/components/custom/editButton";
-import PlusButton from "src/components/custom/plusButton";
-import DeleteButton from "src/components/custom/deleteButton";
+import EditButton from "src/components/button/editButton";
+import PlusButton from "src/components/button/plusButton";
+import DeleteButton from "src/components/button/deleteButton";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -29,7 +29,7 @@ const List = () => {
   const [per_page, set_per_page] = useState(50);
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
-  const [module, setModule] = useState(1);
+  const [module, setModule] = useState();
   const [isPrice, setIsPrice] = useState(false);
 
   // жагсаалт
@@ -63,6 +63,7 @@ const List = () => {
   }, [state.refresh, module, date]);
 
   useLayoutEffect(() => {
+    module &&
     API.getType({ module_id: module })
       .then((res) => {
         dispatch({
@@ -104,7 +105,6 @@ const List = () => {
               title: "Жагсаалт татаж чадсангүй",
             });
           });
-      console.log(state.price_emc);
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,7 +177,7 @@ const List = () => {
               setDate(e.$y);
             }}
           />
-          <span className="px-3 font-semibold text-xs">Сургалтын бүлэг:</span>
+          <span className="px-3 font-semibold text-xs whitespace-nowrap">Сургалтын бүлэг:</span>
           <Module
             value={module}
             onChange={(value) => {

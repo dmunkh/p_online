@@ -9,7 +9,7 @@ import { useLayoutEffect } from "react";
 
 const Header = () => {
   const { state, dispatch } = useReferenceContext();
-  const { message } = useUserContext();
+  const { message,  checkRole } = useUserContext();
 
   //modul жагсаалт
   useLayoutEffect(() => {
@@ -49,6 +49,7 @@ const Header = () => {
               Сургалтын бүлэг:
             </span>
             <div className="w-full md:min-w-[200px]">
+            {checkRole(["organization_add"]) && (
               <Select
                 value={state.selected_moduleID}
                 placeholder="сонгох."
@@ -72,6 +73,7 @@ const Header = () => {
                   </Select.Option>
                 ))}
               </Select>
+            )}
             </div>
           </div>
         </div>

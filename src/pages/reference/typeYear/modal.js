@@ -10,7 +10,7 @@ import { Toast } from "primereact/toast";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
-import SaveButton from "src/components/custom/SaveButton";
+import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
 const Component = ({ setIsPrice, isPrice }) => {
@@ -81,7 +81,6 @@ const Component = ({ setIsPrice, isPrice }) => {
         ...data,
       })
         .then(() => {
-          console.log(data);
           dispatch({
             type: "STATE",
             data: {
@@ -96,7 +95,7 @@ const Component = ({ setIsPrice, isPrice }) => {
           //   detail: "Амжилттай хадгалагдлаа",
           // });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-          console.log(data)
+         
         })
         .catch((error) => {
           // toast.current.show({
@@ -130,7 +129,7 @@ const Component = ({ setIsPrice, isPrice }) => {
           // });
 
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-          console.log(data)
+      
         })
         .catch((error) => {
           // toast.current.show({
