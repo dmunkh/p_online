@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
-const Component = ({ setIsPrice, isPrice }) => {
+const Component = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
@@ -89,21 +89,10 @@ const Component = ({ setIsPrice, isPrice }) => {
           });
           dispatch({ type: "CLEAR_TYPEYEAR" });
           dispatch({ type: "STATE", data: { modal: false } });
-          // toast.current.show({
-          //   severity: "success",
-          //   summary: "Амжилттай",
-          //   detail: "Амжилттай хадгалагдлаа",
-          // });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
          
         })
         .catch((error) => {
-          // toast.current.show({
-          //   severity: "error",
-          //   summary: "Алдаа",
-          //   detail: error.response.data.msg,
-          // });
-
           message({
             type: "error",
             error,
@@ -122,22 +111,10 @@ const Component = ({ setIsPrice, isPrice }) => {
             },
           });
           dispatch({ type: "STATE", data: { modal: false } });
-          // toast.current.show({
-          //   severity: "success",
-          //   summary: "Амжилттай",
-          //   detail: "Амжилттай хадгалагдлаа",
-          // });
-
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
       
         })
         .catch((error) => {
-          // toast.current.show({
-          //   severity: "error",
-          //   summary: "Алдаа",
-          //   detail: error.response.data.msg,
-          // });
-
           message({
             type: "error",
             error,
@@ -176,7 +153,6 @@ const Component = ({ setIsPrice, isPrice }) => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
-              setIsPrice(true);
               dispatch({
                 type: "STATE",
                 data: {

@@ -35,6 +35,7 @@ const List = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
+    module&&
     API.getTypesYear({ module_id: module, year: date })
       .then((res) => {
         dispatch({
@@ -62,24 +63,24 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, module, date]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     module &&
-    API.getType({ module_id: module })
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_type: _.orderBy(res, ["type_name"]),
-          },
+      API.getType({ module_id: module })
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_type: _.orderBy(res, ["type_name"]),
+            },
+          });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Жагсаалт татаж чадсангүй",
+          });
         });
-      })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module]);
   useLayoutEffect(
@@ -177,7 +178,9 @@ const List = () => {
               setDate(e.$y);
             }}
           />
-          <span className="px-3 font-semibold text-xs whitespace-nowrap">Сургалтын бүлэг:</span>
+          <span className="px-3 font-semibold text-xs whitespace-nowrap">
+            Сургалтын бүлэг:
+          </span>
           <Module
             value={module}
             onChange={(value) => {
@@ -394,12 +397,6 @@ const List = () => {
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["type_year_edit"]) && (
                   <EditButton onClick={() => updateItem(item)} />
-                  // <button
-                  //   className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                  //   onClick={() => updateItem(item)}
-                  // >
-                  //   <i className="ft-edit" />
-                  // </button>
                 )}
 
                 {checkRole(["type_year_delete"]) && (
@@ -410,7 +407,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal setIsPrice={setIsPrice} isPrice={isPrice} />
+      <Modal />
     </div>
   );
 };
