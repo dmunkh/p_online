@@ -36,7 +36,7 @@ const Header = () => {
         <span className="md:w-max  font-semibold text-xs whitespace-nowrap">
           Сургалтын бүлэг:
         </span>
-        <div className="w-full md:min-w-[200px]">
+        <div className="w-full md:min-w-[400px]">
           <Module
             value={state.moduleid}
             onChange={(value) => {

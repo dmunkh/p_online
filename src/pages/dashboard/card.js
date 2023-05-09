@@ -27,7 +27,7 @@ const Card = () => {
   const [barLabels, setBarLabels] = useState();
 
   useLayoutEffect(() => {
-    tseh&&
+    tseh&&date&&
     API.getControlPanel({ year: date, department_id: tseh })
       .then(async (res) => {
         const lebel = [];
@@ -59,7 +59,7 @@ const Card = () => {
       }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, tseh]);
   useLayoutEffect(() => {
-    module&&
+    modul&&
     API.getControlDepartment({
       module_id: modul,
       year: date,
