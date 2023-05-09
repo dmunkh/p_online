@@ -43,9 +43,9 @@ const Header = () => {
 
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-5 border-b">
-      <div className="md:w-1/3 flex flex-col  md:flex-row md:items-center gap-3 ml-5">
-        <span className="px-3 font-semibold text-xs whitespace-nowrap">
-          Сургалтын бүлэг:
+      <div className="md:w-1/3 flex flex-col  md:flex-row md:items-center gap-3 ">
+        <span className=" font-semibold text-xs whitespace-nowrap">
+          Модуль:
         </span>
         <Module
           value={module}

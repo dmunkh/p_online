@@ -15,18 +15,19 @@ const Card = () => {
   const { message } = useUserContext();
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
-  const [tseh, setTseh] = useState(0);
+  const [tseh, setTseh] = useState();
   const [data, setData] = useState();
   const [count, setCount] = useState();
   const [module_name, setModule_name] = useState();
   const [count_unique, setCount_unique] = useState();
-  const [modul, setModule] = useState(1);
+  const [modul, setModule] = useState();
   const [modulename, setModuleName] = useState("ХЭМАБ");
   const [barData1, setBarData1] = useState();
   const [barData2, setBarData2] = useState();
   const [barLabels, setBarLabels] = useState();
 
   useLayoutEffect(() => {
+    tseh&&
     API.getControlPanel({ year: date, department_id: tseh })
       .then(async (res) => {
         const lebel = [];
@@ -58,6 +59,7 @@ const Card = () => {
       }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, tseh]);
   useLayoutEffect(() => {
+    module&&
     API.getControlDepartment({
       module_id: modul,
       year: date,
