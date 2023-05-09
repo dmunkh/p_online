@@ -6,7 +6,7 @@ import * as API from "src/api/request";
 import { Select, Input, Modal } from "antd";
 
 import _ from "lodash";
-import SaveButton from "src/components/SaveButton";
+import SaveButton from "src/components/custom/SaveButton";
 
 const Component = (data) => {
   const { message } = useUserContext();

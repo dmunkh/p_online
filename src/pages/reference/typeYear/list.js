@@ -15,6 +15,8 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
+import EditButton from "src/components/custom/editButton";
+import PlusButton from "src/components/custom/plusButton";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -209,22 +211,32 @@ const List = () => {
             </div>
             <div className="flex items-center gap-2 ">
               {checkRole(["type_year_add"]) && (
-                <div
-                  title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                  onClick={() => {
-                    dispatch({
-                      type: "CLEAR_TYPEYEAR",
-                    });
+                <PlusButton  title="Нэмэх" onClick={() => {
+                  dispatch({
+                    type: "CLEAR_TYPEYEAR",
+                  });
 
-                    dispatch({
-                      type: "STATE",
-                      data: { modal: true },
-                    });
-                  }}
-                >
-                  <i className="ft-plus" />
-                </div>
+                  dispatch({
+                    type: "STATE",
+                    data: { modal: true },
+                  });
+                }}/>
+                // <div
+                //   title="Нэмэх"
+                //   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
+                //   onClick={() => {
+                //     dispatch({
+                //       type: "CLEAR_TYPEYEAR",
+                //     });
+
+                //     dispatch({
+                //       type: "STATE",
+                //       data: { modal: true },
+                //     });
+                //   }}
+                // >
+                //   <i className="ft-plus" />
+                // </div>
               )}
             </div>
           </div>
@@ -394,12 +406,13 @@ const List = () => {
             return (
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["type_year_edit"]) && (
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => updateItem(item)}
-                  >
-                    <i className="ft-edit" />
-                  </button>
+                  <EditButton onClick={() => updateItem(item)}/>
+                  // <button
+                  //   className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                  //   onClick={() => updateItem(item)}
+                  // >
+                  //   <i className="ft-edit" />
+                  // </button>
                 )}
 
                 {checkRole(["type_year_delete"]) && (
