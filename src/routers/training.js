@@ -6,6 +6,7 @@ import UseTrainingContext from "src/contexts/trainingContext";
 
 import TrainingList from "src/pages/registration/training/index";
 import PlanReport from "src/pages/reports/index";
+import PlanDepReport from "src/pages/reports/planDep";
 
 const Training = () => {
   const data = [
@@ -22,6 +23,14 @@ const Training = () => {
       component: (
         <UseTrainingContext>
           <PlanReport />
+        </UseTrainingContext>
+      ),
+    },
+    {
+      path: "/plandep",
+      component: (
+        <UseTrainingContext>
+          <PlanDepReport />
         </UseTrainingContext>
       ),
     },

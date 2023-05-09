@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 import moment from "moment";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 
-
 const Training = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useTrainingContext();

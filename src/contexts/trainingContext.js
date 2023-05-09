@@ -38,6 +38,8 @@ const _state = {
   attendance_minut: "",
 
   list_reportplan: [],
+  list_reportplandep: [],
+  list_lessType: [],
 };
 
 export const useTrainingContext = () => {
