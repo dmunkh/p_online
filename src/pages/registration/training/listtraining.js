@@ -90,7 +90,12 @@ const Training = () => {
     });
   };
   const updateItem = (item) => {
- 
+    dispatch({
+      type: "STATE",
+      data: {
+        id: null,
+      },
+    });
    API.getTypesYear({
     module_id: state.moduleid,
     year: moment(state.change_year).format("YYYY"),

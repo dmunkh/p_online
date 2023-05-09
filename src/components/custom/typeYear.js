@@ -20,7 +20,7 @@ const TypeList = (props) => {
         (res) => {
           setList(_.orderBy(res, ["id"]));
 
-          if (res.length > 0 && !props.value) props.onChange(res[0].id);
+          //if (res.length > 0 && !props.value) props.onChange(res[0].id);
         }
       );
 
