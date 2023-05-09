@@ -10,9 +10,10 @@ import { Toast } from "primereact/toast";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
+import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
-const Component = ({ setIsPrice, isPrice }) => {
+const Component = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
@@ -80,7 +81,6 @@ const Component = ({ setIsPrice, isPrice }) => {
         ...data,
       })
         .then(() => {
-          console.log(data);
           dispatch({
             type: "STATE",
             data: {
@@ -89,21 +89,10 @@ const Component = ({ setIsPrice, isPrice }) => {
           });
           dispatch({ type: "CLEAR_TYPEYEAR" });
           dispatch({ type: "STATE", data: { modal: false } });
-          // toast.current.show({
-          //   severity: "success",
-          //   summary: "Амжилттай",
-          //   detail: "Амжилттай хадгалагдлаа",
-          // });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-          console.log(data)
+         
         })
         .catch((error) => {
-          // toast.current.show({
-          //   severity: "error",
-          //   summary: "Алдаа",
-          //   detail: error.response.data.msg,
-          // });
-
           message({
             type: "error",
             error,
@@ -122,22 +111,10 @@ const Component = ({ setIsPrice, isPrice }) => {
             },
           });
           dispatch({ type: "STATE", data: { modal: false } });
-          // toast.current.show({
-          //   severity: "success",
-          //   summary: "Амжилттай",
-          //   detail: "Амжилттай хадгалагдлаа",
-          // });
-
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-          console.log(data)
+      
         })
         .catch((error) => {
-          // toast.current.show({
-          //   severity: "error",
-          //   summary: "Алдаа",
-          //   detail: error.response.data.msg,
-          // });
-
           message({
             type: "error",
             error,
@@ -176,7 +153,6 @@ const Component = ({ setIsPrice, isPrice }) => {
             placeholder="Сонгоно уу."
             value={state.selected_typeyear.type_id}
             onChange={async (value) => {
-              setIsPrice(true);
               dispatch({
                 type: "STATE",
                 data: {
@@ -342,28 +318,10 @@ const Component = ({ setIsPrice, isPrice }) => {
         </div>
 
         <div className="my-3 border " />
-
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
-          onClick={() => save(state, dispatch, date, toast)}
-        >
-          {/* <i className="ft-save" /> */}
-          <span className="ml-2">Хадгалах</span>
-        </button>
+        <SaveButton  onClick={() => save()}/>
         <Toast ref={toast} />
       </Modal>
-      {/* <div className="card flex p-2 border rounded text-xs">
-        <div className="flex flex-col rounded">
-          <div className=" text-xs rounded p-2">
-            <Spin
-              tip="Уншиж байна."
-              className="min-h-full first-line:bg-opacity-80"
-              spinning={loading}
-            >
-            </Spin>
-          </div>
-        </div>
-      </div> */}
+     
     </>
   );
 };

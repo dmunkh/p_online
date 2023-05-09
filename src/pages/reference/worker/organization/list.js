@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Spin } from "antd";
@@ -15,6 +15,8 @@ import Swal from "sweetalert2";
 import Employee from "./employee/list";
 import Modal from "./modal";
 import EmpModal from "./employee/modal";
+import EditButton from "src/components/button/editButton";
+import PlusButton from "src/components/button/plusButton";
 
 export default function List() {
   const { message, checkRole } = useUserContext();
@@ -151,10 +153,8 @@ export default function List() {
         onChange={(e) => setSearch(e.target.value)}
       />
       {checkRole(["person_add"]) && (
-        <div className="mt-1">
-          <div
-            title="Байгууллага нэмэх"
-            className="p-1 text-xs flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-16"
+        <div className="">
+          <PlusButton
             onClick={() => {
               dispatch({
                 type: "STATE",
@@ -166,9 +166,7 @@ export default function List() {
                 data: { modal1: true },
               });
             }}
-          >
-            <i className="ft-plus" />
-          </div>
+          />
         </div>
       )}
     </div>
@@ -293,13 +291,7 @@ export default function List() {
                 return (
                   <div className="flex items-center justify-left gap-2">
                     {checkRole(["person_edit"]) && (
-                      <button
-                        title="Байгууллага засах"
-                        className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                        onClick={() => updateItem(item)}
-                      >
-                        <i className="ft-edit" />
-                      </button>
+                      <EditButton onClick={() => updateItem(item)} />
                     )}
 
                     {checkRole(["person_delete"]) && (

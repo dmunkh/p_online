@@ -4,6 +4,7 @@ import { useUserContext } from "src/contexts/userContext";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import Type from "src/components/custom/typeYear";
 import moment from "moment";
+import SaveButton from "src/components/button/SaveButton";
 
 // import _ from "lodash";
 
@@ -28,9 +29,39 @@ const ModalNormDetail = () => {
           }}
         />
       </div>
+      <SaveButton
+        onClick={() => {
+          if (state.modaltypeid !== null) {
+            API.postPostNormType({
+              department_id: state.department_id,
+              position_id: state.position_id,
+              type_id: state.modaltypeid,
+            })
+              .then((res) => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1, modaltypeid: null },
+                });
+              })
+              .catch((error) =>
+                message({
+                  type: "error",
+                  error,
+                  title: "Хадгалж чадсангүй",
+                })
+              )
+              .finally(() => {});
+            dispatch({ type: "STATE", data: { modal: false } });
+          } else {
+            message({
+              type: "error",
+              title: "Сургалтын төрөл сонгоно уу",
+            });
+          }
+        }}
+      />
 
-      <hr className="my-2" />
-
+      {/* <hr className="my-2" />
       <button
         className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
         onClick={() => {
@@ -65,7 +96,7 @@ const ModalNormDetail = () => {
       >
         <i className="ft-save" />
         <span className="ml-2">Хадгалах</span>
-      </button>
+      </button> */}
     </div>
   );
 };

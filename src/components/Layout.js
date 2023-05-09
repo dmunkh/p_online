@@ -48,7 +48,7 @@ const Layout = ({ children }) => {
 
         <div className="main-panel">
           <div className="main-content">
-            <div className="content-wrapper"><div className="card h-full">{children}</div></div>
+            <div className="content-wrapper"><div className="card h-[window.innerHeight - 400">{children}</div></div>
           </div>
 
           <button className="btn btn-primary scroll-top" type="button">

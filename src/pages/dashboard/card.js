@@ -15,18 +15,19 @@ const Card = () => {
   const { message } = useUserContext();
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
-  const [tseh, setTseh] = useState(0);
+  const [tseh, setTseh] = useState();
   const [data, setData] = useState();
   const [count, setCount] = useState();
   const [module_name, setModule_name] = useState();
   const [count_unique, setCount_unique] = useState();
-  const [modul, setModule] = useState(1);
+  const [modul, setModule] = useState();
   const [modulename, setModuleName] = useState("ХЭМАБ");
   const [barData1, setBarData1] = useState();
   const [barData2, setBarData2] = useState();
   const [barLabels, setBarLabels] = useState();
 
   useLayoutEffect(() => {
+    tseh&&date&&
     API.getControlPanel({ year: date, department_id: tseh })
       .then(async (res) => {
         const lebel = [];
@@ -58,6 +59,7 @@ const Card = () => {
       }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, tseh]);
   useLayoutEffect(() => {
+    modul&&
     API.getControlDepartment({
       module_id: modul,
       year: date,
@@ -253,22 +255,22 @@ const Card = () => {
   });
   return (
     <div className="md:px-20">
-      <div className="card ">
-        <div className="md:w-1/2 md:flex justify-start md:gap-2 p-2 ">
+      <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
+        <div className="w-full  md:min-w-[500px] mt-2 ">
 
-        <div className="flex items-center  text-xs gap-2">
-          <span className="pr-3 font-semibold text-xs">Огноо:</span>
+        <div className="flex items-center w-full  md:min-w-[500px] text-xs gap-2">
+        <span className="md:w-[20px] font-semibold">Он:</span>
           <DatePicker
             size="large"
             defaultValue={dayjs(date, yearFormat)}
             format={yearFormat}
             picker="year"
-            className="h-9 w-full "
+            className="h-9  "
             onChange={(e) => {
               setDate(e.$y);
             }}
           />
-          <span className="pr-3 font-semibold text-xs">Бүтцийн нэгж:</span>
+          <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
           <DepartmentTseh
             value={tseh}
             onChange={(value) => {

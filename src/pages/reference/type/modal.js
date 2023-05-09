@@ -181,7 +181,7 @@ const Component = () => {
           >
             {_.map(state.list_interval, (item) => (
               <Select.Option key={item.id} value={item.id}>
-                {`${item.interval_name}+"|"+ ${item.time}`}
+                {item.interval_name}
               </Select.Option>
             ))}
           </Select>

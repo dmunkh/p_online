@@ -11,7 +11,8 @@ const SaveButton = ({onClick}) => {
         </button>
       </div>
     </>
-  );
+  )
+
 };
 
 export default React.memo(SaveButton);

@@ -6,7 +6,7 @@ import * as API from "src/api/request";
 import { Select, Input, Modal } from "antd";
 
 import _ from "lodash";
-import SaveButton from "src/components/SaveButton";
+import SaveButton from "src/components/button/SaveButton";
 
 const Component = (data) => {
   const { message } = useUserContext();
@@ -85,7 +85,7 @@ const Component = (data) => {
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
         })
         .catch((error) => {
-          console.log(state.selected_employee.id);
+     
           message({
             type: "error",
             error,

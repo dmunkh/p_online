@@ -171,9 +171,6 @@ const Calendars = () => {
     }
   };
 
-  // const onPanelChange = (value: dayjs, mode: CalendarMode) => {
-  //   console.log(value.format("YYYY-MM-DD"), mode);
-  // };
 
   const memo_calendar = useMemo(() => {
     var result = state.list_training;
@@ -290,7 +287,7 @@ const Calendars = () => {
               type="date"
               value={state.begin_date}
               onChange={(e) => {
-                console.log("eeeeeeeee", e);
+              
               }}
               //onPanelChange={onPanelChange}
               dateCellRender={(date) => {

@@ -15,6 +15,9 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
+import EditButton from "src/components/button/editButton";
+import PlusButton from "src/components/button/plusButton";
+import DeleteButton from "src/components/button/deleteButton";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -26,12 +29,13 @@ const List = () => {
   const [per_page, set_per_page] = useState(50);
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
-  const [module, setModule] = useState(1);
+  const [module, setModule] = useState();
   const [isPrice, setIsPrice] = useState(false);
 
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
+    module&&
     API.getTypesYear({ module_id: module, year: date })
       .then((res) => {
         dispatch({
@@ -59,31 +63,31 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, module, date]);
 
-  useLayoutEffect(() => {
-    API.getType({ module_id: module })
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_type: _.orderBy(res, ["type_name"]),
-          },
+  useEffect(() => {
+    module &&
+      API.getType({ module_id: module })
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_type: _.orderBy(res, ["type_name"]),
+            },
+          });
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Жагсаалт татаж чадсангүй",
+          });
         });
-      })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module]);
-  useLayoutEffect(() => {
-    
+  useLayoutEffect(
+    () => {
       state.selected_typeyear.type_id &&
         API.getTypes(state.selected_typeyear.type_id)
           .then((res) => {
-           
             dispatch({
               type: "STATE",
               data: {
@@ -102,11 +106,11 @@ const List = () => {
               title: "Жагсаалт татаж чадсангүй",
             });
           });
-      console.log(state.price_emc);
-    }
+    },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [state.selected_typeyear.type_id]);
+    [state.selected_typeyear.type_id]
+  );
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -162,27 +166,28 @@ const List = () => {
   return (
     <div className="card flex justify-center text-xs rounded p-2">
       <div className="md:flex justify-start rounded gap-4 my-3 mx-2 md:w-1/3">
-      <div className="w-full flex items-center pl-2">
-      <span className="pr-3 font-semibold text-xs">Огноо:</span>
-        <DatePicker
-          size="large"
-          defaultValue={dayjs(date, yearFormat)}
-          format={yearFormat}
-          picker="year"
-          className="h-9    "
-          onChange={(e) => {
-            setDate(e.$y);
-          }}
-        />
-   <span className="px-3 font-semibold text-xs">Сургалтын бүлэг:</span>
+        <div className="w-full flex items-center pl-2">
+          <span className="pr-3 font-semibold text-xs">Огноо:</span>
+          <DatePicker
+            size="large"
+            defaultValue={dayjs(date, yearFormat)}
+            format={yearFormat}
+            picker="year"
+            className="h-9    "
+            onChange={(e) => {
+              setDate(e.$y);
+            }}
+          />
+          <span className="px-3 font-semibold text-xs whitespace-nowrap">
+            Сургалтын бүлэг:
+          </span>
           <Module
             value={module}
             onChange={(value) => {
               setModule(value);
             }}
           />
-      
-      </div>
+        </div>
       </div>
       <DataTable
         scrollable
@@ -209,9 +214,8 @@ const List = () => {
             </div>
             <div className="flex items-center gap-2 ">
               {checkRole(["type_year_add"]) && (
-                <div
+                <PlusButton
                   title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
                   onClick={() => {
                     dispatch({
                       type: "CLEAR_TYPEYEAR",
@@ -222,9 +226,7 @@ const List = () => {
                       data: { modal: true },
                     });
                   }}
-                >
-                  <i className="ft-plus" />
-                </div>
+                />
               )}
             </div>
           </div>
@@ -394,28 +396,18 @@ const List = () => {
             return (
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["type_year_edit"]) && (
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => updateItem(item)}
-                  >
-                    <i className="ft-edit" />
-                  </button>
+                  <EditButton onClick={() => updateItem(item)} />
                 )}
 
                 {checkRole(["type_year_delete"]) && (
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteItem(item)}
-                  >
-                    <i className="ft-trash-2" />
-                  </button>
+                  <DeleteButton onClick={() => deleteItem(item)} />
                 )}
               </div>
             );
           }}
         />
       </DataTable>
-      <Modal setIsPrice={setIsPrice} isPrice={isPrice} />
+      <Modal />
     </div>
   );
 };

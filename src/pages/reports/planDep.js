@@ -13,7 +13,7 @@ import { Input, Tooltip, Row, Modal } from "antd";
 import _ from "lodash";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 
-const Index = () => {
+const PlanDep = () => {
   const { message, checkRole } = useUserContext();
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useTrainingContext();
@@ -22,7 +22,7 @@ const Index = () => {
 
   useLayoutEffect(() => {
     state.moduleid &&
-      API.getReportPlan({
+      API.getReportPlanDep({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
       })
@@ -30,7 +30,7 @@ const Index = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_reportplan: _.orderBy(res, ["type_id"]),
+              list_reportplandep: _.orderBy(res, ["type_id"]),
             },
           });
         })
@@ -38,7 +38,7 @@ const Index = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_reportplan: [],
+              list_reportplandep: [],
             },
           });
           message({
@@ -48,6 +48,31 @@ const Index = () => {
           });
         });
 
+    API.getTypesYear({
+      year: moment(state.change_year).format("YYYY"),
+      module_id: state.moduleid,
+    })
+      .then((res) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_lessType: _.orderBy(res, ["type_id"]),
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_lessType: [],
+          },
+        });
+        message({
+          type: "error",
+          error,
+          title: "Тайлан татаж чадсангүй",
+        });
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.change_year, state.moduleid]);
 
@@ -57,7 +82,7 @@ const Index = () => {
       year: moment(state.change_year).format("YYYY"),
       module_id: state.moduleid,
     };
-    var url = new URL("https://localhost:44335/training/plan");
+    var url = new URL("https://localhost:44335/training/planDepartment");
     //var url = new URL("https://training.erdenetmc.mn/api/report/plan/count");
 
     // if (window.location.hostname === "localhost")
@@ -83,27 +108,82 @@ const Index = () => {
         setLoading(false);
       });
   };
+  const ss = (list) => {
+    var result = [];
 
-  //   var result = _.map(state.list_reportplan, (a, i) => {
-  //     return {
-  //       // specsname: a.specsname,
-  //       // methodname: a.methodname,
-  //       // specspercent: a.specspercent,
-  //       // resultvalue2: a.resultvalue2,
-  //       // resultvalue1: a.resultvalue1,
-  //       // resultvalue: a.resultvalue,
-  //     };
-  //   });
-  //   result.push({
-  //    specsname: "Нийт",
-  //     // methodname: "",
-  //     // specspercent: _.sumBy(state.list_rate, (a) => a.specspercent),
-  //     // resultvalue2: _.sumBy(state.list_rate, (a) => a.resultvalue2),
-  //     // resultvalue1: _.sumBy(state.list_rate, (a) => a.resultvalue1),
-  //     // resultvalue: _.sumBy(state.list_rate, (a) => a.resultvalue),
-  //   });
+    _.map(list, (item) => {
+      _.map(item.attendance, (data) => {
+        data.checked && result.push(data.checked);
+      });
+    });
+
+    return result.length;
+  };
+  const memo_header = useMemo(() => {
+    var row = [];
+    var result = state.list_lessType;
+
+    _.map(result, (i) => {
+      row.push(
+        <Column
+          key={"key_header_" + i + 1}
+          header={
+            <th style={{ transform: "rotate(-90deg)" }}>
+              <span>{i.type_name}</span>{" "}
+            </th>
+          }
+          align="center"
+          className="min-w-[220px] max-w-[220px] w-[220px] "
+          //headerClassName=" rotate-90"
+        />
+      );
+    });
+
+    return row;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_lessType]);
+
+  const memo_header_sub = useMemo(() => {
+    var row = [];
+    var result = state.list_lessType;
+
+    _.map(result, (i) => {
+      row.push(
+        <Column
+          key={"key_header_sub_1" + i}
+          header=" то444о"
+          align="center"
+          className="min-w-[60px] max-w-[60px] w-[60px]"
+        />
+      );
+    });
+
+    return row;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_lessType]);
+
+  const memo_column = useMemo(() => {
+    var row = [];
+    var result = state.list_reportplandep.data;
+
+    _.map(result, (i) => {
+      row.push(
+        <Column
+          key={"key_column_1" + i}
+          header=" тоо"
+          align="center"
+          field={i.count}
+          className="min-w-[70px] max-w-[70px] w-[70px]"
+        />
+      );
+    });
+
+    return row;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.list_reportplandep]);
+
   const memo_table = useMemo(() => {
-    var result = state.list_reportplan;
+    var result = state.list_reportplandep;
 
     // if (state?.type_id)
     //   result = _.filter(result, (a) => a.type_id === state.type_id);
@@ -217,9 +297,28 @@ const Index = () => {
             Мэдээлэл олдсонгүй...
           </div>
         }
+        headerColumnGroup={
+          <ColumnGroup>
+            <Row>
+              <Column
+                header="№"
+                rowSpan={1}
+                className="min-w-[50px] max-w-[50px] w-[50px]"
+              />
+              <Column
+                header="Бүтцийн нэгжийн нэр"
+                rowSpan={1}
+                className="min-w-[350px]"
+              />
+
+              {memo_header}
+            </Row>
+
+            {/* <Row>{memo_header_sub}</Row> */}
+          </ColumnGroup>
+        }
       >
         <Column
-          header="№"
           align="center"
           style={{ minWidth: "50px", maxWidth: "50px" }}
           className="text-xs w-full"
@@ -230,61 +329,28 @@ const Index = () => {
 
         <Column
           sortable
-          header="Сургалтын төрөл"
-          field="type_name"
+          /// header="Бүтцийн нэгжийн нэр"
+          field="departmentname"
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start "
         />
-        <Column
+        {/* <Column
           sortable
-          header="Эрдэнэт үйлдвэр ТӨҮГ төлбөрийн тариф"
-          field="price_emc"
-          style={{ minWidth: "250px", maxWidth: "250px" }}
+          // header="*"
+          field="departmentcode"
+          style={{ minWidth: "100px", maxWidth: "100px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-end "
-        />
+        /> */}
 
-        <Column
-          sortable
-          header="Гадны байгууллага төлбөрийн тариф"
-          field="price_organization"
-          style={{ minWidth: "250px", maxWidth: "250px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end"
-        />
-        <Column
-          sortable
-          header="Суралцагчдын тоо"
-          field="count_worker"
-          style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center"
-        />
-        <Column
-          sortable
-          header="Нийт төлбөр /мян.төгрөг/"
-          //field="limit"
-          style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end"
-          body={(data) => {
-            return (
-              <span className="text-blue-500 font-semibold cursor-pointer">
-                {_.add(data.price_emc, data.price_organization)}
-              </span>
-            );
-          }}
-        />
+        {memo_column}
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.list_reportplan, search]);
+  }, [state.list_reportplandep, search]);
 
   return (
     <div className=" card flex p-2 rounded text-xs">
@@ -332,4 +398,4 @@ const Index = () => {
   );
 };
 
-export default React.memo(Index);
+export default React.memo(PlanDep);

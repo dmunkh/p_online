@@ -144,22 +144,6 @@ const Interval = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2 ">
-              {/* {checkRole(["xx_act_add"]) && ( */}
-              <div
-                title="Нэмэх"
-                className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                onClick={() => {
-                  dispatch({
-                    type: "STATE",
-                    data: { modal: true },
-                  });
-                }}
-              >
-                <i className="ft-plus" />
-              </div>
-              {/* )} */}
-            </div>
           </div>
         }
         paginator
@@ -255,92 +239,11 @@ const Interval = () => {
           headerClassName="flex items-center justify-left"
           bodyClassName="flex items-center justify-start text-left"
         />
-
-        <Column
-          align="center"
-          header="Үйлдэл"
-          className="text-xs"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
-          headerClassName="flex items-center justify-center"
-          body={(item) => {
-            return (
-              <div className="flex items-center justify-center gap-2">
-                {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
-                <button
-                  className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                  onClick={() => updateItem(item)}
-                >
-                  <i className="ft-edit" />
-                </button>
-                {/* )}
-
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
-                <button
-                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                  onClick={() => deleteItem(item)}
-                >
-                  <i className="ft-trash-2" />
-                </button>
-                {/* )} */}
-              </div>
-            );
-          }}
-        />
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_interval, search, first, per_page]);
-
-  const save = () => {
-    var error = [];
-    if (!state.id) {
-      state.warehouse_razmer || error.push("Хамгаалах хэрэгслийн төрөл.");
-    }
-
-    if (error.length > 0) {
-      message({
-        type: "warning",
-        title: (
-          <div className="text-orange-500 font-semibold">
-            Дараах мэдээлэл дутуу байна
-          </div>
-        ),
-        description: (
-          <div className="flex flex-col gap-1">
-            {_.map(error, (item, index) => (
-              <div key={index}>
-                - <span className="ml-1">{item}</span>
-              </div>
-            ))}
-          </div>
-        ),
-      });
-    } else {
-      //   var data = {
-      //     razmer: state.warehouse_razmer,
-      //   };
-      if (state.id) {
-        // API.putWarehouseItemID(state.id, data)
-        //   .then(() => {
-        //     dispatch({ type: "REFRESH" });
-        //     dispatch({ type: "MODAL", data: false });
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай хадгалагдлаа.",
-        //     });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Засварлаж чадсангүй",
-        //     });
-        //   });
-      }
-    }
-  };
-
-  return (
+ return (
     <>
       <Modal
         centered
@@ -376,16 +279,6 @@ const Interval = () => {
             }}
           />
         </div>
-
-        <div className="my-3 border " />
-
-        <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 text-xs"
-          onClick={() => save()}
-        >
-          <i className="fas fa-save" />
-          <span className="ml-2">Хадгалах</span>
-        </button>
       </Modal>
 
       <div className="card h-screen flex  text-xs rounded p-2">

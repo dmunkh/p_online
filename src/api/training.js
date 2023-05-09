@@ -59,3 +59,9 @@ export async function getReportPlan(params) {
   });
   return response.data;
 }
+export async function getReportPlanDep(params) {
+  const response = await API().get("/report/plan/count/department", {
+    params: { ...params },
+  });
+  return response.data;
+}

@@ -6,6 +6,7 @@ import Module from "src/components/custom/module";
 import moment from "moment";
 // import _ from "lodash";
 import { Spin } from "antd";
+import SaveButton from "src/components/button/SaveButton";
 // import Swal from "sweetalert2";
 // const { Option } = Select;
 
@@ -31,7 +32,42 @@ const ModalNormDetail = () => {
         className="bg-opacity-60"
         spinning={loading}
       >
-        <button
+
+      <SaveButton   onClick={() => {
+            setLoading(true);
+            API.postPlanApprove({
+              module_id: state.moduleid,
+              year: moment(state.date).format("Y"),
+              is_closed: 1,
+              department_id: state.department_id,
+            })
+              .then((res) => {
+                dispatch({
+                  type: "STATE",
+                  data: { refresh: state.refresh + 1 },
+                });
+                dispatch({ type: "STATE", data: { modal: false } });
+
+                message({
+                  type: "success",
+                  title: "Баталгаажуулалт амжилттай",
+                });
+
+                setLoading(false);
+              })
+              .catch((error) => {
+                message({
+                  type: "error",
+                  error,
+                  title: "Жагсаалт татаж чадсангүй",
+                });
+                setLoading(false);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }} />
+        {/* <button
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {
             setLoading(true);
@@ -71,7 +107,7 @@ const ModalNormDetail = () => {
           <i className="fa fa-save" />
 
           <span className="ml-2">Хадгалах</span>
-        </button>
+        </button> */}
       </Spin>
     </div>
   );
