@@ -27,74 +27,75 @@ const Card = () => {
   const [barLabels, setBarLabels] = useState();
 
   useLayoutEffect(() => {
-    tseh&&date&&
-    API.getControlPanel({ year: date, department_id: tseh })
-      .then(async (res) => {
-        const lebel = [];
-        const chartsdata = [];
-        const labelcount = [];
-        if (res.length > 0) {
-          await res.map((el) => {
-            // eslint-disable-next-line no-sequences
-            lebel.push(el.count_all === 0 ? 0.0001 : el.count_all);
-            chartsdata.push(el.module_name);
-            labelcount.push(el.count_unique === 0 ? 0.0001 : el.count_unique);
-            return true;
+    console.log(tseh, date);
+    if (date !== null && tseh !== null && tseh !== undefined)
+      API.getControlPanel({ year: date, department_id: tseh })
+        .then(async (res) => {
+          const lebel = [];
+          const chartsdata = [];
+          const labelcount = [];
+          if (res.length > 0) {
+            await res.map((el) => {
+              // eslint-disable-next-line no-sequences
+              lebel.push(el.count_all === 0 ? 0.0001 : el.count_all);
+              chartsdata.push(el.module_name);
+              labelcount.push(el.count_unique === 0 ? 0.0001 : el.count_unique);
+              return true;
+            });
+
+            setCount(lebel);
+            setModule_name(chartsdata);
+            setCount_unique(labelcount);
+          } else {
+          }
+
+          setData(res);
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Жагсаалт татаж чадсангүй",
           });
-
-          setCount(lebel);
-          setModule_name(chartsdata);
-          setCount_unique(labelcount);
-        } else {
-        }
-
-        setData(res);
-      })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      }); // eslint-disable-next-line react-hooks/exhaustive-deps
+        }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, tseh]);
   useLayoutEffect(() => {
-    modul&&
-    API.getControlDepartment({
-      module_id: modul,
-      year: date,
-      department_id: tseh,
-    })
-      .then(async (res) => {
-        const chartsdata1 = [];
-        const chartsdata2 = [];
-        const labels = [];
-        if (res.length > 0) {
-          await res.map((el) => {
-            // eslint-disable-next-line no-sequences
-            labels.push(el.departmentname);
-            chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);
-            chartsdata2.push(el.count_unique === 0 ? 5 : el.count_unique);
-
-            return true;
-          });
-
-          setBarData1(chartsdata1);
-          setBarData2(chartsdata2);
-          setBarLabels(labels);
-        } else {
-          setBarData1([0.0001]);
-          setBarData2([0.0001]);
-          setBarLabels([""]);
-        }
+    modul &&
+      API.getControlDepartment({
+        module_id: modul,
+        year: date,
+        department_id: tseh,
       })
-      .catch((error) => {
-        message({
-          type: "error",
-          error,
-          title: "Жагсаалт татаж чадсангүй",
-        });
-      }); // eslint-disable-next-line react-hooks/exhaustive-deps
+        .then(async (res) => {
+          const chartsdata1 = [];
+          const chartsdata2 = [];
+          const labels = [];
+          if (res.length > 0) {
+            await res.map((el) => {
+              // eslint-disable-next-line no-sequences
+              labels.push(el.departmentname);
+              chartsdata1.push(el.count_all === 0 ? 5 : el.count_all);
+              chartsdata2.push(el.count_unique === 0 ? 5 : el.count_unique);
+
+              return true;
+            });
+
+            setBarData1(chartsdata1);
+            setBarData2(chartsdata2);
+            setBarLabels(labels);
+          } else {
+            setBarData1([0.0001]);
+            setBarData2([0.0001]);
+            setBarLabels([""]);
+          }
+        })
+        .catch((error) => {
+          message({
+            type: "error",
+            error,
+            title: "Жагсаалт татаж чадсангүй",
+          });
+        }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date, tseh, modul]);
   const cards = useMemo(() => {
     return (
@@ -122,12 +123,12 @@ const Card = () => {
                 </svg>
               </div>
               <p className="text-sm whitespace-pre-wrap  font-medium text-gray-500">
-                Сургалтанд хамрагдах ажилтнуудын тоо 
+                Сургалтанд хамрагдах ажилтнуудын тоо
               </p>
               <div className="mt-4 border-t-2 border-blue-100 py-2">
                 <div className="flex justify-center items-center gap-2 ">
                   <p className="text-sm font-bold uppercase text-gray-600">
-                   Давхардсан тоо:
+                    Давхардсан тоо:
                   </p>
                   <h3 className="text-2xl font-bold text-[#14b8a6] hover:scale-110 ">
                     {item.count_all}
@@ -257,26 +258,27 @@ const Card = () => {
     <div className="md:px-20">
       <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
         <div className="w-full  md:min-w-[500px] mt-2 ">
-
-        <div className="flex items-center w-full  md:min-w-[500px] text-xs gap-2">
-        <span className="md:w-[20px] font-semibold">Он:</span>
-          <DatePicker
-            size="large"
-            defaultValue={dayjs(date, yearFormat)}
-            format={yearFormat}
-            picker="year"
-            className="h-9  "
-            onChange={(e) => {
-              setDate(e.$y);
-            }}
-          />
-          <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
-          <DepartmentTseh
-            value={tseh}
-            onChange={(value) => {
-              setTseh(value);
-            }}
-          />
+          <div className="flex items-center w-full  md:min-w-[500px] text-xs gap-2">
+            <span className="md:w-[20px] font-semibold">Он:</span>
+            <DatePicker
+              size="large"
+              defaultValue={dayjs(date, yearFormat)}
+              format={yearFormat}
+              picker="year"
+              className="h-9  "
+              onChange={(e) => {
+                setDate(e.$y);
+              }}
+            />
+            <span className="font-semibold whitespace-nowrap">
+              Бүтцийн нэгж:
+            </span>
+            <DepartmentTseh
+              value={tseh}
+              onChange={(value) => {
+                setTseh(value);
+              }}
+            />
           </div>
         </div>
       </div>
