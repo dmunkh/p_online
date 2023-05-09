@@ -17,6 +17,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import EditButton from "src/components/custom/editButton";
 import PlusButton from "src/components/custom/plusButton";
+import DeleteButton from "src/components/custom/deleteButton";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -80,12 +81,11 @@ const List = () => {
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module]);
-  useLayoutEffect(() => {
-    
+  useLayoutEffect(
+    () => {
       state.selected_typeyear.type_id &&
         API.getTypes(state.selected_typeyear.type_id)
           .then((res) => {
-           
             dispatch({
               type: "STATE",
               data: {
@@ -105,10 +105,11 @@ const List = () => {
             });
           });
       console.log(state.price_emc);
-    }
+    },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  , [state.selected_typeyear.type_id]);
+    [state.selected_typeyear.type_id]
+  );
 
   const deleteItem = (item) => {
     Swal.fire({
@@ -164,27 +165,26 @@ const List = () => {
   return (
     <div className="card flex justify-center text-xs rounded p-2">
       <div className="md:flex justify-start rounded gap-4 my-3 mx-2 md:w-1/3">
-      <div className="w-full flex items-center pl-2">
-      <span className="pr-3 font-semibold text-xs">Огноо:</span>
-        <DatePicker
-          size="large"
-          defaultValue={dayjs(date, yearFormat)}
-          format={yearFormat}
-          picker="year"
-          className="h-9    "
-          onChange={(e) => {
-            setDate(e.$y);
-          }}
-        />
-   <span className="px-3 font-semibold text-xs">Сургалтын бүлэг:</span>
+        <div className="w-full flex items-center pl-2">
+          <span className="pr-3 font-semibold text-xs">Огноо:</span>
+          <DatePicker
+            size="large"
+            defaultValue={dayjs(date, yearFormat)}
+            format={yearFormat}
+            picker="year"
+            className="h-9    "
+            onChange={(e) => {
+              setDate(e.$y);
+            }}
+          />
+          <span className="px-3 font-semibold text-xs">Сургалтын бүлэг:</span>
           <Module
             value={module}
             onChange={(value) => {
               setModule(value);
             }}
           />
-      
-      </div>
+        </div>
       </div>
       <DataTable
         scrollable
@@ -211,32 +211,19 @@ const List = () => {
             </div>
             <div className="flex items-center gap-2 ">
               {checkRole(["type_year_add"]) && (
-                <PlusButton  title="Нэмэх" onClick={() => {
-                  dispatch({
-                    type: "CLEAR_TYPEYEAR",
-                  });
+                <PlusButton
+                  title="Нэмэх"
+                  onClick={() => {
+                    dispatch({
+                      type: "CLEAR_TYPEYEAR",
+                    });
 
-                  dispatch({
-                    type: "STATE",
-                    data: { modal: true },
-                  });
-                }}/>
-                // <div
-                //   title="Нэмэх"
-                //   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer mr-1"
-                //   onClick={() => {
-                //     dispatch({
-                //       type: "CLEAR_TYPEYEAR",
-                //     });
-
-                //     dispatch({
-                //       type: "STATE",
-                //       data: { modal: true },
-                //     });
-                //   }}
-                // >
-                //   <i className="ft-plus" />
-                // </div>
+                    dispatch({
+                      type: "STATE",
+                      data: { modal: true },
+                    });
+                  }}
+                />
               )}
             </div>
           </div>
@@ -406,7 +393,7 @@ const List = () => {
             return (
               <div className="flex items-center justify-center gap-2">
                 {checkRole(["type_year_edit"]) && (
-                  <EditButton onClick={() => updateItem(item)}/>
+                  <EditButton onClick={() => updateItem(item)} />
                   // <button
                   //   className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                   //   onClick={() => updateItem(item)}
@@ -416,12 +403,7 @@ const List = () => {
                 )}
 
                 {checkRole(["type_year_delete"]) && (
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteItem(item)}
-                  >
-                    <i className="ft-trash-2" />
-                  </button>
+                  <DeleteButton onClick={() => deleteItem(item)} />
                 )}
               </div>
             );
