@@ -129,11 +129,13 @@ const PlanDep = () => {
           key={"key_header_" + i + 1}
           header={
             <th style={{ transform: "rotate(-90deg)" }}>
-              <span>{i.type_name}</span>{" "}
+              <span className="text-start font-thin  text-sm">
+                {i.type_name}
+              </span>
             </th>
           }
-          align="center"
-          className="min-w-[220px] max-w-[220px] w-[220px] "
+          align="left"
+          className="w-full"
           //headerClassName=" rotate-90"
         />
       );
@@ -163,22 +165,29 @@ const PlanDep = () => {
   }, [state.list_lessType]);
 
   const memo_column = useMemo(() => {
-    var row = [];
-    var result = state.list_reportplandep.data;
+    //     var row = [];
+    //     var result = state.list_reportplandep
+    console.log("rerreed", state.list_reportplandep);
+    // _.map(result, (i) => {
+    //     console.log(_.map(i, 'type_id'))
+    //       row.push(
+    <>
+      <Column
+        align="center"
+        field=""
+        className="min-w-[70px] max-w-[70px] w-[70px]"
+      />
+      <Column
+        align="center"
+        field=""
+        className="min-w-[70px] max-w-[70px] w-[70px]"
+      />
+    </>;
+    //   );
+    // });
+    //  console.log(row)
+    //   return row;
 
-    _.map(result, (i) => {
-      row.push(
-        <Column
-          key={"key_column_1" + i}
-          header=" тоо"
-          align="center"
-          field={i.count}
-          className="min-w-[70px] max-w-[70px] w-[70px]"
-        />
-      );
-    });
-
-    return row;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_reportplandep]);
 
@@ -211,7 +220,7 @@ const PlanDep = () => {
         removableSort
         scrollHeight={window.innerHeight - 280}
         responsiveLayout="scroll"
-        value={_.orderBy(result, ["type_name"])}
+        value={state.list_reportplandep}
         header={
           <div className="flex items-center justify-between">
             <div className="w-full md:max-w-[200px]">
@@ -251,8 +260,8 @@ const PlanDep = () => {
               />
 
               <Column
-                // className="min-w-[150px]"
-                style={{ minWidth: "150px" }}
+                // className="min-w-[200px]"
+                style={{ minWidth: "200px" }}
                 footer={() => {
                   return (
                     <div className="flex items-center justify-center">
@@ -301,20 +310,23 @@ const PlanDep = () => {
           <ColumnGroup>
             <Row>
               <Column
-                header="№"
-                rowSpan={1}
                 className="min-w-[50px] max-w-[50px] w-[50px]"
+                header="№"
+                rowSpan={3}
               />
               <Column
                 header="Бүтцийн нэгжийн нэр"
-                rowSpan={1}
-                className="min-w-[350px]"
+                rowSpan={3}
+                className="min-w-[200px] max-w-[200px] w-[200px]"
               />
-
-              {memo_header}
+              <Column
+                header=""
+                rowSpan={3}
+                className="min-w-[80px] max-w-[80px] w-[80px]"
+              />
             </Row>
-
-            {/* <Row>{memo_header_sub}</Row> */}
+            <Row>{memo_header}</Row>
+            <Row>{memo_header_sub}</Row>
           </ColumnGroup>
         }
       >
@@ -331,22 +343,21 @@ const PlanDep = () => {
           sortable
           /// header="Бүтцийн нэгжийн нэр"
           field="departmentname"
-          style={{ minWidth: "150px" }}
+          style={{ minWidth: "200px", maxWidth: "200px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start "
         />
-        {/* <Column
+        <Column
           sortable
           // header="*"
           field="departmentcode"
-          style={{ minWidth: "100px", maxWidth: "100px" }}
+          style={{ minWidth: "80px", maxWidth: "80px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end "
-        /> */}
-
-        {memo_column}
+          bodyClassName="flex items-center justify-center "
+        />
+        <ColumnGroup />
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

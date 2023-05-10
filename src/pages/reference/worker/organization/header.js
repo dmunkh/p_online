@@ -50,57 +50,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="my-3  flex flex-col md:flex-row gap-5 ml-5">
-      <div className="flex flex-col md:justify-between md:flex-row md:items-center gap-3  pb-2">
-        <div className="flex flex-col md:flex-row md:items-center gap-2">
-          <div className="w-full flex items-center gap-3 pr-3">
-            <span className="w-25 pr-3 font-semibold text-xs">Он:</span>
-
-            <DatePicker
-              allowClear={false}
-              className="w-full md:w-[150px] text-xs "
-              picker="year"
-              format="YYYY"
-              value={state.change_year}
-              onChange={(date) =>
-                dispatch({
-                  type: "YEAR",
-                  data: moment(date, "YYYY"),
-                })
-              }
-            />
-          </div>
-          <div className="flex flex-col  md:flex-row md:items-center gap-3">
-            <span className="md:w-max pr-3 font-semibold text-xs whitespace-nowrap">
-              Байгууллага:
-            </span>
-            <div className="w-full md:min-w-[200px]">
-              <Select
-                value={state.selected_organizationID}
-                placeholder="Сонгоно уу..."
-                allowClear
-                className="w-full text-xs"
-                onChange={(value, children) => {
-                  dispatch({
-                    type: "STATE",
-                    data: {
-                      selected_orgName: children.children,
-                      selected_organizationID: value,
-                    },
-                  });
-                }}
-              >
-                {_.map(state?.list_organization, (item, index) => (
-                  <Select.Option key={index} value={item.id}>
-                    {item.organization_name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <></>
   );
 };
 
