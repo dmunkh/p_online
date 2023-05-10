@@ -27,7 +27,7 @@ const Card = () => {
   const [barLabels, setBarLabels] = useState();
 
   useLayoutEffect(() => {
-    tseh&&date&&
+    if (date !== null && tseh !== null && tseh !== undefined)
     API.getControlPanel({ year: date, department_id: tseh })
       .then(async (res) => {
         const lebel = [];
