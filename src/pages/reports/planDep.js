@@ -30,7 +30,7 @@ const PlanDep = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_reportplandep: _.orderBy(res, ["type_id"]),
+              list_reportplandep: _.orderBy(res),
             },
           });
         })
@@ -352,6 +352,20 @@ const PlanDep = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_reportplandep, search]);
 
+  const render = (question) => {
+    var bb = [];
+
+    _.map(question, (item, index) => {
+      var aa = [];
+      _.map(state?.list_lessType, (i) => aa.push(i.type_id));
+
+      if (aa.includes(item?.type_id)) {
+        return bb.push(<td className="text-center border">{item?.count}</td>);
+      }
+    });
+    return bb;
+  };
+
   return (
     <div className=" card flex p-2 rounded text-xs">
       <Header />
@@ -363,7 +377,37 @@ const PlanDep = () => {
               className="min-h-full first-line:bg-opacity-80"
               spinning={loading}
             > */}
-            {memo_table}
+
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <th className="text-center border p-1 ">№</th>
+                  <th className="text-center border p-1 ">Төрөл</th>
+
+                  {_.map(state.list_lessType, (answer, index) => {
+                    return (
+                      <th key={index} className="text-center border p-1">
+                        {answer.type_name}
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {_.map(state.list_reportplandep, (item, index) => {
+                  return (
+                    <tr key={item.id}>
+                      <td className="text-center border p-1">{index + 1}</td>
+                      <td className="border px-2">
+                        {item.departmentnameshort}
+                      </td>
+                      {render(item.data)}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {/* {memo_table} */}
             {/* </Spin> */}
           </div>
         </div>
