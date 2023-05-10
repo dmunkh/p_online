@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import Header from "src/pages/reports/header";
 import { useTrainingContext } from "src/contexts/trainingContext";
-import { Spin } from "antd";
+import { Result, Spin } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
 import { DataTable } from "primereact/datatable";
@@ -119,6 +119,16 @@ const PlanDep = () => {
 
     return result.length;
   };
+
+  const sum_les = (rowdata) => {
+    var less_id = _.map(state.list_lessType, 'type_id');
+    var result = _.filter(_.map(rowdata.data), { type_id: 1 });
+    console.log(_.filter(_.map(rowdata.data), { type_id: 1 }));
+
+    console.log("fhdsfsfhkds",less_id)
+    return result[0].type_id;
+  };
+
   const memo_header = useMemo(() => {
     var row = [];
     var result = state.list_lessType;
@@ -129,11 +139,13 @@ const PlanDep = () => {
           key={"key_header_" + i + 1}
           header={
             <th style={{ transform: "rotate(-90deg)" }}>
-              <span className="text-start font-thin  text-sm">{i.type_name}</span>
+              <span className="text-start font-thin  text-sm">
+                {i.type_name}
+              </span>
             </th>
           }
           align="left"
-         className="w-full"
+          className="w-full"
           //headerClassName=" rotate-90"
         />
       );
@@ -146,14 +158,16 @@ const PlanDep = () => {
   const memo_header_sub = useMemo(() => {
     var row = [];
     var result = state.list_lessType;
-
+    console.log("sub hhhhh", result);
     _.map(result, (i) => {
       row.push(
         <Column
-          key={"key_header_sub_1" + i}
-          header=" то444о"
+          key={"key_header_sub_1" + i.id}
+          header={i.price_emc}
+
+          id={i.type_id}
           align="center"
-          className="min-w-[60px] max-w-[60px] w-[60px]"
+          className="min-w-[60px] max-w-[60px] w-[60px] p-1"
         />
       );
     });
@@ -163,27 +177,29 @@ const PlanDep = () => {
   }, [state.list_lessType]);
 
   const memo_column = useMemo(() => {
-//     var row = [];
-//     var result = state.list_reportplandep
-console.log("rerreed", state.list_reportplandep );
-// _.map(result, (i) => {
-//     console.log(_.map(i, 'type_id'))
-//       row.push(
-  <><Column
-          align="center"
-          field=""
-          className="min-w-[70px] max-w-[70px] w-[70px]"
-        />
-        <Column
+    //     var row = [];
+    //     var result = state.list_reportplandep
+    console.log("rerreed", state.list_reportplandep);
+    // _.map(result, (i) => {
+    //     console.log(_.map(i, 'type_id'))
+    //       row.push(
+    <>
+      <Column
         align="center"
         field=""
         className="min-w-[70px] max-w-[70px] w-[70px]"
-      /></>
+      />
+      <Column
+        align="center"
+        field=""
+        className="min-w-[70px] max-w-[70px] w-[70px]"
+      />
+    </>;
     //   );
     // });
-  //  console.log(row)
-  //   return row;
- 
+    //  console.log(row)
+    //   return row;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.list_reportplandep]);
 
@@ -314,7 +330,6 @@ console.log("rerreed", state.list_reportplandep );
                 header="Бүтцийн нэгжийн нэр"
                 rowSpan={3}
                 className="min-w-[200px] max-w-[200px] w-[200px]"
-                
               />
               <Column
                 header=""
@@ -322,13 +337,8 @@ console.log("rerreed", state.list_reportplandep );
                 className="min-w-[80px] max-w-[80px] w-[80px]"
               />
             </Row>
-            <Row>
-             {memo_header}
-            </Row>
-            <Row>
-             {memo_header_sub}
-            </Row>
-            
+            <Row>{memo_header}</Row>
+            <Row>{memo_header_sub}</Row>
           </ColumnGroup>
         }
       >
@@ -345,7 +355,7 @@ console.log("rerreed", state.list_reportplandep );
           sortable
           /// header="Бүтцийн нэгжийн нэр"
           field="departmentname"
-          style={{ minWidth: "200px", maxWidth:"200px" }}
+          style={{ minWidth: "200px", maxWidth: "200px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-start "
@@ -359,11 +369,28 @@ console.log("rerreed", state.list_reportplandep );
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
         />
-        <ColumnGroup/>
-        
- 
-
-        
+        <Column
+          field="Sum"
+          //header="SecretNum"
+          body={sum_les}
+          style={{
+            textAlign: "center",
+            fontWeight: "600",
+            width: "50px",
+            minWidth: "50px",
+          }}
+        />
+         <Column
+          field="Sum"
+          //header="SecretNum"
+          body={sum_les}
+          style={{
+            textAlign: "center",
+            fontWeight: "600",
+            width: "50px",
+            minWidth: "50px",
+          }}
+        />
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
