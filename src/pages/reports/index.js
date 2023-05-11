@@ -27,10 +27,16 @@ const Index = () => {
         module_id: state.moduleid,
       })
         .then((res) => {
+          var result = [];
+
+          _.map(res, (item) => {
+            result.push({ ...item, ss: item.count_worker * item.price_emc });
+          });
+
           dispatch({
             type: "STATE",
             data: {
-              list_reportplan: _.orderBy(res, ["type_id"]),
+              list_reportplan: _.orderBy(result, ["type_id"]),
             },
           });
         })
@@ -162,52 +168,16 @@ const Index = () => {
         footerColumnGroup={
           <ColumnGroup>
             <Row>
-              {state.checkNoNorm && (
-                <Column className="w-[50px] text-center text-xs" />
-              )}
+              <Column colSpan={3} />
               <Column
-                className="w-[50px] max-w-[50px] text-center text-xs"
-                footer={result.length}
+                className="w-[150px] max-w-[150px] text-right text-xs"
+                footer={_.sumBy(result, (a) => a.count_worker)}
               />
-
               <Column
-                // className="min-w-[150px]"
-                style={{ minWidth: "150px" }}
-                footer={() => {
-                  return (
-                    <div className="flex items-center justify-center">
-                      <Tooltip
-                        placement="top"
-                        title={
-                          <div className="flex flex-col gap-2 text-xs">
-                            {_.map(
-                              Object.entries(_.groupBy(result, "type_id")),
-                              (item, index) => {
-                                return (
-                                  <div key={index} className="">
-                                    <span>
-                                      {item[0] === "null"
-                                        ? "Тодорхойгүй"
-                                        : item[0]}
-                                    </span>
-                                    - <span>{item[1].length}</span>,{"  тоо: "}
-                                    <span>
-                                      - {_.sumBy(item[1], (a) => a.normcount)}
-                                    </span>
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
-                        }
-                      >
-                        <div className="flex items-center justify-center text-blue-500 text-lg">
-                          <i className="fe fe-info" />
-                        </div>
-                      </Tooltip>
-                    </div>
-                  );
-                }}
+                className="w-[150px] max-w-[150px] text-right text-xs"
+                footer={Intl.NumberFormat("en-US").format(
+                  _.sumBy(result, (a) => a.ss)
+                )}
               />
             </Row>
           </ColumnGroup>
@@ -241,7 +211,7 @@ const Index = () => {
           sortable
           header="Эрдэнэт үйлдвэр ТӨҮГ төлбөрийн тариф"
           field="price_emc"
-          style={{ minWidth: "250px", maxWidth: "250px" }}
+          style={{ minWidth: "150px", maxWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-end "
@@ -251,7 +221,7 @@ const Index = () => {
           sortable
           header="Гадны байгууллага төлбөрийн тариф"
           field="price_organization"
-          style={{ minWidth: "250px", maxWidth: "250px" }}
+          style={{ minWidth: "150px", maxWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-end"
@@ -261,9 +231,10 @@ const Index = () => {
           header="Суралцагчдын тоо"
           field="count_worker"
           style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs "
+          className="text-xs text-right "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-center"
+          bodyClassName="items-right text"
+          align="right"
         />
         <Column
           sortable
@@ -272,11 +243,12 @@ const Index = () => {
           style={{ minWidth: "150px", maxWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end"
+          bodyClassName="flex items-center justify-end textAlign:left"
           body={(data) => {
+            let dollarUSLocale = Intl.NumberFormat("en-US");
             return (
-              <span className="text-blue-500 font-semibold cursor-pointer">
-                {_.add(data.price_emc, data.price_organization)}
+              <span className=" font-semibold ">
+                {dollarUSLocale.format(data.price_emc * data.count_worker)}
               </span>
             );
           }}

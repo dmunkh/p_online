@@ -8,6 +8,8 @@ import { FilterMatchMode } from "primereact/api";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/plan/modal";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 import moment from "moment";
 
 const List = () => {
@@ -21,7 +23,12 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (state.moduleid && state.department_id !== null) {
+    console.log(state.moduleid, state.department_id);
+    if (
+      state.moduleid &&
+      state.department_id !== null &&
+      state.department_id !== undefined
+    ) {
       setLoading(true);
       API.getPlan({
         year: moment(state.date).format("Y"),
@@ -161,6 +168,23 @@ const List = () => {
                 </div>
               );
             }}
+            footerColumnGroup={
+              <ColumnGroup>
+                <Row>
+                  <Column
+                    align="right"
+                    colSpan={2}
+                    footer="Нийт төлөвлөгөөт ажилтнууд:"
+                    className=" text-xs "
+                  />
+                  <Column
+                    align="center"
+                    footer={_.sumBy(state?.list_normposition, (a) => a.count)}
+                    className="w-[150px] text-xs"
+                  />
+                </Row>
+              </ColumnGroup>
+            }
             rows={per_page}
             first={first}
             onPage={(event) => {

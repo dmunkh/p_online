@@ -10,6 +10,9 @@ import { usePlanHabContext } from "src/contexts/planhabContext";
 import MODAL from "src/pages/planhab/modal";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
+import _ from "lodash";
 
 const List = () => {
   const { message, checkRole } = useUserContext();
@@ -139,6 +142,23 @@ const List = () => {
               if (state.id === data.id) result = " bg-blue-500 text-white";
               return result;
             }}
+            footerColumnGroup={
+              <ColumnGroup>
+                <Row>
+                  <Column
+                    align="right"
+                    colSpan={2}
+                    footer="Нийт төлөвлөгөөт ажилтнууд:"
+                    className=" text-xs "
+                  />
+                  <Column
+                    align="center"
+                    footer={_.sumBy(state?.list_norm, (a) => a.count)}
+                    className="w-[150px] text-xs"
+                  />
+                </Row>
+              </ColumnGroup>
+            }
           >
             <Column
               align="center"

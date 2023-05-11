@@ -8,6 +8,8 @@ import { FilterMatchMode } from "primereact/api";
 import { usePlanHabContext } from "src/contexts/planhabContext";
 import MODAL from "src/pages/planhab/modal";
 import { useUserContext } from "src/contexts/userContext";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 // import Swal from "sweetalert2";
 // import moment from "moment";
 
@@ -23,20 +25,25 @@ const List = () => {
 
   useEffect(() => {
     setLoading(true);
-
     state.department &&
       API.getNormPosition({
         department_id: state.department,
       })
         .then((res) => {
+          var result = [];
+          _.map(res, (item) => {
+            result.push({
+              ...item,
+              ss: item.count_norm * item.worker_count,
+            });
+          });
+
+          console.log(result);
+
           dispatch({
             type: "STATE",
             data: {
-              list_normposition: _.orderBy(
-                res,
-                ["departmentcode"],
-                ["asc", "asc"]
-              ),
+              list_normposition: _.orderBy(result, ["departmentcode"]),
             },
           });
         })
@@ -134,6 +141,34 @@ const List = () => {
                 },
               });
             }}
+            footerColumnGroup={
+              <ColumnGroup>
+                <Row>
+                  <Column
+                    align="right"
+                    colSpan={2}
+                    footer="Нийт:"
+                    className=" text-xs "
+                  />
+                  <Column
+                    align="center"
+                    footer={
+                      "Ажилтны тоо: " +
+                      _.sumBy(state?.list_normposition, (a) => a.worker_count)
+                    }
+                    className="w-[150px] text-xs"
+                  />
+                  <Column
+                    align="center"
+                    footer={
+                      "Сургалтын тоо: " +
+                      _.sumBy(state?.list_normposition, (a) => a.ss)
+                    }
+                    className="w-[150px] text-xs"
+                  />
+                </Row>
+              </ColumnGroup>
+            }
             rows={per_page}
             first={first}
             onPage={(event) => {
