@@ -531,7 +531,7 @@ const PlanDep = () => {
   return (
     <div className=" card flex p-2 rounded text-xs">
       <Header />
-      <div className="flex  text-xs">
+      <div className="flex  text-xs max-h-[calc(100vh-300px)] overflow-auto">
         <div className="flex flex-col ">
           <div className="flex justify-center text-xs  ">
             {/* <Spin
@@ -545,7 +545,8 @@ const PlanDep = () => {
               <thead>
                 <tr>
                   <th className="text-center border p-1 ">№</th>
-                  <th className="text-center border p-1 ">Төрөл</th>
+                  <th className="text-center border p-1 ">Код</th>
+                  <th className="text-center border p-1 ">Бүтцийн нэгж</th>
 
                   {_.map(state.list_lessType, (answer, index) => {
                     return (
@@ -561,7 +562,16 @@ const PlanDep = () => {
                   return (
                     <tr key={item.id}>
                       <td className="text-center border p-1">{index + 1}</td>
-                      <td className="border px-2">
+                      <td
+                        className="text-center border p-1"
+                        style={{ width: "60px" }}
+                      >
+                        {item.departmentcode}
+                      </td>
+                      <td
+                        className="border px-2 m-w-[200px]"
+                        style={{ width: "300px" }}
+                      >
                         {item.departmentnameshort}
                       </td>
                       {render(item.data)}
