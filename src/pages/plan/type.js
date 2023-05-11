@@ -23,7 +23,12 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (state.moduleid && state.department_id !== null) {
+    console.log(state.moduleid, state.department_id);
+    if (
+      state.moduleid &&
+      state.department_id !== null &&
+      state.department_id !== undefined
+    ) {
       setLoading(true);
       API.getPlan({
         year: moment(state.date).format("Y"),

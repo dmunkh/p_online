@@ -5,6 +5,7 @@ import { useTrainingContext } from "src/contexts/trainingContext";
 import { Spin } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
+
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
@@ -19,8 +20,30 @@ const PlanDep = () => {
   const { state, dispatch } = useTrainingContext();
   const [search, setSearch] = useState("");
   const [print_modal, setPrint_modal] = useState(false);
+  const [listLesson, setListLesson] = useState([]);
 
   useLayoutEffect(() => {
+    API.getLesson({
+      module_id: 1,
+      year: 2023,
+    })
+      .then((res) => {
+        setListLesson(_.orderBy(res, "type_id"));
+      })
+      .catch((error) => {
+        dispatch({
+          type: "STATE",
+          data: {
+            list_reportplandep: [],
+          },
+        });
+        message({
+          type: "error",
+          error,
+          title: "Тайлан татаж чадсангүй",
+        });
+      });
+
     state.moduleid &&
       API.getReportPlanDep({
         year: moment(state.change_year).format("YYYY"),
@@ -377,6 +400,134 @@ const PlanDep = () => {
     return bb;
   };
 
+  const states = {
+    OH: {
+      name: "Ohio",
+      abbreviation: "OH",
+      cities: {
+        Cleveland: {
+          name: "Cleveland",
+          metroPopulation: "~2.1M",
+        },
+        Columbus: {
+          name: "Columbus",
+          metroPopulation: "~2.0M",
+        },
+      },
+    },
+    MA: {
+      name: "Massachusetts",
+      abbreviation: "MA",
+      cities: {
+        Boston: {
+          name: "Boston",
+          metroPopulation: "~4.6M",
+        },
+      },
+    },
+    TX: {
+      name: "Texas",
+      abbreviation: "TX",
+      cities: {
+        Austin: {
+          name: "Austin",
+          metroPopulation: "~2.1M",
+        },
+        "San Antonio": {
+          name: "San Antonio",
+          metroPopulation: "~2.5M",
+        },
+        Dallas: {
+          name: "Dallas",
+          metroPopulation: "~7.2M",
+        },
+      },
+    },
+    CA: {
+      name: "California",
+      abbreviation: "CA",
+      cities: {
+        "Los Angeles": {
+          name: "Los Angeles",
+          metroPopulation: "~13.1M",
+        },
+        "San Diego": {
+          name: "San Diego",
+          metroPopulation: "~3.3M",
+        },
+        "San Francisco": {
+          name: "San Francisco",
+          metroPopulation: "~4.7M",
+        },
+        Sacramento: {
+          name: "Sacramento",
+          metroPopulation: "~2.1M",
+        },
+      },
+    },
+  };
+
+  const App = () => {
+    const stateValues = Object.values(states);
+
+    console.log("statesVal", stateValues);
+
+    const tbodies = listLesson.map((state, index) => {
+      // const cityValues = Object.values(state.data);
+
+      // console.log("cityVal", cityValues);
+
+      // const cityRows = cityValues.map((city, i) => {
+      //   const stateName =
+      //     i === 0 ? (
+      //       <td rowSpan={cityValues.length + 1}>{state.name}</td>
+      //     ) : null;
+
+      //   console.log("stateName", stateName);
+
+      //   const stateAbbreviation =
+      //     i === 0 ? (
+      //       <td rowSpan={cityValues.length + 1}>{state.abbreviation}</td>
+      //     ) : null;
+
+      //   return (
+      //     <tr key={i} className="border-1">
+      //       {stateName}
+      //       {stateAbbreviation}
+      //       <td>{city.name}</td>
+      //       <td>{city.metroPopulation}</td>
+      //     </tr>
+      //   );
+      // });
+      return (
+        <tbody key={index} className="border-1">
+          <tr>
+            <td>{state.type_name}</td>
+            <td>{state.begin_date}</td>
+          </tr>
+        </tbody>
+      );
+    });
+    return (
+      <div>
+        <table className="border-1">
+          <thead>
+            <tr>
+              <th colSpan="4">Metro Areas by State</th>
+            </tr>
+            <tr>
+              <th>State Name</th>
+              <th>State Abbreviation</th>
+              <th>City</th>
+              <th>Population</th>
+            </tr>
+          </thead>
+          {tbodies}
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className=" card flex p-2 rounded text-xs">
       <Header />
@@ -388,6 +539,7 @@ const PlanDep = () => {
               className="min-h-full first-line:bg-opacity-80"
               spinning={loading}
             > */}
+            {/* <App /> */}
 
             <table className="w-full">
               <thead>
