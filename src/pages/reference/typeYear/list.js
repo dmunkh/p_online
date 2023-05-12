@@ -35,30 +35,30 @@ const List = () => {
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
-    module&&
-    API.getTypesYear({ module_id: module, year: date })
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_typeyear: _.orderBy(res, ["id"], "desc"),
-          },
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_typeyear: [],
-          },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Сургалтын төрлийн жагсаалт татаж чадсангүй",
-        });
-      })
-      .finally(() => setLoading(false));
+    module &&
+      API.getTypesYear({ module_id: module, year: date })
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_typeyear: _.orderBy(res, ["id"], "desc"),
+            },
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_typeyear: [],
+            },
+          });
+          message({
+            type: "error",
+            error,
+            title: "Сургалтын төрлийн жагсаалт татаж чадсангүй",
+          });
+        })
+        .finally(() => setLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, module, date]);
@@ -95,6 +95,7 @@ const List = () => {
                   ...state.selected_typeyear,
                   price_emc: res.price_emc,
                   price_organization: res.price_organization,
+                  hour: res.hour,
                 },
               },
             });
