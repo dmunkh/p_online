@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
-import _, { rest } from "lodash";
+import _ from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
@@ -12,13 +12,10 @@ import MODALTRANSFER from "src/pages/workers/modaltransfer";
 import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
-import { MultiSelect } from "primereact/multiselect";
-import { Dropdown } from "primereact/dropdown";
+
 import { Spin, Input, Modal, InputNumber, Checkbox, Select } from "antd";
 import moment from "moment";
 import * as XLSX from "xlsx";
-import { Tag } from "primereact/tag";
-import { InputText } from "primereact/inputtext";
 
 const List = () => {
   const { user, message, checkRole, checkGroup } = useUserContext();
@@ -26,9 +23,9 @@ const List = () => {
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
-  const [filters, setFilters] = useState({
-    status: { value: null, matchMode: FilterMatchMode.EQUALS },
-  });
+  // const [filters, setFilters] = useState({
+  //   status: { value: null, matchMode: FilterMatchMode.EQUALS },
+  // });
   const { Option } = Select;
   // const [first, set_first] = useState(0);
   // const [per_page, set_per_page] = useState(50);
@@ -40,15 +37,6 @@ const List = () => {
   // const [indeterminate, setIndeterminate] = useState(false);
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
-  const [cnt, setCnt] = useState([]);
-
-  const [statuses] = useState([
-    "unqualified",
-    "qualified",
-    "new",
-    "negotiation",
-    "renewal",
-  ]);
 
   useEffect(() => {
     if (state.department !== null) {
@@ -206,7 +194,6 @@ const List = () => {
       <Select
         className="md:w-[80px]"
         onChange={(value) => {
-     
           var result = list;
           if (value === 1)
             setList(_.filter(result, (a) => a.is_success === true));
@@ -270,7 +257,6 @@ const List = () => {
         <MODALTRANSFER />
       </Modal>
       <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}>
-      
         <DataTable
           value={list}
           filters={search}
