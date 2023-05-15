@@ -69,7 +69,6 @@ const List = () => {
       </Modal>
 
       <div className="p-2 rounded text-xs">
-        ...
         <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
           <DataTable
             size="small"
