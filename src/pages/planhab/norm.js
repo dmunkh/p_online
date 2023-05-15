@@ -176,7 +176,7 @@ const List = () => {
               body={(item) => {
                 return (
                   <div className="flex items-center justify-center gap-2">
-                    {item.type_id !== 1 && checkRole(["norm_delete"]) && (
+                    {checkRole(["norm_delete"]) && (
                       <button
                         className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                         onClick={() => {
