@@ -174,7 +174,7 @@ const List = () => {
                   <Column
                     align="right"
                     colSpan={2}
-                    footer="Нийт төлөвлөгөөт ажилтнууд:"
+                    footer="Нийт сургалтанд суух ажилтнууд ( давхардсан ):"
                     className=" text-xs "
                   />
                   <Column
