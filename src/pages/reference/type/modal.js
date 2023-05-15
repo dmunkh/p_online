@@ -6,6 +6,7 @@ import { useReferenceContext } from "../../../contexts/referenceContext";
 import * as API from "../../../api/reference";
 import _ from "lodash";
 import { useLayoutEffect } from "react";
+import TextArea from "antd/lib/input/TextArea";
 
 const Component = () => {
   const { state, dispatch } = useReferenceContext();
@@ -242,7 +243,7 @@ const Component = () => {
         <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын тайлбар:
         </span>
-        <Input
+        <TextArea
           className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
           value={state.description}
           onChange={(e) => {

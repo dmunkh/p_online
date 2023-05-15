@@ -3,13 +3,13 @@ import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import { Select, InputNumber, Modal, Input } from "antd";
+import { Select, Modal, Input } from "antd";
 
 import { Toast } from "primereact/toast";
 
 import _ from "lodash";
 import moment from "moment";
-import Swal from "sweetalert2";
+
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
@@ -18,7 +18,7 @@ const Component = () => {
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
-  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
+  const [date] = useState(moment(Date.now()).format("YYYY"));
 
   //жагсаалт
 
@@ -90,7 +90,6 @@ const Component = () => {
           dispatch({ type: "CLEAR_TYPEYEAR" });
           dispatch({ type: "STATE", data: { modal: false } });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-         
         })
         .catch((error) => {
           message({
@@ -112,7 +111,6 @@ const Component = () => {
           });
           dispatch({ type: "STATE", data: { modal: false } });
           message({ type: "success", title: "Амжилттай хадгалагдлаа" });
-      
         })
         .catch((error) => {
           message({
@@ -222,7 +220,7 @@ const Component = () => {
           <Input
             type="number"
             size="small"
-            className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
+            className=" p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
             value={state.selected_typeyear.hour}
             onChange={(e) => {
               dispatch({
@@ -242,9 +240,7 @@ const Component = () => {
             type="number"
             size="small"
             className="p-1 w-full text-gray-900 border border-gray-200 rounded-sm"
-            value={
-               state.selected_typeyear.price_emc
-            }
+            value={state.selected_typeyear.price_emc}
             onChange={(e) => {
               dispatch({
                 type: "STATE",
@@ -256,6 +252,7 @@ const Component = () => {
                 },
               });
             }}
+            status="error"
           />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
@@ -317,11 +314,9 @@ const Component = () => {
           />
         </div>
 
-        <div className="my-3 border " />
-        <SaveButton  onClick={() => save()}/>
+        <SaveButton onClick={() => save()} />
         <Toast ref={toast} />
       </Modal>
-     
     </>
   );
 };

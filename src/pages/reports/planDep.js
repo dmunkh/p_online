@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import Header from "src/pages/reports/header";
 import { useTrainingContext } from "src/contexts/trainingContext";
-import { Spin } from "antd";
+import { Result, Spin } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
 
@@ -142,6 +142,16 @@ const PlanDep = () => {
 
     return result.length;
   };
+
+  const sum_les = (rowdata) => {
+    var less_id = _.map(state.list_lessType, 'type_id');
+    var result = _.filter(_.map(rowdata.data), { type_id: 1 });
+    console.log(_.filter(_.map(rowdata.data), { type_id: 1 }));
+
+    console.log("fhdsfsfhkds",less_id)
+    return result[0].type_id;
+  };
+
   const memo_header = useMemo(() => {
     var row = [];
     var result = state.list_lessType;
@@ -171,14 +181,16 @@ const PlanDep = () => {
   const memo_header_sub = useMemo(() => {
     var row = [];
     var result = state.list_lessType;
-
+    console.log("sub hhhhh", result);
     _.map(result, (i) => {
       row.push(
         <Column
-          key={"key_header_sub_1" + i}
-          header=" то444о"
+          key={"key_header_sub_1" + i.id}
+          header={i.price_emc}
+
+          id={i.type_id}
           align="center"
-          className="min-w-[60px] max-w-[60px] w-[60px]"
+          className="min-w-[60px] max-w-[60px] w-[60px] p-1"
         />
       );
     });
@@ -379,6 +391,28 @@ const PlanDep = () => {
           className="text-xs "
           headerClassName="flex items-center justify-center"
           bodyClassName="flex items-center justify-center "
+        />
+        <Column
+          field="Sum"
+          //header="SecretNum"
+          body={sum_les}
+          style={{
+            textAlign: "center",
+            fontWeight: "600",
+            width: "50px",
+            minWidth: "50px",
+          }}
+        />
+         <Column
+          field="Sum"
+          //header="SecretNum"
+          body={sum_les}
+          style={{
+            textAlign: "center",
+            fontWeight: "600",
+            width: "50px",
+            minWidth: "50px",
+          }}
         />
         <ColumnGroup />
       </DataTable>

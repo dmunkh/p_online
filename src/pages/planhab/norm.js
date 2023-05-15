@@ -3,7 +3,7 @@ import * as API from "src/api/planhab";
 
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Modal, Input } from "antd";
+import { Spin, Modal } from "antd";
 
 import { FilterMatchMode } from "primereact/api";
 import { usePlanHabContext } from "src/contexts/planhabContext";
@@ -16,7 +16,7 @@ import _ from "lodash";
 const List = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanHabContext();
-  const [search, setSearch] = useState({
+  const [search] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
 
