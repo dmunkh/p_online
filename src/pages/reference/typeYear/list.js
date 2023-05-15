@@ -30,7 +30,7 @@ const List = () => {
   const yearFormat = "YYYY";
   const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
   const [module, setModule] = useState();
-  const [isPrice, setIsPrice] = useState(false);
+
 
   // жагсаалт
   useLayoutEffect(() => {

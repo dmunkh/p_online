@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useEffect, useLayoutEffect } from "react";
+import React, { useState, useMemo,  useLayoutEffect } from "react";
 import { Input, Modal, DatePicker, Switch, Modal as CalModal } from "antd";
-import { InputMask } from "primereact/inputmask";
 import { InputNumber } from "primereact/inputnumber";
 import Type from "src/components/custom/typeYear";
 import PlaceList from "src/components/custom/placeList";
@@ -12,6 +11,7 @@ import { Column } from "primereact/column";
 import _ from "lodash";
 import moment from "moment";
 import Swal from "sweetalert2";
+import SaveButton from "src/components/button/SaveButton";
 
 const Component = (props) => {
   const { state, dispatch } = useTrainingContext();
@@ -663,13 +663,8 @@ const Component = (props) => {
 
         <div className="my-3 border " />
         {!state.timeRegister && (
-          <button
-            className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-            onClick={() => save()}
-          >
-            <i className="ft-save" />
-            <span className="ml-2">Хадгалах</span>
-          </button>
+          <SaveButton  onClick={() => save()}/>
+         
         )}
       </Modal>
 

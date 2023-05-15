@@ -6,7 +6,7 @@ import Header from "src/pages/plan/header";
 import { usePlanContext } from "src/contexts/planContext";
 
 const Index = () => {
-  const { state, dispatch } = usePlanContext();
+  const { state } = usePlanContext();
   return (
     <div className=" p-2 text-xs">
       <Header />

@@ -9,9 +9,9 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import { useUserContext } from "src/contexts/userContext";
-import Header from "src/pages/plan/id/header";
+
 import Swal from "sweetalert2";
-import WorkerType from "src/pages/plan/workersType ";
+
 
 const Workers = () => {
   const { message, checkRole } = useUserContext();

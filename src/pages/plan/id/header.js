@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
-import Module from "src/components/custom/module";
-// import * as API from "src/api/request";
 import { useNavigate } from "react-router-dom";
 
-import { Select, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import Department from "src/components/custom/departmentTseh";
-import _ from "lodash";
 import moment from "moment";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, message } = useUserContext();
+  const {  message } = useUserContext();
   const { state, dispatch } = usePlanContext();
 
   useEffect(() => {
