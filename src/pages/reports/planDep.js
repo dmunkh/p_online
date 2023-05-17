@@ -202,7 +202,7 @@ const PlanDep = () => {
   const memo_column = useMemo(() => {
     //     var row = [];
     //     var result = state.list_reportplandep
-    console.log("rerreed", state.list_reportplandep);
+    // console.log("rerreed", state.list_reportplandep);
     // _.map(result, (i) => {
     //     console.log(_.map(i, 'type_id'))
     //       row.push(

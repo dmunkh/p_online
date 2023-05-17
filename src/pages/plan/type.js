@@ -36,11 +36,22 @@ const List = () => {
         department_id: state.department_id,
       })
         .then((res) => {
+          var result = [];
+
+          _.map(res, (items) => {
+            result.push({
+              ...items,
+              // Intl.NumberFormat("en-US").format(
+              sum: items?.price_emc * items?.count,
+              //),
+            });
+          });
+
           dispatch({
             type: "STATE",
             data: {
               list_normposition: _.orderBy(
-                res,
+                result,
                 ["departmentcode"],
                 ["asc", "asc"]
               ),
@@ -173,14 +184,21 @@ const List = () => {
                 <Row>
                   <Column
                     align="right"
-                    colSpan={2}
-                    footer="Нийт төлөвлөгөөт ажилтнууд:"
+                    colSpan={3}
+                    footer="Нийт сургалтанд суух ажилтнууд ( давхардсан ):"
                     className=" text-xs "
                   />
                   <Column
                     align="center"
                     footer={_.sumBy(state?.list_normposition, (a) => a.count)}
-                    className="w-[150px] text-xs"
+                    className="w-[100px] text-xs"
+                  />
+                  <Column
+                    align="right"
+                    footer={Intl.NumberFormat("en-US").format(
+                      _.sumBy(state?.list_normposition, (a) => a.sum)
+                    )}
+                    className="w-[100px] text-xs"
                   />
                 </Row>
               </ColumnGroup>
@@ -287,6 +305,18 @@ const List = () => {
                 );
               }}
             />
+            <Column
+              header="Нэгж үнэ"
+              field="price_emc"
+              align="center"
+              sortable
+              className="text-xs"
+              headerClassName="flex items-center justify-center"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              body={(data) => {
+                return Intl.NumberFormat("en-US").format(data.price_emc);
+              }}
+            />
 
             <Column
               header="Ажилтны тоо"
@@ -295,7 +325,19 @@ const List = () => {
               sortable
               className="text-xs"
               headerClassName="flex items-center justify-center"
-              style={{ minWidth: "150px", maxWidth: "150px" }}
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+            />
+            <Column
+              header="Нийт үнэ"
+              field="sum"
+              align="right"
+              sortable
+              className="text-xs text-right"
+              // headerClassName="flex items-center justify-center"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              body={(data) => {
+                return Intl.NumberFormat("en-US").format(data.sum);
+              }}
             />
           </DataTable>
         </Spin>
