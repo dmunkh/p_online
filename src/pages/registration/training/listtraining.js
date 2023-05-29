@@ -95,6 +95,7 @@ const Training = () => {
         id: null,
       },
     });
+    
    API.getTypesYear({
     module_id: state.moduleid,
     year: moment(state.change_year).format("YYYY"),
