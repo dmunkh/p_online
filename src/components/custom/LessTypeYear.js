@@ -19,7 +19,6 @@ const LessTypeYear = (props) => {
       API.getTypesYear({ module_id: props.module_id, year: props.year }).then(
         (res) => {
           setList(_.orderBy(res, ["id"]));
-          console.log("res: +++++", res);
 
           //if (res.length > 0 && !props.value) props.onChange(res[0].id);
         }

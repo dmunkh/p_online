@@ -54,7 +54,7 @@ const Training = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.change_year, state.moduleid]);
 
-    const deleteItem = (item) => {
+  const deleteItem = (item) => {
     Swal.fire({
       text: "Устгахдаа итгэлтэй байна уу?",
       icon: "warning",
@@ -92,26 +92,43 @@ const Training = () => {
     dispatch({
       type: "STATE",
       data: {
-        id: null,
+        less_id: null,
       },
     });
-    
-   API.getTypesYear({
-    module_id: state.moduleid,
-    year: moment(state.change_year).format("YYYY"),
-  })
-    .then((res) => {  
-      
+
+    API.getTypesYear({
+      module_id: state.moduleid,
+      year: moment(state.change_year).format("YYYY"),
+    }).then((res) => {
       var result = _.filter(res, (a) => a.type_id === item.type_id);
-      
+
       dispatch({
         type: "STATE",
         data: {
           id: result[0].id,
         },
       });
-    })
-    .catch((error) => {});
+    });
+
+    API.getLessonID(item.id).then((res) => {
+      dispatch({
+        type: "SET_LESSON",
+        data: {
+          type_name: res.type_name,
+          type_id: res.type_id,
+          begin_date: res.begin_date,
+          end_date: res.end_date,
+          hour: res.hour,
+          limit: res.limit,
+          percent: res.percent,
+          place_id: res.place_id,
+          point: res.point,
+          price_emc: res.price_emc,
+          price_organization: res.price_organization,
+          year: res.year,
+        },
+      });
+    });
 
     dispatch({
       type: "STATE",
@@ -119,43 +136,25 @@ const Training = () => {
         type_name: item.type_name,
       },
     });
-   dispatch({
-    type: "STATE",
-    data: {
-      type_id: item.type_id,
-    },
-  });
+    // dispatch({
+    //   type: "STATE",
+    //   data: {
+    //     type_id: item.type_id,
+    //   },
+    // });
 
     dispatch({
       type: "STATE",
       data: { timeRegister: false },
     });
-    dispatch({
-      type: "SET_LESSON",
-      data: {
-        type_name: item.type_name,
-        type_id: item.type_id,
-        begin_date: item.begin_date,
-        end_date: item.end_date,
-        hour: item.hour,
-        limit: item.limit,
-        percent: item.percent,
-        place_id: item.place_id,
-        point: item.point,
-        price_emc: item.price_emc,
-        price_organization: item.price_organization,
-        year: item.year,
-        less_id: item.id,
-      },
-    });
+
     dispatch({
       type: "STATE",
       data: {
         less_id: item.id,
       },
     });
-   
-   
+
     dispatch({
       type: "STATE",
       data: {
@@ -169,12 +168,12 @@ const Training = () => {
       },
     });
     setEdit(true);
+
     dispatch({
       type: "STATE",
       data: { modal: true },
     });
   };
-
   const memo_table = useMemo(() => {
     var result = state.list_training;
 
@@ -235,6 +234,12 @@ const Training = () => {
                       data: { timeRegister: false },
                     });
                     setEdit(false);
+                    dispatch({
+                      type: "STATE",
+                      data: {
+                        less_id: null,
+                      },
+                    });
 
                     dispatch({
                       type: "STATE",
@@ -254,7 +259,7 @@ const Training = () => {
           return (
             <React.Fragment>
               <span className="text-xs font-semibold">
-                <span>Сургалтын төрөл :</span> 
+                <span>Сургалтын төрөл :</span>
                 <span className="ml-1">
                   {data.type_name} - / {data.count_register} ш/
                 </span>

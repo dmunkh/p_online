@@ -25,6 +25,7 @@ const Component = (props) => {
     state.place_id || error.push("Сургалтын танхим");
     // state.begin_date || error.push("Сургалтын эхлэх хугацаа");
     // state.end_date || error.push("Сургалтын дуусах хугацаа");
+
     state.limit || error.push("Суух ажилчдын тоо ");
     state.hour || error.push("Сургалт үргэлжлэх хугацаа");
     state.point || error.push("Шалгалтын оноо");
@@ -61,14 +62,14 @@ const Component = (props) => {
           </div>
         ),
       });
-    } else if (state.id) {
-      API.putLesson(state.id, data)
+    } else if (state.less_id && props.setedit) {
+      API.putLesson(state.less_id, data)
         .then(() => {
           dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
           dispatch({ type: "STATE", data: { modal: false } });
           message({
             type: "success",
-            title: "Амжилттай хадгалагдлаа.",
+            title: "Амжилттай засварлагдлаа.",
           });
         })
         .catch((error) => {
@@ -395,7 +396,7 @@ const Component = (props) => {
         width={850}
         title={
           <div className="text-center">
-            {state?.id
+            {state?.less_id
               ? "Сургалтын төрөл засварлах цонх"
               : "Сургалтын төрөл бүртгэх цонх"}
           </div>
@@ -414,15 +415,17 @@ const Component = (props) => {
           <div className=" p-1 flex  justify-end gap-3 ">
             <div className="card flex justify-content-center">
               <ToggleButton
-                onLabel="Сургалт засах"
-                offLabel="Ирц бүртгэх"
+                onLabel="Сургалт засварлах"
+                offLabel="Ирц бүртгэх хугацаа"
                 onIcon="pi pi-check"
                 offIcon="pi pi-times"
                 checked={state.timeRegister}
                 onChange={(e) =>
                   dispatch({
                     type: "STATE",
-                    data: { timeRegister: e.value },
+                    data: {
+                      timeRegister: e.value,
+                    },
                   })
                 }
                 className="w-11rem text-white text-xs bg-indigo-500 shadow-lg p-1 flex items-center justify-center font-semibold  border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
@@ -459,10 +462,10 @@ const Component = (props) => {
                   year={moment(state.change_year).format("YYYY")}
                   value={state?.id}
                   onChange={(value) => {
-                    // dispatch({
-                    //   type: "STATE",
-                    //   data: { id: value },
-                    // });
+                    dispatch({
+                      type: "STATE",
+                      data: { id: value },
+                    });
                     API.getLessonTypeID(value).then((res) => {
                       dispatch({
                         type: "SET_LESSON",

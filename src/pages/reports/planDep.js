@@ -144,11 +144,10 @@ const PlanDep = () => {
   };
 
   const sum_les = (rowdata) => {
-    var less_id = _.map(state.list_lessType, 'type_id');
+    var less_id = _.map(state.list_lessType, "type_id");
     var result = _.filter(_.map(rowdata.data), { type_id: 1 });
     console.log(_.filter(_.map(rowdata.data), { type_id: 1 }));
 
-    console.log("fhdsfsfhkds",less_id)
     return result[0].type_id;
   };
 
@@ -181,13 +180,11 @@ const PlanDep = () => {
   const memo_header_sub = useMemo(() => {
     var row = [];
     var result = state.list_lessType;
-    console.log("sub hhhhh", result);
     _.map(result, (i) => {
       row.push(
         <Column
           key={"key_header_sub_1" + i.id}
           header={i.price_emc}
-
           id={i.type_id}
           align="center"
           className="min-w-[60px] max-w-[60px] w-[60px] p-1"
@@ -202,7 +199,6 @@ const PlanDep = () => {
   const memo_column = useMemo(() => {
     //     var row = [];
     //     var result = state.list_reportplandep
-    // console.log("rerreed", state.list_reportplandep);
     // _.map(result, (i) => {
     //     console.log(_.map(i, 'type_id'))
     //       row.push(
@@ -403,7 +399,7 @@ const PlanDep = () => {
             minWidth: "50px",
           }}
         />
-         <Column
+        <Column
           field="Sum"
           //header="SecretNum"
           body={sum_les}
@@ -504,20 +500,14 @@ const PlanDep = () => {
   const App = () => {
     const stateValues = Object.values(states);
 
-    console.log("statesVal", stateValues);
-
     const tbodies = listLesson.map((state, index) => {
       // const cityValues = Object.values(state.data);
-
-      // console.log("cityVal", cityValues);
 
       // const cityRows = cityValues.map((city, i) => {
       //   const stateName =
       //     i === 0 ? (
       //       <td rowSpan={cityValues.length + 1}>{state.name}</td>
       //     ) : null;
-
-      //   console.log("stateName", stateName);
 
       //   const stateAbbreviation =
       //     i === 0 ? (
