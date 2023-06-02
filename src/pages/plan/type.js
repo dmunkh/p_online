@@ -123,7 +123,7 @@ const List = () => {
             responsiveLayout="scroll"
             sortMode="multiple"
             rowGroupMode="subheader"
-            groupRowsBy="departmentname"
+            groupRowsBy="module_id"
             scrollHeight={window.innerHeight - 360}
             globalFilterFields={["type_name"]}
             emptyMessage={
@@ -173,9 +173,7 @@ const List = () => {
             rowGroupHeaderTemplate={(data) => {
               return (
                 <div className="text-xs font-semibold">
-                  <span className="ml-1">
-                    {data.departmentcode} | {data.departmentname}
-                  </span>
+                  <span className="ml-1">{data.module_name}</span>
                 </div>
               );
             }}
@@ -304,6 +302,15 @@ const List = () => {
                   </div>
                 );
               }}
+            />
+            <Column
+              header="Давтамж"
+              field="interval_name"
+              align="center"
+              sortable
+              className="text-xs"
+              headerClassName="flex items-center justify-center"
+              style={{ minWidth: "150px", maxWidth: "150px" }}
             />
             <Column
               header="Нэгж үнэ"

@@ -196,6 +196,18 @@ const Workers = () => {
           className="text-xs"
           headerClassName="flex items-center justify-center"
         />
+        <Column
+          header="Сургалтанд суусан огноо"
+          field="last_register_date"
+          sortable
+          align="center"
+          className="text-xs"
+          style={{ minWidth: "120px", maxWidth: "120px" }}
+          headerClassName="flex items-center justify-center"
+          body={(rowData) => {
+            return moment(rowData.last_register_date).format("YYYY-MM-DD");
+          }}
+        />
         {!state.isapprove && checkRole(["plan_delete"]) && (
           <Column
             align="center"

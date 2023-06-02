@@ -144,11 +144,11 @@ const PlanDep = () => {
   };
 
   const sum_les = (rowdata) => {
-    var less_id = _.map(state.list_lessType, 'type_id');
+    var less_id = _.map(state.list_lessType, "type_id");
     var result = _.filter(_.map(rowdata.data), { type_id: 1 });
     console.log(_.filter(_.map(rowdata.data), { type_id: 1 }));
 
-    console.log("fhdsfsfhkds",less_id)
+    console.log("fhdsfsfhkds", less_id);
     return result[0].type_id;
   };
 
@@ -187,7 +187,6 @@ const PlanDep = () => {
         <Column
           key={"key_header_sub_1" + i.id}
           header={i.price_emc}
-
           id={i.type_id}
           align="center"
           className="min-w-[60px] max-w-[60px] w-[60px] p-1"
@@ -403,7 +402,7 @@ const PlanDep = () => {
             minWidth: "50px",
           }}
         />
-         <Column
+        <Column
           field="Sum"
           //header="SecretNum"
           body={sum_les}
@@ -431,7 +430,18 @@ const PlanDep = () => {
         return bb.push(<td className="text-center border">{item?.count}</td>);
       }
     });
+
     return bb;
+
+    // _.map(question, (item, index) => {
+    //   var aa = [];
+    //   _.map(state?.list_lessType, (i) => aa.push(i.type_id));
+
+    //   if (aa.includes(item?.type_id)) {
+    //     return bb.push(<td className="text-center border">{item?.count}</td>);
+    //   }
+    // });
+    // return bb;
   };
 
   const states = {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo,  useLayoutEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import { Input, Modal, DatePicker, Switch, Modal as CalModal } from "antd";
 import { InputNumber } from "primereact/inputnumber";
 import Type from "src/components/custom/typeYear";
@@ -130,8 +130,8 @@ const Component = (props) => {
   }, [state.refresh, state.less_id]);
 
   // useEffect(() => {
-   
-  //   state.id &&     
+
+  //   state.id &&
 
   //       API.getLessonTypeID(state.id).then((res) => {
   //         dispatch({
@@ -156,7 +156,7 @@ const Component = (props) => {
   //           data: { type_id: res.type_id },
   //         });
   //       });
-          
+
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [state.id]);
 
@@ -442,41 +442,39 @@ const Component = (props) => {
                   year={moment(state.change_year).format("YYYY")}
                   value={state?.id}
                   onChange={(value) => {
-                    
-                      // dispatch({
-                      //   type: "STATE",
-                      //   data: { id: value },
-                      // });
-                      API.getLessonTypeID(value).then((res) => {
-                        dispatch({
-                          type: "SET_LESSON",
-                          data: {
-                            id: res.id,
-                            begin_date: res.begin_date,
-                            end_date: res.end_date,
-                            hour: res.hour,
-                            limit: res.limit,
-                            percent: res.percent,
-              
-                            point: res.point,
-                            type_id: res.type_id,
-                            place_id: res.place_id,
-                            price_emc: res.price_emc,
-                            price_organization: res.price_organization,
-                          },
-                        });
-                        dispatch({
-                          type: "STATE",
-                          data: { type_id: res.type_id },
-                        });
+                    // dispatch({
+                    //   type: "STATE",
+                    //   data: { id: value },
+                    // });
+                    API.getLessonTypeID(value).then((res) => {
+                      dispatch({
+                        type: "SET_LESSON",
+                        data: {
+                          id: res.id,
+                          begin_date: res.begin_date,
+                          end_date: res.end_date,
+                          hour: res.hour,
+                          limit: res.limit,
+                          percent: res.percent,
+
+                          point: res.point,
+                          type_id: res.type_id,
+                          place_id: res.place_id,
+                          price_emc: res.price_emc,
+                          price_organization: res.price_organization,
+                        },
                       });
-                     
                       dispatch({
                         type: "STATE",
-                        data: { modal: true },
+                        data: { type_id: res.type_id },
                       });
-                      //loadItemTypeList(res.itemtypeid);
-                   
+                    });
+
+                    dispatch({
+                      type: "STATE",
+                      data: { modal: true },
+                    });
+                    //loadItemTypeList(res.itemtypeid);
                   }}
                 />
               </div>
@@ -662,10 +660,7 @@ const Component = (props) => {
         )}
 
         <div className="my-3 border " />
-        {!state.timeRegister && (
-          <SaveButton  onClick={() => save()}/>
-         
-        )}
+        {!state.timeRegister && <SaveButton onClick={() => save()} />}
       </Modal>
 
       <CalModal
