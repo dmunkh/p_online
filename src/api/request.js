@@ -89,7 +89,7 @@ export async function getType(params) {
   return response.data;
 }
 export async function getTypes(id) {
-  const response = await API().get("/type/" +id);
+  const response = await API().get("/type/" + id);
   return response.data;
 }
 // Сургалтын төрөл жилээр - TypeYear

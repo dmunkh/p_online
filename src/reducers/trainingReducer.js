@@ -10,7 +10,7 @@ export const reducer = (state, action) => {
     case "SET_LESSON":
       return {
         ...state,
-        id: action.data.id,
+        //id: action.data.id,
         begin_date: action.data.begin_date,
         end_date: action.data.end_date,
         hour: action.data.hour,
@@ -21,8 +21,8 @@ export const reducer = (state, action) => {
         price_emc: action.data.price_emc,
         price_organization: action.data.price_organization,
         year: action.data.year,
-        type_name: action.type_name,
-        type_id: action.type_id,
+        // type_name: action.type_name,
+        type_id: action.data.type_id,
       };
 
     case "CLEAR_LESSON":
