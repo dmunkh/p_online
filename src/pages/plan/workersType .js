@@ -9,6 +9,8 @@ import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import { useUserContext } from "src/contexts/userContext";
 import Swal from "sweetalert2";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 
 const Workers = () => {
   const { message, checkRole } = useUserContext();
@@ -29,7 +31,13 @@ const Workers = () => {
       department_id: state.department_id,
     })
       .then((res) => {
-        setList(_.orderBy(res, ["department_code"], ["firstname"]));
+        setList(
+          _.orderBy(
+            _.filter(res, (a) => a.tn !== "0"),
+            ["department_code"],
+            ["firstname"]
+          )
+        );
 
         dispatch({
           type: "STATE",
