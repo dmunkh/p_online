@@ -119,6 +119,7 @@ const List = () => {
             scrollable
             removableSort
             showGridlines
+            rowHover
             className="table-xs"
             filterDisplay="menu"
             responsiveLayout="scroll"

@@ -205,7 +205,10 @@ const Workers = () => {
           style={{ minWidth: "120px", maxWidth: "120px" }}
           headerClassName="flex items-center justify-center"
           body={(rowData) => {
-            return moment(rowData.last_register_date).format("YYYY-MM-DD");
+            return (
+              rowData.last_register_date &&
+              moment(rowData.last_register_date).format("YYYY-MM-DD")
+            );
           }}
         />
         {state.moduleid === 1

@@ -8,7 +8,7 @@ const _state = {
   list: [],
   refresh: 0,
   modal: false,
-  date: moment(),
+  date: moment().add(1, "years"),
   department: null,
   moduleid: null,
   typeid: null,
