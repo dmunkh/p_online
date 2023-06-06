@@ -208,60 +208,116 @@ const Workers = () => {
             return moment(rowData.last_register_date).format("YYYY-MM-DD");
           }}
         />
-        {!state.isapprove && checkRole(["plan_delete"]) && (
-          <Column
-            align="center"
-            header=""
-            className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-            headerClassName="flex items-center justify-center"
-            body={(item) => {
-              return item.insert_type === "plan" ? (
-                <button
-                  className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                  onClick={() => {
-                    Swal.fire({
-                      text: item.short_name + "-г сургалтнаас хасах уу",
-                      icon: "warning",
-                      showCancelButton: true,
-                      confirmButtonColor: "#1890ff",
-                      cancelButtonColor: "rgb(244, 106, 106)",
-                      confirmButtonText: "Тийм",
-                      cancelButtonText: "Үгүй",
-                      reverseButtons: true,
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        API.deletePlanWorker(item.id)
-                          .then(() => {
-                            dispatch({
-                              type: "STATE",
-                              data: { refresh: state.refresh + 1 },
-                            });
+        {state.moduleid === 1
+          ? checkRole(["plan_delete"]) && (
+              <Column
+                align="center"
+                header=""
+                className="text-xs"
+                style={{ minWidth: "70px", maxWidth: "70px" }}
+                headerClassName="flex items-center justify-center"
+                body={(item) => {
+                  return item.insert_type === "plan" ? (
+                    <button
+                      className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                      onClick={() => {
+                        Swal.fire({
+                          text: item.short_name + "-г сургалтнаас хасах уу",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#1890ff",
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          confirmButtonText: "Тийм",
+                          cancelButtonText: "Үгүй",
+                          reverseButtons: true,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            API.deletePlanWorker(item.id)
+                              .then(() => {
+                                dispatch({
+                                  type: "STATE",
+                                  data: { refresh: state.refresh + 1 },
+                                });
 
-                            message({
-                              type: "success",
-                              title: "Амжилттай устгагдлаа..",
-                            });
-                          })
-                          .catch((error) => {
-                            message({
-                              type: "error",
-                              error,
-                              title: "Албан тушаалаас норм хасаж чадсангүй",
-                            });
-                          });
-                      }
-                    });
-                  }}
-                >
-                  <i className="ft-trash-2" />
-                </button>
-              ) : (
-                ""
-              );
-            }}
-          />
-        )}
+                                message({
+                                  type: "success",
+                                  title: "Амжилттай устгагдлаа..",
+                                });
+                              })
+                              .catch((error) => {
+                                message({
+                                  type: "error",
+                                  error,
+                                  title: "Албан тушаалаас норм хасаж чадсангүй",
+                                });
+                              });
+                          }
+                        });
+                      }}
+                    >
+                      <i className="ft-trash-2" />
+                    </button>
+                  ) : (
+                    ""
+                  );
+                }}
+              />
+            )
+          : !state.isapprove &&
+            checkRole(["plan_delete"]) && (
+              <Column
+                align="center"
+                header=""
+                className="text-xs"
+                style={{ minWidth: "70px", maxWidth: "70px" }}
+                headerClassName="flex items-center justify-center"
+                body={(item) => {
+                  return item.insert_type === "plan" ? (
+                    <button
+                      className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                      onClick={() => {
+                        Swal.fire({
+                          text: item.short_name + "-г сургалтнаас хасах уу",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#1890ff",
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          confirmButtonText: "Тийм",
+                          cancelButtonText: "Үгүй",
+                          reverseButtons: true,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            API.deletePlanWorker(item.id)
+                              .then(() => {
+                                dispatch({
+                                  type: "STATE",
+                                  data: { refresh: state.refresh + 1 },
+                                });
+
+                                message({
+                                  type: "success",
+                                  title: "Амжилттай устгагдлаа..",
+                                });
+                              })
+                              .catch((error) => {
+                                message({
+                                  type: "error",
+                                  error,
+                                  title: "Албан тушаалаас норм хасаж чадсангүй",
+                                });
+                              });
+                          }
+                        });
+                      }}
+                    >
+                      <i className="ft-trash-2" />
+                    </button>
+                  ) : (
+                    ""
+                  );
+                }}
+              />
+            )}
       </DataTable>
     </Spin>
   );

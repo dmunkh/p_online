@@ -28,7 +28,7 @@ const PlanDep = () => {
       year: 2023,
     })
       .then((res) => {
-        setListLesson(_.orderBy(res, "type_id"));
+        setListLesson(_.orderBy(res, ["id"]));
       })
       .catch((error) => {
         dispatch({
@@ -417,18 +417,28 @@ const PlanDep = () => {
   }, [state.list_reportplandep, search]);
 
   const render = (question) => {
-    var bb = [];
-
-    _.map(question, (item, index) => {
-      var aa = [];
-      _.map(state?.list_lessType, (i) => aa.push(i.type_id));
-
-      if (aa.includes(item?.type_id)) {
-        return bb.push(<td className="text-center border">{item?.count}</td>);
+    return question.map((item, index) => {
+      if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
+        return (
+          <td className="text-center border" key={index}>
+            {item?.type_id} - {item?.count}
+          </td>
+        );
       }
+      return null;
     });
+    // var bb = [];
 
-    return bb;
+    // _.map(question, (item, index) => {
+    //   var aa = [];
+    //   _.map(state?.list_lessType, (i) => aa.push(i.type_id));
+
+    //   if (aa.includes(item?.type_id)) {
+    //     return bb.push(<td className="text-center border">{item?.count}</td>);
+    //   }
+    // });
+
+    // return bb;
 
     // _.map(question, (item, index) => {
     //   var aa = [];
@@ -586,7 +596,7 @@ const PlanDep = () => {
                   {_.map(state.list_lessType, (answer, index) => {
                     return (
                       <th key={index} className="text-center border p-1">
-                        {answer.type_name}
+                        {answer.type_name} + {answer.type_id}
                       </th>
                     );
                   })}

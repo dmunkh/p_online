@@ -44,6 +44,13 @@ export async function postPlanApprove(params) {
   return response.data;
 }
 
+export async function postPlanCountResource(params) {
+  const response = await API().post("/plan", {
+    ...params,
+  });
+  return response.data;
+}
+
 export async function getPlanApprove(params) {
   const response = await API().get("/plan/approve", {
     params: {

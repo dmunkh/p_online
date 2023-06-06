@@ -9,9 +9,9 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import { useUserContext } from "src/contexts/userContext";
+import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
-
 
 const Workers = () => {
   const { message, checkRole } = useUserContext();
@@ -198,62 +198,120 @@ const Workers = () => {
           headerClassName="flex items-center justify-center"
         />
 
-        {!state.isapprove && checkRole(["plan_add"]) && (
-          <Column
-            align="center"
-            header=""
-            className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-            headerClassName="flex items-center justify-center"
-            body={(item) => {
-              return (
-                <button
-                  className="p-1 flex items-center justify-center font-semibold text-purple-500 rounded-full border-2 border-purple-500 hover:bg-purple-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                  onClick={() => {
-                    Swal.fire({
-                      text: item.shortname + "-г сургалтан бүртгэх үү",
-                      icon: "warning",
-                      showCancelButton: true,
-                      confirmButtonColor: "#1890ff",
-                      cancelButtonColor: "rgb(244, 106, 106)",
-                      confirmButtonText: "Тийм",
-                      cancelButtonText: "Үгүй",
-                      reverseButtons: true,
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        API.postPlanWorker({
-                          tn: item.tn,
-                          type_id: state.typeid,
-                          year: moment(state.date).format("Y"),
-                        })
-                          .then(() => {
-                            dispatch({
-                              type: "STATE",
-                              data: { refresh: state.refresh + 1 },
-                            });
+        {state.moduleid === 1
+          ? checkRole(["plan_add"]) && (
+              <Column
+                align="center"
+                header=""
+                className="text-xs"
+                style={{ minWidth: "70px", maxWidth: "70px" }}
+                headerClassName="flex items-center justify-center"
+                body={(item) => {
+                  return (
+                    <button
+                      className="p-1 flex items-center justify-center font-semibold text-purple-500 rounded-full border-2 border-purple-500 hover:bg-purple-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                      onClick={() => {
+                        Swal.fire({
+                          text: item.shortname + "-г сургалтан бүртгэх үү",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#1890ff",
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          confirmButtonText: "Тийм",
+                          cancelButtonText: "Үгүй",
+                          reverseButtons: true,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            API.postPlanWorker({
+                              tn: item.tn,
+                              type_id: state.typeid,
+                              year: moment(state.date).format("Y"),
+                            })
+                              .then(() => {
+                                dispatch({
+                                  type: "STATE",
+                                  data: { refresh: state.refresh + 1 },
+                                });
 
-                            message({
-                              type: "success",
-                              title: "Амжилттай устгагдлаа..",
-                            });
-                          })
-                          .catch((error) => {
-                            message({
-                              type: "error",
-                              error,
-                              title: "Албан тушаалаас норм хасаж чадсангүй",
-                            });
-                          });
-                      }
-                    });
-                  }}
-                >
-                  <i className="ft-plus" />
-                </button>
-              );
-            }}
-          />
-        )}
+                                message({
+                                  type: "success",
+                                  title: "Амжилттай устгагдлаа..",
+                                });
+                              })
+                              .catch((error) => {
+                                message({
+                                  type: "error",
+                                  error,
+                                  title: "Албан тушаалаас норм хасаж чадсангүй",
+                                });
+                              });
+                          }
+                        });
+                      }}
+                    >
+                      <i className="ft-plus" />
+                    </button>
+                  );
+                }}
+              />
+            )
+          : !state.isapprove &&
+            checkRole(["plan_add"]) && (
+              <Column
+                align="center"
+                header=""
+                className="text-xs"
+                style={{ minWidth: "70px", maxWidth: "70px" }}
+                headerClassName="flex items-center justify-center"
+                body={(item) => {
+                  return (
+                    <button
+                      className="p-1 flex items-center justify-center font-semibold text-purple-500 rounded-full border-2 border-purple-500 hover:bg-purple-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                      onClick={() => {
+                        Swal.fire({
+                          text: item.shortname + "-г сургалтан бүртгэх үү",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#1890ff",
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          confirmButtonText: "Тийм",
+                          cancelButtonText: "Үгүй",
+                          reverseButtons: true,
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            API.postPlanWorker({
+                              tn: item.tn,
+                              type_id: state.typeid,
+                              year: moment(state.date).format("Y"),
+                            })
+                              .then(() => {
+                                dispatch({
+                                  type: "STATE",
+                                  data: { refresh: state.refresh + 1 },
+                                });
+
+                                message({
+                                  type: "success",
+                                  title: "Амжилттай устгагдлаа..",
+                                });
+                              })
+                              .catch((error) => {
+                                message({
+                                  type: "error",
+                                  error,
+                                  title: "Албан тушаалаас норм хасаж чадсангүй",
+                                });
+                              });
+                          }
+                        });
+                      }}
+                    >
+                      <i className="ft-plus" />
+                    </button>
+                  );
+                }}
+              />
+            )}
       </DataTable>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
