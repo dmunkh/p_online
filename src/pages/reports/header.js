@@ -12,8 +12,8 @@ const Header = () => {
   return (
     <div className="flex border-b pb-1">
       <div className="flex flex-col md:flex-row md:items-center gap-3">
-        <div className="w-full flex items-center pl-2">
-          <span className="pr-3 font-semibold text-xs">Огноо:</span>
+        <div className="w-full flex items-center pl-1">
+          <span className="pr-1 font-semibold text-xs">Огноо:</span>
 
           <DatePicker
             allowClear={false}
@@ -31,8 +31,8 @@ const Header = () => {
             }}
           />
         </div>
-        <div className="flex flex-col  md:flex-row md:items-center gap-3 ml-5">
-          <span className="md:w-max pr-3 font-semibold text-xs whitespace-nowrap">
+        <div className="flex flex-col  md:flex-row md:items-center gap-3 ">
+          <span className="md:w-max pr-1 font-semibold text-xs whitespace-nowrap">
             Сургалтын бүлэг:
           </span>
           <div className="w-full md:min-w-[400px]">
