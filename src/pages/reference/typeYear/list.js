@@ -27,16 +27,13 @@ const List = () => {
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
-  const yearFormat = "YYYY";
-  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
   const [module, setModule] = useState();
-
 
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
     module &&
-      API.getTypesYear({ module_id: module, year: date })
+      API.getTypesYear({ module_id: module, year: state.date })
         .then((res) => {
           dispatch({
             type: "STATE",
@@ -61,7 +58,7 @@ const List = () => {
         .finally(() => setLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, module, date]);
+  }, [state.refresh, module, state.date]);
 
   useEffect(() => {
     module &&
@@ -171,12 +168,11 @@ const List = () => {
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
           <DatePicker
             size="large"
-            defaultValue={dayjs(date, yearFormat)}
-            format={yearFormat}
             picker="year"
+            format="YYYY"
             className="h-9    "
-            onChange={(e) => {
-              setDate(e.$y);
+            onChange={(date) => {
+              dispatch({ type: "STATE", data: { date: date } });
             }}
           />
           <span className="px-3 font-semibold text-xs whitespace-nowrap">

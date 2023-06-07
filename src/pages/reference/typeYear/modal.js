@@ -18,8 +18,6 @@ const Component = () => {
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
-  const [date] = useState(moment(Date.now()).format("YYYY"));
-
   //жагсаалт
 
   useEffect(() => {
@@ -55,7 +53,7 @@ const Component = () => {
       price_emc: state.selected_typeyear.price_emc,
       price_organization: state.selected_typeyear.price_organization,
       type_id: state.selected_typeyear.type_id,
-      year: date,
+      year: state.date,
     };
 
     if (error.length > 0) {
