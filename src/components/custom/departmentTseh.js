@@ -36,7 +36,9 @@ const DepartmentTseh = (props) => {
         var department = _.find(res, {
           departmentcode: user?.info?.tseh_code,
         });
-        props.onChange(department.id);
+
+        if(department)
+          props.onChange(department.id);
       }
     });
 

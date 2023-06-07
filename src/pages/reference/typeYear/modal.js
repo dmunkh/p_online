@@ -12,7 +12,7 @@ import _ from "lodash";
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
-function Component({ date }) {
+const Component = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
@@ -316,6 +316,6 @@ function Component({ date }) {
       </Modal>
     </>
   );
-}
+};
 
 export default React.memo(Component);

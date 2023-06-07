@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import * as API from "src/api/registerEmpl";
-import { Select, InputNumber } from "antd";
+import { Select } from "antd";
 // import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
-import DepartmentTseh from "src/components/custom/departmentTseh";
+// import DepartmentTseh from "src/components/custom/departmentTseh";
 import TypeYear from "src/components/custom/typeYear";
 import _ from "lodash";
 
