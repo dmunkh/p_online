@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {  useEffect, useRef } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
@@ -8,18 +8,17 @@ import { Select, Modal, Input } from "antd";
 import { Toast } from "primereact/toast";
 
 import _ from "lodash";
-import moment from "moment";
+
 
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
-const Component = () => {
+function Component({ date }) {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
   //жагсаалт
-
   useEffect(() => {
     API.getPlaces()
       .then((res) => {
@@ -125,19 +124,17 @@ const Component = () => {
       <Modal
         centered
         width={700}
-        title={
-          <div className="text-center">
-            Сургалтийн төрөл
-            {state.selected_typeyear.id ? " засварлах " : " бүртгэх "} цонх
-          </div>
-        }
+        title={<div className="text-center">
+          Сургалтийн төрөл
+          {state.selected_typeyear.id ? " засварлах " : " бүртгэх "} цонх
+        </div>}
         visible={state.modal}
         onCancel={() => {
           dispatch({
             type: "STATE",
             data: { modal: false },
           });
-        }}
+        } }
         footer={null}
       >
         <div className="flex flex-col justify-start text-xs">
@@ -158,7 +155,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
+            } }
           >
             {_.map(state.list_type, (item) => (
               <Option className="text-xs" key={item.id} value={item.id}>
@@ -184,7 +181,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
+            } }
           >
             {_.map(state.list_place, (item) => (
               <Option className="text-xs" key={item.id} value={item.id}>
@@ -209,8 +206,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
-          />
+            } } />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үргэлжлэх хугацаа:
@@ -230,8 +226,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
-          />
+            } } />
           <div className="my-2 " />
           <span className="font-semibold pb-1">Сургалтын үнэ:</span>
           <Input
@@ -249,9 +244,8 @@ const Component = () => {
                   },
                 },
               });
-            }}
-            status="error"
-          />
+            } }
+            status="error" />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үнэ /Гадны байгууллага/:
@@ -271,8 +265,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
-          />
+            } } />
           <div className="my-1 " />
           <span className="font-semibold pb-1">Шалгалтын оноо:</span>
           <Input
@@ -289,8 +282,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
-          />
+            } } />
           <div className="my-2 " />
           <span className="font-semibold pb-1">Тэнцэх хувь:</span>
           <Input
@@ -308,8 +300,7 @@ const Component = () => {
                   },
                 },
               });
-            }}
-          />
+            } } />
         </div>
 
         <SaveButton onClick={() => save()} />
@@ -317,6 +308,6 @@ const Component = () => {
       </Modal>
     </>
   );
-};
+}
 
 export default React.memo(Component);

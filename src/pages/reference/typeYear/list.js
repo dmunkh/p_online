@@ -404,7 +404,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal />
+      <Modal date={date}/>
     </div>
   );
 };
