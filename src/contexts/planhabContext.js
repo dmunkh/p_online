@@ -9,7 +9,7 @@ const context = React.createContext();
 const _state = {
   id: null,
   list: [],
-  date: moment(),
+  date: moment().add(1, "years"),
   refresh: 0,
   modal: false,
   modaltypeid: null,

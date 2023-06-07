@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as API from "src/api/plan";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Modal, Input, Select } from "antd";
+import { Spin, Modal, Input, Select, InputNumber } from "antd";
 import _ from "lodash";
 import { FilterMatchMode } from "primereact/api";
 import { useUserContext } from "src/contexts/userContext";
@@ -23,7 +23,6 @@ const List = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(state.moduleid, state.department_id);
     if (
       state.moduleid &&
       state.department_id !== null &&
@@ -42,7 +41,9 @@ const List = () => {
             result.push({
               ...items,
               // Intl.NumberFormat("en-US").format(
-              sum: items?.price_emc * items?.count,
+              plan: items?.count + items?.count_resource,
+              sum: (items?.count + items?.count_resource) * items?.price_emc,
+
               //),
             });
           });
@@ -118,12 +119,13 @@ const List = () => {
             scrollable
             removableSort
             showGridlines
+            rowHover
             className="table-xs"
             filterDisplay="menu"
             responsiveLayout="scroll"
             sortMode="multiple"
             rowGroupMode="subheader"
-            groupRowsBy="departmentname"
+            groupRowsBy="module_id"
             scrollHeight={window.innerHeight - 360}
             globalFilterFields={["type_name"]}
             emptyMessage={
@@ -155,7 +157,7 @@ const List = () => {
                           dispatch({ type: "STATE", data: { modal: true } });
                         }}
                       >
-                        <i className="ft-edit" />
+                        <i className="ft-check" />
                       </div>
                     ) : (
                       <div
@@ -173,9 +175,7 @@ const List = () => {
             rowGroupHeaderTemplate={(data) => {
               return (
                 <div className="text-xs font-semibold">
-                  <span className="ml-1">
-                    {data.departmentcode} | {data.departmentname}
-                  </span>
+                  <span className="ml-1">{data.module_name}</span>
                 </div>
               );
             }}
@@ -191,6 +191,19 @@ const List = () => {
                   <Column
                     align="center"
                     footer={_.sumBy(state?.list_normposition, (a) => a.count)}
+                    className="w-[100px] text-xs"
+                  />
+                  <Column
+                    align="center"
+                    footer={_.sumBy(
+                      state?.list_normposition,
+                      (a) => a.count_resource
+                    )}
+                    className="w-[100px] text-xs"
+                  />
+                  <Column
+                    align="center"
+                    footer={_.sumBy(state?.list_normposition, (a) => a.plan)}
                     className="w-[100px] text-xs"
                   />
                   <Column
@@ -306,6 +319,15 @@ const List = () => {
               }}
             />
             <Column
+              header="Давтамж"
+              field="interval_name"
+              align="center"
+              sortable
+              className="text-xs"
+              headerClassName="flex items-center justify-center"
+              style={{ minWidth: "150px", maxWidth: "150px" }}
+            />
+            <Column
               header="Нэгж үнэ"
               field="price_emc"
               align="center"
@@ -326,6 +348,88 @@ const List = () => {
               className="text-xs"
               headerClassName="flex items-center justify-center"
               style={{ minWidth: "100px", maxWidth: "100px" }}
+            />
+            <Column
+              header="Нөөц төлөвлөлт"
+              field="Count"
+              align="center"
+              sortable
+              className="text-xs"
+              headerClassName="flex items-center justify-center"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              body={(data) => {
+                return (
+                  <InputNumber
+                    style={{ fontSize: 12 }}
+                    value={data.count_resource}
+                    onChange={(value) => {
+                      const updatedList = [...state.list_normposition]; // Create a new copy of the array
+                      const index = updatedList.findIndex(
+                        (employee) => employee.type_id === data.type_id
+                      );
+
+                      if (index !== -1) {
+                        updatedList[index] = {
+                          ...updatedList[index],
+                          count_resource: value,
+                          plan: updatedList[index].count + value,
+                          sum:
+                            (updatedList[index].count + value) *
+                            updatedList[index].price_emc,
+                        }; // Update the height property
+
+                        dispatch({
+                          type: "STATE",
+                          data: { list_normposition: updatedList },
+                        }); // Dispatch the updated array directly
+                      }
+                    }}
+                    onPressEnter={(e) => {
+                      if (e.key === "Enter") {
+                        console.log(
+                          "target",
+                          e.target.value === "" ? 0 : e.target.value
+                        );
+
+                        API.postPlanCountResource({
+                          count: e.target.value === "" ? 0 : e.target.value,
+                          type_id: data.type_id,
+                          year: moment(state.date).format("Y"),
+                          department_id: state.department_id,
+                        })
+                          .then((res) => {
+                            // setdraw((prev) => prev + 1);
+
+                            message({
+                              type: "success",
+                              title: "Амжилттай хадгалагдлаа",
+                            });
+                          })
+                          .catch((error) =>
+                            message({
+                              type: "error",
+                              error,
+                              title: "Амжилтгүй. Дахин оруулна уу",
+                            })
+                          )
+                          .finally(() => {});
+                      }
+                    }}
+                  ></InputNumber>
+                );
+              }}
+            />
+            <Column
+              header="Нийт төлөвлөлт"
+              field="plan"
+              align="center"
+              sortable
+              className="text-xs text-right"
+              // headerClassName="flex items-center justify-center"
+              style={{ minWidth: "100px", maxWidth: "100px" }}
+              body={(data) => {
+                return Intl.NumberFormat("en-US").format(data.plan);
+              }}
             />
             <Column
               header="Нийт үнэ"

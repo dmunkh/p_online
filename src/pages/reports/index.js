@@ -30,7 +30,10 @@ const Index = () => {
           var result = [];
 
           _.map(res, (item) => {
-            result.push({ ...item, ss: item.count_worker * item.price_emc });
+            result.push({
+              ...item,
+              ss: (item.count_worker + item.count_resource) * item.price_emc,
+            });
           });
 
           dispatch({
@@ -171,7 +174,10 @@ const Index = () => {
               <Column colSpan={3} />
               <Column
                 className="w-[150px] max-w-[150px] text-right text-xs"
-                footer={_.sumBy(result, (a) => a.count_worker)}
+                footer={_.sumBy(
+                  result,
+                  (a) => a.count_worker + a.count_resource
+                )}
               />
               <Column
                 className="w-[150px] max-w-[150px] text-right text-xs"
@@ -235,6 +241,14 @@ const Index = () => {
           headerClassName="flex items-center justify-center"
           bodyClassName="items-right text"
           align="right"
+          body={(data) => {
+            let dollarUSLocale = Intl.NumberFormat("en-US");
+            return (
+              <span className=" font-semibold ">
+                {dollarUSLocale.format(data.count_worker + data.count_resource)}
+              </span>
+            );
+          }}
         />
         <Column
           sortable
@@ -248,7 +262,9 @@ const Index = () => {
             let dollarUSLocale = Intl.NumberFormat("en-US");
             return (
               <span className=" font-semibold ">
-                {dollarUSLocale.format(data.price_emc * data.count_worker)}
+                {dollarUSLocale.format(
+                  data.price_emc * (data.count_worker + data.count_resource)
+                )}
               </span>
             );
           }}
