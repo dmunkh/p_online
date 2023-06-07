@@ -37,17 +37,7 @@
       "react-app/jest"
     ]
   },
-  "plugins": [
-    [
-      "import",
-      [
-        {
-          "libraryName": "antd",
-          "style": "css"
-        }
-      ]
-    ]
-  ],
+
   "browserslist": {
     "production": [
       ">0.2%",
