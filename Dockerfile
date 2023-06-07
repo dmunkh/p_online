@@ -5,7 +5,7 @@ COPY package.json .
 
 RUN yarn
 COPY . .
-RUN yarn run build
+RUN npm start
 
 FROM nginx:stable-alpine
 
