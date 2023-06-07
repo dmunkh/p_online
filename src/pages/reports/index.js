@@ -174,7 +174,10 @@ const Index = () => {
               <Column colSpan={3} />
               <Column
                 className="w-[150px] max-w-[150px] text-right text-xs"
-                footer={_.sumBy(result, (a) => a.count_worker)}
+                footer={_.sumBy(
+                  result,
+                  (a) => a.count_worker + a.count_resource
+                )}
               />
               <Column
                 className="w-[150px] max-w-[150px] text-right text-xs"
