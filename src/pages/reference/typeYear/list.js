@@ -34,7 +34,10 @@ const List = () => {
   useLayoutEffect(() => {
     setLoading(true);
     module &&
-      API.getTypesYear({ module_id: module, year: state.date })
+      API.getTypesYear({
+        module_id: module,
+        year: moment(state.date).format("YYYY"),
+      })
         .then((res) => {
           dispatch({
             type: "STATE",
@@ -169,6 +172,7 @@ const List = () => {
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
           <DatePicker
             size="large"
+            value={state.date}
             picker="year"
             format="YYYY"
             className="h-9    "
