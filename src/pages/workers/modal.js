@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import * as API from "src/api/registerEmpl";
-// import { InputSwitch } from "primereact/inputswitch";
+import { InputSwitch } from "primereact/inputswitch";
 import { Switch, Spin } from "antd";
 
 // import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
-// import DepartmentTseh from "src/components/custom/departmentTseh";
+import DepartmentTseh from "src/components/custom/departmentTseh";
 import Department from "src/pages/workers/department";
 import DepartmentPlan from "src/pages/workers/departmentPlan";
 import _ from "lodash";

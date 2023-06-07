@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
@@ -6,8 +6,9 @@ import * as API from "src/api/request";
 import { Select, Modal, Input } from "antd";
 
 import { Toast } from "primereact/toast";
-import moment from "moment";
+
 import _ from "lodash";
+import moment from "moment";
 
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
@@ -17,7 +18,10 @@ const Component = () => {
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
 
+  const [date] = useState(moment(Date.now()).format("YYYY"));
+
   //жагсаалт
+
   useEffect(() => {
     API.getPlaces()
       .then((res) => {
@@ -39,7 +43,6 @@ const Component = () => {
   }, []);
 
   const save = () => {
-    console.log(state.date);
     var error = [];
     state.selected_typeyear.type_id || error.push("Сургалтын төрөл:");
     state.selected_typeyear.place_id || error.push("Танхим:");
@@ -52,7 +55,7 @@ const Component = () => {
       price_emc: state.selected_typeyear.price_emc,
       price_organization: state.selected_typeyear.price_organization,
       type_id: state.selected_typeyear.type_id,
-      year: moment(state.date).format("YYYY"),
+      year: date,
     };
 
     if (error.length > 0) {

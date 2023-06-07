@@ -27,17 +27,16 @@ const List = () => {
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
+  const yearFormat = "YYYY";
+  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
   const [module, setModule] = useState();
-  const [date, setdate] = useState(moment());
+
 
   // жагсаалт
   useLayoutEffect(() => {
     setLoading(true);
     module &&
-      API.getTypesYear({
-        module_id: module,
-        year: moment(state.date).format("YYYY"),
-      })
+      API.getTypesYear({ module_id: module, year: date })
         .then((res) => {
           dispatch({
             type: "STATE",
@@ -62,7 +61,7 @@ const List = () => {
         .finally(() => setLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, module, state.date]);
+  }, [state.refresh, module, date]);
 
   useEffect(() => {
     module &&
@@ -172,12 +171,12 @@ const List = () => {
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
           <DatePicker
             size="large"
-            value={state.date}
+            defaultValue={dayjs(date, yearFormat)}
+            format={yearFormat}
             picker="year"
-            format="YYYY"
             className="h-9    "
-            onChange={(date) => {
-              dispatch({ type: "STATE", data: { date: date } });
+            onChange={(e) => {
+              setDate(e.$y);
             }}
           />
           <span className="px-3 font-semibold text-xs whitespace-nowrap">
@@ -409,7 +408,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal date={date} />
+      <Modal />
     </div>
   );
 };

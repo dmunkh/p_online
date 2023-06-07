@@ -3,23 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fullcalendar/core": "6.1.5",
-    "@fullcalendar/daygrid": "6.1.5",
-    "@fullcalendar/react": "6.1.5",
-    "@fullcalendar/timegrid": "6.1.5",
+    "@fullcalendar/core": "^6.1.5",
+    "@fullcalendar/daygrid": "^6.1.5",
+    "@fullcalendar/react": "^6.1.5",
+    "@fullcalendar/timegrid": "^6.1.5",
     "antd": "4.18.6",
     "axios": "0.26.0",
-    "chart.js": "4.3.0",
-    "dayjs": "1.11.7",
+    "chart.js": "^4.3.0",
+    "dayjs": "^1.11.7",
     "file-saver": "2.0.5",
     "lodash": "4.17.21",
     "moment": "2.29.4",
     "primeicons": "6.0.1",
-    "primereact": "8.7.3",
+    "primereact": "^8.7.3",
     "query-string": "7.1.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-icons": "4.8.0",
+    "react-icons": "^4.8.0",
     "react-router-dom": "6.2.1",
     "react-scripts": "5.0.0",
     "sweetalert2": "11.4.0",
@@ -37,7 +37,17 @@
       "react-app/jest"
     ]
   },
-
+  "plugins": [
+    [
+      "import",
+      [
+        {
+          "libraryName": "antd",
+          "style": "css"
+        }
+      ]
+    ]
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -51,8 +61,6 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.0.2",
-    "postcss": "^8.0.9",
     "tailwindcss": "3.0.23"
   }
 }

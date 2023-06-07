@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 
 import RightBar from "./RightBar";
@@ -6,9 +6,7 @@ import NavBar from "./Navbar";
 
 const Layout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [windowHeight, setWindowHeight] = useState(
-    (window.innerHeight / 5) * 4
-  );
+
   const [rightbar, setRightbar] = useState(false);
   const rightbarToggle = () => {
     setRightbar(!rightbar);
@@ -22,15 +20,7 @@ const Layout = ({ children }) => {
   const [mode, setMode] = useState(
     localStorage.getItem("srs-theme") === "dark" ? true : false
   );
-  useEffect(() => {
-   
-    
-   
-    setWindowHeight(parseInt(window.innerHeight / 5) * 4);
-   
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [window.innerHeight]);
-  console.log("", windowHeight);
+
   return (
     <div
       className={`horizontal-layout horizontal-menu horizontal-menu-padding 2-columns navbar-sticky ${
@@ -57,10 +47,8 @@ const Layout = ({ children }) => {
         <NavBar />
 
         <div className="main-panel">
-          <div className="main-content ">
-            <div className="content-wrapper">
-              <div className={`card h-[${windowHeight}px]`}>{children}</div>
-            </div>
+          <div className="main-content">
+            <div className="content-wrapper"><div className="card h-full">{children}</div></div>
           </div>
 
           <button className="btn btn-primary scroll-top" type="button">
