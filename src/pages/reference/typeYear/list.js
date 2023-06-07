@@ -28,6 +28,7 @@ const List = () => {
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
   const [module, setModule] = useState();
+  const [date, setdate] = useState(moment());
 
   // жагсаалт
   useLayoutEffect(() => {
@@ -404,7 +405,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal date={date}/>
+      <Modal date={date} />
     </div>
   );
 };
