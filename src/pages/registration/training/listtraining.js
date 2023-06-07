@@ -1,8 +1,8 @@
-import React, { useState, useMemo, useLayoutEffect, useEffect } from "react";
+import React, { useState, useMemo, useLayoutEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
 import * as API from "src/api/training";
-import { Select, Input, Tooltip, Row } from "antd";
+import { Input, Tooltip, Row } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import Modal from "./modal";
@@ -16,10 +16,9 @@ const Training = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useTrainingContext();
   const [edit, setEdit] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [ setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [first, set_first] = useState(0);
-  const [per_page, set_per_page] = useState(50);
+
 
   // жагсаалт
   useLayoutEffect(() => {
@@ -231,7 +230,8 @@ const Training = () => {
                     });
                     dispatch({
                       type: "STATE",
-                      data: { timeRegister: false },
+                      data: { timeRegister: false , begin_date:moment(state.change_year, 'YYYY.MM.DD'), end_date:moment(state.change_year, 'YYYY.MM.DD')},
+
                     });
                     setEdit(false);
                     dispatch({

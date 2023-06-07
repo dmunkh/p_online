@@ -1,6 +1,5 @@
 import React from "react";
-import { DatePicker, Select } from "antd";
-import moment from "moment";
+
 import { useReferenceContext } from "src/contexts/referenceContext";
 import { useUserContext } from "src/contexts/userContext";
 import * as API from "src/api/request";
@@ -9,7 +8,7 @@ import _ from "lodash";
 import { useLayoutEffect } from "react";
 
 const Header = () => {
-  const { state, dispatch } = useReferenceContext();
+  const { dispatch } = useReferenceContext();
   const { message } = useUserContext();
 
   //байгуулга жагсаалт

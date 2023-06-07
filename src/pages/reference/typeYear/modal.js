@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
@@ -8,16 +8,15 @@ import { Select, Modal, Input } from "antd";
 import { Toast } from "primereact/toast";
 
 import _ from "lodash";
+import moment from "moment";
 
 import SaveButton from "src/components/button/SaveButton";
 const { Option } = Select;
 
-function Component({ date }) {
+const Component = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
   const toast = useRef(null);
-
-
 
   //жагсаалт
   useEffect(() => {
@@ -53,7 +52,7 @@ function Component({ date }) {
       price_emc: state.selected_typeyear.price_emc,
       price_organization: state.selected_typeyear.price_organization,
       type_id: state.selected_typeyear.type_id,
-      year: date,
+      year: moment(state.date).format("YYYY"),
     };
 
     if (error.length > 0) {
@@ -125,17 +124,19 @@ function Component({ date }) {
       <Modal
         centered
         width={700}
-        title={<div className="text-center">
-          Сургалтийн төрөл
-          {state.selected_typeyear.id ? " засварлах " : " бүртгэх "} цонх
-        </div>}
+        title={
+          <div className="text-center">
+            Сургалтийн төрөл
+            {state.selected_typeyear.id ? " засварлах " : " бүртгэх "} цонх
+          </div>
+        }
         visible={state.modal}
         onCancel={() => {
           dispatch({
             type: "STATE",
             data: { modal: false },
           });
-        } }
+        }}
         footer={null}
       >
         <div className="flex flex-col justify-start text-xs">
@@ -156,7 +157,7 @@ function Component({ date }) {
                   },
                 },
               });
-            } }
+            }}
           >
             {_.map(state.list_type, (item) => (
               <Option className="text-xs" key={item.id} value={item.id}>
@@ -182,7 +183,7 @@ function Component({ date }) {
                   },
                 },
               });
-            } }
+            }}
           >
             {_.map(state.list_place, (item) => (
               <Option className="text-xs" key={item.id} value={item.id}>
@@ -207,7 +208,8 @@ function Component({ date }) {
                   },
                 },
               });
-            } } />
+            }}
+          />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үргэлжлэх хугацаа:
@@ -227,7 +229,8 @@ function Component({ date }) {
                   },
                 },
               });
-            } } />
+            }}
+          />
           <div className="my-2 " />
           <span className="font-semibold pb-1">Сургалтын үнэ:</span>
           <Input
@@ -245,8 +248,9 @@ function Component({ date }) {
                   },
                 },
               });
-            } }
-            status="error" />
+            }}
+            status="error"
+          />
           <div className="my-2 " />
           <span className="font-semibold pb-1">
             Сургалтын үнэ /Гадны байгууллага/:
@@ -266,7 +270,8 @@ function Component({ date }) {
                   },
                 },
               });
-            } } />
+            }}
+          />
           <div className="my-1 " />
           <span className="font-semibold pb-1">Шалгалтын оноо:</span>
           <Input
@@ -283,7 +288,8 @@ function Component({ date }) {
                   },
                 },
               });
-            } } />
+            }}
+          />
           <div className="my-2 " />
           <span className="font-semibold pb-1">Тэнцэх хувь:</span>
           <Input
@@ -301,7 +307,8 @@ function Component({ date }) {
                   },
                 },
               });
-            } } />
+            }}
+          />
         </div>
 
         <SaveButton onClick={() => save()} />
@@ -309,6 +316,6 @@ function Component({ date }) {
       </Modal>
     </>
   );
-}
+};
 
 export default React.memo(Component);

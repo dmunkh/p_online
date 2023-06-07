@@ -1,5 +1,4 @@
-import React, { Suspense, lazy, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { Suspense } from "react";
 import { useUserContext } from "src/contexts/userContext";
 
 import { ConfigProvider } from "antd";
@@ -16,12 +15,10 @@ import PlanHabRoute from "src/routers/planhab";
 import RegisterEmplRoute from "src/routers/registerEmpl";
 import TrainingRoute from "src/routers/training";
 
-// const Layout = lazy(() => import("./components/Layout"));
+
 
 const Router = () => {
   const { user } = useUserContext();
-  const location = useLocation();
-  const navigate = useNavigate();
 
   return (
     <>

@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import * as API from "src/api/registerEmpl";
-import { Select, InputNumber } from "antd";
+
 // import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
-import DepartmentTseh from "src/components/custom/departmentTseh";
+
 import TypeYear from "src/components/custom/typeYear";
 import _ from "lodash";
 
-import moment from "moment";
+
 // import _ from "lodash";
 
-const { Option } = Select;
 
 const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
-  const [list, setList] = useState([]);
+
 
   // const { state, dispatch } = useUserContext();
 

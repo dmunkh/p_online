@@ -9,12 +9,12 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Tooltip, Row, Modal } from "antd";
+import { Input, Row, Modal } from "antd";
 import _ from "lodash";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 
 const Index = () => {
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useTrainingContext();
   const [search, setSearch] = useState("");

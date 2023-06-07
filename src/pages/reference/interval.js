@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
-import { useUserContext } from "../../contexts/userContext";
-import { useReferenceContext } from "../../contexts/referenceContext";
-import * as API from "../../api/request";
+import { useUserContext } from "src/contexts/userContext";
+import { useReferenceContext } from "src/contexts/referenceContext";
+import * as API from "src/api/request";
 import { Spin, Select, Input, Modal } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import Swal from "sweetalert2";
+
 
 const Interval = () => {
   const { message } = useUserContext();
@@ -47,69 +47,6 @@ const Interval = () => {
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
-
-  const deleteItem = (item) => {
-    Swal.fire({
-      text: "Устгахдаа итгэлтэй байна уу?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#1890ff",
-      cancelButtonColor: "rgb(244, 106, 106)",
-      confirmButtonText: "Тийм",
-      cancelButtonText: "Үгүй",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // API.deleteItemWarehouse(item.warehouse_id)
-        //   .then(() => {
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай устгагдлаа",
-        //     });
-        //     dispatch({ type: "REFRESH" });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Ажлын байр устгаж чадсангүй",
-        //     });
-        //   });
-        message({
-          type: "error",
-          title: "Амжилттай устгагдлаа",
-        });
-      }
-    });
-  };
-  const updateItem = (item) => {
-    // API.getWarehouseItemID(item.warehouse_id)
-    //   .then((res) => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: {
-    //     list_lesson_ID: {
-    //       res
-    //     },
-    //   },
-    // });
-    //     //loadItemTypeList(res.itemtypeid);
-    dispatch({
-      type: "STATE",
-      data: { modal: true },
-    });
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
-  };
 
   const memo_table = useMemo(() => {
     var result = state.list_interval;

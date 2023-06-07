@@ -3,7 +3,7 @@ import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import * as API from "src/api/request";
 
-import { Select, Input, Modal } from "antd";
+import {  Input, Modal } from "antd";
 
 import _ from "lodash";
 import SaveButton from "src/components/button/SaveButton";

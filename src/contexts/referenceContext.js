@@ -1,9 +1,10 @@
 import React, { useContext, useReducer } from "react";
 import { reducer } from "../reducers/referenceReducer";
-
+import moment from "moment"
 const context = React.createContext();
 
 const _state = {
+  date:moment().add(1, "year"),
   list_module: [],
   selected_moduleID: null,
 

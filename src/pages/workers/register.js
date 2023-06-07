@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as API from "src/api/registerEmpl";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { FilterMatchMode } from "primereact/api";
 import _ from "lodash";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
@@ -13,7 +13,7 @@ import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
-import { Spin, Input, Modal, InputNumber, Checkbox, Select } from "antd";
+import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
 import moment from "moment";
 import * as XLSX from "xlsx";
 
@@ -26,7 +26,7 @@ const List = () => {
   // const [filters, setFilters] = useState({
   //   status: { value: null, matchMode: FilterMatchMode.EQUALS },
   // });
-  const { Option } = Select;
+ 
   // const [first, set_first] = useState(0);
   // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
@@ -158,25 +158,25 @@ const List = () => {
   //   }
   // };
 
-  const getSeverity = (status) => {
-    // eslint-disable-next-line default-case
-    switch (status) {
-      case "unqualified":
-        return "danger";
+  // const getSeverity = (status) => {
+  //   // eslint-disable-next-line default-case
+  //   switch (status) {
+  //     case "unqualified":
+  //       return "danger";
 
-      case "qualified":
-        return "success";
+  //     case "qualified":
+  //       return "success";
 
-      case "new":
-        return "info";
+  //     case "new":
+  //       return "info";
 
-      case "negotiation":
-        return "warning";
+  //     case "negotiation":
+  //       return "warning";
 
-      case "renewal":
-        return null;
-    }
-  };
+  //     case "renewal":
+  //       return null;
+  //   }
+  // };
   const ss = (list) => {
     var result = [];
 
@@ -189,30 +189,30 @@ const List = () => {
     return result.length;
   };
 
-  const statusRowFilterTemplate = (options) => {
-    return (
-      <Select
-        className="md:w-[80px]"
-        onChange={(value) => {
-          var result = list;
-          if (value === 1)
-            setList(_.filter(result, (a) => a.is_success === true));
-          if (value === 2)
-            setList(_.filter(result, (a) => a.is_success === false));
-        }}
-      >
-        <Option key={1} value={1}>
-          Бүгд
-        </Option>
-        <Option key={2} value={2}>
-          Тэнцсэн
-        </Option>
-        <Option key={3} value={3}>
-          Тэнцээгүй
-        </Option>
-      </Select>
-    );
-  };
+  // const statusRowFilterTemplate = (options) => {
+  //   return (
+  //     <Select
+  //       className="md:w-[80px]"
+  //       onChange={(value) => {
+  //         var result = list;
+  //         if (value === 1)
+  //           setList(_.filter(result, (a) => a.is_success === true));
+  //         if (value === 2)
+  //           setList(_.filter(result, (a) => a.is_success === false));
+  //       }}
+  //     >
+  //       <Option key={1} value={1}>
+  //         Бүгд
+  //       </Option>
+  //       <Option key={2} value={2}>
+  //         Тэнцсэн
+  //       </Option>
+  //       <Option key={3} value={3}>
+  //         Тэнцээгүй
+  //       </Option>
+  //     </Select>
+  //   );
+  // };
 
   return (
     <div className="p-2 rounded text-xs max-h-[calc(100vh-250px)] overflow-auto">

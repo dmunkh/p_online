@@ -1,26 +1,25 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
-import { useUserContext } from "../../../contexts/userContext";
-import { useNormContext } from "../../../contexts/normContext";
-import * as API from "../../../api/norm";
-import { Spin, Select, Input, Checkbox, Row, Tooltip } from "antd";
+import { useUserContext } from "src/contexts/userContext";
+import { useNormContext } from "src/contexts/normContext";
+import * as API from "src/api/norm";
+import { Spin, Input, Checkbox, Row, Tooltip } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import Swal from "sweetalert2";
 import Header from "./header";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 
 const List = () => {
-  const { user, message, checkRole } = useUserContext();
+  const { message} = useUserContext();
   const { state, dispatch } = useNormContext();
   const [checkAll, setCheckAll] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const [first, set_first] = useState(0);
+
   const [indeterminate, setIndeterminate] = useState(false);
-  const [per_page, set_per_page] = useState(50);
+
   const [draw, setdraw] = useState(1);
 
   // жагсаалт
@@ -53,75 +52,75 @@ const List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.department]);
 
-  const deleteItem = (item) => {
-    Swal.fire({
-      text: "Устгахдаа итгэлтэй байна уу?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#1890ff",
-      cancelButtonColor: "rgb(244, 106, 106)",
-      confirmButtonText: "Тийм",
-      cancelButtonText: "Үгүй",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // API.deleteLessonTypeID(item.id)
-        //   .then(() => {
-        //     message({
-        //       type: "success",
-        //       title: "Амжилттай устгагдлаа",
-        //     });
-        //     dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
-        //   })
-        //   .catch((error) => {
-        //     message({
-        //       type: "error",
-        //       error,
-        //       title: "Сургалтын төрөл устгаж чадсангүй",
-        //     });
-        //   });
-        // message({
-        //   type: "error",
-        //   title: "Амжилттай устгагдлаа",
-        // });
-      }
-    });
-  };
-  const updateItem = (item) => {
-    // API.getLessonTypeID(item.id)
-    //   .then((res) => {
-    //     dispatch({
-    //       type: "SET_TYPE",
-    //       data: {
-    //         id: res.id,
-    //         module_id: res.module_id,
-    //         interval_id: res.interval_id,
-    //         type_name: res.type_name,
-    //         price_emc: res.price_emc,
-    //         price_organization: res.price_organization,
-    //         hour: res.hour,
-    //         description: res.description,
-    //         interval_name: res.interval_name,
-    //         time: res.time,
-    //       },
-    //     });
-    //     dispatch({
-    //       type: "STATE",
-    //       data: { modal: true },
-    //     });
-    //     //loadItemTypeList(res.itemtypeid);
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
-  };
+  // const deleteItem = (item) => {
+  //   Swal.fire({
+  //     text: "Устгахдаа итгэлтэй байна уу?",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#1890ff",
+  //     cancelButtonColor: "rgb(244, 106, 106)",
+  //     confirmButtonText: "Тийм",
+  //     cancelButtonText: "Үгүй",
+  //     reverseButtons: true,
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       // API.deleteLessonTypeID(item.id)
+  //       //   .then(() => {
+  //       //     message({
+  //       //       type: "success",
+  //       //       title: "Амжилттай устгагдлаа",
+  //       //     });
+  //       //     dispatch({ type: "STATE", data: { refresh: state.refresh + 1 } });
+  //       //   })
+  //       //   .catch((error) => {
+  //       //     message({
+  //       //       type: "error",
+  //       //       error,
+  //       //       title: "Сургалтын төрөл устгаж чадсангүй",
+  //       //     });
+  //       //   });
+  //       // message({
+  //       //   type: "error",
+  //       //   title: "Амжилттай устгагдлаа",
+  //       // });
+  //     }
+  //   });
+  // };
+  // const updateItem = (item) => {
+  //   // API.getLessonTypeID(item.id)
+  //   //   .then((res) => {
+  //   //     dispatch({
+  //   //       type: "SET_TYPE",
+  //   //       data: {
+  //   //         id: res.id,
+  //   //         module_id: res.module_id,
+  //   //         interval_id: res.interval_id,
+  //   //         type_name: res.type_name,
+  //   //         price_emc: res.price_emc,
+  //   //         price_organization: res.price_organization,
+  //   //         hour: res.hour,
+  //   //         description: res.description,
+  //   //         interval_name: res.interval_name,
+  //   //         time: res.time,
+  //   //       },
+  //   //     });
+  //   //     dispatch({
+  //   //       type: "STATE",
+  //   //       data: { modal: true },
+  //   //     });
+  //   //     //loadItemTypeList(res.itemtypeid);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     message({
+  //   //       type: "error",
+  //   //       error,
+  //   //       title: "Мэдээлэл татаж чадсангүй.",
+  //   //     });
+  //   //     dispatch({
+  //   //       type: "CLEAR",
+  //   //     });
+  //   //   });
+  // };
   const check_position = (e, item) => {
     var result = state.checked_positionList;
 

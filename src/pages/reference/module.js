@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
-import { useUserContext } from "../../contexts/userContext";
-import { useReferenceContext } from "../../contexts/referenceContext";
-import * as API from "../../api/request";
-import { Spin, Select, Input, Modal } from "antd";
+import { useUserContext } from "src/contexts/userContext";
+import { useReferenceContext } from "src/contexts/referenceContext";
+import * as API from "src/api/request";
+import { Spin, Select, Input } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 
 import { SearchOutlined } from "@ant-design/icons";
 import _ from "lodash";
-import Swal from "sweetalert2";
+
 
 const Modul = () => {
   const { message, checkRole } = useUserContext();

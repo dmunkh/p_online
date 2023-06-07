@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useNormContext } from "../../../contexts/normContext";
+import { useNormContext } from "src/contexts/normContext";
 
 import { TreeSelect, Input } from "antd";
-import * as API from "../../../api/request";
+// import * as API from "src/api/request";
 import _ from "lodash";
-import { useUserContext } from "../../../contexts/userContext";
+import { useUserContext } from "src/contexts/userContext";
 
 const Header = () => {
-  const { user, message } = useUserContext();
+  const { user } = useUserContext();
   const { state, dispatch } = useNormContext();
   const [open, setOpen] = useState(false);
   const [info, setInfo] = useState([]);

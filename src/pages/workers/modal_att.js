@@ -3,7 +3,6 @@ import * as API from "src/api/registerEmpl";
 import * as REQ from "src/api/request";
 import { Select, InputNumber } from "antd";
 import { Image } from "primereact/image";
-import Swal from "sweetalert2";
 import { useUserContext } from "src/contexts/userContext";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import _ from "lodash";
@@ -12,7 +11,7 @@ import moment from "moment";
 const Modal_att = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
-  const [loading, setLoading] = useState(false);
+  const [ setLoading] = useState(false);
   const { Option } = Select;
 
   const ref = useRef(null);

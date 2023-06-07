@@ -1,8 +1,8 @@
-import React, { useState, useLayoutEffect, useRef, useEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import { useReferenceContext } from "src/contexts/referenceContext";
 import Module from "src/components/custom/module";
-import Modal from "./modal";
+import Component from "./modal";
 
 import * as API from "src/api/request";
 import { Select, Input, DatePicker } from "antd";
@@ -10,7 +10,6 @@ import { SearchOutlined } from "@ant-design/icons";
 
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import dayjs from "dayjs";
 
 import _ from "lodash";
 import moment from "moment";
@@ -22,21 +21,18 @@ import DeleteButton from "src/components/button/deleteButton";
 const List = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useReferenceContext();
-  const toast = useRef(null);
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
-  const yearFormat = "YYYY";
-  const [date, setDate] = useState(moment(Date.now()).format("YYYY"));
   const [module, setModule] = useState();
-
 
   // жагсаалт
   useLayoutEffect(() => {
-    setLoading(true);
     module &&
-      API.getTypesYear({ module_id: module, year: date })
+      API.getTypesYear({
+        module_id: module,
+        year: moment(state.date).format("YYYY"),
+      })
         .then((res) => {
           dispatch({
             type: "STATE",
@@ -57,11 +53,10 @@ const List = () => {
             error,
             title: "Сургалтын төрлийн жагсаалт татаж чадсангүй",
           });
-        })
-        .finally(() => setLoading(false));
+        });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, module, date]);
+  }, [state.refresh, module, state.date]);
 
   useEffect(() => {
     module &&
@@ -171,12 +166,11 @@ const List = () => {
           <span className="pr-3 font-semibold text-xs">Огноо:</span>
           <DatePicker
             size="large"
-            defaultValue={dayjs(date, yearFormat)}
-            format={yearFormat}
+            value={state.date}
             picker="year"
             className="h-9    "
-            onChange={(e) => {
-              setDate(e.$y);
+            onChange={(date) => {
+              dispatch({ type: "STATE", data: { date: date } });
             }}
           />
           <span className="px-3 font-semibold text-xs whitespace-nowrap">
@@ -408,7 +402,7 @@ const List = () => {
           }}
         />
       </DataTable>
-      <Modal date={date}/>
+      <Component />
     </div>
   );
 };

@@ -3,80 +3,80 @@ import { useUserContext } from "src/contexts/userContext";
 import { useTrainingContext } from "src/contexts/trainingContext";
 import * as API from "src/api/training";
 import _ from "lodash";
-import { Badge, Calendar, Typography } from "antd";
-import Swal from "sweetalert2";
-import moment from "moment";
-import dayjs from "dayjs";
-const { Title, Paragraph, Text, Link } = Typography;
-const Calendars = () => {
-  const { message, checkRole } = useUserContext();
-  const { state, dispatch } = useTrainingContext();
-  const [value, setValue] = useState(() => dayjs("2017-01-25"));
-  const [loading, setLoading] = useState(false);
+import {  Calendar, Typography } from "antd";
 
-  const getListData = (value) => {
-    let listData;
-    switch (value.date()) {
-      case 1:
-        listData = [
-          {
-            type: "warning",
-            content: "This is warning event.",
-          },
-          {
-            type: "success",
-            content: "This is usual event.",
-          },
-        ];
-        break;
-      case 16:
-        listData = [
-          {
-            type: "warning",
-            content: "This is warning event.",
-          },
-          {
-            type: "success",
-            content: "This is usual event.",
-          },
-          {
-            type: "error",
-            content: "This is error event.",
-          },
-        ];
-        break;
-      case 15:
-        listData = [
-          {
-            type: "warning",
-            content: "This is warning event",
-          },
-          {
-            type: "success",
-            content: "This is very long usual event。。....",
-          },
-          {
-            type: "error",
-            content: "This is error event 1.",
-          },
-          {
-            type: "error",
-            content: "This is error event 2.",
-          },
-          {
-            type: "error",
-            content: "This is error event 3.",
-          },
-          {
-            type: "error",
-            content: "This is error event 4.",
-          },
-        ];
-        break;
-      default:
-    }
-    return listData || [];
-  };
+import moment from "moment";
+
+const {  Link } = Typography;
+const Calendars = () => {
+  const { message} = useUserContext();
+  const { state, dispatch } = useTrainingContext();
+
+  const [ setLoading] = useState(false);
+
+  // const getListData = (value) => {
+  //   let listData;
+  //   switch (value.date()) {
+  //     case 1:
+  //       listData = [
+  //         {
+  //           type: "warning",
+  //           content: "This is warning event.",
+  //         },
+  //         {
+  //           type: "success",
+  //           content: "This is usual event.",
+  //         },
+  //       ];
+  //       break;
+  //     case 16:
+  //       listData = [
+  //         {
+  //           type: "warning",
+  //           content: "This is warning event.",
+  //         },
+  //         {
+  //           type: "success",
+  //           content: "This is usual event.",
+  //         },
+  //         {
+  //           type: "error",
+  //           content: "This is error event.",
+  //         },
+  //       ];
+  //       break;
+  //     case 15:
+  //       listData = [
+  //         {
+  //           type: "warning",
+  //           content: "This is warning event",
+  //         },
+  //         {
+  //           type: "success",
+  //           content: "This is very long usual event。。....",
+  //         },
+  //         {
+  //           type: "error",
+  //           content: "This is error event 1.",
+  //         },
+  //         {
+  //           type: "error",
+  //           content: "This is error event 2.",
+  //         },
+  //         {
+  //           type: "error",
+  //           content: "This is error event 3.",
+  //         },
+  //         {
+  //           type: "error",
+  //           content: "This is error event 4.",
+  //         },
+  //       ];
+  //       break;
+  //     default:
+  //   }
+  //   return listData || [];
+  // };
   // const getMonthData = (value) => {
   //   if (value.month() === 5) {
   //     return 1394;
@@ -144,32 +144,32 @@ const Calendars = () => {
   //   return info.originNode;
   // };
 
-  const monthCellRender = (value) => {
-    const num = getMonthData(value);
-    return num ? (
-      <div className="notes-month">
-        <section>{num}</section>
-        <span>Backlog number</span>
-      </div>
-    ) : null;
-  };
-  const dateCellRender = (value) => {
-    const listData = getListData(value);
-    return (
-      <ul className="events">
-        {listData.map((item) => (
-          <li key={item.content}>
-            <Badge status={item.type} text={item.content} />
-          </li>
-        ))}
-      </ul>
-    );
-  };
-  const getMonthData = (value) => {
-    if (value.month() === 8) {
-      return 1394;
-    }
-  };
+  // const monthCellRender = (value) => {
+  //   const num = getMonthData(value);
+  //   return num ? (
+  //     <div className="notes-month">
+  //       <section>{num}</section>
+  //       <span>Backlog number</span>
+  //     </div>
+  //   ) : null;
+  // };
+  // const dateCellRender = (value) => {
+  //   const listData = getListData(value);
+  //   return (
+  //     <ul className="events">
+  //       {listData.map((item) => (
+  //         <li key={item.content}>
+  //           <Badge status={item.type} text={item.content} />
+  //         </li>
+  //       ))}
+  //     </ul>
+  //   );
+  // };
+  // const getMonthData = (value) => {
+  //   if (value.month() === 8) {
+  //     return 1394;
+  //   }
+  // };
 
 
   const memo_calendar = useMemo(() => {

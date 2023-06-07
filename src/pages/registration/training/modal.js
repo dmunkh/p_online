@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
-import { Input, Modal, DatePicker, Switch, Modal as CalModal } from "antd";
+import { Input, Modal, DatePicker,  Modal as CalModal } from "antd";
 import { InputNumber } from "primereact/inputnumber";
 import Type from "src/components/custom/LessTypeYear";
 import PlaceList from "src/components/custom/placeList";

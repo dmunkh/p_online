@@ -3,7 +3,7 @@ import { DatePicker } from "antd";
 import { useTrainingContext } from "src/contexts/trainingContext";
 import { InputSwitch } from "primereact/inputswitch";
 import Module from "src/components/custom/module";
-import TypeYear from "src/components/custom/typeYear";
+// import TypeYear from "src/components/custom/typeYear";
 import moment from "moment";
 
 const Header = () => {

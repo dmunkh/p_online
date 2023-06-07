@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useLayoutEffect } from "react";
-import { useUserContext } from "../../contexts/userContext";
-import { useReferenceContext } from "../../contexts/referenceContext";
-import * as API from "../../api/reference";
+import { useUserContext } from "src/contexts/userContext";
+import { useReferenceContext } from "src/contexts/referenceContext";
+import * as API from "src/api/reference";
 import { Spin, Select, Input, Modal } from "antd";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 import SaveButton from "src/components/button/SaveButton";
 
 const LessonsRegister = () => {
-  const { message, checkRole } = useUserContext();
+  const { message } = useUserContext();
   const { state, dispatch } = useReferenceContext();
 
   const [loading, setLoading] = useState(false);
@@ -112,37 +112,14 @@ const LessonsRegister = () => {
     });
   };
   const updateItem = (item) => {
-    // API.getWarehouseItemID(item.warehouse_id)
-    //   .then((res) => {
-    // dispatch({
-    //   type: "STATE",
-    //   data: {
-    //     list_lesson_ID: {
-    //       res
-    //     },
-    //   },
-    // });
-    //     //loadItemTypeList(res.itemtypeid);
     dispatch({
       type: "STATE",
       data: { modal: true },
     });
-    //   })
-    //   .catch((error) => {
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Мэдээлэл татаж чадсангүй.",
-    //     });
-    //     dispatch({
-    //       type: "CLEAR",
-    //     });
-    //   });
   };
 
   const memo_table = useMemo(() => {
     var result = state.list_lessonsRegister;
-
     if (search) {
       result = _.filter(
         result,
