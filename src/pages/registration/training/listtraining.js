@@ -231,7 +231,8 @@ const Training = () => {
                     });
                     dispatch({
                       type: "STATE",
-                      data: { timeRegister: false },
+                      data: { timeRegister: false, begin_date:moment(state.change_year, 'YYYY.MM.DD'), end_date:(moment(state.change_year, 'YYYY.MM.DD')) },
+
                     });
                     setEdit(false);
 
