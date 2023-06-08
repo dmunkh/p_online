@@ -16,14 +16,14 @@ const Training = () => {
   const { message, checkRole } = useUserContext();
   const { state, dispatch } = useTrainingContext();
   const [edit, setEdit] = useState(false);
-  const [ setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-
 
   // жагсаалт
   useLayoutEffect(() => {
-    //setLoading(true);
-    state.moduleid &&
+    if (state.moduleid) {
+      setLoading(true);
+
       API.getLesson({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
@@ -50,6 +50,7 @@ const Training = () => {
           });
         })
         .finally(() => setLoading(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.change_year, state.moduleid]);
 
@@ -230,8 +231,11 @@ const Training = () => {
                     });
                     dispatch({
                       type: "STATE",
-                      data: { timeRegister: false , begin_date:moment(state.change_year, 'YYYY.MM.DD'), end_date:moment(state.change_year, 'YYYY.MM.DD')},
-
+                      data: {
+                        timeRegister: false,
+                        begin_date: moment(state.change_year, "YYYY.MM.DD"),
+                        end_date: moment(state.change_year, "YYYY.MM.DD"),
+                      },
                     });
                     setEdit(false);
                     dispatch({
