@@ -249,16 +249,18 @@ const Index = () => {
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-start "
         />
         <Column
           sortable
           header="Эрдэнэт үйлдвэр ТӨҮГ төлбөрийн тариф"
           field="price_emc"
           style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end "
+          className="text-xs justify-end "
+          body={(data) => {
+            return (
+              <span>{Intl.NumberFormat("en-US").format(data.price_emc)}</span>
+            );
+          }}
         />
 
         <Column
@@ -266,9 +268,14 @@ const Index = () => {
           header="Гадны байгууллага төлбөрийн тариф"
           field="price_organization"
           style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs "
-          headerClassName="flex items-center justify-center"
-          bodyClassName="flex items-center justify-end"
+          className="text-xs justify-end "
+          body={(data) => {
+            return (
+              <span>
+                {Intl.NumberFormat("en-US").format(data.price_organization)}
+              </span>
+            );
+          }}
         />
         <Column
           sortable
