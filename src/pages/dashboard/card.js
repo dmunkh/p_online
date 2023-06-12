@@ -1,4 +1,5 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {  useLayoutEffect, useMemo, useState } from "react";
 import * as API from "src/api/request";
 import { useUserContext } from "src/contexts/userContext";
 import DepartmentTseh from "src/components/custom/departmentTseh";
@@ -128,7 +129,7 @@ const Card = () => {
                   </svg>
                 </div>
                 <p className="text-sm whitespace-pre-wrap  font-medium text-gray-500">
-                  Сургалтанд хамрагдах ажилтнуудын тоо
+                  Сургалтад хамрагдах ажилтнуудын тоо
                 </p>
                 <div className="mt-4 border-t-2 border-blue-100 py-2">
                   <div className="flex justify-center items-center gap-2 ">
@@ -165,7 +166,7 @@ const Card = () => {
               className="mr-2 uppercase px-3"
               severity="success"
               icon="pi pi-chart-line"
-              value="Нийт"
+              value="Давхардсан"
             ></Tag>
           </div>
           <div className="mt-2 border-t-2 border-blue-100 py-2"></div>
@@ -200,7 +201,7 @@ const Card = () => {
           <div className="w-full  inline-flex items-center gap-2 text-red-500   ">
             <Tag
               severity="warning"
-              value="Ажилтнуудын тоо"
+              value="Давхардаагүй"
               icon="pi pi-check"
               className="px-3 uppercase"
             ></Tag>
