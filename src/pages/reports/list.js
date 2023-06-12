@@ -19,13 +19,12 @@ const Index = () => {
   const { state, dispatch } = useTrainingContext();
   const [search, setSearch] = useState("");
   const [print_modal, setPrint_modal] = useState(false);
-  const [loading2, setLoading2] = useState(false);
 
   useLayoutEffect(() => {
     if (state.moduleid !== null && state.department_id !== null) {
-      setLoading2(true);
       API.getReportPlan({
         year: moment(state.change_year).format("YYYY"),
+        module_id: state.moduleid,
         department_id: state.department_id,
       })
         .then((res) => {
@@ -34,27 +33,18 @@ const Index = () => {
           _.map(res, (item) => {
             result.push({
               ...item,
-              planworker: item.count_worker + item.count_resource,
               ss: (item.count_worker + item.count_resource) * item.price_emc,
             });
           });
 
-          var list = result;
-
-          if (state.moduleid !== 0) {
-            list = _.filter(result, (a) => a.module_id === state.moduleid);
-          }
-
           dispatch({
             type: "STATE",
             data: {
-              list_reportplan: _.orderBy(list, ["module_id"]),
+              list_reportplan: _.orderBy(result, ["type_id"]),
             },
           });
-          setLoading2(false);
         })
         .catch((error) => {
-          setLoading2(false);
           dispatch({
             type: "STATE",
             data: {
@@ -104,6 +94,24 @@ const Index = () => {
       });
   };
 
+  //   var result = _.map(state.list_reportplan, (a, i) => {
+  //     return {
+  //       // specsname: a.specsname,
+  //       // methodname: a.methodname,
+  //       // specspercent: a.specspercent,
+  //       // resultvalue2: a.resultvalue2,
+  //       // resultvalue1: a.resultvalue1,
+  //       // resultvalue: a.resultvalue,
+  //     };
+  //   });
+  //   result.push({
+  //    specsname: "Нийт",
+  //     // methodname: "",
+  //     // specspercent: _.sumBy(state.list_rate, (a) => a.specspercent),
+  //     // resultvalue2: _.sumBy(state.list_rate, (a) => a.resultvalue2),
+  //     // resultvalue1: _.sumBy(state.list_rate, (a) => a.resultvalue1),
+  //     // resultvalue: _.sumBy(state.list_rate, (a) => a.resultvalue),
+  //   });
   const memo_table = useMemo(() => {
     var result = state.list_reportplan;
 
@@ -133,9 +141,7 @@ const Index = () => {
         removableSort
         scrollHeight={window.innerHeight - 280}
         responsiveLayout="scroll"
-        rowGroupMode="subheader"
-        groupRowsBy="module_id"
-        value={_.orderBy(result, ["module_id"])}
+        value={_.orderBy(result, ["type_name"])}
         header={
           <div className="flex items-center justify-between">
             <div className="w-full md:max-w-[200px]">
@@ -163,49 +169,6 @@ const Index = () => {
             </div>
           </div>
         }
-        rowGroupHeaderTemplate={(data) => {
-          return (
-            <div className="text-xs font-semibold">
-              <span className="ml-1">{data.module_name}</span>
-            </div>
-          );
-        }}
-        rowGroupFooterTemplate={(data) => {
-          var list_type = _.filter(
-            result,
-            (a) => a.module_id === data.module_id
-          );
-          return (
-            state.moduleid === 0 && (
-              <React.Fragment key={"key_footer_" + data.item_id}>
-                <td
-                  colSpan={4}
-                  className="flex items-center justify-end font-bold text-xs"
-                  style={{ minWidth: "300px" }}
-                >
-                  Нийт
-                </td>
-                <td
-                  style={{
-                    minWidth: "150px",
-                    maxWidth: "150px",
-                  }}
-                  className="flex items-center justify-end font-bold text-xs"
-                >
-                  {Intl.NumberFormat("en-US").format(
-                    _.sumBy(list_type, "planworker")
-                  )}
-                </td>
-                <td
-                  style={{ minWidth: "150px", maxWidth: "150px" }}
-                  className="flex items-center justify-end font-bold text-xs "
-                >
-                  {Intl.NumberFormat("en-US").format(_.sumBy(list_type, "ss"))}
-                </td>
-              </React.Fragment>
-            )
-          );
-        }}
         footerColumnGroup={
           <ColumnGroup>
             <Row>
@@ -249,18 +212,16 @@ const Index = () => {
           style={{ minWidth: "150px" }}
           className="text-xs "
           headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start "
         />
         <Column
           sortable
           header="Эрдэнэт үйлдвэр ТӨҮГ төлбөрийн тариф"
           field="price_emc"
           style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs justify-end "
-          body={(data) => {
-            return (
-              <span>{Intl.NumberFormat("en-US").format(data.price_emc)}</span>
-            );
-          }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-end "
         />
 
         <Column
@@ -268,14 +229,9 @@ const Index = () => {
           header="Гадны байгууллага төлбөрийн тариф"
           field="price_organization"
           style={{ minWidth: "150px", maxWidth: "150px" }}
-          className="text-xs justify-end "
-          body={(data) => {
-            return (
-              <span>
-                {Intl.NumberFormat("en-US").format(data.price_organization)}
-              </span>
-            );
-          }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-end"
         />
         <Column
           sortable
@@ -325,13 +281,13 @@ const Index = () => {
       <div className="flex  text-xs">
         <div className="flex flex-col ">
           <div className="flex justify-center text-xs  ">
-            <Spin
+            {/* <Spin
               tip="Уншиж байна."
               className="min-h-full first-line:bg-opacity-80"
-              spinning={loading2}
-            >
-              {memo_table}
-            </Spin>
+              spinning={loading}
+            > */}
+            {memo_table}
+            {/* </Spin> */}
           </div>
         </div>
       </div>
