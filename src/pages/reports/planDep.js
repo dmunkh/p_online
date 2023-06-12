@@ -415,7 +415,7 @@ const PlanDep = () => {
       if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
         return (
           <td className="text-center border" key={index}>
-            {item?.count}
+            {item?.count !== 0 ? item?.count : ""}
           </td>
         );
       }
