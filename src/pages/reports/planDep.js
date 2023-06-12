@@ -1,17 +1,13 @@
-import React, { useLayoutEffect,  useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import Header from "src/pages/reports/header";
 import { useTrainingContext } from "src/contexts/trainingContext";
-import {  Spin } from "antd";
+import { Spin } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
 
-
-
-
 import { Modal } from "antd";
 import _ from "lodash";
-
 
 const PlanDep = () => {
   const { message } = useUserContext();
@@ -145,7 +141,6 @@ const PlanDep = () => {
   // const sum_les = (rowdata) => {
   //   // var less_id = _.map(state.list_lessType, "type_id");
   //   var result = _.filter(_.map(rowdata.data), { type_id: 1 });
-   
 
   //   return result[0].type_id;
   // };
@@ -420,7 +415,7 @@ const PlanDep = () => {
       if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
         return (
           <td className="text-center border" key={index}>
-            {item?.type_id} - {item?.count}
+            {item?.count}
           </td>
         );
       }
