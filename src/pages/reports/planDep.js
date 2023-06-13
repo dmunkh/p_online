@@ -411,8 +411,11 @@ const PlanDep = () => {
   // }, [state.list_reportplandep, search]);
 
   const render = (question) => {
-    return question.map((item, index) => {
+    let sum = 0; // Initialize a variable to hold the sum
+
+    const cells = question.data.map((item, index) => {
       if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
+        sum += item?.count || 0; // Add the count to the sum
         return (
           <td className="text-center border" key={index}>
             {item?.count !== 0 ? item?.count : ""}
@@ -421,6 +424,45 @@ const PlanDep = () => {
       }
       return null;
     });
+
+    cells.push(
+      <td className="text-center border ml-8 mr-8" key="sum">
+        {sum !== 0 ? sum : ""}
+      </td>
+    ); // Add the sum as the last cell
+
+    return cells;
+
+    // return question.data.map((item, index) => {
+    //   if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
+    //     return (
+    //       <td className="text-center border" key={index}>
+    //         {item?.count !== 0 ? item?.count : ""}
+    //       </td>
+    //     );
+    //   }
+    //   return null;
+    // });
+    // .concat(
+    //   <tr key="footer">
+    //     <td className="text-center border p-1" colSpan="3"></td>
+    //     {columnSums.map((sum, index) => (
+    //       <td className="text-center border" key={index}>
+    //         {sum}
+    //       </td>
+    //     ))}
+    //   </tr>
+    // );
+    // return question.map((item, index) => {
+    //   if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
+    //     return (
+    //       <td className="text-center border" key={index}>
+    //         {item?.count !== 0 ? item?.count : ""}
+    //       </td>
+    //     );
+    //   }
+    //   return null;
+    // });
     // var bb = [];
 
     // _.map(question, (item, index) => {
@@ -444,73 +486,6 @@ const PlanDep = () => {
     // });
     // return bb;
   };
-
-  // const states = {
-  //   OH: {
-  //     name: "Ohio",
-  //     abbreviation: "OH",
-  //     cities: {
-  //       Cleveland: {
-  //         name: "Cleveland",
-  //         metroPopulation: "~2.1M",
-  //       },
-  //       Columbus: {
-  //         name: "Columbus",
-  //         metroPopulation: "~2.0M",
-  //       },
-  //     },
-  //   },
-  //   MA: {
-  //     name: "Massachusetts",
-  //     abbreviation: "MA",
-  //     cities: {
-  //       Boston: {
-  //         name: "Boston",
-  //         metroPopulation: "~4.6M",
-  //       },
-  //     },
-  //   },
-  //   TX: {
-  //     name: "Texas",
-  //     abbreviation: "TX",
-  //     cities: {
-  //       Austin: {
-  //         name: "Austin",
-  //         metroPopulation: "~2.1M",
-  //       },
-  //       "San Antonio": {
-  //         name: "San Antonio",
-  //         metroPopulation: "~2.5M",
-  //       },
-  //       Dallas: {
-  //         name: "Dallas",
-  //         metroPopulation: "~7.2M",
-  //       },
-  //     },
-  //   },
-  //   CA: {
-  //     name: "California",
-  //     abbreviation: "CA",
-  //     cities: {
-  //       "Los Angeles": {
-  //         name: "Los Angeles",
-  //         metroPopulation: "~13.1M",
-  //       },
-  //       "San Diego": {
-  //         name: "San Diego",
-  //         metroPopulation: "~3.3M",
-  //       },
-  //       "San Francisco": {
-  //         name: "San Francisco",
-  //         metroPopulation: "~4.7M",
-  //       },
-  //       Sacramento: {
-  //         name: "Sacramento",
-  //         metroPopulation: "~2.1M",
-  //       },
-  //     },
-  //   },
-  // };
 
   // const App = () => {
   //   const stateValues = Object.values(states);
@@ -594,6 +569,8 @@ const PlanDep = () => {
                       </th>
                     );
                   })}
+
+                  <th className="text-center border pl-3 pr-3 ">Нийт</th>
                 </tr>
               </thead>
               <tbody>
@@ -613,7 +590,7 @@ const PlanDep = () => {
                       >
                         {item.departmentnameshort}
                       </td>
-                      {render(item.data)}
+                      {render(item)}
                     </tr>
                   );
                 })}
