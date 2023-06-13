@@ -18,28 +18,7 @@ const PlanDep = () => {
   const [listLesson, setListLesson] = useState([]);
 
   useLayoutEffect(() => {
-    API.getLesson({
-      module_id: 1,
-      year: 2023,
-    })
-      .then((res) => {
-        setListLesson(_.orderBy(res, ["id"]));
-      })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_reportplandep: [],
-          },
-        });
-        message({
-          type: "error",
-          error,
-          title: "Тайлан татаж чадсангүй",
-        });
-      });
-
-    state.moduleid &&
+    if (state.moduleid) {
       API.getReportPlanDep({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
@@ -66,31 +45,32 @@ const PlanDep = () => {
           });
         });
 
-    API.getTypesYear({
-      year: moment(state.change_year).format("YYYY"),
-      module_id: state.moduleid,
-    })
-      .then((res) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_lessType: _.orderBy(res, ["type_id"]),
-          },
-        });
+      API.getTypesYear({
+        year: moment(state.change_year).format("YYYY"),
+        module_id: state.moduleid,
       })
-      .catch((error) => {
-        dispatch({
-          type: "STATE",
-          data: {
-            list_lessType: [],
-          },
+        .then((res) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_lessType: _.orderBy(res, ["type_id"]),
+            },
+          });
+        })
+        .catch((error) => {
+          dispatch({
+            type: "STATE",
+            data: {
+              list_lessType: [],
+            },
+          });
+          message({
+            type: "error",
+            error,
+            title: "Тайлан татаж чадсангүй",
+          });
         });
-        message({
-          type: "error",
-          error,
-          title: "Тайлан татаж чадсангүй",
-        });
-      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.change_year, state.moduleid]);
 
@@ -410,6 +390,47 @@ const PlanDep = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [state.list_reportplandep, search]);
 
+  // const renderFooter = (question) => {
+  //   let sum = new Array(question.data[0].length).fill(0); // Initialize an array to hold the sums for each column
+  //   console.log(sum, question);
+  //   const cells = question?.data.map((item, rowIndex) => {
+  //     const rowSum = []; // Initialize an array to hold the sum for each row
+
+  //     const rowCells = item?.map((cell, columnIndex) => {
+  //       if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
+  //         rowSum[columnIndex] = (rowSum[columnIndex] || 0) + (cell?.count || 0); // Add the count to the row sum
+  //         return (
+  //           <td className="text-center border" key={columnIndex}>
+  //             {cell?.count !== 0 ? cell?.count : ""}
+  //           </td>
+  //         );
+  //       }
+  //       return null;
+  //     });
+
+  //     cells.push(rowCells); // Add the row cells to the cells array
+
+  //     rowSum?.forEach((columnSum, columnIndex) => {
+  //       sum[columnIndex] = (sum[columnIndex] || 0) + columnSum; // Add the row sum to the column sum
+  //     });
+
+  //     return null;
+  //   });
+
+  //   console.log(cells);
+
+  //   const footerRow = (
+  //     <tr key="footer">
+  //       {sum.map((columnSum, columnIndex) => (
+  //         <td className="text-center border" key={columnIndex}>
+  //           {columnSum}
+  //         </td>
+  //       ))}
+  //     </tr>
+  //   );
+  //   console.log(footerRow);
+  //   return footerRow;
+  // };
   const render = (question) => {
     let sum = 0; // Initialize a variable to hold the sum
 
@@ -417,7 +438,7 @@ const PlanDep = () => {
       if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
         sum += item?.count || 0; // Add the count to the sum
         return (
-          <td className="text-center border" key={index}>
+          <td className="text-center border " key={index}>
             {item?.count !== 0 ? item?.count : ""}
           </td>
         );
@@ -426,7 +447,10 @@ const PlanDep = () => {
     });
 
     cells.push(
-      <td className="text-center border ml-8 mr-8" key="sum">
+      <td
+        className="text-center border ml-8 mr-8 font-bold bg-gray-50"
+        key="sum"
+      >
         {sum !== 0 ? sum : ""}
       </td>
     ); // Add the sum as the last cell
@@ -486,62 +510,6 @@ const PlanDep = () => {
     // });
     // return bb;
   };
-
-  // const App = () => {
-  //   const stateValues = Object.values(states);
-
-  //   const tbodies = listLesson.map((state, index) => {
-  //     // const cityValues = Object.values(state.data);
-
-  //     // const cityRows = cityValues.map((city, i) => {
-  //     //   const stateName =
-  //     //     i === 0 ? (
-  //     //       <td rowSpan={cityValues.length + 1}>{state.name}</td>
-  //     //     ) : null;
-
-  //     //   const stateAbbreviation =
-  //     //     i === 0 ? (
-  //     //       <td rowSpan={cityValues.length + 1}>{state.abbreviation}</td>
-  //     //     ) : null;
-
-  //     //   return (
-  //     //     <tr key={i} className="border-1">
-  //     //       {stateName}
-  //     //       {stateAbbreviation}
-  //     //       <td>{city.name}</td>
-  //     //       <td>{city.metroPopulation}</td>
-  //     //     </tr>
-  //     //   );
-  //     // });
-  //     return (
-  //       <tbody key={index} className="border-1">
-  //         <tr>
-  //           <td>{state.type_name}</td>
-  //           <td>{state.begin_date}</td>
-  //         </tr>
-  //       </tbody>
-  //     );
-  //   });
-  //   return (
-  //     <div>
-  //       <table className="border-1">
-  //         <thead>
-  //           <tr>
-  //             <th colSpan="4">Metro Areas by State</th>
-  //           </tr>
-  //           <tr>
-  //             <th>State Name</th>
-  //             <th>State Abbreviation</th>
-  //             <th>City</th>
-  //             <th>Population</th>
-  //           </tr>
-  //         </thead>
-  //         {tbodies}
-  //       </table>
-  //     </div>
-  //   );
-  // };
-
   return (
     <div className=" card flex p-2 rounded text-xs">
       <Header />
@@ -558,26 +526,35 @@ const PlanDep = () => {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-center border p-1 ">№</th>
-                  <th className="text-center border p-1 ">Код</th>
-                  <th className="text-center border p-1 ">Бүтцийн нэгж</th>
+                  <th className="text-center border p-1 bg-slate-100 ">№</th>
+                  <th className="text-center border p-1  bg-slate-100">Код</th>
+                  <th className="text-center border p-1  bg-slate-100">
+                    Бүтцийн нэгж
+                  </th>
 
                   {_.map(state.list_lessType, (answer, index) => {
                     return (
-                      <th key={index} className="text-center border p-1">
+                      <th
+                        key={index}
+                        className="text-center border p-1  bg-slate-100"
+                      >
                         {answer.type_name} + {answer.type_id}
                       </th>
                     );
                   })}
 
-                  <th className="text-center border pl-3 pr-3 ">Нийт</th>
+                  <th className="text-center border pl-3 pr-3  bg-slate-100 ">
+                    Нийт
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {_.map(state.list_reportplandep, (item, index) => {
                   return (
                     <tr key={item.id}>
-                      <td className="text-center border p-1">{index + 1}</td>
+                      <td className="text-center border pl-2 pr-2">
+                        {index + 1}
+                      </td>
                       <td
                         className="text-center border p-1"
                         style={{ width: "60px" }}
