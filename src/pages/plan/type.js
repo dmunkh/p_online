@@ -354,7 +354,7 @@ const List = () => {
               headerClassName="flex items-center justify-center"
               style={{ minWidth: "100px", maxWidth: "100px" }}
               body={(data) => {
-                return (
+                return !state.isapprove ? (
                   <InputNumber
                     style={{ fontSize: 12 }}
                     value={data.count_resource}
@@ -412,6 +412,8 @@ const List = () => {
                       }
                     }}
                   ></InputNumber>
+                ) : (
+                  data.count_resource
                 );
               }}
             />
