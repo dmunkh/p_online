@@ -43,7 +43,6 @@ const List = () => {
               // Intl.NumberFormat("en-US").format(
               plan: items?.count + items?.count_resource,
               sum: (items?.count + items?.count_resource) * items?.price_emc,
-
               //),
             });
           });
@@ -51,11 +50,7 @@ const List = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_normposition: _.orderBy(
-                result,
-                ["departmentcode"],
-                ["asc", "asc"]
-              ),
+              list_normposition: _.orderBy(result, ["type_id"], ["asc", "asc"]),
             },
           });
         })
@@ -109,6 +104,7 @@ const List = () => {
       </Modal>
 
       <div className="p-2 rounded text-xs">
+        {" "}
         <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
           <DataTable
             size="small"

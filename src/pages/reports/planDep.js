@@ -35,7 +35,8 @@ const PlanDep = () => {
                     a.departmentcode !== "0102-68" &&
                     a.departmentcode !== "0102-20" &&
                     a.departmentcode !== "0102-70"
-                )
+                ),
+                ["type_id"]
               ),
             },
           });
@@ -127,324 +128,78 @@ const PlanDep = () => {
   //   return result.length;
   // };
 
-  // const sum_les = (rowdata) => {
-  //   // var less_id = _.map(state.list_lessType, "type_id");
-  //   var result = _.filter(_.map(rowdata.data), { type_id: 1 });
+  const renderFooter = (question) => {
+    let sum = new Array(question.data[0].length).fill(0); // Initialize an array to hold the sums for each column
 
-  //   return result[0].type_id;
-  // };
+    const cells = _.map(question, (item, index) => {
+      const rowSum = [];
+      // const rowCells = _.map(item, (cell, colIndex) => {
+      //   if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
+      //     // rowSum[colIndex] = (rowSum[colIndex] || 0) + (cell.count || 0);
+      //     return (
+      //       <td className="text-center border" key={colIndex}>
+      //         {cell?.count !== 0 ? cell?.count : ""}
+      //       </td>
+      //     );
+      //   }
+      //   return null;
+      // });
 
-  // const memo_header = useMemo(() => {
-  //   var row = [];
-  //   var result = state.list_lessType;
+      // // const cells = question?.data.map((item, rowIndex) => {
+      // //   const rowSum = []; // Initialize an array to hold the sum for each row
 
-  //   _.map(result, (i) => {
-  //     row.push(
-  //       <Column
-  //         key={"key_header_" + i + 1}
-  //         header={
-  //           <th style={{ transform: "rotate(-90deg)" }}>
-  //             <span className="text-start font-thin  text-sm">
-  //               {i.type_name}
-  //             </span>
-  //           </th>
-  //         }
-  //         align="left"
-  //         className="w-full"
-  //         //headerClassName=" rotate-90"
-  //       />
-  //     );
-  //   });
+      // //   const rowCells = item?.map((cell, columnIndex) => {
+      // //     if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
+      // //       rowSum[columnIndex] = (rowSum[columnIndex] || 0) + (cell?.count || 0); // Add the count to the row sum
+      // //       return (
+      // //         <td className="text-center border" key={columnIndex}>
+      // //           {cell?.count !== 0 ? cell?.count : ""}
+      // //         </td>
+      // //       );
+      // //     }
+      // //     return null;
+      // //   });
 
-  //   return row;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.list_lessType]);
+      // cells.push(rowCells); // Add the row cells to the cells array
 
-  // const memo_header_sub = useMemo(() => {
-  //   var row = [];
-  //   var result = state.list_lessType;
-  //   _.map(result, (i) => {
-  //     row.push(
-  //       <Column
-  //         key={"key_header_sub_1" + i.id}
-  //         header={i.price_emc}
-  //         id={i.type_id}
-  //         align="center"
-  //         className="min-w-[60px] max-w-[60px] w-[60px] p-1"
-  //       />
-  //     );
-  //   });
+      _.map(item.data, (colSum, colIndex) => {
+        sum[colIndex] = (sum[colIndex] || 0) + colSum;
+      });
 
-  //   return row;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.list_lessType]);
+      // rowSum?.forEach((columnSum, columnIndex) => {
+      //   sum[columnIndex] = (sum[columnIndex] || 0) + columnSum; // Add the row sum to the column sum
+      // });
 
-  // const memo_column = useMemo(() => {
-  //   //     var row = [];
-  //   //     var result = state.list_reportplandep
-  //   // _.map(result, (i) => {
-  //   //     console.log(_.map(i, 'type_id'))
-  //   //       row.push(
-  //   <>
-  //     <Column
-  //       align="center"
-  //       field=""
-  //       className="min-w-[70px] max-w-[70px] w-[70px]"
-  //     />
-  //     <Column
-  //       align="center"
-  //       field=""
-  //       className="min-w-[70px] max-w-[70px] w-[70px]"
-  //     />
-  //   </>;
-  //   //   );
-  //   // });
-  //   //  console.log(row)
-  //   //   return row;
+      return null;
+    });
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.list_reportplandep]);
+    const footerRow = (
+      // <tr key="footer">
+      //   {sum.map((columnSum, columnIndex) => (
+      //     <td className="text-center border" key={columnIndex}>
+      //       {columnSum}
+      //     </td>
+      //   ))}
+      // </tr>
+      <tr key="footer">
+        {_.map(sum, (columnSum, colIndex) => (
+          <td key={colIndex}>{columnSum}</td>
+        ))}
+      </tr>
+    );
 
-  // const memo_table = useMemo(() => {
-  //   var result = state.list_reportplandep;
+    return footerRow;
+  };
 
-  //   // if (state?.type_id)
-  //   //   result = _.filter(result, (a) => a.type_id === state.type_id);
-
-  //   if (search) {
-  //     result = _.filter(
-  //       result,
-  //       (a) =>
-  //         _.includes(_.toLower(a.type_name), _.toLower(search)) ||
-  //         _.includes(_.toLower(a.price_emc), _.toLower(search)) ||
-  //         _.includes(_.toLower(a.price_organization), _.toLower(search)) ||
-  //         _.includes(_.toLower(a.count_worker), _.toLower(search))
-  //     );
-  //   }
-
-  //   return (
-  //     <DataTable
-  //       scrollable
-  //       dataKey="id"
-  //       size="small"
-  //       stripedRows
-  //       showGridlines
-  //       className="w-full text-sm"
-  //       sortMode="single"
-  //       removableSort
-  //       scrollHeight={window.innerHeight - 280}
-  //       responsiveLayout="scroll"
-  //       value={state.list_reportplandep}
-  //       header={
-  //         <div className="flex items-center justify-between">
-  //           <div className="w-full md:max-w-[200px]">
-  //             <Input
-  //               placeholder="Хайх..."
-  //               prefix={<SearchOutlined />}
-  //               className="w-full rounded-lg"
-  //               value={search}
-  //               onChange={(e) => setSearch(e.target.value)}
-  //             />
-  //           </div>
-  //           <div className="fonticon-wrap"></div>
-  //           <div
-  //             className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
-  //             onClick={() => printTo(result)}
-  //           >
-  //             {/* <img
-  //               alt=""
-  //               title="Excel татах"
-  //               src="/assets/images/excel.png"
-  //               className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-  //               onClick={() => exportTo(true, result)}
-  //             /> */}
-  //             <i className="ft-printer"></i>
-  //           </div>
-  //         </div>
-  //       }
-  //       footerColumnGroup={
-  //         <ColumnGroup>
-  //           <Row>
-  //             {state.checkNoNorm && (
-  //               <Column className="w-[50px] text-center text-xs" />
-  //             )}
-  //             <Column
-  //               className="w-[50px] max-w-[50px] text-center text-xs"
-  //               footer={result.length}
-  //             />
-
-  //             <Column
-  //               // className="min-w-[200px]"
-  //               style={{ minWidth: "200px" }}
-  //               footer={() => {
-  //                 return (
-  //                   <div className="flex items-center justify-center">
-  //                     <Tooltip
-  //                       placement="top"
-  //                       title={
-  //                         <div className="flex flex-col gap-2 text-xs">
-  //                           {_.map(
-  //                             Object.entries(_.groupBy(result, "type_id")),
-  //                             (item, index) => {
-  //                               return (
-  //                                 <div key={index} className="">
-  //                                   <span>
-  //                                     {item[0] === "null"
-  //                                       ? "Тодорхойгүй"
-  //                                       : item[0]}
-  //                                   </span>
-  //                                   - <span>{item[1].length}</span>,{"  тоо: "}
-  //                                   <span>
-  //                                     - {_.sumBy(item[1], (a) => a.normcount)}
-  //                                   </span>
-  //                                 </div>
-  //                               );
-  //                             }
-  //                           )}
-  //                         </div>
-  //                       }
-  //                     >
-  //                       <div className="flex items-center justify-center text-blue-500 text-lg">
-  //                         <i className="fe fe-info" />
-  //                       </div>
-  //                     </Tooltip>
-  //                   </div>
-  //                 );
-  //               }}
-  //             />
-  //           </Row>
-  //         </ColumnGroup>
-  //       }
-  //       emptyMessage={
-  //         <div className="text-xs text-orange-500 italic font-semibold">
-  //           Мэдээлэл олдсонгүй...
-  //         </div>
-  //       }
-  //       headerColumnGroup={
-  //         <ColumnGroup>
-  //           <Row>
-  //             <Column
-  //               className="min-w-[50px] max-w-[50px] w-[50px]"
-  //               header="№"
-  //               rowSpan={3}
-  //             />
-  //             <Column
-  //               header="Бүтцийн нэгжийн нэр"
-  //               rowSpan={3}
-  //               className="min-w-[200px] max-w-[200px] w-[200px]"
-  //             />
-  //             <Column
-  //               header=""
-  //               rowSpan={3}
-  //               className="min-w-[80px] max-w-[80px] w-[80px]"
-  //             />
-  //           </Row>
-  //           <Row>{memo_header}</Row>
-  //           <Row>{memo_header_sub}</Row>
-  //         </ColumnGroup>
-  //       }
-  //     >
-  //       <Column
-  //         align="center"
-  //         style={{ minWidth: "50px", maxWidth: "50px" }}
-  //         className="text-xs w-full"
-  //         headerClassName="flex items-center justify-center"
-  //         bodyClassName="flex items-center justify-center"
-  //         body={(data, row) => row.rowIndex + 1}
-  //       />
-
-  //       <Column
-  //         sortable
-  //         /// header="Бүтцийн нэгжийн нэр"
-  //         field="departmentname"
-  //         style={{ minWidth: "200px", maxWidth: "200px" }}
-  //         className="text-xs "
-  //         headerClassName="flex items-center justify-center"
-  //         bodyClassName="flex items-center justify-start "
-  //       />
-  //       <Column
-  //         sortable
-  //         // header="*"
-  //         field="departmentcode"
-  //         style={{ minWidth: "80px", maxWidth: "80px" }}
-  //         className="text-xs "
-  //         headerClassName="flex items-center justify-center"
-  //         bodyClassName="flex items-center justify-center "
-  //       />
-  //       <Column
-  //         field="Sum"
-  //         //header="SecretNum"
-  //         body={sum_les}
-  //         style={{
-  //           textAlign: "center",
-  //           fontWeight: "600",
-  //           width: "50px",
-  //           minWidth: "50px",
-  //         }}
-  //       />
-  //       <Column
-  //         field="Sum"
-  //         //header="SecretNum"
-  //         body={sum_les}
-  //         style={{
-  //           textAlign: "center",
-  //           fontWeight: "600",
-  //           width: "50px",
-  //           minWidth: "50px",
-  //         }}
-  //       />
-  //       <ColumnGroup />
-  //     </DataTable>
-  //   );
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.list_reportplandep, search]);
-
-  // const renderFooter = (question) => {
-  //   let sum = new Array(question.data[0].length).fill(0); // Initialize an array to hold the sums for each column
-  //   console.log(sum, question);
-  //   const cells = question?.data.map((item, rowIndex) => {
-  //     const rowSum = []; // Initialize an array to hold the sum for each row
-
-  //     const rowCells = item?.map((cell, columnIndex) => {
-  //       if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
-  //         rowSum[columnIndex] = (rowSum[columnIndex] || 0) + (cell?.count || 0); // Add the count to the row sum
-  //         return (
-  //           <td className="text-center border" key={columnIndex}>
-  //             {cell?.count !== 0 ? cell?.count : ""}
-  //           </td>
-  //         );
-  //       }
-  //       return null;
-  //     });
-
-  //     cells.push(rowCells); // Add the row cells to the cells array
-
-  //     rowSum?.forEach((columnSum, columnIndex) => {
-  //       sum[columnIndex] = (sum[columnIndex] || 0) + columnSum; // Add the row sum to the column sum
-  //     });
-
-  //     return null;
-  //   });
-
-  //   console.log(cells);
-
-  //   const footerRow = (
-  //     <tr key="footer">
-  //       {sum.map((columnSum, columnIndex) => (
-  //         <td className="text-center border" key={columnIndex}>
-  //           {columnSum}
-  //         </td>
-  //       ))}
-  //     </tr>
-  //   );
-  //   console.log(footerRow);
-  //   return footerRow;
-  // };
   const render = (question) => {
     let sum = 0; // Initialize a variable to hold the sum
 
-    const cells = question.data.map((item, index) => {
-      if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
+    const cells = _.orderBy(question.data, ["type_id"]).map((item, index) => {
+      if (
+        _.orderBy(state?.list_lessType, ["type_id"]).some(
+          (i) => i.type_id === item?.type_id
+        )
+      ) {
         sum += item?.count || 0; // Add the count to the sum
         return (
           <td className="text-center border " key={index}>
@@ -465,59 +220,6 @@ const PlanDep = () => {
     ); // Add the sum as the last cell
 
     return cells;
-
-    // return question.data.map((item, index) => {
-    //   if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
-    //     return (
-    //       <td className="text-center border" key={index}>
-    //         {item?.count !== 0 ? item?.count : ""}
-    //       </td>
-    //     );
-    //   }
-    //   return null;
-    // });
-    // .concat(
-    //   <tr key="footer">
-    //     <td className="text-center border p-1" colSpan="3"></td>
-    //     {columnSums.map((sum, index) => (
-    //       <td className="text-center border" key={index}>
-    //         {sum}
-    //       </td>
-    //     ))}
-    //   </tr>
-    // );
-    // return question.map((item, index) => {
-    //   if (state?.list_lessType.some((i) => i.type_id === item?.type_id)) {
-    //     return (
-    //       <td className="text-center border" key={index}>
-    //         {item?.count !== 0 ? item?.count : ""}
-    //       </td>
-    //     );
-    //   }
-    //   return null;
-    // });
-    // var bb = [];
-
-    // _.map(question, (item, index) => {
-    //   var aa = [];
-    //   _.map(state?.list_lessType, (i) => aa.push(i.type_id));
-
-    //   if (aa.includes(item?.type_id)) {
-    //     return bb.push(<td className="text-center border">{item?.count}</td>);
-    //   }
-    // });
-
-    // return bb;
-
-    // _.map(question, (item, index) => {
-    //   var aa = [];
-    //   _.map(state?.list_lessType, (i) => aa.push(i.type_id));
-
-    //   if (aa.includes(item?.type_id)) {
-    //     return bb.push(<td className="text-center border">{item?.count}</td>);
-    //   }
-    // });
-    // return bb;
   };
   return (
     <div className=" card flex p-2 rounded text-xs">
@@ -560,7 +262,7 @@ const PlanDep = () => {
               <tbody>
                 {_.map(state.list_reportplandep, (item, index) => {
                   return (
-                    <tr key={item.id}>
+                    <tr key={item.id} className="hover:bg-slate-200">
                       <td className="text-center border pl-2 pr-2">
                         {index + 1}
                       </td>
