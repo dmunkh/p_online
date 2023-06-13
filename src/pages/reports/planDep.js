@@ -8,6 +8,7 @@ import * as API from "src/api/training";
 
 import { Modal } from "antd";
 import _ from "lodash";
+import department from "../workers/department";
 
 const PlanDep = () => {
   const { message } = useUserContext();
@@ -27,7 +28,15 @@ const PlanDep = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_reportplandep: _.orderBy(res),
+              list_reportplandep: _.orderBy(
+                _.filter(
+                  res,
+                  (a) =>
+                    a.departmentcode !== "0102-68" &&
+                    a.departmentcode !== "0102-20" &&
+                    a.departmentcode !== "0102-70"
+                )
+              ),
             },
           });
         })

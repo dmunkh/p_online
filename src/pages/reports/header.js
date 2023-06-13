@@ -14,7 +14,6 @@ const Header = () => {
   const { Option } = Select;
   useLayoutEffect(() => {
     API.getUserModule().then((res) => {
-      console.log(res);
       var result = res;
       result.push({ id: 0, module_name: "Бүгд" });
       setList(_.orderBy(res, ["id"]));
