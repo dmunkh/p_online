@@ -48,7 +48,7 @@ const Index = () => {
           dispatch({
             type: "STATE",
             data: {
-              list_reportplan: _.orderBy(list, ["module_id"]),
+              list_reportplan: _.orderBy(list, ["module_id", "type_id"]),
             },
           });
           setLoading2(false);

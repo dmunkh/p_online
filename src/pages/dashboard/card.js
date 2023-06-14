@@ -30,6 +30,7 @@ const Card = () => {
 
   useLayoutEffect(() => {
     if (date !== null && tseh !== null && tseh !== undefined) {
+      
       setLoading(true);
       API.getControlPanel({ year: date, department_id: tseh })
         .then(async (res) => {
