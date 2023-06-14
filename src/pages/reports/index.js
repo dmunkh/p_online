@@ -135,7 +135,7 @@ const Index = () => {
         responsiveLayout="scroll"
         rowGroupMode="subheader"
         groupRowsBy="module_id"
-        value={_.orderBy(result, ["module_id"])}
+        value={_.orderBy(result, ["module_id", "type_id"])}
         header={
           <div className="flex items-center justify-between">
             <div className="w-full md:max-w-[200px]">
