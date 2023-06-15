@@ -396,78 +396,80 @@ const List = () => {
               headerClassName="flex items-center justify-center"
               style={{ minWidth: "100px", maxWidth: "100px" }}
             />
-            <Column
-              header="Нөөц төлөвлөлт"
-              field="Count"
-              align="center"
-              sortable
-              className="text-xs"
-              headerClassName="flex items-center justify-center"
-              style={{ minWidth: "100px", maxWidth: "100px" }}
-              body={(data) => {
-                return !state.isapprove ? (
-                  <InputNumber
-                    style={{ fontSize: 12 }}
-                    value={data.count_resource}
-                    onChange={(value) => {
-                      const updatedList = [...state.list_normposition]; // Create a new copy of the array
-                      const index = updatedList.findIndex(
-                        (employee) => employee.type_id === data.type_id
-                      );
-
-                      if (index !== -1) {
-                        updatedList[index] = {
-                          ...updatedList[index],
-                          count_resource: value,
-                          plan: updatedList[index].count + value,
-                          sum:
-                            (updatedList[index].count + value) *
-                            updatedList[index].price_emc,
-                        }; // Update the height property
-
-                        dispatch({
-                          type: "STATE",
-                          data: { list_normposition: updatedList },
-                        }); // Dispatch the updated array directly
-                      }
-                    }}
-                    onPressEnter={(e) => {
-                      if (e.key === "Enter") {
-                        console.log(
-                          "target",
-                          e.target.value === "" ? 0 : e.target.value
+            {state.moduleid !== 4 && (
+              <Column
+                header="Нөөц төлөвлөлт"
+                field="Count"
+                align="center"
+                sortable
+                className="text-xs"
+                headerClassName="flex items-center justify-center"
+                style={{ minWidth: "100px", maxWidth: "100px" }}
+                body={(data) => {
+                  return !state.isapprove ? (
+                    <InputNumber
+                      style={{ fontSize: 12 }}
+                      value={data.count_resource}
+                      onChange={(value) => {
+                        const updatedList = [...state.list_normposition]; // Create a new copy of the array
+                        const index = updatedList.findIndex(
+                          (employee) => employee.type_id === data.type_id
                         );
 
-                        API.postPlanCountResource({
-                          count: e.target.value === "" ? 0 : e.target.value,
-                          type_id: data.type_id,
-                          year: moment(state.date).format("Y"),
-                          department_id: state.department_id,
-                        })
-                          .then((res) => {
-                            // setdraw((prev) => prev + 1);
+                        if (index !== -1) {
+                          updatedList[index] = {
+                            ...updatedList[index],
+                            count_resource: value,
+                            plan: updatedList[index].count + value,
+                            sum:
+                              (updatedList[index].count + value) *
+                              updatedList[index].price_emc,
+                          }; // Update the height property
 
-                            message({
-                              type: "success",
-                              title: "Амжилттай хадгалагдлаа",
-                            });
+                          dispatch({
+                            type: "STATE",
+                            data: { list_normposition: updatedList },
+                          }); // Dispatch the updated array directly
+                        }
+                      }}
+                      onPressEnter={(e) => {
+                        if (e.key === "Enter") {
+                          console.log(
+                            "target",
+                            e.target.value === "" ? 0 : e.target.value
+                          );
+
+                          API.postPlanCountResource({
+                            count: e.target.value === "" ? 0 : e.target.value,
+                            type_id: data.type_id,
+                            year: moment(state.date).format("Y"),
+                            department_id: state.department_id,
                           })
-                          .catch((error) =>
-                            message({
-                              type: "error",
-                              error,
-                              title: "Амжилтгүй. Дахин оруулна уу",
+                            .then((res) => {
+                              // setdraw((prev) => prev + 1);
+
+                              message({
+                                type: "success",
+                                title: "Амжилттай хадгалагдлаа",
+                              });
                             })
-                          )
-                          .finally(() => {});
-                      }
-                    }}
-                  ></InputNumber>
-                ) : (
-                  data.count_resource
-                );
-              }}
-            />
+                            .catch((error) =>
+                              message({
+                                type: "error",
+                                error,
+                                title: "Амжилтгүй. Дахин оруулна уу",
+                              })
+                            )
+                            .finally(() => {});
+                        }
+                      }}
+                    ></InputNumber>
+                  ) : (
+                    data.count_resource
+                  );
+                }}
+              />
+            )}
             <Column
               header="Нийт төлөвлөлт"
               field="plan"
