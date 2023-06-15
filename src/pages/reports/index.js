@@ -106,7 +106,6 @@ const Index = () => {
   };
 
   const exportToExcel = (list) => {
-    console.log(list);
     let Heading = [
       ["№", "Төрөл", "Сургалтын нэр", "Нэгж үнэ", "Нийт тоо", "Нийт үнэ"],
     ];

@@ -38,8 +38,6 @@ const List = () => {
             });
           });
 
-          console.log(result);
-
           dispatch({
             type: "STATE",
             data: {
