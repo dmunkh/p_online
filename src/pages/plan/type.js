@@ -11,9 +11,10 @@ import MODAL from "src/pages/plan/modal";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import moment from "moment";
+import * as XLSX from "xlsx";
 
 const List = () => {
-  const { message } = useUserContext();
+  const { user, message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -84,6 +85,49 @@ const List = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.moduleid, state.date, state.department_id, state.refresh]);
+
+  const exportToExcel = (list) => {
+    console.log(list);
+    let Heading = [
+      [
+        "№",
+        "Төрөл",
+        "Сургалтын нэр",
+        "Давтамж",
+        "Нэгж үнэ",
+        "Нийт тоо",
+        "Нийт үнэ",
+      ],
+    ];
+    var result = _.map(list, (a, i) => {
+      return {
+        i: i + 1,
+        module: a.module_name,
+        type: a.type_name,
+        frequence: a.interval_name,
+        price_emc: a.price_emc,
+        workers: a.plan,
+        sum: a.sum,
+      };
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Тайлан " + user.tn + " " + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
 
   return (
     <>
@@ -165,6 +209,13 @@ const List = () => {
                       </div>
                     )
                   ) : null}
+                  <img
+                    alt=""
+                    title="Excel татах"
+                    src="/assets/img/excel.png"
+                    className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(state.list_normposition)}
+                  />
                 </div>
               </div>
             }

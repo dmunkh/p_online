@@ -1,25 +1,29 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useUserContext } from "src/contexts/userContext";
 import Header from "src/pages/reports/header";
 import { useTrainingContext } from "src/contexts/trainingContext";
-import { Spin } from "antd";
+import { Spin, Input } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
 
 import { Modal } from "antd";
 import _ from "lodash";
-import department from "../workers/department";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Row } from "primereact/row";
+import ColumnGroup from "antd/lib/table/ColumnGroup";
 
 const PlanDep = () => {
   const { message } = useUserContext();
   const [loading] = useState(false);
   const { state, dispatch } = useTrainingContext();
+  const [list, setList] = useState([]);
+  const [sum, setSum] = useState(0);
 
   const [print_modal, setPrint_modal] = useState(false);
-  const [listLesson, setListLesson] = useState([]);
 
   useLayoutEffect(() => {
-    if (state.moduleid) {
+    if (state.change_year && state.moduleid) {
       API.getReportPlanDep({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
@@ -84,6 +88,23 @@ const PlanDep = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.change_year, state.moduleid]);
 
+  useEffect(() => {
+    let result = [];
+    let sumCount = 0;
+
+    if (state.list_reportplandep.length > 0 && state.list_lessType.length > 0) {
+      _.map(state.list_reportplandep, (item) => {
+        _.map(item.data, (data) => {
+          item["col" + data.type_id] = data.count;
+          sumCount += data.count;
+        });
+        result.push(item);
+      });
+    }
+    setList(result);
+    setSum(sumCount);
+  }, [state.list_reportplandep, state.list_lessType]);
+
   // const printTo = (list) => {
   //   setPrint_modal(true);
   //   var data = {
@@ -128,167 +149,138 @@ const PlanDep = () => {
   //   return result.length;
   // };
 
-  const renderFooter = (question) => {
-    let sum = new Array(question.data[0].length).fill(0); // Initialize an array to hold the sums for each column
-
-    const cells = _.map(question, (item, index) => {
-      const rowSum = [];
-      // const rowCells = _.map(item, (cell, colIndex) => {
-      //   if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
-      //     // rowSum[colIndex] = (rowSum[colIndex] || 0) + (cell.count || 0);
-      //     return (
-      //       <td className="text-center border" key={colIndex}>
-      //         {cell?.count !== 0 ? cell?.count : ""}
-      //       </td>
-      //     );
-      //   }
-      //   return null;
-      // });
-
-      // // const cells = question?.data.map((item, rowIndex) => {
-      // //   const rowSum = []; // Initialize an array to hold the sum for each row
-
-      // //   const rowCells = item?.map((cell, columnIndex) => {
-      // //     if (state?.list_lessType.some((i) => i.type_id === cell?.type_id)) {
-      // //       rowSum[columnIndex] = (rowSum[columnIndex] || 0) + (cell?.count || 0); // Add the count to the row sum
-      // //       return (
-      // //         <td className="text-center border" key={columnIndex}>
-      // //           {cell?.count !== 0 ? cell?.count : ""}
-      // //         </td>
-      // //       );
-      // //     }
-      // //     return null;
-      // //   });
-
-      // cells.push(rowCells); // Add the row cells to the cells array
-
-      _.map(item.data, (colSum, colIndex) => {
-        sum[colIndex] = (sum[colIndex] || 0) + colSum;
-      });
-
-      // rowSum?.forEach((columnSum, columnIndex) => {
-      //   sum[columnIndex] = (sum[columnIndex] || 0) + columnSum; // Add the row sum to the column sum
-      // });
-
-      return null;
-    });
-
-    const footerRow = (
-      // <tr key="footer">
-      //   {sum.map((columnSum, columnIndex) => (
-      //     <td className="text-center border" key={columnIndex}>
-      //       {columnSum}
-      //     </td>
-      //   ))}
-      // </tr>
-      <tr key="footer">
-        {_.map(sum, (columnSum, colIndex) => (
-          <td key={colIndex}>{columnSum}</td>
-        ))}
-      </tr>
-    );
-
-    return footerRow;
-  };
-
-  const render = (question) => {
-    let sum = 0; // Initialize a variable to hold the sum
-
-    const cells = _.orderBy(question.data, ["type_id"]).map((item, index) => {
-      if (
-        _.orderBy(state?.list_lessType, ["type_id"]).some(
-          (i) => i.type_id === item?.type_id
-        )
-      ) {
-        sum += item?.count || 0; // Add the count to the sum
-        return (
-          <td className="text-center border " key={index}>
-            {item?.count !== 0 ? item?.count : ""}
-          </td>
-        );
-      }
-      return null;
-    });
-
-    cells.push(
-      <td
-        className="text-center border ml-8 mr-8 font-bold bg-gray-50"
-        key="sum"
-      >
-        {sum !== 0 ? sum : ""}
-      </td>
-    ); // Add the sum as the last cell
-
-    return cells;
-  };
   return (
     <div className=" card flex p-2 rounded text-xs">
       <Header />
-      <div className="flex  text-xs max-h-[calc(100vh-300px)] overflow-auto">
-        <div className="flex flex-col ">
-          <div className="flex justify-center text-xs  ">
-            {/* <Spin
-              tip="Уншиж байна."
-              className="min-h-full first-line:bg-opacity-80"
-              spinning={loading}
-            > */}
-            {/* <App /> */}
 
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-center border p-1 bg-slate-100 ">№</th>
-                  <th className="text-center border p-1  bg-slate-100">Код</th>
-                  <th className="text-center border p-1  bg-slate-100">
-                    Бүтцийн нэгж
-                  </th>
-
-                  {_.map(state.list_lessType, (answer, index) => {
-                    return (
-                      <th
-                        key={index}
-                        className="text-center border p-1  bg-slate-100"
-                      >
-                        {answer.type_name} + {answer.type_id}
-                      </th>
-                    );
-                  })}
-
-                  <th className="text-center border pl-3 pr-3  bg-slate-100 ">
-                    Нийт
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {_.map(state.list_reportplandep, (item, index) => {
-                  return (
-                    <tr key={item.id} className="hover:bg-slate-200">
-                      <td className="text-center border pl-2 pr-2">
-                        {index + 1}
-                      </td>
-                      <td
-                        className="text-center border p-1"
-                        style={{ width: "60px" }}
-                      >
-                        {item.departmentcode}
-                      </td>
-                      <td
-                        className="border px-2 m-w-[200px]"
-                        style={{ width: "300px" }}
-                      >
-                        {item.departmentnameshort}
-                      </td>
-                      {render(item)}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {/* {memo_table} */}
-            {/* </Spin> */}
+      <DataTable
+        scrollable
+        dataKey="id"
+        size="small"
+        stripedRows
+        rowHover
+        showGridlines
+        className="w-full text-sm"
+        sortMode="single"
+        removableSort
+        scrollHeight={window.innerHeight - 280}
+        responsiveLayout="scroll"
+        value={_.orderBy(list, ["type_id"])}
+        // header={
+        //   <div className="flex items-center justify-between">
+        //     <div className="w-full md:max-w-[200px]">
+        //       <Input
+        //         placeholder="Хайх..."
+        //         prefix={<SearchOutlined />}
+        //         className="w-full rounded-lg"
+        //         value={search}
+        //         onChange={(e) => setSearch(e.target.value)}
+        //       />
+        //     </div>
+        //     <div className="fonticon-wrap"></div>
+        //     <div
+        //       className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
+        //       onClick={() => printTo()}
+        //     >
+        //       {/* <img
+        //         alt=""
+        //         title="Excel татах"
+        //         src="/assets/images/excel.png"
+        //         className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+        //         onClick={() => exportTo(true, result)}
+        //       /> */}
+        //       <i className="ft-printer"></i>
+        //     </div>
+        //   </div>
+        // }
+        footerColumnGroup={
+          <ColumnGroup>
+            <Row>
+              <Column colSpan={2} />
+              {_.map(state.list_lessType, (item) => {
+                return (
+                  <Column
+                    style={{
+                      minWidth: "100px",
+                      maxWidth: "100px",
+                      width: "100px",
+                    }}
+                    className="text-xs "
+                    align="center"
+                    footer={_.sumBy(list, "col" + item.type_id)}
+                  />
+                );
+              })}
+              <Column
+                sortable
+                style={{ minWidth: "100px", maxWidth: "100px", width: "100px" }}
+                className="text-xs "
+                align="center"
+                footer={sum}
+              />
+            </Row>
+          </ColumnGroup>
+        }
+        emptyMessage={
+          <div className="text-xs text-orange-500 italic font-semibold">
+            Мэдээлэл олдсонгүй...
           </div>
-        </div>
-      </div>
+        }
+      >
+        <Column
+          header="№"
+          align="center"
+          style={{ minWidth: "50px", maxWidth: "50px" }}
+          className="text-xs w-full"
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-center"
+          body={(data, row) => row.rowIndex + 1}
+        />
+
+        <Column
+          sortable
+          header="Бүтцийн нэгж"
+          field="departmentname"
+          style={{ minWidth: "350px" }}
+          className="text-xs "
+          headerClassName="flex items-center justify-center"
+          bodyClassName="flex items-center justify-start "
+        />
+        {_.map(state.list_lessType, (item) => {
+          return (
+            <Column
+              sortable
+              header={item.type_name}
+              field={"col" + item.type_id}
+              style={{ minWidth: "100px", maxWidth: "100px", width: "100px" }}
+              className="text-xs "
+              align="center"
+              body={(data) => {
+                var result = data["col" + item.type_id];
+                return result !== 0 ? result : "";
+              }}
+            />
+          );
+        })}
+        <Column
+          sortable
+          header="Нийт"
+          style={{ minWidth: "100px", maxWidth: "100px", width: "100px" }}
+          className="text-xs "
+          align="center"
+          body={(data) => {
+            var result = 0;
+            _.map(state.list_lessType, (item) => {
+              result += data["col" + item.type_id];
+            });
+            return result !== 0 ? (
+              <span className="font-bold"> {result} </span>
+            ) : (
+              ""
+            );
+          }}
+        />
+      </DataTable>
 
       <Modal
         centered

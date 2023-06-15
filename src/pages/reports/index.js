@@ -12,9 +12,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Row, Modal } from "antd";
 import _ from "lodash";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
+import * as XLSX from "xlsx";
 
 const Index = () => {
-  const { message } = useUserContext();
+  const { user, message } = useUserContext();
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useTrainingContext();
   const [search, setSearch] = useState("");
@@ -104,6 +105,40 @@ const Index = () => {
       });
   };
 
+  const exportToExcel = (list) => {
+    console.log(list);
+    let Heading = [
+      ["№", "Төрөл", "Сургалтын нэр", "Нэгж үнэ", "Нийт тоо", "Нийт үнэ"],
+    ];
+    var result = _.map(list, (a, i) => {
+      return {
+        i: i + 1,
+        module: a.module_name,
+        type: a.type_name,
+        price_emc: a.price_emc,
+        workers: a.planworker,
+        sum: a.ss,
+      };
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Тайлан " + user.tn + " " + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
+
   const memo_table = useMemo(() => {
     var result = state.list_reportplan;
 
@@ -137,7 +172,7 @@ const Index = () => {
         groupRowsBy="module_id"
         value={_.orderBy(result, ["module_id", "type_id"])}
         header={
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b pb-2 mb-2  text-xs">
             <div className="w-full md:max-w-[200px]">
               <Input
                 placeholder="Хайх..."
@@ -147,21 +182,50 @@ const Index = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="fonticon-wrap"></div>
-            <div
-              className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
-              onClick={() => printTo(result)}
-            >
-              {/* <img
+            <div className="flex items-center gap-3">
+              <img
                 alt=""
                 title="Excel татах"
-                src="/assets/images/excel.png"
-                className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                onClick={() => exportTo(true, result)}
-              /> */}
-              <i className="ft-printer"></i>
+                src="/assets/img/excel.png"
+                className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                onClick={() => exportToExcel(result)}
+              />
             </div>
           </div>
+          // <div className="flex items-center justify-between">
+          //   <div className="w-full md:max-w-[200px]">
+          //     <Input
+          //       placeholder="Хайх..."
+          //       prefix={<SearchOutlined />}
+          //       className="w-full rounded-lg"
+          //       value={search}
+          //       onChange={(e) => setSearch(e.target.value)}
+          //     />
+          //   </div>
+          //   <div className="fonticon-wrap"></div>
+          //   <div className="flex items-center gap-3">
+          //     <img
+          //       alt=""
+          //       title="Excel татах"
+          //       src="/assets/images/excel.png"
+          //       className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+          //       onClick={() => exportToExcel(result)}
+          //     />
+          //   </div>
+          //   <div
+          //     className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
+          //     onClick={() => printTo(result)}
+          //   >
+          //     {/* <i className="ft-printer"></i> */}
+          //     <img
+          //       alt=""
+          //       title="Excel татах"
+          //       src="/assets/img/excel.png"
+          //       className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
+          //       onClick={() => exportToExcel(result)}
+          //     />
+          //   </div>
+          // </div>
         }
         rowGroupHeaderTemplate={(data) => {
           return (
