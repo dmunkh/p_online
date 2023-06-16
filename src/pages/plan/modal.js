@@ -17,6 +17,13 @@ const ModalNormDetail = () => {
 
   return (
     <div className="flex flex-col text-xs">
+      <div className="font-semibold, text-sm, bg-red-100 p-2 border-1 ">
+        {" "}
+        Анхааруулга: Баталгаажуулалт хийсэн тохиолдолд засварлах боломжгүй болно
+        <br />
+        Баталагаажуусны дараа засвар оруулах шаардлагатай бол ЭЦДС сургалтын
+        алба руу хандана уу.
+      </div>
       <hr className="my-2" />
       <div className="flex items-center">
         <Module
@@ -32,8 +39,8 @@ const ModalNormDetail = () => {
         className="bg-opacity-60"
         spinning={loading}
       >
-
-      <SaveButton   onClick={() => {
+        <SaveButton
+          onClick={() => {
             setLoading(true);
             API.postPlanApprove({
               module_id: state.moduleid,
@@ -66,7 +73,8 @@ const ModalNormDetail = () => {
               .finally(() => {
                 setLoading(false);
               });
-          }} />
+          }}
+        />
         {/* <button
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {

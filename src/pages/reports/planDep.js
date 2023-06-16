@@ -32,21 +32,42 @@ const PlanDep = () => {
       })
         .then((res) => {
           setloading(false);
-          dispatch({
-            type: "STATE",
-            data: {
-              list_reportplandep: _.orderBy(
-                _.filter(
-                  res,
-                  (a) =>
-                    a.departmentcode !== "0102-68" &&
-                    a.departmentcode !== "0102-20" &&
-                    a.departmentcode !== "0102-70"
+          console.log(state.moduleid, _.toInteger(state.department_id));
+
+          if (state.department_id === 0) {
+            dispatch({
+              type: "STATE",
+              data: {
+                list_reportplandep: _.orderBy(
+                  _.filter(
+                    res,
+                    (a) =>
+                      a.departmentcode !== "0102-68" &&
+                      a.departmentcode !== "0102-20" &&
+                      a.departmentcode !== "0102-70"
+                  ),
+                  ["type_id"]
                 ),
-                ["type_id"]
-              ),
-            },
-          });
+              },
+            });
+          } else {
+            dispatch({
+              type: "STATE",
+              data: {
+                list_reportplandep: _.orderBy(
+                  _.filter(
+                    res,
+                    (a) =>
+                      a.departmentcode !== "0102-68" &&
+                      a.departmentcode !== "0102-20" &&
+                      a.departmentcode !== "0102-70" &&
+                      a.id === _.toInteger(state.department_id)
+                  ),
+                  ["type_id"]
+                ),
+              },
+            });
+          }
         })
         .catch((error) => {
           setloading(false);
@@ -62,7 +83,7 @@ const PlanDep = () => {
             title: "Тайлан татаж чадсангүй",
           });
         });
-
+      console.log(state.list_reportplandep);
       API.getTypesYear({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
@@ -96,7 +117,7 @@ const PlanDep = () => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.change_year, state.moduleid]);
+  }, [state.change_year, state.moduleid, state.department_id]);
 
   useEffect(() => {
     let result = [];
@@ -280,6 +301,13 @@ const PlanDep = () => {
             headerClassName="flex items-center justify-center"
             bodyClassName="flex items-center justify-center"
             body={(data, row) => row.rowIndex + 1}
+          />
+          <Column
+            header="Код"
+            field="departmentcode"
+            align="center"
+            style={{ minWidth: "50px", maxWidth: "50px" }}
+            className="text-xs w-full"
           />
 
           <Column
