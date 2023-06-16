@@ -22,6 +22,8 @@ const List = () => {
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
+  const [loadingBtn, setloadingBtn] = useState(false);
+  const [cnt, setCnt] = useState(0);
 
   useEffect(() => {
     if (
@@ -405,58 +407,102 @@ const List = () => {
               style={{ minWidth: "100px", maxWidth: "100px" }}
               body={(data) => {
                 return !state.isapprove ? (
-                  <InputNumber
-                    style={{ fontSize: 12 }}
-                    value={data.count_resource}
-                    onChange={(value) => {
-                      const updatedList = [...state.list_normposition]; // Create a new copy of the array
-                      const index = updatedList.findIndex(
-                        (employee) => employee.type_id === data.type_id
-                      );
+                  <>
+                    <InputNumber
+                      style={{ fontSize: 12 }}
+                      // value={data.count_resource !== 0 && data.count_resource}
+                      value={data.count_resource}
+                      onChange={(value) => {
+                        value !== null && setCnt(value);
+                        const updatedList = [...state.list_normposition]; // Create a new copy of the array
+                        const index = updatedList.findIndex(
+                          (employee) => employee.type_id === data.type_id
+                        );
 
-                      if (index !== -1) {
-                        updatedList[index] = {
-                          ...updatedList[index],
-                          count_resource: value,
-                          plan: updatedList[index].count + value,
-                          sum:
-                            (updatedList[index].count + value) *
-                            updatedList[index].price_emc,
-                        }; // Update the height property
+                        if (index !== -1) {
+                          updatedList[index] = {
+                            ...updatedList[index],
+                            count_resource: value,
+                            plan: updatedList[index].count + value,
+                            sum:
+                              (updatedList[index].count + value) *
+                              updatedList[index].price_emc,
+                          }; // Update the height property
 
-                        dispatch({
-                          type: "STATE",
-                          data: { list_normposition: updatedList },
-                        }); // Dispatch the updated array directly
-                      }
-                    }}
-                    onPressEnter={(e) => {
-                      if (e.key === "Enter") {
-                        API.postPlanCountResource({
-                          count: e.target.value === "" ? 0 : e.target.value,
-                          type_id: data.type_id,
-                          year: moment(state.date).format("Y"),
-                          department_id: state.department_id,
-                        })
-                          .then((res) => {
-                            // setdraw((prev) => prev + 1);
-
-                            message({
-                              type: "success",
-                              title: "Амжилттай хадгалагдлаа",
-                            });
+                          dispatch({
+                            type: "STATE",
+                            data: { list_normposition: updatedList },
+                          }); // Dispatch the updated array directly
+                        }
+                      }}
+                      onPressEnter={(e) => {
+                        if (e.key === "Enter") {
+                          API.postPlanCountResource({
+                            count: e.target.value === "" ? 0 : e.target.value,
+                            type_id: data.type_id,
+                            year: moment(state.date).format("Y"),
+                            department_id: state.department_id,
                           })
-                          .catch((error) =>
-                            message({
-                              type: "error",
-                              error,
-                              title: "Амжилтгүй. Дахин оруулна уу",
+                            .then((res) => {
+                              // setdraw((prev) => prev + 1);
+
+                              message({
+                                type: "success",
+                                title: "Амжилттай хадгалагдлаа",
+                              });
                             })
-                          )
-                          .finally(() => {});
-                      }
-                    }}
-                  ></InputNumber>
+                            .catch((error) =>
+                              message({
+                                type: "error",
+                                error,
+                                title: "Амжилтгүй. Дахин оруулна уу",
+                              })
+                            )
+                            .finally(() => {});
+                        }
+                      }}
+                    ></InputNumber>{" "}
+                    <Spin
+                      // tip="..."
+                      className="bg-opacity-80"
+                      spinning={loadingBtn}
+                    >
+                      <button
+                        title="Хадгалах"
+                        className="p-1 flex items-center justify-center font-semibold text-purple-500 rounded-full border-2 border-purple-500 hover:bg-purple-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                        onClick={() => {
+                          setloadingBtn(true);
+
+                          API.postPlanCountResource({
+                            count: cnt === null && cnt === "" ? 0 : cnt,
+                            type_id: data.type_id,
+                            year: moment(state.date).format("Y"),
+                            department_id: state.department_id,
+                          })
+                            .then((res) => {
+                              // setdraw((prev) => prev + 1);
+                              setCnt(0);
+                              setloadingBtn(false);
+                              message({
+                                type: "success",
+                                title: "Амжилттай хадгалагдлаа",
+                              });
+                            })
+                            .catch((error) => {
+                              setloadingBtn(false);
+                              message({
+                                type: "error",
+                                error,
+                                title: "Амжилтгүй. Дахин оруулна уу",
+                              });
+                            })
+                            .finally(() => {});
+                        }}
+                      >
+                        <i className="ft-save" />
+                      </button>
+                    </Spin>
+                  </>
                 ) : (
                   data.count_resource
                 );
