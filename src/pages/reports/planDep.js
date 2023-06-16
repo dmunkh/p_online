@@ -32,42 +32,22 @@ const PlanDep = () => {
       })
         .then((res) => {
           setloading(false);
-          console.log(state.moduleid, _.toInteger(state.department_id));
 
-          if (state.department_id === 0) {
-            dispatch({
-              type: "STATE",
-              data: {
-                list_reportplandep: _.orderBy(
-                  _.filter(
-                    res,
-                    (a) =>
-                      a.departmentcode !== "0102-68" &&
-                      a.departmentcode !== "0102-20" &&
-                      a.departmentcode !== "0102-70"
-                  ),
-                  ["type_id"]
+          dispatch({
+            type: "STATE",
+            data: {
+              list_reportplandep: _.orderBy(
+                _.filter(
+                  res,
+                  (a) =>
+                    a.departmentcode !== "0102-68" &&
+                    a.departmentcode !== "0102-20" &&
+                    a.departmentcode !== "0102-70"
                 ),
-              },
-            });
-          } else {
-            dispatch({
-              type: "STATE",
-              data: {
-                list_reportplandep: _.orderBy(
-                  _.filter(
-                    res,
-                    (a) =>
-                      a.departmentcode !== "0102-68" &&
-                      a.departmentcode !== "0102-20" &&
-                      a.departmentcode !== "0102-70" &&
-                      a.id === _.toInteger(state.department_id)
-                  ),
-                  ["type_id"]
-                ),
-              },
-            });
-          }
+                ["type_id"]
+              ),
+            },
+          });
         })
         .catch((error) => {
           setloading(false);
@@ -83,7 +63,7 @@ const PlanDep = () => {
             title: "Тайлан татаж чадсангүй",
           });
         });
-      console.log(state.list_reportplandep);
+
       API.getTypesYear({
         year: moment(state.change_year).format("YYYY"),
         module_id: state.moduleid,
