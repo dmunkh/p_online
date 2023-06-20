@@ -409,6 +409,7 @@ const List = () => {
                 return !state.isapprove ? (
                   <>
                     <InputNumber
+                      min={0}
                       style={{ fontSize: 12, marginRight: 5 }}
                       // value={data.count_resource !== 0 && data.count_resource}
                       value={data.count_resource}
