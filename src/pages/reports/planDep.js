@@ -5,7 +5,7 @@ import { useTrainingContext } from "src/contexts/trainingContext";
 import { Spin, Input } from "antd";
 import moment from "moment";
 import * as API from "src/api/training";
-
+import * as XLSX from "xlsx";
 import { Modal } from "antd";
 import _, { result } from "lodash";
 import { DataTable } from "primereact/datatable";
@@ -14,7 +14,7 @@ import { Row } from "primereact/row";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
 
 const PlanDep = () => {
-  const { message } = useUserContext();
+  const { user, message } = useUserContext();
   // const [loading] = useState(false);
   const [loading, setloading] = useState(false);
   const { state, dispatch } = useTrainingContext();
@@ -120,52 +120,54 @@ const PlanDep = () => {
       });
     }
     setList(result);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, state.moduleid, state.list_reportplandep, state.list_lessType]);
 
-  // const printTo = (list) => {
-  //   setPrint_modal(true);
-  //   var data = {
-  //     year: moment(state.change_year).format("YYYY"),
-  //     module_id: state.moduleid,
-  //   };
-  //   var url = new URL("https://localhost:44335/training/planDepartment");
-  //   //var url = new URL("https://training.erdenetmc.mn/api/report/plan/count");
+  console.log(list);
 
-  //   // if (window.location.hostname === "localhost")
-  //   //   url = new URL("https://localhost:44335/hse/plan");
-  //   Object.keys(data).forEach((key) => url.searchParams.append(key, data[key]));
-  //   fetch(url, {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "SSO " + localStorage.token,
-  //     },
-  //   })
-  //     .then((response) => response.blob())
-  //     .then(function (myBlob) {
-  //       const obj_url = URL.createObjectURL(myBlob);
+  const exportToExcel = (list) => {
+    let Heading1 = [["№", "Код", "Бүтцийн нэгж"]];
 
-  //       const iframe = document.getElementById("ReportViewer");
-  //       iframe.contentWindow.location.replace(obj_url);
-  //     })
-  //     .catch((error) => {
-  //       message({ type: "error", error, title: "Хэвлэж чадсангүй" });
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // };
-  // const ss = (list) => {
-  //   var result = [];
+    _.map(state.list_lessType, (item) => {
+      Heading1[0].push(item.type_name);
+    });
 
-  //   _.map(list, (item) => {
-  //     _.map(item.attendance, (data) => {
-  //       data.checked && result.push(data.checked);
-  //     });
-  //   });
+    var result = [];
 
-  //   return result.length;
-  // };
+    _.map(list, (a, i) => {
+      var item = {
+        i: i + 1,
+        module: a.departmentcode,
+        type: a.departmentname,
+      };
+
+      _.map(state.list_lessType, (type) => {
+        item["col" + _.toString(type.type_id)] =
+          a["col" + _.toString(type.type_id)] !== 0
+            ? a["col" + _.toString(type.type_id)]
+            : "";
+      });
+      result.push(item);
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading1, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Тайлан " + user.tn + " " + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
 
   return (
     <div className=" card flex p-2 rounded text-xs">
@@ -184,33 +186,30 @@ const PlanDep = () => {
           scrollHeight={window.innerHeight - 280}
           responsiveLayout="scroll"
           value={_.orderBy(list, ["type_id"])}
-          // header={
-          //   <div className="flex items-center justify-between">
-          //     <div className="w-full md:max-w-[200px]">
-          //       <Input
-          //         placeholder="Хайх..."
-          //         prefix={<SearchOutlined />}
-          //         className="w-full rounded-lg"
-          //         value={search}
-          //         onChange={(e) => setSearch(e.target.value)}
-          //       />
-          //     </div>
-          //     <div className="fonticon-wrap"></div>
-          //     <div
-          //       className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
-          //       onClick={() => printTo()}
-          //     >
-          //       {/* <img
-          //         alt=""
-          //         title="Excel татах"
-          //         src="/assets/images/excel.png"
-          //         className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-          //         onClick={() => exportTo(true, result)}
-          //       /> */}
-          //       <i className="ft-printer"></i>
-          //     </div>
-          //   </div>
-          // }
+          header={
+            <div className="flex items-center justify-between">
+              {/* <div className="w-full md:max-w-[200px]">
+                <Input
+                  placeholder="Хайх..."
+                  prefix={<SearchOutlined />}
+                  className="w-full rounded-lg"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div> */}
+              <div className="flex items-center gap-3">
+                {" "}
+                <img
+                  alt=""
+                  title="Excel татах"
+                  src="/assets/img/excel.png"
+                  className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                  onClick={() => exportToExcel(list)}
+                />
+              </div>
+              <div className="fonticon-wrap"></div>
+            </div>
+          }
           footerColumnGroup={
             <ColumnGroup>
               <Row>
