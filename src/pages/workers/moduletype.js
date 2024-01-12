@@ -84,7 +84,8 @@ const Moduletype = () => {
                 >
                   <span>{item.type_name}</span>
                   <span className="badge bg-light-primary float-right">
-                    {_.replace(item.count_lesson, "0", "-")}
+                    {/* {_.replace(item.count_lesson, "0", "-")} */}
+                    {item.count_lesson}
                   </span>
                 </li>
               );

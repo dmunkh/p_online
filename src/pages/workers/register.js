@@ -26,7 +26,7 @@ const List = () => {
   // const [filters, setFilters] = useState({
   //   status: { value: null, matchMode: FilterMatchMode.EQUALS },
   // });
- 
+
   // const [first, set_first] = useState(0);
   // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
@@ -188,6 +188,39 @@ const List = () => {
 
     return result.length;
   };
+  const ss_repeat = (list) => {
+    var result = [];
+
+    _.map(list, (item) => {
+      item.is_repeat && result.push(item.id);
+    });
+
+    return "Давтан-" + result.length;
+  };
+
+  const ss_result = (list) => {
+    var success = [];
+    var unsuccess = [];
+    var no_result = [];
+
+    _.map(list, (item) => {
+      item.is_success === true && success.push(item.id);
+    });
+    _.map(list, (item) => {
+      item.is_success === false && unsuccess.push(item.id);
+    });
+    _.map(list, (item) => {
+      item.is_success === null && no_result.push(item.id);
+    });
+    return (
+      "Тэнцсэн-" +
+      success.length +
+      ", Тэнцээгүй-" +
+      unsuccess.length +
+      ", Хоосон-" +
+      no_result.length
+    );
+  };
 
   // const statusRowFilterTemplate = (options) => {
   //   return (
@@ -271,14 +304,13 @@ const List = () => {
             <ColumnGroup>
               <Row>
                 <Column
-                  footer="Нийт ажилтнууд:"
+                  colSpan={5}
+                  // footer={"Нийт ажилтнууд -" + list.length}
                   footerStyle={{ textAlign: "right" }}
                 />
-                <Column colSpan={6} footer={list.length} />
-                <Column
-                  colSpan={6}
-                  footer={"Ирц: " + list.length + "/" + ss(list)}
-                />
+                <Column footer={"Ирц: " + list.length + "/" + ss(list)} />
+                <Column footer={ss_repeat(list)} />
+                <Column footer={ss_result(list)} />
               </Row>
             </ColumnGroup>
           }
