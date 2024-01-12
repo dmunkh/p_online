@@ -1,10 +1,10 @@
 import React, { useContext, useReducer } from "react";
 import { reducer } from "../reducers/referenceReducer";
-import moment from "moment"
+import moment from "moment";
 const context = React.createContext();
 
 const _state = {
-  date:moment().add(1, "year"),
+  date: moment(),
   list_module: [],
   selected_moduleID: null,
 
@@ -35,39 +35,36 @@ const _state = {
   organization_name: "",
 
   list_employee: [],
-  selected_employee:{
-    id:null,
+  selected_employee: {
+    id: null,
     organization_id: null,
-    position_name:null,
-    register_number:null,
-    short_name:null,
+    position_name: null,
+    register_number: null,
+    short_name: null,
   },
-  
 
   list_chamber: [],
   placeID: null,
   place_name: "",
 
-
   list_typeyear: [],
   selected_typeyear: {
-    id:null,
-    type_name:"",
+    id: null,
+    type_name: "",
     hour: null,
     limit: null,
     percent: null,
-    place_id:null,
+    place_id: null,
     point: null,
     price_emc: null,
     price_organization: null,
     type_id: null,
-    year: null,},
-  change_year:null,
+    year: null,
+  },
+  change_year: null,
 
   list_lessonsRegister: [],
   selected_lessonsTypeID: [],
-
-  
 };
 
 export const useReferenceContext = () => {

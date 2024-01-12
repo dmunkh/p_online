@@ -8,7 +8,7 @@ const _state = {
   list_training: [],
   refresh: 0,
   modal: false,
-  change_year: moment().add(1, "year"),
+  change_year: moment(),
   change_btn: false,
 
   moduleid: null,

@@ -5,7 +5,7 @@ import moment from "moment";
 const context = React.createContext();
 
 const _state = {
-  date: moment().add(1, "year"),
+  date: moment(),
   module: null,
   department: null,
   list: [],
