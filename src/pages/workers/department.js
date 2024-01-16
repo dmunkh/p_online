@@ -97,7 +97,7 @@ const Department = () => {
           value={list}
           rowGroupMode="subheader"
           groupRowsBy="department_name"
-          globalFilterFields={["tn", "short_name", "position_name"]}
+          globalFilterFields={["tn", "shortname", "position_namemn"]}
           header={
             <div className="flex items-center justify-between">
               <div className="w-full md:max-w-[300px]">
