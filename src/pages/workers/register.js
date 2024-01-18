@@ -261,7 +261,6 @@ const List = () => {
       >
         <MODAL />
       </Modal>
-
       <Modal
         width={800}
         height={600}
@@ -274,7 +273,6 @@ const List = () => {
       >
         <MODAL_ATT />
       </Modal>
-
       <Modal
         width={800}
         height={600}
@@ -314,7 +312,8 @@ const List = () => {
               </Row>
             </ColumnGroup>
           }
-          groupRowsBy={state.department === 0 ? "tseh_name" : "negj_name"}
+          // groupRowsBy={state.department === 0 ? "tseh_name" : "negj_name"}
+          groupRowsBy={"negj_code"}
           sortMode="single"
           sortField="tseh_name"
           sortOrder={1}
