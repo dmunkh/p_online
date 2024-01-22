@@ -83,7 +83,7 @@ const List = () => {
         /> */}
         <span className="vertical-align-middle ml-2 font-bold line-height-3">
           {data.tseh_name} - {data.negj_name} | (
-          {calculateCustomerTotal(data.negj_name)} ажилтан)
+          {calculateCustomerTotal(data.negj_code)} ажилтан)
         </span>
       </React.Fragment>
     );
@@ -94,7 +94,7 @@ const List = () => {
 
     if (list) {
       for (let customer of list) {
-        if (customer.negj_name === name) {
+        if (customer.negj_code === name) {
           total++;
         }
       }
