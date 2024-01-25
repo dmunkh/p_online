@@ -189,6 +189,13 @@ export async function deletePerson(id) {
   return response.data;
 }
 
+// Гадны ажилтнууд сургалтанд бүртгэх
+
+export async function postPersonLesson(data) {
+  const response = await API().post("/register/organization", data);
+  return response.data;
+}
+
 // Хянах самбар
 
 export async function getControlPanel(params) {

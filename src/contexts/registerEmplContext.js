@@ -8,6 +8,7 @@ const _state = {
   date: moment(),
   module: null,
   department: null,
+  organization: null,
   list: [],
   refresh: 0,
 
@@ -33,6 +34,10 @@ const _state = {
 
   modal_att: false,
   info_type: [],
+
+  person_register: null,
+  person_name: null,
+  person_position: null,
 
   page: {
     date: moment(),
