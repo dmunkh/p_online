@@ -59,7 +59,21 @@ const List = () => {
             },
           });
 
-          setList(_.orderBy(res.list, ["department_code"]));
+          var result = [];
+
+          _.map(res.list, (item) => {
+            result.push({
+              ...item,
+              negj_code:
+                item.negj_code === null ? item.tseh_code : item.negj_code,
+              negj_name:
+                item.negj_code === null ? item.tseh_name : item.negj_name,
+            });
+          });
+
+          console.log("result", result);
+
+          setList(_.orderBy(result, ["tseh_code", "department_code"]));
         })
         .catch((error) =>
           message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
