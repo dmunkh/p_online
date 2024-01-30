@@ -12,7 +12,7 @@ const DepartmentTseh = (props) => {
   useLayoutEffect(() => {
     API.getOrganization().then((res) => {
       var result = res;
-      console.log(res);
+
       setList(_.orderBy(result, ["organization_name"], ["asc"]));
       props.onChange(res[0].id);
     });

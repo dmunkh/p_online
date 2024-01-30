@@ -124,8 +124,6 @@ const PlanDep = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price, state.moduleid, state.list_reportplandep, state.list_lessType]);
 
-  console.log(list);
-
   const exportToExcel = (list) => {
     let Heading1 = [["№", "Код", "Бүтцийн нэгж"]];
 

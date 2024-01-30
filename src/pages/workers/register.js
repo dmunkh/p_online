@@ -71,8 +71,6 @@ const List = () => {
             });
           });
 
-          console.log("result", result);
-
           setList(_.orderBy(result, ["tseh_code", "department_code"]));
         })
         .catch((error) =>
@@ -96,7 +94,7 @@ const List = () => {
           className="ml-2"
         /> */}
         <span className="vertical-align-middle ml-2 font-bold line-height-3">
-          {data.tseh_name} - {data.negj_name} | (
+          {data.tseh_name} - {data.negj_code} | {data.negj_name} | (
           {calculateCustomerTotal(data.negj_code)} ажилтан)
         </span>
       </React.Fragment>

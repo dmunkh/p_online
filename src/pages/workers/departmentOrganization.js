@@ -49,8 +49,6 @@ const Organization = () => {
     setLoading(true);
     REQ.getPerson()
       .then((res) => {
-        console.log(res, state.organization);
-
         setPerson(
           _.filter(res, (a) => a.organization_id === state.organization)
         );
@@ -189,7 +187,6 @@ const Organization = () => {
             );
           }}
           onRowClick={(e) => {
-            console.log(e.data);
             dispatch({
               type: "STATE",
               data: {
