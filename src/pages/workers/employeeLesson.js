@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Checkbox, Modal } from "antd";
+import { Spin, Input, Select, Checkbox } from "antd";
 import _ from "lodash";
 // import { SearchOutlined } from "@ant-design/icons";
 import * as API from "src/api/plan";
@@ -14,9 +14,8 @@ import * as REQ from "src/api/request";
 import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
-import Employee from "src/pages/workers/employeeLesson";
 
-const Department = () => {
+const Employee = () => {
   const { message } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
   const [search, setSearch] = useState({
@@ -28,22 +27,15 @@ const Department = () => {
   const [list, setList] = useState([]);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkAll, setCheckAll] = useState(false);
-  const [name, setname] = useState("");
-  const [tn, settn] = useState("");
 
   useEffect(() => {
     setLoading(true);
-    REQ.getWorkers({
-      department_id: state.department,
+    REQ.getEmployee({
+      tn: state.tn,
     })
       .then((res) => {
-        setList(
-          _.orderBy(
-            _.filter(res, (a) => !state.list_planworker.includes(a.tn)),
-            ["department_code"],
-            ["firstname"]
-          )
-        );
+        console.log(res);
+        setList(res);
       })
       .catch((error) =>
         message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -52,51 +44,10 @@ const Department = () => {
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.department, state.date, state.moduleid, state.refresh]);
-
-  const check_position = (e, item) => {
-    var result = state.list_checked;
-
-    if (e.target.checked) result.push(item.tn);
-    else result = _.reject(result, (a) => a === item.tn);
-
-    dispatch({
-      type: "STATE",
-      data: { list_checked: result },
-    });
-  };
-
-  useEffect(() => {
-    var result = false;
-    if (state.list_checked.length === list.length) result = true;
-
-    setCheckAll(result);
-  }, [list, state.list_checked]);
+  }, [state.tn]);
 
   return (
     <>
-      <Modal
-        width={800}
-        height={600}
-        visible={state.modal_employee}
-        // visible={true}
-        onCancel={() =>
-          dispatch({ type: "STATE", data: { modal_employee: false } })
-        }
-        title={"Сургалт (" + name + "| БД: " + tn + ")"}
-        closeIcon={<div className="">x</div>}
-        footer={false}
-      >
-        <Employee />
-      </Modal>
-      <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
-      <DepartmentTseh
-        value={state.department}
-        onChange={(value) =>
-          dispatch({ type: "STATE", data: { department: value } })
-        }
-      />
-      <hr className="my-2" />
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           scrollable
@@ -112,45 +63,7 @@ const Department = () => {
           scrollHeight={600}
           responsiveLayout="scroll"
           value={list}
-          rowGroupMode="subheader"
-          groupRowsBy="department_name"
           globalFilterFields={["tn", "shortname", "position_namemn"]}
-          header={
-            <div className="flex items-center justify-between">
-              <div className="w-full md:max-w-[300px]">
-                <Input.Search
-                  className="md:w-80"
-                  placeholder="Хайх..."
-                  value={search.global.value}
-                  onChange={(e) => {
-                    let _search = { ...search };
-                    _search["global"].value = e.target.value;
-                    setSearch(_search);
-                  }}
-                />
-              </div>
-
-              {state.lesson.limit -
-                state.lesson.count_register -
-                state.list_checked.length <
-              0 ? (
-                <span className="text-red-500">
-                  {" "}
-                  <i className="ft-arrow-up"></i> Лимит хэтэрлээ ({" "}
-                  {state.lesson.limit} /
-                  {state.lesson.count_register + state.list_checked.length} )
-                </span>
-              ) : (
-                <span>
-                  <span className="font-bold">
-                    <i className="ft-user-plus"></i>
-                  </span>{" "}
-                  ( {state.lesson.limit} /
-                  {state.lesson.count_register + state.list_checked.length} )
-                </span>
-              )}
-            </div>
-          }
           rowClassName={(data) => {
             var result = " ";
             if (_.indexOf(state.list_checked, data.tn) > -1)
@@ -162,16 +75,6 @@ const Department = () => {
               Мэдээлэл олдсонгүй...
             </div>
           }
-          rowGroupHeaderTemplate={(data) => {
-            return (
-              <React.Fragment>
-                <span className="text-xs font-semibold">
-                  <span>{data.department_code}</span> |
-                  <span className="ml-1">{data.department_name}</span>
-                </span>
-              </React.Fragment>
-            );
-          }}
           rows={per_page}
           first={first}
           onPage={(event) => {
@@ -241,46 +144,6 @@ const Department = () => {
           paginatorClassName="justify-content-end"
         >
           <Column
-            align="center"
-            header={
-              <Checkbox
-                indeterminate={indeterminate}
-                onChange={(e) => {
-                  var result = [];
-
-                  if (e.target.checked) {
-                    _.map(list, (item) => {
-                      result.push(item.tn);
-                    });
-                  }
-
-                  dispatch({
-                    type: "STATE",
-                    data: { list_checked: result },
-                  });
-
-                  setIndeterminate(false);
-                }}
-                checked={checkAll}
-              />
-            }
-            style={{ minWidth: "50px", maxWidth: "50px" }}
-            className="text-xs w-[50px]"
-            body={(item) => {
-              var checked = _.indexOf(state.list_checked, item.tn) > -1;
-              return (
-                <Checkbox
-                  key={item.id}
-                  checked={checked}
-                  onChange={(e) => check_position(e, item)}
-                />
-              );
-            }}
-            headerClassName="flex items-center justify-center"
-            bodyClassName="flex items-center justify-center"
-          />
-
-          <Column
             header="№"
             align="center"
             style={{ minWidth: "50px", maxWidth: "50px" }}
@@ -292,8 +155,8 @@ const Department = () => {
           <Column
             sortable
             // align="center"
-            header="БД"
-            field="tn"
+            header="Огноо"
+            field="begin_date"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             className="text-xs"
             headerClassName="flex items-center justify-center"
@@ -302,38 +165,79 @@ const Department = () => {
           <Column
             sortable
             // align="center"
-            header="Овог нэр"
-            field="shortname"
-            style={{ minWidth: "150px", maxWidth: "150px" }}
+            header="Модуль"
+            field="module_name"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
             className="text-xs"
             headerClassName="flex items-center justify-center"
             bodyClassName="flex items-center justify-start"
+          />
+          <Column
+            sortable
+            // align="center"
+            header="Сургалтын нэр"
+            field="trainingname"
+            className="text-xs"
+            headerClassName="flex items-center justify-center"
+            bodyClassName="flex items-center justify-start"
+          />
+          <Column
+            // align="center"
+            header="Авах оноо"
+            field="scoreplan"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            className="text-xs"
+            headerClassName="flex items-center justify-center"
+            bodyClassName="flex items-right justify-end"
+          />
+          <Column
+            // align="center"
+            header="Авсан оноо"
+            field="score"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            className="text-xs"
+            headerClassName="flex items-center justify-center"
+            bodyClassName="flex items-right justify-end"
             body={(data) => {
-              return (
-                <span
-                  className="text-brown-500 cursor-pointer text-blue-700 font-semibold"
-                  onClick={() => {
-                    setname(data.shortname);
-                    settn(data.tn);
-                    dispatch({
-                      type: "STATE",
-                      data: { modal_employee: true, tn: data.tn },
-                    });
-                  }}
-                >
-                  {data.shortname}
-                </span>
-              );
+              return data.score !== 0 ? data.score : "";
+            }}
+          />
+          <Column
+            // align="center"
+            header="Хувь"
+            field="result"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            className="text-xs"
+            headerClassName="flex items-center justify-center"
+            bodyClassName="flex items-right justify-end"
+            body={(data) => {
+              return data.score !== 0 ? data.result : "";
             }}
           />
           <Column
             sortable
-            header="Албан тушаалын нэр"
-            field="position_namemn"
-            style={{ minWidth: "150px" }}
-            className="text-xs "
+            // align="center"
+            header="Тэнцсэн эсэх"
+            field="resultdesc"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs"
             headerClassName="flex items-center justify-center"
-            bodyClassName="flex items-center justify-start text-left"
+            bodyClassName="flex items-right justify-end"
+            body={(data) => {
+              var name = "";
+              data.resultdesc === "Тэнцсэн"
+                ? (name = "success")
+                : (name = "danger");
+
+              return data.score !== 0 ? (
+                <span className={"badge-" + name + " p-1"}>
+                  {" "}
+                  {data.resultdesc}{" "}
+                </span>
+              ) : (
+                ""
+              );
+            }}
           />
         </DataTable>
       </Spin>
@@ -341,4 +245,4 @@ const Department = () => {
   );
 };
 
-export default React.memo(Department);
+export default React.memo(Employee);

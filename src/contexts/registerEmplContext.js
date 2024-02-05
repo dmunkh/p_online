@@ -23,6 +23,8 @@ const _state = {
   modaltransferTypeYear: null,
   moduleid: null,
   modaltypeid: null,
+  modal_employee: null,
+  tn: null,
 
   list_checked: [],
   list_position: [],

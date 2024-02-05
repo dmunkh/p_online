@@ -64,7 +64,11 @@ export async function getUserDepartment() {
   const response = await API().get("/user/department");
   return response.data;
 }
-
+//Ажилтны сургалтын түүх
+export async function getEmployee(params) {
+  const response = await API().get("/employee", { params: { ...params } });
+  return response.data;
+}
 //Сургалтын бүлэг - Мodule
 export async function getModule() {
   const response = await API().get("/module");
