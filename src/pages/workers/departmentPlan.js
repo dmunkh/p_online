@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Checkbox } from "antd";
+import { Spin, Input, Select, Checkbox, Modal } from "antd";
 import _ from "lodash";
 // import { SearchOutlined } from "@ant-design/icons";
 import * as API from "src/api/plan";
@@ -13,6 +13,7 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { useRegisterEmplContext } from "src/contexts/registerEmplContext";
 import { useUserContext } from "src/contexts/userContext";
+import Employee from "src/pages/workers/employeeLesson";
 
 const Department = () => {
   const { message } = useUserContext();
@@ -26,6 +27,8 @@ const Department = () => {
   const [list, setList] = useState([]);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkAll, setCheckAll] = useState(false);
+  const [name, setname] = useState("");
+  const [tn, settn] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -72,6 +75,20 @@ const Department = () => {
 
   return (
     <>
+      <Modal
+        width={800}
+        height={600}
+        visible={state.modal_employee}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "STATE", data: { modal_employee: false } })
+        }
+        title={"Сургалт (" + name + "| БД: " + tn + ")"}
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <Employee />
+      </Modal>
       <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
       <DepartmentTseh
         value={state.department}
@@ -97,7 +114,7 @@ const Department = () => {
           value={list}
           rowGroupMode="subheader"
           groupRowsBy="department_name"
-          globalFilterFields={["tn", "shortname", "position_name"]}
+          globalFilterFields={["tn", "short_name", "position_name"]}
           header={
             <div className="flex items-center justify-between">
               <div className="w-full md:max-w-[300px]">
@@ -291,6 +308,23 @@ const Department = () => {
             className="text-xs"
             headerClassName="flex items-center justify-center"
             bodyClassName="flex items-center justify-start"
+            body={(data) => {
+              return (
+                <span
+                  className="text-brown-500 cursor-pointer text-blue-700 font-semibold"
+                  onClick={() => {
+                    setname(data.short_name);
+                    settn(data.tn);
+                    dispatch({
+                      type: "STATE",
+                      data: { modal_employee: true, tn: data.tn },
+                    });
+                  }}
+                >
+                  {data.short_name}
+                </span>
+              );
+            }}
           />
           <Column
             sortable
