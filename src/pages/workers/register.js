@@ -13,7 +13,7 @@ import MODAL_ATT from "src/pages/workers/modal_att";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
-import { Spin, Input, Modal, InputNumber, Checkbox } from "antd";
+import { Spin, Input, Modal, InputNumber, Checkbox, Select } from "antd";
 import moment from "moment";
 import * as XLSX from "xlsx";
 
@@ -23,6 +23,7 @@ const List = () => {
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
+  const { Option } = Select;
   // const [filters, setFilters] = useState({
   //   status: { value: null, matchMode: FilterMatchMode.EQUALS },
   // });
@@ -37,6 +38,7 @@ const List = () => {
   // const [indeterminate, setIndeterminate] = useState(false);
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
+  const [score, setscore] = useState(1);
 
   useEffect(() => {
     if (state.department !== null) {
@@ -71,7 +73,9 @@ const List = () => {
             });
           });
 
-          setList(_.orderBy(result, ["tseh_code", "department_code"]));
+          setList(
+            _.orderBy(result, ["tseh_code", "negj_code", "department_code"])
+          );
         })
         .catch((error) =>
           message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -99,6 +103,43 @@ const List = () => {
         </span>
       </React.Fragment>
     );
+  };
+
+  const statusRowFilterTemplate = (data) => {
+    return (
+      <Select
+        showSearch
+        allowClear
+        placeholder="Сонгоно уу."
+        optionFilterProp="children"
+        className="w-full"
+        value={score}
+        onChange={() => filterList(data)}
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Тэнцсэн
+        </Option>
+        <Option key={3} value={3}>
+          Тэнцээгүй
+        </Option>
+      </Select>
+    );
+  };
+
+  const filterList = (name) => {
+    let total = 0;
+
+    if (list) {
+      for (let customer of list) {
+        if (customer.negj_code === name) {
+          total++;
+        }
+      }
+    }
+    return total;
   };
 
   const calculateCustomerTotal = (name) => {
@@ -159,36 +200,7 @@ const List = () => {
       }
     );
   };
-  // const getRepeat = (status) => {
-  //   // eslint-disable-next-line default-case
-  //   switch (status) {
-  //     case "false":
-  //       return "danger";
 
-  //     case "true":
-  //       return "success";
-  //   }
-  // };
-
-  // const getSeverity = (status) => {
-  //   // eslint-disable-next-line default-case
-  //   switch (status) {
-  //     case "unqualified":
-  //       return "danger";
-
-  //     case "qualified":
-  //       return "success";
-
-  //     case "new":
-  //       return "info";
-
-  //     case "negotiation":
-  //       return "warning";
-
-  //     case "renewal":
-  //       return null;
-  //   }
-  // };
   const ss = (list) => {
     var result = [];
 
@@ -200,6 +212,7 @@ const List = () => {
 
     return result.length;
   };
+
   const ss_repeat = (list) => {
     var result = [];
 
@@ -233,31 +246,6 @@ const List = () => {
       no_result.length
     );
   };
-
-  // const statusRowFilterTemplate = (options) => {
-  //   return (
-  //     <Select
-  //       className="md:w-[80px]"
-  //       onChange={(value) => {
-  //         var result = list;
-  //         if (value === 1)
-  //           setList(_.filter(result, (a) => a.is_success === true));
-  //         if (value === 2)
-  //           setList(_.filter(result, (a) => a.is_success === false));
-  //       }}
-  //     >
-  //       <Option key={1} value={1}>
-  //         Бүгд
-  //       </Option>
-  //       <Option key={2} value={2}>
-  //         Тэнцсэн
-  //       </Option>
-  //       <Option key={3} value={3}>
-  //         Тэнцээгүй
-  //       </Option>
-  //     </Select>
-  //   );
-  // };
 
   return (
     <div className="p-2 rounded text-xs max-h-[calc(100vh-250px)] overflow-auto">
@@ -637,12 +625,12 @@ const List = () => {
           />
           <Column
             field="is_success"
-            header="Тэнцсэн эсэх"
+            header={statusRowFilterTemplate}
             align="center"
             // filter
             // filterElement={statusRowFilterTemplate}
             className=" text-xs border"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
+            style={{ minWidth: "120px", maxWidth: "120px" }}
             body={(data) => {
               var result = "";
               if (data.is_success !== null)
