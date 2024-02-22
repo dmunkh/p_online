@@ -32,6 +32,7 @@ const List = () => {
   // const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [filterlist, setfilterList] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   // const [isDialog, setIsDialog] = useState(false);
   // const [selected, setSelected] = useState(null);
@@ -76,6 +77,9 @@ const List = () => {
           setList(
             _.orderBy(result, ["tseh_code", "negj_code", "department_code"])
           );
+          setfilterList(
+            _.orderBy(result, ["tseh_code", "negj_code", "department_code"])
+          );
         })
         .catch((error) =>
           message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
@@ -112,9 +116,20 @@ const List = () => {
         allowClear
         placeholder="Сонгоно уу."
         optionFilterProp="children"
-        className="w-full"
+        className="w-180"
         value={score}
-        onChange={() => filterList(data)}
+        onChange={(value) => {
+          setscore(value);
+          if (value === 1) {
+            setList(filterlist);
+          } else if (value === 2) {
+            setList(_.filter(filterlist, (a) => a.is_success === true));
+          } else if (value === 3) {
+            setList(_.filter(filterlist, (a) => a.is_success === false));
+          } else if (value === 4) {
+            setList(_.filter(filterlist, (a) => a.is_success === null));
+          }
+        }}
       >
         <Option key={1} value={1}>
           Бүгд
@@ -125,26 +140,31 @@ const List = () => {
         <Option key={3} value={3}>
           Тэнцээгүй
         </Option>
+        <Option key={4} value={4}>
+          Дүнгүй
+        </Option>
       </Select>
     );
   };
 
-  const filterList = (name) => {
-    let total = 0;
+  const filterList = () => {
+    console.log(score);
 
-    if (list) {
-      for (let customer of list) {
-        if (customer.negj_code === name) {
-          total++;
-        }
-      }
+    let result = [];
+
+    if (score === 1) {
+      setList(filterlist);
+    } else if (score === 2) {
+      setList(_.filter(filterlist, (a) => a.is_success === true));
+    } else if (score === 3) {
+      setList(_.filter(filterlist, (a) => a.is_success === false));
+    } else if (score === 4) {
+      setList(_.filter(filterlist, (a) => a.is_success === null));
     }
-    return total;
   };
 
   const calculateCustomerTotal = (name) => {
     let total = 0;
-
     if (list) {
       for (let customer of list) {
         if (customer.negj_code === name) {

@@ -7,7 +7,7 @@ import { useUserContext } from "src/contexts/userContext";
 import Module from "src/components/custom/module";
 
 const Header = () => {
-  const { user } = useUserContext();
+  const { user, checkGroup } = useUserContext();
   const { state, dispatch } = useRegisterEmplContext();
 
   useEffect(() => {
@@ -16,10 +16,17 @@ const Header = () => {
         department_code: user?.info?.tseh_code,
       });
 
-      dispatch({
-        type: "DEPARTMENT",
-        data: department?.department_id,
-      });
+      if (checkGroup([306])) {
+        dispatch({
+          type: "DEPARTMENT",
+          data: 0,
+        });
+      } else {
+        dispatch({
+          type: "DEPARTMENT",
+          data: department?.department_id,
+        });
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.list_department]);
