@@ -116,7 +116,7 @@ const List = () => {
         allowClear
         placeholder="Сонгоно уу."
         optionFilterProp="children"
-        className="w-180"
+        style={{ minWidth: "100px", maxWidth: "100px" }}
         value={score}
         onChange={(value) => {
           setscore(value);
