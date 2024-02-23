@@ -147,22 +147,6 @@ const List = () => {
     );
   };
 
-  const filterList = () => {
-    console.log(score);
-
-    let result = [];
-
-    if (score === 1) {
-      setList(filterlist);
-    } else if (score === 2) {
-      setList(_.filter(filterlist, (a) => a.is_success === true));
-    } else if (score === 3) {
-      setList(_.filter(filterlist, (a) => a.is_success === false));
-    } else if (score === 4) {
-      setList(_.filter(filterlist, (a) => a.is_success === null));
-    }
-  };
-
   const calculateCustomerTotal = (name) => {
     let total = 0;
     if (list) {
@@ -179,7 +163,9 @@ const List = () => {
     let Heading = [
       [
         "№",
+        "Цех код",
         "Бүтцийн нэгж",
+        "Нэгж код",
         "Нэгж",
         "БД",
         "Овог нэр",
@@ -192,7 +178,9 @@ const List = () => {
     var result = _.map(list, (a, i) => {
       return {
         i: i + 1,
+        tseh_code: a.tseh_code,
         tseh: a.tseh_name,
+        negj_code: a.negj_code,
         negj: a.negj_name,
         tn: a.tn,
         name: a.short_name,
