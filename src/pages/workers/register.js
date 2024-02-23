@@ -141,7 +141,7 @@ const List = () => {
           Тэнцээгүй
         </Option>
         <Option key={4} value={4}>
-          Дүнгүй
+          Хоосон
         </Option>
       </Select>
     );
