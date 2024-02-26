@@ -40,6 +40,7 @@ const List = () => {
   // const [checkAll, setCheckAll] = useState(false);
   const [draw, setDraw] = useState(0);
   const [score, setscore] = useState(1);
+  const [repeat, setrepeat] = useState(1);
 
   useEffect(() => {
     if (state.department !== null) {
@@ -109,6 +110,94 @@ const List = () => {
     );
   };
 
+  const statusRowFilterIsRepeat = (data) => {
+    return (
+      <Select
+        showSearch
+        allowClear
+        placeholder="Сонгоно уу."
+        optionFilterProp="children"
+        style={{ minWidth: "100px", maxWidth: "100px" }}
+        value={repeat}
+        onChange={(value) => {
+          setrepeat(value);
+          if (value === 1) {
+            if (score === 1) {
+              setList(filterlist);
+            } else if (score === 2) {
+              setList(_.filter(filterlist, (a) => a.is_success === true));
+            } else if (score === 3) {
+              setList(_.filter(filterlist, (a) => a.is_success === false));
+            } else if (score === 4) {
+              setList(_.filter(filterlist, (a) => a.is_success === null));
+            }
+          } else if (value === 2) {
+            if (score === 1) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === false));
+            } else if (score === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === true && a.is_repeat === false
+                )
+              );
+            } else if (score === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === false && a.is_repeat === false
+                )
+              );
+            } else if (score === 4) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === null && a.is_repeat === false
+                )
+              );
+            }
+          } else if (value === 3) {
+            console.log(value, score);
+            if (score === 1) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === true));
+            } else if (score === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === true && a.is_repeat === true
+                )
+              );
+            } else if (score === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === false && a.is_repeat === true
+                )
+              );
+            } else if (score === 4) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === null && a.is_repeat === true
+                )
+              );
+            }
+          }
+        }}
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Давтан биш
+        </Option>
+        <Option key={3} value={3}>
+          Давтан
+        </Option>
+      </Select>
+    );
+  };
+
   const statusRowFilterTemplate = (data) => {
     return (
       <Select
@@ -121,13 +210,70 @@ const List = () => {
         onChange={(value) => {
           setscore(value);
           if (value === 1) {
-            setList(filterlist);
+            if (repeat === 1) {
+              setList(filterlist);
+            } else if (repeat === 2) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === false));
+            } else if (repeat === 3) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === true));
+            }
           } else if (value === 2) {
-            setList(_.filter(filterlist, (a) => a.is_success === true));
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === true));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === true
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === true
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === true));
           } else if (value === 3) {
-            setList(_.filter(filterlist, (a) => a.is_success === false));
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === false));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === false
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === false
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === false));
           } else if (value === 4) {
-            setList(_.filter(filterlist, (a) => a.is_success === null));
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === null));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === null
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === null
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === null));
           }
         }}
       >
@@ -529,9 +675,9 @@ const List = () => {
 
           <Column
             field="is_repeat"
-            header="Давтан эсэх"
+            header={statusRowFilterIsRepeat}
             align="center"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
+            style={{ minWidth: "120px", maxWidth: "120px" }}
             className="text-xs border"
             body={(item) => {
               return checkRole(["register_repeat_crud"]) ? (
