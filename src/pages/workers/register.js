@@ -157,7 +157,6 @@ const List = () => {
               );
             }
           } else if (value === 3) {
-            console.log(value, score);
             if (score === 1) {
               setList(_.filter(filterlist, (a) => a.is_repeat === true));
             } else if (score === 2) {
