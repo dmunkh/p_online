@@ -656,9 +656,16 @@ const List = () => {
                               <i className="ft-user-x text-xl text-red-600" />-
                             </>
                           )}{" "}
-                          {moment(item.attendance_date).format(
-                            "YYYY.MM.DD HH:mm"
-                          )}
+                          {
+                            // moment(item.attendance_date).format(
+                            //   "YYYY.MM.DD HH:mm"
+                            // ) +
+                            //   " - " +
+                            item.attendance_date &&
+                              item.attendance_date.substring(0, 10) +
+                                " " +
+                                item.attendance_date.substring(11, 16)
+                          }
                         </span>
                       </Checkbox>
                     ) : item.checked ? (
