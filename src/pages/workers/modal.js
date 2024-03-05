@@ -24,6 +24,7 @@ const ModalNormDetail = () => {
   const PlanApprove = (id, ischecked) => {
     setLoadingbtn(false);
   };
+
   return (
     <div className="flex flex-col text-xs">
       {/* <hr className="my-2" /> */}
@@ -49,7 +50,7 @@ const ModalNormDetail = () => {
         >
           Нийт
         </InputSwitch> */}
-        <div class="w-full md:w-1/2 ">
+        <div className="w-full md:w-1/2 ">
           <Radio.Group
             style={{ display: "block" }}
             value={checked}
@@ -125,9 +126,14 @@ const ModalNormDetail = () => {
             <i className="fa fa-save" />
             <span className="ml-2">Хадгалах</span>
           </button>
-        ) : state.limit_count - state.list_count - state.list_checked.length <
+        ) : state.lesson.limit -
+            state.lesson.count_register -
+            state.list_checked.length <
           0 ? (
-          <span className="text-red-500">"Бүртгэх ажилтны лимит хэтэрлээ"</span>
+          // state.limit_count - state.list_count - state.list_checked.length <
+          <span className="text-red-500 font-bold text-sm">
+            Бүртгэх ажилтны лимит хэтэрлээ
+          </span>
         ) : (
           <button
             className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
