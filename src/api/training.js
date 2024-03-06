@@ -65,3 +65,10 @@ export async function getReportPlanDep(params) {
   });
   return response.data;
 }
+
+export async function getReportRegister(params) {
+  const response = await API().get("/register/report", {
+    params: { ...params },
+  });
+  return response.data;
+}
