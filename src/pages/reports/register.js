@@ -31,7 +31,7 @@ const Index = () => {
   const { Option } = Select;
 
   useLayoutEffect(() => {
-    if (state.department_id !== null) {
+    if (state.department_id !== null && state.department_id !== undefined) {
       setLoading(true);
       API.getReportRegister({
         begin_date: moment(dt1).format("YYYY.MM.DD"),
