@@ -24,11 +24,14 @@ const Index = () => {
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
   const [print_modal, setPrint_modal] = useState(false);
-  const [list, setlist] = useState([]);
+  const [list, setList] = useState([]);
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
   const [dt1, setdt1] = useState(moment());
   const [dt2, setdt2] = useState(moment());
+  const [filterlist, setfilterList] = useState([]);
+  const [score, setscore] = useState(1);
+  const [repeat, setrepeat] = useState(1);
   const { Option } = Select;
 
   useLayoutEffect(() => {
@@ -40,7 +43,10 @@ const Index = () => {
         department_id: state.department_id,
       })
         .then((res) => {
-          setlist(_.orderBy(res, ["type_id", "begin_date", "negj_code", "tn"]));
+          setList(_.orderBy(res, ["type_id", "begin_date", "negj_code", "tn"]));
+          setfilterList(
+            _.orderBy(res, ["type_id", "begin_date", "negj_code", "tn"])
+          );
           setLoading(false);
         })
         .catch((error) => {
@@ -117,6 +123,185 @@ const Index = () => {
     );
   };
 
+  const statusRowFilterIsRepeat = (data) => {
+    return (
+      <Select
+        showSearch
+        placeholder="Сонгоно уу."
+        optionFilterProp="children"
+        style={{ minWidth: "90px", maxWidth: "90px" }}
+        value={repeat}
+        onChange={(value) => {
+          setrepeat(value);
+          if (value === 1) {
+            if (score === 1) {
+              setList(filterlist);
+            } else if (score === 2) {
+              setList(_.filter(filterlist, (a) => a.is_success === true));
+            } else if (score === 3) {
+              setList(_.filter(filterlist, (a) => a.is_success === false));
+            } else if (score === 4) {
+              setList(_.filter(filterlist, (a) => a.is_success === null));
+            }
+          } else if (value === 2) {
+            if (score === 1) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === false));
+            } else if (score === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === true && a.is_repeat === false
+                )
+              );
+            } else if (score === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === false && a.is_repeat === false
+                )
+              );
+            } else if (score === 4) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === null && a.is_repeat === false
+                )
+              );
+            }
+          } else if (value === 3) {
+            if (score === 1) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === true));
+            } else if (score === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === true && a.is_repeat === true
+                )
+              );
+            } else if (score === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === false && a.is_repeat === true
+                )
+              );
+            } else if (score === 4) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_success === null && a.is_repeat === true
+                )
+              );
+            }
+          }
+        }}
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Давтан биш
+        </Option>
+        <Option key={3} value={3}>
+          Давтан
+        </Option>
+      </Select>
+    );
+  };
+
+  const statusRowFilterTemplate = (data) => {
+    return (
+      <Select
+        showSearch
+        placeholder="Сонгоно уу."
+        optionFilterProp="children"
+        style={{ minWidth: "90px", maxWidth: "90px" }}
+        value={score}
+        onChange={(value) => {
+          setscore(value);
+          if (value === 1) {
+            if (repeat === 1) {
+              setList(filterlist);
+            } else if (repeat === 2) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === false));
+            } else if (repeat === 3) {
+              setList(_.filter(filterlist, (a) => a.is_repeat === true));
+            }
+          } else if (value === 2) {
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === true));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === true
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === true
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === true));
+          } else if (value === 3) {
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === false));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === false
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === false
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === false));
+          } else if (value === 4) {
+            if (repeat === 1) {
+              setList(_.filter(filterlist, (a) => a.is_success === null));
+            } else if (repeat === 2) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === false && a.is_success === null
+                )
+              );
+            } else if (repeat === 3) {
+              setList(
+                _.filter(
+                  filterlist,
+                  (a) => a.is_repeat === true && a.is_success === null
+                )
+              );
+            }
+            // setList(_.filter(filterlist, (a) => a.is_success === null));
+          }
+        }}
+      >
+        <Option key={1} value={1}>
+          Бүгд
+        </Option>
+        <Option key={2} value={2}>
+          Тэнцсэн
+        </Option>
+        <Option key={3} value={3}>
+          Тэнцээгүй
+        </Option>
+        <Option key={4} value={4}>
+          Хоосон
+        </Option>
+      </Select>
+    );
+  };
   const printTo = (list) => {
     setPrint_modal(true);
     var data = {
@@ -435,7 +620,6 @@ const Index = () => {
               sortable
               header="Сургалтын төрөл"
               field="type_name"
-              style={{ minWidth: "150px" }}
               className="text-xs "
               headerClassName="flex items-center justify-center"
               bodyClassName="flex items-center justify-start "
@@ -444,7 +628,7 @@ const Index = () => {
               sortable
               header="Цех"
               field="tseh_name"
-              style={{ minWidth: "150px" }}
+              style={{ minWidth: "100px" }}
               className="text-xs "
               headerClassName="flex items-center justify-center"
               bodyClassName="flex items-center justify-start "
@@ -453,7 +637,7 @@ const Index = () => {
               sortable
               header="Нэгж"
               field="negj_name"
-              style={{ minWidth: "150px" }}
+              style={{ minWidth: "100px" }}
               className="text-xs "
               headerClassName="flex items-center justify-center"
               bodyClassName="flex items-center justify-start "
@@ -496,10 +680,9 @@ const Index = () => {
             />
 
             <Column
-              sortable
-              header="Тэнцсэн эсэх"
+              header={statusRowFilterTemplate}
               field="is_success"
-              style={{ minWidth: "80px", maxWidth: "80px" }}
+              style={{ minWidth: "100px", maxWidth: "100px" }}
               className="text-xs "
               body={(data) => {
                 var name = "";
@@ -524,10 +707,9 @@ const Index = () => {
               }}
             />
             <Column
-              sortable
-              header="Давтан эсэх"
+              header={statusRowFilterIsRepeat}
               field="is_repeat"
-              style={{ minWidth: "80px", maxWidth: "80px" }}
+              style={{ minWidth: "100px", maxWidth: "100px" }}
               className="text-xs "
               body={(data) => {
                 return data.is_repeat === true ? "Тийм" : "Үгүй";
