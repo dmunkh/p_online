@@ -14,9 +14,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Row, Modal, Select, DatePicker } from "antd";
 import _ from "lodash";
 import ColumnGroup from "antd/lib/table/ColumnGroup";
+import * as XLSX from "xlsx";
 
 const Index = () => {
-  const { message } = useUserContext();
+  const { user, message } = useUserContext();
   const [loading, setLoading] = useState(false);
   const { state, dispatch } = useTrainingContext();
   const [search, setSearch] = useState({
@@ -53,6 +54,63 @@ const Index = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dt1, dt2, state.moduleid, state.department_id]);
+
+  const exportToExcel = (list) => {
+    let Heading = [
+      [
+        "№",
+        "Сургалтын огноо",
+        "Сургалтын нэр",
+        "Цех код",
+        "Цехийн нэр",
+        "Нэгж код",
+        "Нэгжийн нэр",
+        "БД",
+        "Овог нэр",
+        "Албан тушаал",
+        "Давтан эсэх",
+        "Шалгалтын дүн",
+        "Тэнцсэн эсэх",
+      ],
+    ];
+    var result = _.map(list, (a, i) => {
+      return {
+        i: i + 1,
+        dt:
+          a.begin_date === a.end_date
+            ? a.begin_date
+            : a.begin_date + " | " + a.end_date,
+        type: a.type_name,
+        tseh_code: a.tseh_code,
+        tseh: a.tseh_name,
+        negj_code: a.negj_code,
+        negj: a.negj_name,
+        tn: a.tn,
+        name: a.short_name,
+        pos: a.position_name,
+        repeat: a.is_repeat ? "Тийм" : "Үгүй",
+        dun: a.point,
+        is_success: a.is_success ? "Тийм" : "Тэнцээгүй",
+      };
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Сургалт_" + user.tn + " " + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
 
   const printTo = (list) => {
     setPrint_modal(true);
@@ -221,8 +279,8 @@ const Index = () => {
             rowGroupMode="subheader"
             groupRowsBy="type_name"
             header={
-              <div className="flex items-center justify-between">
-                <div className="w-full md:max-w-[200px]">
+              <div className="flex items-center justify-between  pb-2  text-xs">
+                <div>
                   <Input.Search
                     className="md:w-80"
                     placeholder="Хайх..."
@@ -234,20 +292,15 @@ const Index = () => {
                     }}
                   />
                 </div>
-                <div className="fonticon-wrap"></div>
-                {/* <div
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer"
-                  // onClick={() => printTo(result)}
-                >
+                <div className="flex items-center justify-between">
                   <img
                     alt=""
                     title="Excel татах"
-                    src="/assets/images/excel.png"
-                    className="w-6 h-6 object-cover cursor-pointer hover:scale-125 duration-300"
-                    onClick={() => exportTo(true, result)}
+                    src="/img/excel.png"
+                    className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(list)}
                   />
-                  <i className="ft-printer"></i>
-                </div> */}
+                </div>
               </div>
             }
             //   footerColumnGroup={
