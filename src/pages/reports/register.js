@@ -91,7 +91,7 @@ const Index = () => {
         repeat: a.is_repeat ? "Тийм" : "Үгүй",
         dun: a.point,
         is_success:
-          a.is_success !== null && a.is_success === ""
+          a.is_success !== null
             ? a.is_success === true
               ? "Тэнцсэн"
               : "Тэнцээгүй"
