@@ -1,11 +1,12 @@
 import React from "react";
-import Card from "./card"
+// import Card from "./card"
 
 const Dashboard = () => {
   
   return (
   <>
-    <Card/>
+    {/* <Card/> */}
+    dashboard
     </>
   );
 };

@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
+
 import { Column } from "primereact/column";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
+
 import { Spin, Input, Select, Modal } from "antd";
 import _ from "lodash";
 import * as API from "src/api/plan";
@@ -9,9 +13,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/balance/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
+import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
@@ -50,9 +55,9 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/balancelist"
         );
-        console.log(response.data.response);
+        console.log("balance list", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -63,7 +68,9 @@ const Workers = () => {
         //   })
         //   .value();
 
-        setList(_.orderBy(response.data.response, ["id"]));
+        setList(
+          _.orderBy(response.data.response, ["baraa_id", "register_date"])
+        );
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -72,34 +79,19 @@ const Workers = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
-  const deleteClick = (item) => {
-    try {
-      const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
-      );
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
   return (
-    <>
+    <div className="w-full">
       {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.balance.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "BALANCE", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
@@ -113,6 +105,7 @@ const Workers = () => {
           filters={search}
           paginator
           scrollable
+          rowHover
           removableSort
           showGridlines
           className="table-xs"
@@ -120,7 +113,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="negj_namemnfull"
+          groupRowsBy="baraa_id"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
@@ -147,16 +140,13 @@ const Workers = () => {
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     dispatch({
-                      type: "BARAA",
+                      type: "BALANCE",
                       data: {
                         modal: true,
+                        count: 0,
                         id: 0,
-                        baraa_ner: "",
-                        company_id: "",
-                        company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
+                        type: 1,
+                        baraa_id: null,
                       },
                     });
                   }}
@@ -246,62 +236,143 @@ const Workers = () => {
             },
           }}
           paginatorClassName="justify-content-end"
+          footerColumnGroup={
+            <ColumnGroup>
+              <Row>
+                <Column
+                  colSpan={7}
+                  footer={() => <div className="text-right text-xs ">Нийт</div>}
+                />
+                <Column
+                  className="w-[100px] text-xs justify-end justify-items-end text-right"
+                  footer={() => (
+                    <div className="justify-items-end justify-end">
+                      {Intl.NumberFormat("en-US").format(
+                        _.sumBy(list, (a) => a.count * a.price)
+                      )}
+                    </div>
+                  )}
+                />
+                <Column
+                  className="w-[70px] text-xs"
+                  // footer={() => (
+                  //   <div className="text-center">
+                  //     {_.sumBy(list, (a) => a.count)}
+                  //   </div>
+                  // )}
+                />
+                <Column
+                  className="w-[70px] text-xs"
+                  // footer={() => }
+                />
+              </Row>
+            </ColumnGroup>
+          }
         >
           <Column
             align="center"
             header="№"
-            className="text-xs w-2"
+            className="text-sm"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            style={{ minWidth: "40px", maxWidth: "40px" }}
             field="id"
-            header="Order"
+            className="text-sm"
+            header="id"
           />
-
           <Column
-            field="company_ner"
+            field="delguur_ner"
+            header="Дэлгүүр"
+            className="text-sm"
+            // style={{ minWidth: "120px", maxWidth: "120px" }}
+          />
+          <Column
+            field="company_name"
             header="Компани"
-            className="text-xs w-2"
+            className="text-sm"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-          {/* <Column
-          field="year"
-          header="Огноо"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
-          body={(data) => {
-            return data.year && data.year + "-" + data.month + "-" + data.day;
-          }}
-        /> */}
+          <Column
+            field="register_date"
+            header="Огноо"
+            style={{ minWidth: "90px", maxWidth: "90px" }}
+            className="text-sm"
+            body={(data) => {
+              return dayjs(data.register_date).format("YYYY-MM-DD");
+            }}
+          />
+          <Column
+            field="type_id"
+            header="type_id"
+            className="text-sm"
+            style={{ minWidth: "40px", maxWidth: "60px" }}
+          />
+          <Column
+            field="baraa_id"
+            header="baraa_id"
+            className="text-sm"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+          />
           <Column
             field="baraa_ner"
-            header="Барааны нэр"
-            className="text-xs w-2"
+            header="Name"
+            className="text-sm"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
-            field="une"
+            field="price"
             header="Нэгж үнэ"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-sm justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+          />
+          {/* <Column
+            field="count"
+            header="Эхний үлдэгдэл"
+            className="text-sm justify-end text-blue-700 font-semibold"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.type_id === 0 ? data.count : "";
+            }}
+          /> */}
+          <Column
+            field="count"
+            header="Орлого"
+            className="text-sm justify-end text-green-700 font-semibold"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.type_id === 1 ? data.count : "";
+            }}
           />
           <Column
-            field="unit"
-            header="Хэмжих нэгж"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            field="count"
+            header="Зарлага"
+            className="text-sm justify-end text-red-700 font-semibold"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.type_id === 3 || data.type === 2 ? data.count : "";
+            }}
+          />
+          <Column
+            field="count"
+            header="Нийт үнэ"
+            style={{ minWidth: "100px", maxWidth: "100px" }}
+            className="text-sm justify-end"
+            body={(data) => {
+              return Intl.NumberFormat("en-US").format(data.count * data.price);
+            }}
           />
           <Column
             field="box_count"
             header="Хайрцаг"
-            className="text-xs w-2"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
+            className="text-sm"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
           />
-
           <Column
             align="center"
             header=""
-            className="text-xs w-2"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
@@ -312,16 +383,13 @@ const Workers = () => {
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "BARAA",
+                        type: "BALANCE",
                         data: {
-                          modal: true,
                           id: item.id,
-                          baraa_ner: item.baraa_ner,
-                          company_id: item.company_id,
-                          company_ner: item.company_ner,
-                          price: item.une,
-                          unit: item.unit,
-                          box_count: item.box_count,
+                          count: item.count,
+                          modal: true,
+                          type: item.type_id,
+                          baraa_id: item.baraa_id,
                         },
                       });
                     }}
@@ -330,10 +398,10 @@ const Workers = () => {
                   </button>
                   {/* )}
 
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
+                {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
+                    // onClick={() => deleteClick(item)}
                   >
                     <i className="ft-trash-2" />
                   </button>
@@ -344,7 +412,7 @@ const Workers = () => {
           />
         </DataTable>
       </Spin>
-    </>
+    </div>
   );
 };
 

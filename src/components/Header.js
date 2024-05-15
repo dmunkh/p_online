@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { useUserContext } from "../contexts/userContext";
-import * as API from "../api/request";
+// import { useUserContext } from "../contexts/userContext";
+// import * as API from "../api/request";
 import Swal from "sweetalert2";
 
 const Header = (props) => {
-  const { user, userDispatch, userType, logOut } = useUserContext();
+  // const { user, userDispatch, userType, logOut } = useUserContext();
   const [src, setSrc] = useState();
   const OnError = (e) => {
-    if (user.info.gender === 1) {
-      setSrc("/img/man.png");
-    } else {
-      setSrc("/img/women.png");
-    }
+    setSrc("/img/man.png");
+    // if (user.info.gender === 1) {
+    //   setSrc("/img/man.png");
+    // } else {
+    //   setSrc("/img/women.png");
+    // }
   };
 
   return (
@@ -45,13 +46,13 @@ const Header = (props) => {
                 >
                   <div className="user d-md-flex d-none mr-2 text">
                     <span className="text-right  text-black">
-                      {user.info.shortname}
+                     Хэрэглэгч {/* {user.info.shortname} */}
                     </span>
                     <span className="text-right text-muted font-small-1">
-                      {user.info.position_namemn}
+                    Munkh  {/* {user.info.position_namemn} */}
                     </span>
                   </div>
-                  <img
+                  {/* <img
                     src={
                       src === undefined
                         ? "https://minio-action.erdenetmc.mn/emp/" +
@@ -62,7 +63,7 @@ const Header = (props) => {
                     className="avatar w-9 h-9"
                     alt=""
                     onError={(e) => OnError(e)}
-                  />
+                  /> */}
                 </a>
                 <div
                   className="dropdown-menu text-left dropdown-menu-right m-0 pb-0"
@@ -81,19 +82,20 @@ const Header = (props) => {
                     href="/"
                     onClick={(e) => {
                       e.preventDefault();
-                      API.logOut()
-                        .then(() => {
-                          userDispatch({ type: userType.LOG_OUT });
-                          window.location = "https://digital.erdenetmc.mn";
-                        })
-                        .catch(() =>
-                          Swal.fire({
-                            icon: "warning",
-                            title: "Гарах сервис ажиллахгүй байна.",
-                            html: "",
-                          })
-                        );
-                    }}
+                    //   API.logOut()
+                    //     .then(() => {
+                    //       userDispatch({ type: userType.LOG_OUT });
+                    //       window.location = "https://digital.erdenetmc.mn";
+                    //     })
+                    //     .catch(() =>
+                    //       Swal.fire({
+                    //         icon: "warning",
+                    //         title: "Гарах сервис ажиллахгүй байна.",
+                    //         html: "",
+                    //       })
+                    //     );
+                   }
+                  }
                   >
                     <div className="d-flex align-items-center">
                       <i className="ft-power mr-2" />

@@ -8,14 +8,15 @@ import TrainingList from "src/pages/registration/training/index";
 import PlanReport from "src/pages/reports/index";
 import PlanDepReport from "src/pages/reports/planDep";
 import ReportRegister from "src/pages/reports/register";
+import Login from "src/pages/login";
 
 const Training = () => {
   const data = [
     {
-      path: "/training",
+      path: "/login",
       component: (
         <UseTrainingContext>
-          <TrainingList />
+          <Login />
         </UseTrainingContext>
       ),
     },

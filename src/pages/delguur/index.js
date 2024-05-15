@@ -1,8 +1,7 @@
 import React from "react";
-import Type from "src/pages/plan/type";
-import WorkersType from "src/pages/plan/workersType ";
-import Workers from "src/pages/plan/workers";
-import Header from "src/pages/plan/header";
+
+import List from "src/pages/delguur/list";
+
 import { usePlanContext } from "src/contexts/planContext";
 
 const Index = () => {
@@ -11,7 +10,7 @@ const Index = () => {
     <div className=" p-2 text-xs">
       <div className="flex flex-col md:flex-row gap-2 ">
         <div className="md:w-2/3">
-          <Workers />
+          <List />
         </div>
       </div>
       {/* <Header />

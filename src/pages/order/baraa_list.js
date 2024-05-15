@@ -9,14 +9,17 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/order/modal";
+import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
+import MODAL_EDIT from "src/pages/order/modal_edit";
+import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
 
-const Workers = () => {
+const Goods_List = () => {
   // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
@@ -50,18 +53,33 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/balance"
         );
-        console.log(response.data.response);
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
+        console.log("order list", response.data.response);
+
+        var result = _(response.data.response)
+          .groupBy("id_order")
+          .map(function (items, id_order) {
+            return {
+              order_id: id_order,
+              delguur_id: items[0].delguur_id,
+              delguur_ner: items[0].delguur_ner,
+              register_date: items[0].register_date,
+              cash: items[0].cash,
+              count: _.sumBy(items, "count"),
+              total: _.sumBy(items, "total"),
+            };
+          })
+          .value();
+
+        dispatch({
+          type: "STATE",
+          data: {
+            balance_list: response.data.response,
+            balanceGroup_list: result,
+          },
+        });
+        console.log("result", result);
 
         setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -72,38 +90,51 @@ const Workers = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
-  const deleteClick = (item) => {
-    try {
-      const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
-      );
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
   return (
-    <>
+    <div className="w-full">
       {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
         <MODAL />
+      </Modal>
+      <Modal
+        style={{ width: "1200" }}
+        width={1200}
+        height={550}
+        visible={state.modal_add_baraa}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "STATE", data: { modal_add_baraa: false } })
+        }
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_ADD_BARAA />
+      </Modal>
+      <Modal
+        style={{ width: "1200" }}
+        width={1200}
+        height={550}
+        visible={state.order.modal_edit}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "ORDER", data: { modal_edit: false } })
+        }
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_EDIT />
       </Modal>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
@@ -113,6 +144,7 @@ const Workers = () => {
           filters={search}
           paginator
           scrollable
+          rowHover
           removableSort
           showGridlines
           className="table-xs"
@@ -120,7 +152,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="negj_namemnfull"
+          groupRowsBy="order_id"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
@@ -146,19 +178,7 @@ const Workers = () => {
                   title="Нэмэх"
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
-                    dispatch({
-                      type: "BARAA",
-                      data: {
-                        modal: true,
-                        id: 0,
-                        baraa_ner: "",
-                        company_id: "",
-                        company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
-                      },
-                    });
+                    dispatch({ type: "STATE", data: { modal: true } });
                   }}
                 >
                   <i className="ft-plus" />
@@ -171,12 +191,36 @@ const Workers = () => {
             // </div>
           }
           rowGroupHeaderTemplate={(data) => {
+            var group = _.filter(list, (a) => a.order_id === data.order_id);
             return (
-              <div className="text-xs font-semibold">
-                <span className="ml-1">
-                  {data.negj_code} | {data.negj_namemnfull}
-                </span>
+              <div
+                key={"key_group_" + data.id}
+                className="flex items-center text-xs font-bold"
+              >
+                <div className="w-full">
+                  {data.delguur_id} | {data.delguur_ner}
+                </div>
+
+                <div className="w-[110px] text-center">
+                  {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))}
+                </div>
+                <div className="w-[250px] text-center"></div>
               </div>
+
+              // <div className="flex items-center text-xs font-bold">
+              //   <span className="w-full">
+              //     {data.delguur_ner} | Нийт дүн -
+              //     {_.sumBy(
+              //       _.filter(list, (a) => a.order_id === data.order_id),
+              //       "total"
+              //     )}
+              //   </span>
+              // </div>
+              // <div className="text-xs font-semibold">
+              //   <span className="ml-1">
+              //     {data.delguur_ner} | {data.order_id}
+              //   </span>
+              // </div>
             );
           }}
           rows={per_page}
@@ -250,58 +294,55 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-xs w-2"
+            className="text-sm"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
+            className="text-sm"
             header="Order"
           />
-
-          <Column
-            field="company_ner"
-            header="Компани"
-            className="text-xs w-2"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
-          />
-          {/* <Column
-          field="year"
-          header="Огноо"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
-          body={(data) => {
-            return data.year && data.year + "-" + data.month + "-" + data.day;
-          }}
-        /> */}
           <Column
             field="baraa_ner"
-            header="Барааны нэр"
-            className="text-xs w-2"
+            header="Бараа нэр"
+            className="text-sm"
+            // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
-            field="une"
+            field="count"
+            header="Тоо ширхэг"
+            className="text-sm justify-end"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
+          />
+          <Column
+            field="price"
             header="Нэгж үнэ"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            style={{ minWidth: "110px", maxWidth: "110px" }}
+            className="text-sm justify-end"
           />
           <Column
-            field="unit"
-            header="Хэмжих нэгж"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            field="total"
+            header="Нийт үнэ"
+            className="text-sm justify-end textAlign: left"
+            style={{ minWidth: "110px", maxWidth: "110px" }}
+            bodyClassName="flex items-center justify-end"
+            body={(data) => {
+              return Intl.NumberFormat("en-US").format(data.total);
+            }}
           />
           <Column
-            field="box_count"
-            header="Хайрцаг"
-            className="text-xs w-2"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
+            field=""
+            header="Баталгаажуулалт"
+            className="text-sm"
+            style={{ minWidth: "130px", maxWidth: "130px" }}
           />
 
           <Column
             align="center"
             header=""
-            className="text-xs w-2"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
@@ -312,16 +353,15 @@ const Workers = () => {
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "BARAA",
+                        type: "ORDER",
                         data: {
-                          modal: true,
+                          modal_edit: true,
+                          delguur_id: item.delguur_id,
+                          delguur_ner: item.delguur_ner,
+                          dt: item.register_date,
+                          count: item.count,
+                          baraa_id: item.baraa_id,
                           id: item.id,
-                          baraa_ner: item.baraa_ner,
-                          company_id: item.company_id,
-                          company_ner: item.company_ner,
-                          price: item.une,
-                          unit: item.unit,
-                          box_count: item.box_count,
                         },
                       });
                     }}
@@ -333,7 +373,7 @@ const Workers = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
+                    // onClick={() => ()}
                   >
                     <i className="ft-trash-2" />
                   </button>
@@ -344,8 +384,8 @@ const Workers = () => {
           />
         </DataTable>
       </Spin>
-    </>
+    </div>
   );
 };
 
-export default React.memo(Workers);
+export default React.memo(Goods_List);

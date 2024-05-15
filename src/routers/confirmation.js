@@ -2,13 +2,13 @@ import React from "react";
 import _ from "lodash";
 import { Routes, Route } from "react-router-dom";
 
-import Approve from "src/pages/approve/list";
+import Store from "src/pages/delguur/index";
 
 const Confirmation = () => {
   const data = [
     {
-      path: "/approve",
-      component: <Approve />,
+      path: "/store....",
+      component: <Store />,
     },
   ];
   return (

@@ -6,7 +6,7 @@ import * as API from "../api/request";
 const Callback = () => {
   const { search } = useLocation();
   let params = queryString.parse(search);
-
+  console.log("callback params", params.code);
   if (params.error) window.location.replace("https://digital.erdenetmc.mn");
   else {
     API.postAuth({

@@ -26,11 +26,12 @@ const ModalNormDetail = () => {
   const { state, dispatch } = usePlanContext();
   const [loading, setLoading] = useState(false);
 
-  const [baraa_ner, setbaraa_ner] = useState("");
-  const [boxcount, setboxcount] = useState(0);
-  const [une, setune] = useState(0);
+  const [delguur_ner, setdelguur_ner] = useState("");
+  const [utas, setutas] = useState(0);
+  const [dans, setdans] = useState("");
+  const [register, setregister] = useState(0);
   const [baraa, setbaraa] = useState();
-  const [unit, setunit] = useState("ш");
+  const [hayag, sethayag] = useState("");
   const [date, setdate] = useState(dayjs());
   const [company, setCompany] = useState([]);
 
@@ -43,7 +44,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/company"
+          "http://localhost:5000/api/backend/delguur"
         );
         console.log(response.data.response);
 
@@ -59,17 +60,20 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    if (state.baraa.id === 0) {
+    console.log("INSERTING");
+    if (state.delguur.id === 0) {
       try {
-        const response = axios.post("http://localhost:5000/api/backend/baraa", {
-          baraa_ner: state.baraa.baraa_ner,
-          company_ner: baraa[0].company_ner,
-          company_id: baraa[0].id,
-          une: state.baraa.price,
-          box_count: state.baraa.box_count,
-          unit: state.baraa.unit,
-          // unit: unit,
-        });
+        const response = axios.post(
+          "http://localhost:5000/api/backend/delguur",
+          {
+            delguur_ner: state.delguur.delguur_ner,
+            d_dans: state.delguur.dans,
+            d_hayag: state.delguur.hayag,
+            d_register: state.delguur.register,
+            d_utas: state.delguur.utas,
+            // unit: unit,
+          }
+        );
         dispatch({
           type: "STATE",
           data: { refresh: state.refresh + 1 },
@@ -80,17 +84,16 @@ const ModalNormDetail = () => {
         setLoading(false);
       }
     } else {
-      console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
       try {
         const response = axios.put(
-          "http://localhost:5000/api/backend/baraa/" + state.baraa.id,
+          "http://localhost:5000/api/backend/delguur/" + state.delguur.id,
           {
-            baraa_ner: state.baraa.baraa_ner,
-            company_ner: baraa[0].company_ner,
-            company_id: baraa[0].id,
-            une: state.baraa.price,
-            box_count: state.baraa.box_count,
-            unit: state.baraa.unit,
+            delguur_ner: state.delguur.delguur_ner,
+            d_dans: state.delguur.dans,
+            d_hayag: state.delguur.hayag,
+            d_register: state.delguur.register,
+            d_utas: state.delguur.utas,
+            // unit: unit,
           }
         );
         dispatch({
@@ -108,99 +111,85 @@ const ModalNormDetail = () => {
     <div className="flex flex-col text-xs">
       <div>
         <h2 className=" text-center text-lg font-extrabold text-gray-900">
-          Бараа бүртгэл
+          Дэлгүүр бүртгэл
         </h2>
       </div>
+
       <hr className="my-2" />
       <div className="rounded-md shadow-sm -space-y-px">
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Барааны нэр</div>
+          <div className="w-1/4">Дэлгүүр нэр</div>
           <div className="w-3/4">
             {" "}
             <Input
-              value={state.baraa.baraa_ner}
+              value={state.delguur.delguur_ner}
+              // onChange={(e) => setdelguur_ner(e.target.value)}
               onChange={(e) =>
-                dispatch({ type: "BARAA", data: { baraa_ner: e.target.value } })
-              }
-            />
-          </div>
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Компани нэр</div>
-          <div className="w-3/4">
-            <Select
-              showSearch
-              allowClear
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              className="w-full"
-              value={state.baraa.company_id}
-              onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(company, (a) => a.id === value)
-                );
-                setbaraa(_.filter(company, (a) => a.id === value));
                 dispatch({
-                  type: "BARAA",
-                  data: {
-                    company_id: _.filter(company, (a) => a.id === value)[0].id,
-                  },
-                });
-              }}
-            >
-              {_.map(company, (item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.company_ner}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Хэмжих нэгж</div>
-          <div className="w-3/4">
-            <Select
-              showSearch
-              allowClear
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              className="w-full"
-              value={state.baraa.unit}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { unit: value } })
-              }
-            >
-              <Option key={"ш"} value={"ш"}>
-                ш
-              </Option>
-              <Option key={"кг"} value={"кг"}>
-                кг
-              </Option>
-              <Option key={"л"} value={"л"}>
-                л
-              </Option>
-            </Select>
-          </div>
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Үнэ</div>
-          <div className="w-3/4">
-            <InputNumber
-              value={state.baraa.price}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { price: value } })
+                  type: "DELGUUR",
+                  data: { delguur_ner: e.target.value },
+                })
               }
             />
           </div>
         </div>
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">1 хайрцагт тоо</div>
+          <div className="w-1/4">Данс</div>
           <div className="w-3/4">
-            <InputNumber
-              value={state.baraa.box_count}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { box_count: value } })
+            {" "}
+            <Input
+              value={state.delguur.dans}
+              onChange={(e) =>
+                dispatch({
+                  type: "DELGUUR",
+                  data: { dans: e.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Хаяг</div>
+          <div className="w-3/4">
+            <div className="w-3/4">
+              {" "}
+              <Input
+                value={state.delguur.hayag}
+                onChange={(e) =>
+                  dispatch({
+                    type: "DELGUUR",
+                    data: { hayag: e.target.value },
+                  })
+                }
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Регистер</div>
+          <div className="w-3/4">
+            <Input
+              value={state.delguur.register}
+              onChange={(e) =>
+                dispatch({
+                  type: "DELGUUR",
+                  data: { register: e.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Утас</div>
+          <div className="w-3/4">
+            <Input
+              value={state.delguur.utas}
+              onChange={(e) =>
+                dispatch({
+                  type: "DELGUUR",
+                  data: { utas: e.target.value },
+                })
               }
             />
           </div>

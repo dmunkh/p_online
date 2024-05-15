@@ -3,7 +3,7 @@ import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 // import Module from "src/components/custom/module";
-import moment from "moment";
+
 import dayjs from "dayjs";
 // import _ from "lodash";
 import {
@@ -26,13 +26,20 @@ const ModalNormDetail = () => {
   const { state, dispatch } = usePlanContext();
   const [loading, setLoading] = useState(false);
 
-  const [baraa_ner, setbaraa_ner] = useState("");
-  const [boxcount, setboxcount] = useState(0);
-  const [une, setune] = useState(0);
+  const [delguur_ner, setdelguur_ner] = useState("");
+  const [utas, setutas] = useState(0);
+  const [dans, setdans] = useState("");
+  const [register, setregister] = useState(0);
   const [baraa, setbaraa] = useState();
-  const [unit, setunit] = useState("ш");
-  const [date, setdate] = useState(dayjs());
+  const [hayag, sethayag] = useState("");
+
   const [company, setCompany] = useState([]);
+  const [count, setcount] = useState(0);
+  const [boxcount, setboxcount] = useState(0);
+
+  const [unit, setunit] = useState("ш");
+  const [price, setprice] = useState(0);
+  const [date, setdate] = useState(dayjs());
 
   const [baraa_list, setBaraa_list] = useState();
 
@@ -43,7 +50,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/company"
+          "http://localhost:5000/api/backend/delguur"
         );
         console.log(response.data.response);
 
@@ -58,75 +65,86 @@ const ModalNormDetail = () => {
     fetchData();
   }, [state.refresh]);
 
-  const handleClick = () => {
-    if (state.baraa.id === 0) {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const response = axios.post("http://localhost:5000/api/backend/baraa", {
-          baraa_ner: state.baraa.baraa_ner,
-          company_ner: baraa[0].company_ner,
-          company_id: baraa[0].id,
-          une: state.baraa.price,
-          box_count: state.baraa.box_count,
-          unit: state.baraa.unit,
-          // unit: unit,
-        });
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data);
-      } catch (error) {
-        setLoading(false);
-      }
-    } else {
-      console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
-      try {
-        const response = axios.put(
-          "http://localhost:5000/api/backend/baraa/" + state.baraa.id,
-          {
-            baraa_ner: state.baraa.baraa_ner,
-            company_ner: baraa[0].company_ner,
-            company_id: baraa[0].id,
-            une: state.baraa.price,
-            box_count: state.baraa.box_count,
-            unit: state.baraa.unit,
-          }
+        setLoading(true);
+        const response = await axios.get(
+          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+          // "http://3.0.177.127/api/backend/baraa"
+          "http://localhost:5000/api/backend/baraa"
         );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
+        console.log("baraa list", response.data.response);
 
-        console.log("return", response.data);
+        setBaraa_list(_.orderBy(response.data.response, ["id"]));
+        setLoading(false);
       } catch (error) {
         setLoading(false);
+        // setError(error);
       }
-    }
+    };
+
+    fetchData();
+  }, [state.refresh]);
+
+  const handleClick = () => {
+    console.log(
+      "INSERTING",
+      // baraa[0].company_name,
+      dayjs(date).format("YYYY"),
+      dayjs(date).format("M")
+    );
+
+    try {
+      console.log("try to insert");
+      const response = axios.post("http://localhost:5000/api/backend/orders", {
+        delguur_id: 1,
+        delguur_ner: "delguur",
+        order_number: 2,
+        register_date: "2024-5-8",
+        is_approve: 0,
+      });
+      dispatch({
+        type: "STATE",
+        data: { refresh: state.refresh + 1 },
+      });
+
+      console.log("return", response.data, "refresh", state.refresh);
+      // const fetchData = async () => {
+      //   try {
+      //     const response = await axios.get(
+      //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
+      //     );
+      //     console.log("data", response.data);
+      //   } catch (error) {}
+      // };
+
+      // fetchData();
+    } catch (error) {}
   };
+
   return (
     <div className="flex flex-col text-xs">
       <div>
         <h2 className=" text-center text-lg font-extrabold text-gray-900">
-          Бараа бүртгэл
+          Захиалга бүртгэл
         </h2>
       </div>
+
       <hr className="my-2" />
       <div className="rounded-md shadow-sm -space-y-px">
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Барааны нэр</div>
+          <div className="w-1/4">Огноо</div>
           <div className="w-3/4">
-            {" "}
-            <Input
-              value={state.baraa.baraa_ner}
-              onChange={(e) =>
-                dispatch({ type: "BARAA", data: { baraa_ner: e.target.value } })
-              }
+            <DatePicker
+              className="w-full"
+              // value={dayjs(date)}
+              onChange={(date) => setdate(date)}
             />
           </div>
         </div>
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Компани нэр</div>
+          <div className="w-1/4">Бараа</div>
           <div className="w-3/4">
             <Select
               showSearch
@@ -134,28 +152,30 @@ const ModalNormDetail = () => {
               placeholder="Сонгоно уу."
               optionFilterProp="children"
               className="w-full"
-              value={state.baraa.company_id}
               onChange={(value) => {
                 console.log(
                   value,
-                  _.filter(company, (a) => a.id === value)
+                  _.filter(baraa_list, (a) => a.id === value)
                 );
-                setbaraa(_.filter(company, (a) => a.id === value));
-                dispatch({
-                  type: "BARAA",
-                  data: {
-                    company_id: _.filter(company, (a) => a.id === value)[0].id,
-                  },
-                });
+                setbaraa(_.filter(baraa_list, (a) => a.id === value));
+                setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
               }}
             >
-              {_.map(company, (item) => (
+              {_.map(baraa_list, (item) => (
                 <Select.Option key={item.id} value={item.id}>
-                  {item.company_ner}
+                  {item.company_ner + " - " + item.baraa_ner + " - " + item.une}
                 </Select.Option>
               ))}
             </Select>
           </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Тоо ширхэг</div>
+          <InputNumber value={count} onChange={(value) => setcount(value)} />
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Нэгж үнэ</div>
+          <InputNumber value={price} onChange={(value) => setprice(value)} />
         </div>
         <div className="flex p-1 gap-2">
           <div className="w-1/4">Хэмжих нэгж</div>
@@ -166,10 +186,8 @@ const ModalNormDetail = () => {
               placeholder="Сонгоно уу."
               optionFilterProp="children"
               className="w-full"
-              value={state.baraa.unit}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { unit: value } })
-              }
+              value={unit}
+              onChange={(value) => setunit(value)}
             >
               <Option key={"ш"} value={"ш"}>
                 ш
@@ -184,41 +202,27 @@ const ModalNormDetail = () => {
           </div>
         </div>
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Үнэ</div>
+          <div className="w-1/4">Хайрцаг</div>
           <div className="w-3/4">
             <InputNumber
-              value={state.baraa.price}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { price: value } })
-              }
+              value={boxcount}
+              onChange={(value) => setboxcount(value)}
             />
           </div>
         </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">1 хайрцагт тоо</div>
-          <div className="w-3/4">
-            <InputNumber
-              value={state.baraa.box_count}
-              onChange={(value) =>
-                dispatch({ type: "BARAA", data: { box_count: value } })
-              }
-            />
-          </div>
-        </div>
-      </div>
-      <Spin
-        tip="Уншиж байна. Түр хүлээнэ үү"
-        className="bg-opacity-60"
-        spinning={loading}
-      >
-        <SaveButton
-          onClick={() => {
-            setLoading(true);
-            handleClick();
-            setLoading(false);
-          }}
-        />
-        {/* <button
+        <Spin
+          tip="Уншиж байна. Түр хүлээнэ үү"
+          className="bg-opacity-60"
+          spinning={loading}
+        >
+          <SaveButton
+            onClick={() => {
+              setLoading(true);
+              handleClick();
+              setLoading(false);
+            }}
+          />
+          {/* <button
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {
             setLoading(true);
@@ -259,7 +263,8 @@ const ModalNormDetail = () => {
 
           <span className="ml-2">Хадгалах</span>
         </button> */}
-      </Spin>
+        </Spin>
+      </div>
     </div>
   );
 };

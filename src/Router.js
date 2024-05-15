@@ -15,16 +15,15 @@ import PlanHabRoute from "src/routers/planhab";
 import RegisterEmplRoute from "src/routers/registerEmpl";
 import TrainingRoute from "src/routers/training";
 
-
-
 const Router = () => {
   const { user } = useUserContext();
-
+  console.log(user.loggedIn);
   return (
     <>
       {user?.loggedIn && (
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<TrainingRoute />}>
           <ConfigProvider locale={mnMN}>
+            <TrainingRoute />
             <Layout>
               <MainRoute />
               <ReferenceRoute />
@@ -33,7 +32,6 @@ const Router = () => {
               <PlanHabRoute />
               <NormRoute />
               <RegisterEmplRoute />
-              <TrainingRoute />
             </Layout>
           </ConfigProvider>
         </Suspense>

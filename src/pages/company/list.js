@@ -9,9 +9,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/company/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
+import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
@@ -50,9 +51,9 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/company"
         );
-        console.log(response.data.response);
+        console.log("balance list", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -72,12 +73,12 @@ const Workers = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
-
   const deleteClick = (item) => {
     try {
       const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
+        "http://localhost:5000/api/backend/company/" + item.id
       );
       dispatch({
         type: "STATE",
@@ -89,17 +90,16 @@ const Workers = () => {
       setLoading(false);
     }
   };
-
   return (
-    <>
+    <div className="w-full">
       {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.company.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "COMPANY", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
@@ -147,16 +147,15 @@ const Workers = () => {
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     dispatch({
-                      type: "BARAA",
+                      type: "COMPANY",
                       data: {
-                        modal: true,
                         id: 0,
-                        baraa_ner: "",
-                        company_id: "",
                         company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
+                        hayag: "",
+                        utas: "",
+                        register: "",
+                        dans: "",
+                        modal: true,
                       },
                     });
                   }}
@@ -250,101 +249,104 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-xs w-2"
+            className="text-sm"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
-            header="Order"
+            className="text-sm"
+            header="id"
           />
-
           <Column
             field="company_ner"
-            header="Компани"
-            className="text-xs w-2"
+            header="Компанийн нэр"
+            className="text-sm"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-          {/* <Column
-          field="year"
-          header="Огноо"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
-          body={(data) => {
-            return data.year && data.year + "-" + data.month + "-" + data.day;
-          }}
-        /> */}
           <Column
-            field="baraa_ner"
-            header="Барааны нэр"
-            className="text-xs w-2"
+            field="hayag"
+            header="Хаяг"
+            className="text-sm"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
-            field="une"
-            header="Нэгж үнэ"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            field="unit"
-            header="Хэмжих нэгж"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            field="box_count"
-            header="Хайрцаг"
-            className="text-xs w-2"
+            field="utas"
+            header="Утас"
             style={{ minWidth: "90px", maxWidth: "90px" }}
+            className="text-sm"
+          />
+          <Column
+            field="dans"
+            header="Данс"
+            className="text-sm"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
+          />
+          <Column
+            field="register"
+            header="Регистер"
+            className="text-sm"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
           />
 
           <Column
             align="center"
             header=""
-            className="text-xs w-2"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
               return (
                 <div className="flex items-center justify-center gap-2">
-                  {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "BARAA",
+                        type: "COMPANY",
                         data: {
-                          modal: true,
                           id: item.id,
-                          baraa_ner: item.baraa_ner,
-                          company_id: item.company_id,
                           company_ner: item.company_ner,
-                          price: item.une,
-                          unit: item.unit,
-                          box_count: item.box_count,
+                          hayag: item.hayag,
+                          dans: item.dans,
+                          utas: item.utas,
+                          register: item.register,
+                          modal: true,
                         },
                       });
                     }}
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
 
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
+                    onClick={() => {
+                      Swal.fire({
+                        text: item.company_ner + "-г устгах уу",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#1890ff",
+                        cancelButtonColor: "rgb(244, 106, 106)",
+                        confirmButtonText: "Тийм",
+                        cancelButtonText: "Үгүй",
+                        reverseButtons: true,
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          deleteClick(item);
+                        }
+                      });
+                    }}
                   >
-                    <i className="ft-trash-2" />
+                    <i className="ft-trash" />
                   </button>
-                  {/* )} */}
                 </div>
               );
             }}
           />
         </DataTable>
       </Spin>
-    </>
+    </div>
   );
 };
 

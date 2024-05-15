@@ -1,34 +1,144 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../contexts/userContext";
+// import { useUserContext } from "../contexts/userContext";
 
 import _ from "lodash";
 
+const data = [
+  {
+    caption: "Компани",
+    description: "ft-calendar",
+    id: 2178,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "company",
+    ordern: 1,
+    parent_id: 0,
+    software_id: 154,
+  },
+  {
+    caption: "Бараа",
+    description: "ft-calendar",
+    id: 2179,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "plan",
+    ordern: 2,
+    parent_id: 0,
+    software_id: 154,
+  },
+  {
+    caption: "Дэлгүүр",
+    description: "ft-airplay",
+    id: 2180,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "store",
+    ordern: 5,
+    parent_id: 0,
+    software_id: 154,
+  },
+  {
+    caption: "Бүртгэл",
+    description: "ft-user-plus",
+    id: 2181,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "balance",
+    ordern: 6,
+    parent_id: 0,
+    software_id: 154,
+  },
+  {
+    caption: "Захиалга",
+    description: "ft-user-plus",
+    id: 2182,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "order",
+    ordern: 6,
+    parent_id: 0,
+    software_id: 154,
+  },
+  {
+    caption: "Хэрэглэгч",
+    description: "ft-user-plus",
+    id: 2183,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "user",
+    ordern: 6,
+    parent_id: 0,
+    software_id: 154,
+  },
+];
+
 const Navbar = () => {
-  const { user } = useUserContext();
+  // const { user } = useUserContext();
 
   const [menu, setMenu] = useState([]);
   const [dropdown, setDropDown] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState(null);
+
   useEffect(() => {
-    if (user.tn !== 0) {
-      var allMenu = user.usermenu;
-      var menu1 = _.sortBy(
-        user.usermenu.filter((a) => a.parent_id === 0),
-        ["ordern"]
+    console.log(data);
+    // if (user.tn !== 0) {
+    var allMenu = data;
+    var menu1 = data;
+
+    // _.sortBy(
+    //   user.usermenu.filter((a) => a.parent_id === 0),
+    //   ["ordern"]
+    // );
+    _.map(menu1, (item) => {
+      var menu2 = _.orderBy(
+        allMenu.filter((a) => a.parent_id === item.id),
+        ["ordern"],
+        ["asc"]
       );
-      _.map(menu1, (item) => {
-        var menu2 = _.orderBy(
-          allMenu.filter((a) => a.parent_id === item.id),
-          ["ordern"],
-          ["asc"]
-        );
-        item.children = menu2;
-      });
-      setMenu(menu1);
-    }
+      item.children = menu2;
+    });
+    setMenu(menu1);
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.tn]);
+    // }, [user.tn]);
+  }, []);
 
   return (
     <>

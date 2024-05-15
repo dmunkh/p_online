@@ -23,7 +23,7 @@ export function API() {
     (error) => {
       if (error === undefined || error.response === undefined) {
         Swal.fire({
-          title: "Сервистэй холбогдсонгүй.",
+          title: "Сервистэй холбогдсонгүй. яах вэ",
           icon: "error",
           //timer: 3000,
         });

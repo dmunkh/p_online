@@ -9,7 +9,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/delguur/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
 import AddBtn from "src/components/button/plusButton";
@@ -50,7 +50,7 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/delguur"
         );
         console.log(response.data.response);
         // var result = _(response.data)
@@ -74,22 +74,6 @@ const Workers = () => {
     fetchData();
   }, [state.refresh]);
 
-  const deleteClick = (item) => {
-    try {
-      const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
-      );
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
   return (
     <>
       {" "}
@@ -97,9 +81,9 @@ const Workers = () => {
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.delguur.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "DELGUUR", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
@@ -147,16 +131,15 @@ const Workers = () => {
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     dispatch({
-                      type: "BARAA",
+                      type: "DELGUUR",
                       data: {
-                        modal: true,
                         id: 0,
-                        baraa_ner: "",
-                        company_id: "",
-                        company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
+                        delguur_ner: "",
+                        dans: "",
+                        register: "",
+                        hayag: "",
+                        utas: "",
+                        modal: true,
                       },
                     });
                   }}
@@ -254,15 +237,15 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-            field="id"
-            header="Order"
-          />
+          {/* <Column
+          style={{ minWidth: "60px", maxWidth: "60px" }}
+          field="id"
+          header="Order"
+        /> */}
 
           <Column
-            field="company_ner"
-            header="Компани"
+            field="delguur_ner"
+            header="Дэлгүүр нэр"
             className="text-xs w-2"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
@@ -274,26 +257,22 @@ const Workers = () => {
             return data.year && data.year + "-" + data.month + "-" + data.day;
           }}
         /> */}
+          <Column field="d_hayag" header="Хаяг" className="text-xs w-2" />
           <Column
-            field="baraa_ner"
-            header="Барааны нэр"
-            className="text-xs w-2"
-          />
-          <Column
-            field="une"
-            header="Нэгж үнэ"
+            field="d_utas"
+            header="Утас"
             className="text-xs w-2"
             style={{ minWidth: "80px", maxWidth: "80px" }}
           />
           <Column
-            field="unit"
-            header="Хэмжих нэгж"
+            field="d_register"
+            header="Регистер"
             className="text-xs w-2"
             style={{ minWidth: "80px", maxWidth: "80px" }}
           />
           <Column
-            field="box_count"
-            header="Хайрцаг"
+            field="d_dans"
+            header="Данс"
             className="text-xs w-2"
             style={{ minWidth: "90px", maxWidth: "90px" }}
           />
@@ -307,37 +286,32 @@ const Workers = () => {
             body={(item) => {
               return (
                 <div className="flex items-center justify-center gap-2">
-                  {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "BARAA",
+                        type: "DELGUUR",
                         data: {
-                          modal: true,
                           id: item.id,
-                          baraa_ner: item.baraa_ner,
-                          company_id: item.company_id,
-                          company_ner: item.company_ner,
-                          price: item.une,
-                          unit: item.unit,
-                          box_count: item.box_count,
+                          delguur_ner: item.delguur_ner,
+                          dans: item.d_dans,
+                          register: item.d_register,
+                          hayag: item.d_hayag,
+                          utas: item.d_utas,
+                          modal: true,
                         },
                       });
                     }}
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
 
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
+                    onClick={() => {}}
                   >
-                    <i className="ft-trash-2" />
+                    <i className="ft-trash" />
                   </button>
-                  {/* )} */}
                 </div>
               );
             }}

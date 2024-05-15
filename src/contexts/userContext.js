@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useReducer } from "react";
 
 import { userType, userReducer } from "../reducers/userReducer";
-import * as API from "../api/request";
+// import * as API from "../api/request";
 import { notification } from "antd";
 import Swal from "sweetalert2";
 import _ from "lodash";
@@ -15,7 +15,7 @@ const initialState = {
   userGroupList: [],
   usermenu: [],
   userzone: [],
-  loggedIn: false,
+  loggedIn: true,
   workerTree: [],
   current: {
     menu1: 1863,
@@ -95,37 +95,43 @@ const UserContext = ({ children }) => {
     if (navigator.onLine) {
       var token =
         typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
       if (token === null) {
-        API.getAuth().then((res) => {
-          const result = res.data;
-          let url = result.url;
-          if (window.location.hostname === "localhost") {
-            url = url.replace(
-              "https://training.erdenetmc.mn/callback",
-              "http://localhost:3000/callback"
-            );
-          }
-          window.location.replace(url);
-        });
-      } else {
-        if (state.tn === 0) {
-          API.getUserInfo().then((userInfo) => {
-            dispatch({
-              type: userType.LOG_IN,
-              data: userInfo,
-            });
-          });
-        }
+        const newRedirectUri = `${window.location.origin}/callback`;
+
+        window.location.replace(newRedirectUri);
       }
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Интернэт холболтоо шалгана уу.",
-        html: "",
-      });
+      //   var token =
+      //     typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      //   if (token === null) {
+      //     API.getAuth().then((res) => {
+      //       const result = res.data;
+      //       let url = result.url;
+      //       if (window.location.hostname === "localhost") {
+      //         url = url.replace(
+      //           "https://training.erdenetmc.mn/callback",
+      //           "http://localhost:3000/callback"
+      //         );
+      //       }
+      //       window.location.replace(url);
+      //     });
+      //   } else {
+      //     if (state.tn === 0) {
+      //       API.getUserInfo().then((userInfo) => {
+      //         dispatch({
+      //           type: userType.LOG_IN,
+      //           data: userInfo,
+      //         });
+      //       });
+      //     }
+      //   }
+      // } else {
+      //   Swal.fire({
+      //     icon: "warning",
+      //     title: "Интернэт холболтоо шалгана уу.",
+      //     html: "",
+      //   });
     }
-  }, [state.tn]);
+  }, []);
 
   useEffect(() => {
     var menu1ID = localStorage.getItem("menu1ID");

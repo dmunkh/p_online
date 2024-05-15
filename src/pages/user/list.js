@@ -9,9 +9,11 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/order/modal";
+import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
+import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
@@ -50,9 +52,9 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/orders"
         );
-        console.log(response.data.response);
+        console.log("order list", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -72,38 +74,37 @@ const Workers = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
-  const deleteClick = (item) => {
-    try {
-      const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
-      );
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
   return (
-    <>
+    <div className="w-full">
       {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
         <MODAL />
+      </Modal>
+      <Modal
+        style={{ width: "1200" }}
+        width={1200}
+        height={550}
+        visible={state.modal_add_baraa}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "STATE", data: { modal_add_baraa: false } })
+        }
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_ADD_BARAA />
       </Modal>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
@@ -146,19 +147,7 @@ const Workers = () => {
                   title="Нэмэх"
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
-                    dispatch({
-                      type: "BARAA",
-                      data: {
-                        modal: true,
-                        id: 0,
-                        baraa_ner: "",
-                        company_id: "",
-                        company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
-                      },
-                    });
+                    dispatch({ type: "STATE", data: { modal: true } });
                   }}
                 >
                   <i className="ft-plus" />
@@ -250,58 +239,65 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-xs w-2"
+            className="text-sm"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
+            className="text-sm"
             header="Order"
           />
-
           <Column
-            field="company_ner"
-            header="Компани"
-            className="text-xs w-2"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
+            field="delguur_ner"
+            header="Дэлгүүр"
+            className="text-sm"
+            // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           {/* <Column
-          field="year"
-          header="Огноо"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
-          body={(data) => {
-            return data.year && data.year + "-" + data.month + "-" + data.day;
-          }}
-        /> */}
+            field="company_name"
+            header="Компани"
+            className="text-sm"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
+          /> */}
           <Column
-            field="baraa_ner"
-            header="Барааны нэр"
-            className="text-xs w-2"
-          />
-          <Column
-            field="une"
-            header="Нэгж үнэ"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            field="unit"
-            header="Хэмжих нэгж"
-            className="text-xs w-2"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            field="box_count"
-            header="Хайрцаг"
-            className="text-xs w-2"
+            field="register_date"
+            header="Огноо"
             style={{ minWidth: "90px", maxWidth: "90px" }}
+            className="text-sm"
+            body={(data) => {
+              return dayjs(data.register_date).format("YYYY-MM-DD");
+            }}
+          />
+          <Column
+            field="cash"
+            header="Нийт дүн"
+            className="text-sm"
+            style={{ minWidth: "110px", maxWidth: "110px" }}
+          />
+          <Column
+            field="cash"
+            header="Бэлэн төлөлт"
+            className="text-sm"
+            style={{ minWidth: "110px", maxWidth: "110px" }}
           />
 
+          <Column
+            field="count"
+            header="Үлдэгдэл"
+            style={{ minWidth: "110px", maxWidth: "110px" }}
+          />
+          <Column
+            field="is_approve"
+            header="Баталгаажуулалт"
+            className="text-sm"
+            style={{ minWidth: "130px", maxWidth: "130px" }}
+          />
           <Column
             align="center"
             header=""
-            className="text-xs w-2"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
@@ -312,16 +308,15 @@ const Workers = () => {
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "BARAA",
+                        type: "STATE",
+                        data: { modal_add_baraa: true },
+                      });
+                      dispatch({
+                        type: "ORDER",
                         data: {
-                          modal: true,
-                          id: item.id,
-                          baraa_ner: item.baraa_ner,
-                          company_id: item.company_id,
-                          company_ner: item.company_ner,
-                          price: item.une,
-                          unit: item.unit,
-                          box_count: item.box_count,
+                          delguur_id: item.delguur_id,
+                          delguur_ner: item.delguur_ner,
+                          dt: item.register_date,
                         },
                       });
                     }}
@@ -333,7 +328,7 @@ const Workers = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
+                    // onClick={() => ()}
                   >
                     <i className="ft-trash-2" />
                   </button>
@@ -344,7 +339,7 @@ const Workers = () => {
           />
         </DataTable>
       </Spin>
-    </>
+    </div>
   );
 };
 

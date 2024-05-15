@@ -1,6 +1,6 @@
 import React from "react";
 // import { useUserContext } from "src/contexts/userContext";
- import { usePlanContext } from "src/contexts/planContext";
+import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
 // import Tree from "src/components/custom/departmentTree";
 // import * as API from "src/api/request";
@@ -31,12 +31,10 @@ const Header = () => {
           )}
         </div>
         <span className="md:w-[50px] font-semibold">Огноо:</span>
-        <div className="w-full md:min-w-[100px] ">
+        <div className="w-full md:min-w-[110px] ">
           <DatePicker
             allowClear={false}
-            className="w-full md:w-[100px] text-xs"
-            picker="year"
-            format="YYYY"
+            className="w-full md:w-[110px] text-xs"
             value={state.date}
             onChange={(date) => {
               dispatch({
@@ -48,8 +46,19 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="flex items-center w-full  md:w-[400px] text-xs gap-2">
-        <span className="font-semibold whitespace-nowrap">Бүтцийн нэгж:</span>
+      <div className="flex items-center md:w-[190px] text-xs gap-2">
+        <span className="font-semibold whitespace-nowrap"> - </span>
+        <DatePicker
+          allowClear={false}
+          className="w-full md:w-[110px] text-xs"
+          value={state.date}
+          onChange={(date) => {
+            dispatch({
+              type: "STATE",
+              data: { date: date },
+            });
+          }}
+        />
         {/* <Department
           menu={1}
           value={state.department_id}
