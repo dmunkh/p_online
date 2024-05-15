@@ -93,13 +93,12 @@ const UserContext = ({ children }) => {
 
   useEffect(() => {
     if (navigator.onLine) {
-      var token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      if (token === null) {
-        const newRedirectUri = `${window.location.origin}/callback`;
-
-        window.location.replace(newRedirectUri);
-      }
+      // var token =
+      //   typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      // if (token === null) {
+      //   const newRedirectUri = `${window.location.origin}/callback`;
+      //   window.location.replace(newRedirectUri);
+      // }
       //   var token =
       //     typeof window !== "undefined" ? localStorage.getItem("token") : null;
       //   if (token === null) {
