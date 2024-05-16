@@ -50,8 +50,8 @@ const Workers = () => {
         setLoading(true);
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          "http://3.0.177.127/api/backend/company"
-          // "http://localhost:5000/api/backend/company"
+          //"http://3.0.177.127/api/backend/company"
+          "http://localhost:5000/api/backend/company"
         );
         console.log("balance list", response.data.response);
         // var result = _(response.data)
