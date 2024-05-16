@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
+import useBearStore from "src/state/state";
 // import Module from "src/components/custom/module";
 import moment from "moment";
 import dayjs from "dayjs";
@@ -25,6 +26,7 @@ const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [loading, setLoading] = useState(false);
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
   const [delguur_ner, setdelguur_ner] = useState("");
   const [utas, setutas] = useState(0);
@@ -96,7 +98,7 @@ const ModalNormDetail = () => {
           "http://localhost:5000/api/backend/balance",
           {
             order_id: 0,
-            type_id: type,
+            type_id: state.balance.type,
             delguur_id: 0,
             delguur_ner: "",
             baraa_id: baraa[0].id,
@@ -107,6 +109,7 @@ const ModalNormDetail = () => {
             unit: unit,
             price: price,
             register_date: dayjs(date).format("YYYY-MM-DD"),
+            mc_id: main_company_id,
           }
         );
         dispatch({

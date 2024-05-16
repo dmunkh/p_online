@@ -52,7 +52,7 @@ const Goods_List = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balance"
+          "http://localhost:5000/api/backend/userzone"
         );
         console.log("order list", response.data.response);
         // var result = _(response.data)
@@ -121,7 +121,7 @@ const Goods_List = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="delguur_ner"
+          groupRowsBy="user_id"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
@@ -163,7 +163,7 @@ const Goods_List = () => {
             return (
               <div className="text-xs font-semibold">
                 <span className="ml-1">
-                  {data.delguur_ner} | {data.delguur_id}
+                  {data.firstname} | {data.id}
                 </span>
               </div>
             );
@@ -250,7 +250,7 @@ const Goods_List = () => {
             header="Order"
           />
           <Column
-            field="baraa_ner"
+            field="company_ner"
             header="Бараа нэр"
             className="text-sm"
             // style={{ minWidth: "120px", maxWidth: "120px" }}

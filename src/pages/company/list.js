@@ -14,11 +14,11 @@ import MODAL from "src/pages/company/modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
+import useBearStore from "src/state/state";
 
 import Swal from "sweetalert2";
 
 const Workers = () => {
-  // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -27,7 +27,9 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-
+  const user_id = useBearStore((state) => state.user_id);
+  const isUserValid = useBearStore((state) => state.isUserValid);
+  console.log("user id", user_id, isUserValid);
   // useEffect(() => {
   //   setLoading(true);
   //   REQ.getWorkers({

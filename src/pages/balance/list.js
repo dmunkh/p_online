@@ -17,6 +17,7 @@ import MODAL from "src/pages/balance/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
 import dayjs from "dayjs";
+import useBearStore from "src/state/state";
 import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
@@ -31,6 +32,7 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -55,7 +57,12 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balancelist"
+          "http://localhost:5000/api/backend/balancelist",
+          {
+            params: {
+              main_company_id: main_company_id,
+            },
+          }
         );
         console.log("balance list", response.data.response);
         // var result = _(response.data)
@@ -351,7 +358,7 @@ const Workers = () => {
             className="text-sm justify-end text-red-700 font-semibold"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
-              return data.type_id === 3 || data.type === 2 ? data.count : "";
+              return data.type_id === 3 || data.type_id === 2 ? data.count : "";
             }}
           />
           <Column

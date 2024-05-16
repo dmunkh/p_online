@@ -16,7 +16,7 @@ import axios from "axios";
 import MODAL_EDIT from "src/pages/order/modal_edit";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
-
+import useBearStore from "src/state/state";
 import Swal from "sweetalert2";
 
 const Goods_List = () => {
@@ -29,6 +29,7 @@ const Goods_List = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -53,7 +54,12 @@ const Goods_List = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balance"
+          "http://localhost:5000/api/backend/balance",
+          {
+            params: {
+              main_company_id: main_company_id,
+            },
+          }
         );
         console.log("order list", response.data.response);
 

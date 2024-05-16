@@ -19,6 +19,7 @@ import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
+import useBearStore from "src/state/state";
 // import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -35,6 +36,7 @@ const ModalNormDetail = () => {
   const [date, setdate] = useState(dayjs());
 
   const [delguur_list, setDelguur_list] = useState();
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
   console.log("date", dayjs(state.order.dt), state.order.order_id);
 
@@ -101,6 +103,7 @@ const ModalNormDetail = () => {
             cash: state.order.cash,
             register_date: state.order.dt,
             is_approve: 0,
+            mc_id: main_company_id,
           }
         );
         dispatch({

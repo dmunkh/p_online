@@ -1,6 +1,6 @@
 import React from "react";
-import List from "src/pages/order/list";
-import Goods from "src/pages/order/baraa_list";
+import List from "src/pages/user/list";
+import Zone from "src/pages/user/userzone_list";
 import Header from "src/pages/order/header";
 import { usePlanContext } from "src/contexts/planContext";
 
@@ -14,7 +14,7 @@ const Index = () => {
           <List />
         </div>
         <div className="md:w-1/2">
-          <Goods />
+          <Zone />
         </div>
       </div>
       {/* <Header />

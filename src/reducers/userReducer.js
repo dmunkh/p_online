@@ -18,6 +18,11 @@ const _ = require("lodash");
 
 export const userReducer = (state, action) => {
   switch (action.type) {
+    case "STATE":
+      return {
+        ...state,
+        ...action.data,
+      };
     case userType.LOG_IN:
       var list = _.split(action.data.usergroup, ",").map((a) => +a);
       return {

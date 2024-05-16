@@ -7,6 +7,7 @@ import register from "src/pages/workers/register";
 const context = React.createContext();
 
 const _state = {
+  tn: 0,
   list: [],
   refresh: 0,
   modal: false,

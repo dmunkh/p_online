@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Spin, Input, Select, Modal } from "antd";
+import useBearStore from "src/state/state";
 import _ from "lodash";
 import * as API from "src/api/plan";
 import * as REQ from "src/api/request";
@@ -27,6 +28,7 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -51,10 +53,15 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balance/group"
+          "http://localhost:5000/api/backend/balance/group",
+          {
+            params: {
+              main_company_id: main_company_id, // Add your parameters here
+            },
+          }
         );
-        console.log("balance list", response.data.response);
-        var result = _(response.data.response)
+        console.log("balance list", main_company_id);
+        var result = _(response.data)
           .groupBy("baraa_ner")
           .map(function (items, baraa_ner) {
             return {

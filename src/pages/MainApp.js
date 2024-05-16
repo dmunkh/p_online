@@ -22,8 +22,16 @@ import SSO from "../pages/Callback";
 
 const MainApp = () => {
   const isUserValid = useBearStore((state) => state.isUserValid);
+  const user_id = useBearStore((state) => state.user_id);
+  const main_company_id = useBearStore((state) => state.main_company_id);
 
-  console.log("MainAPp", isUserValid, window.location.pathname);
+  console.log(
+    "MainAPp",
+    isUserValid,
+    user_id,
+    main_company_id,
+    window.location.pathname
+  );
 
   return (
     <BrowserRouter>

@@ -2,17 +2,53 @@ import React, { useState } from "react";
 import useBearStore from "src/state/state";
 // import Card from "./card"
 import SaveButton from "src/components/button/SaveButton";
+import axios from "axios";
+import _ from "lodash";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const setIsUserValid = useBearStore((state) => state.setIsUserValid);
+  const setUserId = useBearStore((state) => state.setUserId);
+  const setMainCompanyID = useBearStore((state) => state.setMainCompanyID);
+  const setGroupId = useBearStore((state) => state.setUserName);
+  const setUserName = useBearStore((state) => state.setUserName);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Perform login logic here
+    // Assuming you fetch user data after successful login
+    // const userData = { user_id: "123", user_name: "John Doe" };
+    // setUserId(email); // Ensure setUserId is correctly defined and imported
+    // setUserName(userData.user_name); // Ensure setUserName is correctly defined and imported
     setIsUserValid(true);
-    // Handle login logic here
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/backend/user"
+        );
+        var result = _.filter(
+          response.data.response,
+          (a) => a.login_name === email
+        );
+        console.log(result[0].id);
+        setUserId(result[0].id);
+        setMainCompanyID(result[0].main_company_id);
+        setUserName(result[0].user_name);
+        console.log("order list", response.data.response);
+      } catch (error) {}
+    };
+    fetchData();
   };
-  const setIsUserValid = useBearStore((state) => state.setIsUserValid);
+
   const handleClick = () => {
+    console.log("emaillll", email);
+    setIsUserValid(true);
+    const userData = { user_id: email, user_name: "John Doe" };
+    setUserId(email);
+    setUserName(userData.user_name);
     setIsUserValid(true);
   };
   return (

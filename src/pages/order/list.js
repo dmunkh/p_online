@@ -13,6 +13,7 @@ import MODAL from "src/pages/order/modal";
 import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
+import useBearStore from "src/state/state";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -30,7 +31,7 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-
+  const main_company_id = useBearStore((state) => state.setMainCompanyID);
   // useEffect(() => {
   //   setLoading(true);
   //   REQ.getWorkers({
@@ -54,7 +55,10 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/orders"
+          "http://localhost:5000/api/backend/orders",
+          {
+            main_company_id: main_company_id,
+          }
         );
         console.log("order list", response.data.response);
         // var result = _(response.data)

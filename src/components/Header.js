@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useBearStore from "src/state/state";
 // import { useUserContext } from "../contexts/userContext";
 // import * as API from "../api/request";
 import Swal from "sweetalert2";
@@ -6,6 +7,7 @@ import Swal from "sweetalert2";
 const Header = (props) => {
   // const { user, userDispatch, userType, logOut } = useUserContext();
   const [src, setSrc] = useState();
+  const user_name = useBearStore((state) => state.user_name);
   const OnError = (e) => {
     setSrc("/img/man.png");
     // if (user.info.gender === 1) {
@@ -46,10 +48,10 @@ const Header = (props) => {
                 >
                   <div className="user d-md-flex d-none mr-2 text">
                     <span className="text-right  text-black">
-                     Хэрэглэгч {/* {user.info.shortname} */}
+                      Хэрэглэгч {/* {user.info.shortname} */}
                     </span>
                     <span className="text-right text-muted font-small-1">
-                    Munkh  {/* {user.info.position_namemn} */}
+                      {user_name} {/* {user.info.position_namemn} */}
                     </span>
                   </div>
                   {/* <img
@@ -82,20 +84,19 @@ const Header = (props) => {
                     href="/"
                     onClick={(e) => {
                       e.preventDefault();
-                    //   API.logOut()
-                    //     .then(() => {
-                    //       userDispatch({ type: userType.LOG_OUT });
-                    //       window.location = "https://digital.erdenetmc.mn";
-                    //     })
-                    //     .catch(() =>
-                    //       Swal.fire({
-                    //         icon: "warning",
-                    //         title: "Гарах сервис ажиллахгүй байна.",
-                    //         html: "",
-                    //       })
-                    //     );
-                   }
-                  }
+                      //   API.logOut()
+                      //     .then(() => {
+                      //       userDispatch({ type: userType.LOG_OUT });
+                      //       window.location = "https://digital.erdenetmc.mn";
+                      //     })
+                      //     .catch(() =>
+                      //       Swal.fire({
+                      //         icon: "warning",
+                      //         title: "Гарах сервис ажиллахгүй байна.",
+                      //         html: "",
+                      //       })
+                      //     );
+                    }}
                   >
                     <div className="d-flex align-items-center">
                       <i className="ft-power mr-2" />
