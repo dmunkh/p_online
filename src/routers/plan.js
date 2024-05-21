@@ -11,9 +11,18 @@ import Order from "src/pages/order/index";
 import Company from "src/pages/company/index";
 import User from "src/pages/user/index";
 import Login from "src/pages/login";
+import Print from "src/pages/order/print";
 
 const Plan = () => {
   const data = [
+    {
+      path: "/order/print",
+      component: (
+        <UsePlanContext>
+          <Print />
+        </UsePlanContext>
+      ),
+    },
     {
       path: "/login",
       component: (
