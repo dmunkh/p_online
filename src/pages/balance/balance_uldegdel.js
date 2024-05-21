@@ -29,6 +29,7 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
+  const user_id = useBearStore((state) => state.user_id);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -56,7 +57,7 @@ const Workers = () => {
           "http://localhost:5000/api/backend/balance/group",
           {
             params: {
-              main_company_id: main_company_id, // Add your parameters here
+              user_id: user_id, // Add your parameters here
             },
           }
         );

@@ -27,41 +27,13 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
           "http://localhost:5000/api/backend/delguur"
         );
-        console.log(response.data.response);
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
 
         setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -237,11 +209,11 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          {/* <Column
-          style={{ minWidth: "60px", maxWidth: "60px" }}
-          field="id"
-          header="Order"
-        /> */}
+          <Column
+            className="text-xs w-2"
+            field="company_name"
+            header="Компани нэр"
+          />
 
           <Column
             field="delguur_ner"

@@ -143,7 +143,6 @@ const Component = () => {
       className="text-sm tracking-wide"
       footer={null}
     >
-
       <div className="w-full p-1 flex flex-col justify-start ">
         <span className="list-group-item-text grey darken-2 m-0">
           Сургалтын нэр:<b className="ml-1 text-red-500">*</b>

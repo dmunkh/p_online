@@ -7,6 +7,7 @@ import { Column } from "primereact/column";
 import { FilterMatchMode } from "primereact/api";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
+import TextArea from "antd/lib/input/TextArea";
 // import Module from "src/components/custom/module";
 
 import dayjs from "dayjs";
@@ -23,6 +24,7 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
+import useBearStore from "src/state/state";
 // import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -36,47 +38,38 @@ const ModalNormDetail = () => {
   });
   const [first, set_first] = useState(0);
   const [per_page, set_per_page] = useState(50);
-
-  const [delguur_ner, setdelguur_ner] = useState("");
-  const [utas, setutas] = useState(0);
-  const [dans, setdans] = useState("");
-  const [register, setregister] = useState(0);
   const [baraa, setbaraa] = useState();
-  const [hayag, sethayag] = useState("");
-
-  const [company, setCompany] = useState([]);
   const [count, setcount] = useState(0);
   const [boxcount, setboxcount] = useState(0);
-
   const [unit, setunit] = useState("ш");
   const [price, setprice] = useState(0);
-  const [date, setdate] = useState(dayjs());
+  const [comment, setcomment] = useState("");
   const [refresh, setrefresh] = useState(0);
-
   const [list, setList] = useState([]);
-
+  const [type, settype] = useState(3);
   const [baraa_list, setBaraa_list] = useState();
+  const [balance_list, setbalance_list] = useState();
+  const [baraa_id, setbaraa_id] = useState(0);
+  const main_company_id = useBearStore((state) => state.main_company_id);
+  const user_id = useBearStore((state) => state.user_id);
+  const group_id = useBearStore((state) => state.group_id);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balance"
-        );
-        console.log(
-          "filter list",
-          response.data.response,
-          state.order.order_id,
-          _.filter(
-            response.data.response,
-            (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
-          )
+          "http://localhost:5000/api/backend/balance",
+          {
+            params: {
+              main_company_id: main_company_id,
+              user_id: user_id,
+              group_id: group_id,
+            },
+          }
         );
 
-        setList(
+        setbalance_list(
           _.orderBy(
             _.filter(
               response.data.response,
@@ -86,6 +79,9 @@ const ModalNormDetail = () => {
             ["id"]
           )
         );
+
+        baraa_list(_.orderBy(response.data.response, ["id"]));
+        console.log("baraa jagsaalttttttt", response.data.response);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -100,15 +96,37 @@ const ModalNormDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/baraa",
+          { params: { user_id: user_id } }
         );
-        console.log("baraa list", response.data.response);
 
         setBaraa_list(_.orderBy(response.data.response, ["id"]));
+        console.log("baraa jagsaalttttttt", response.data.response);
+        // setLoading(false);
+      } catch (error) {
+        // setLoading(false);
+      }
+    };
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.order.order_id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "http://localhost:5000/api/backend/balance/group",
+          {
+            params: {
+              user_id: user_id,
+            },
+          }
+        );
+
+        setList(_.orderBy(response.data, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -117,18 +135,11 @@ const ModalNormDetail = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
 
   const handleClick = () => {
-    console.log(
-      "INSERTING",
-      // baraa[0].company_name,
-      dayjs(date).format("YYYY"),
-      dayjs(date).format("M")
-    );
-
     try {
-      console.log("try to insert", baraa[0]);
       const response = axios.post("http://localhost:5000/api/backend/balance", {
         type_id: 3,
         baraa_id: baraa[0].id,
@@ -142,6 +153,9 @@ const ModalNormDetail = () => {
         price: price,
         order_id: state.order.order_id,
         register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+        mc_id: main_company_id,
+        user_id: user_id,
+        comment: comment,
       });
       setrefresh(refresh + 1);
       dispatch({
@@ -150,16 +164,6 @@ const ModalNormDetail = () => {
       });
 
       console.log("return", response.data, "refresh", state.refresh);
-      // const fetchData = async () => {
-      //   try {
-      //     const response = await axios.get(
-      //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
-      //     );
-      //     console.log("data", response.data);
-      //   } catch (error) {}
-      // };
-
-      // fetchData();
     } catch (error) {}
   };
 
@@ -185,26 +189,27 @@ const ModalNormDetail = () => {
                   placeholder="Сонгоно уу."
                   optionFilterProp="children"
                   className="w-full"
+                  value={baraa_id}
                   onChange={(value) => {
-                    console.log(
-                      value,
-                      _.filter(baraa_list, (a) => a.id === value)
-                    );
+                    setbaraa_id(value);
                     setbaraa(_.filter(baraa_list, (a) => a.id === value));
+                    console.log(_.filter(baraa_list, (a) => a.id === value));
                     setprice(
                       _.filter(baraa_list, (a) => a.id === value)[0].une
                     );
+                    // setprice(
+                    //   _.filter(baraa_list, (a) => a.id === value)[0].une
+                    // );
+                    // setunit(
+                    //   _.filter(baraa_list, (a) => a.id === value)[0].unit
+                    // );
                     setboxcount(0);
                     setcount(0);
                   }}
                 >
-                  {_.map(baraa_list, (item) => (
+                  {_.map(list, (item) => (
                     <Select.Option key={item.id} value={item.id}>
-                      {item.company_ner +
-                        " - " +
-                        item.baraa_ner +
-                        " - " +
-                        item.une}
+                      {item.ner + " - " + item.uldegdel}
                     </Select.Option>
                   ))}
                 </Select>
@@ -223,6 +228,30 @@ const ModalNormDetail = () => {
                 value={price}
                 onChange={(value) => setprice(value)}
               />
+            </div>
+            <div className="flex p-1 gap-2">
+              <div className="w-1/4">Төрөл</div>
+              <div className="w-3/4">
+                <Select
+                  showSearch
+                  allowClear
+                  placeholder="Сонгоно уу."
+                  optionFilterProp="children"
+                  className="w-full"
+                  value={type}
+                  onChange={(value) => settype(value)}
+                >
+                  <Option key={3} value={3}>
+                    Захиалга
+                  </Option>
+                  <Option key={4} value={4}>
+                    Буцаалт
+                  </Option>
+                  <Option key={5} value={5}>
+                    Хаягдал
+                  </Option>
+                </Select>
+              </div>
             </div>
             <div className="flex p-1 gap-2">
               <div className="w-1/4">Хэмжих нэгж</div>
@@ -259,6 +288,18 @@ const ModalNormDetail = () => {
                   }}
                 />
               </div>
+            </div>
+            <div className="w-full p-1 flex flex-col justify-start ">
+              <span className="list-group-item-text grey darken-2 m-0">
+                Тайлбар:
+              </span>
+              <TextArea
+                className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+                value={comment}
+                onChange={(e) => {
+                  setcomment(e.target.value);
+                }}
+              />
             </div>
             <Spin
               tip="Уншиж байна. Түр хүлээнэ үү"

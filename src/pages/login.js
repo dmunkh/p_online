@@ -12,7 +12,7 @@ const Login = () => {
   const setIsUserValid = useBearStore((state) => state.setIsUserValid);
   const setUserId = useBearStore((state) => state.setUserId);
   const setMainCompanyID = useBearStore((state) => state.setMainCompanyID);
-  const setGroupId = useBearStore((state) => state.setUserName);
+  const setGroupId = useBearStore((state) => state.setGroupId);
   const setUserName = useBearStore((state) => state.setUserName);
 
   const handleSubmit = (e) => {
@@ -33,10 +33,11 @@ const Login = () => {
           response.data.response,
           (a) => a.login_name === email
         );
-        console.log(result[0].id);
+        console.log("user resultttt", result[0]);
         setUserId(result[0].id);
         setMainCompanyID(result[0].main_company_id);
         setUserName(result[0].user_name);
+        setGroupId(result[0].group_id);
         console.log("order list", response.data.response);
       } catch (error) {}
     };
@@ -49,6 +50,7 @@ const Login = () => {
     const userData = { user_id: email, user_name: "John Doe" };
     setUserId(email);
     setUserName(userData.user_name);
+    // setGroupId(result[0].group_id);
     setIsUserValid(true);
   };
   return (

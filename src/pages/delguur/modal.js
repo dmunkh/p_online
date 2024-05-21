@@ -18,6 +18,7 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
+import TextArea from "antd/lib/input/TextArea";
 // import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -60,7 +61,6 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    console.log("INSERTING");
     if (state.delguur.id === 0) {
       try {
         const response = axios.post(
@@ -71,6 +71,7 @@ const ModalNormDetail = () => {
             d_hayag: state.delguur.hayag,
             d_register: state.delguur.register,
             d_utas: state.delguur.utas,
+            company_name: state.delguur.company_name,
             // unit: unit,
           }
         );
@@ -93,6 +94,7 @@ const ModalNormDetail = () => {
             d_hayag: state.delguur.hayag,
             d_register: state.delguur.register,
             d_utas: state.delguur.utas,
+            company_name: state.delguur.company_name,
             // unit: unit,
           }
         );
@@ -128,6 +130,22 @@ const ModalNormDetail = () => {
                 dispatch({
                   type: "DELGUUR",
                   data: { delguur_ner: e.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Компани нэр</div>
+          <div className="w-3/4">
+            {" "}
+            <Input
+              value={state.delguur.company_name}
+              // onChange={(e) => setdelguur_ner(e.target.value)}
+              onChange={(e) =>
+                dispatch({
+                  type: "DELGUUR",
+                  data: { company_name: e.target.value },
                 })
               }
             />

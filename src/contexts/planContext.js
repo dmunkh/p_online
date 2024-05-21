@@ -46,6 +46,7 @@ const _state = {
   delguur: {
     id: 0,
     delguur_ner: null,
+    company_name: null,
     hayag: null,
     utas: null,
     dans: null,

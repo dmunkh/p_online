@@ -37,6 +37,7 @@ const ModalNormDetail = () => {
 
   const [delguur_list, setDelguur_list] = useState();
   const main_company_id = useBearStore((state) => state.main_company_id);
+  const user_id = useBearStore((state) => state.user_id);
 
   console.log("date", dayjs(state.order.dt), state.order.order_id);
 
@@ -104,6 +105,7 @@ const ModalNormDetail = () => {
             register_date: state.order.dt,
             is_approve: 0,
             mc_id: main_company_id,
+            user_id: user_id,
           }
         );
         dispatch({

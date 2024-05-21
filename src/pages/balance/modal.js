@@ -6,6 +6,7 @@ import useBearStore from "src/state/state";
 // import Module from "src/components/custom/module";
 import moment from "moment";
 import dayjs from "dayjs";
+import TextArea from "antd/lib/input/TextArea";
 // import _ from "lodash";
 import {
   DatePicker,
@@ -27,13 +28,9 @@ const ModalNormDetail = () => {
   const { state, dispatch } = usePlanContext();
   const [loading, setLoading] = useState(false);
   const main_company_id = useBearStore((state) => state.main_company_id);
+  const user_id = useBearStore((state) => state.user_id);
 
-  const [delguur_ner, setdelguur_ner] = useState("");
-  const [utas, setutas] = useState(0);
-  const [dans, setdans] = useState("");
-  const [register, setregister] = useState(0);
   const [baraa, setbaraa] = useState();
-  const [hayag, sethayag] = useState("");
 
   const [company, setCompany] = useState([]);
   const [count, setcount] = useState(0);
@@ -42,7 +39,7 @@ const ModalNormDetail = () => {
   const [unit, setunit] = useState("ш");
   const [price, setprice] = useState(0);
   const [date, setdate] = useState(dayjs());
-  const [type, setType] = useState(0);
+  const [comment, setcomment] = useState("");
 
   const [baraa_list, setBaraa_list] = useState();
 
@@ -51,11 +48,8 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
           "http://localhost:5000/api/backend/delguur"
         );
-        console.log(response.data.response);
 
         setCompany(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -73,9 +67,8 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/baraa",
+          { params: { user_id: user_id } }
         );
         console.log("baraa list", response.data.response);
 
@@ -110,6 +103,8 @@ const ModalNormDetail = () => {
             price: price,
             register_date: dayjs(date).format("YYYY-MM-DD"),
             mc_id: main_company_id,
+            user_id: user_id,
+            comment: comment,
           }
         );
         dispatch({
@@ -120,13 +115,6 @@ const ModalNormDetail = () => {
         console.log("return", response.data, "refresh", state.refresh);
       } catch (error) {}
     } else {
-      console.log(
-        "INSERTING",
-        // baraa[0].company_name,
-        dayjs(date).format("YYYY"),
-        dayjs(date).format("M"),
-        state.balance.id
-      );
       try {
         const response = axios.put(
           "http://localhost:5000/api/backend/balance/" + state.balance.id,
@@ -266,6 +254,18 @@ const ModalNormDetail = () => {
             />
           </div>
         </div>
+        <div className="w-full p-1 flex flex-col justify-start ">
+          <span className="list-group-item-text grey darken-2 m-0">
+            Тайлбар:
+          </span>
+          <TextArea
+            className=" p-1 w-full text-gray-900 border border-gray-200 rounded-lg "
+            value={comment}
+            onChange={(e) => {
+              setcomment(e.target.value);
+            }}
+          />
+        </div>
         <Spin
           tip="Уншиж байна. Түр хүлээнэ үү"
           className="bg-opacity-60"
@@ -278,47 +278,6 @@ const ModalNormDetail = () => {
               setLoading(false);
             }}
           />
-          {/* <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-          onClick={() => {
-            setLoading(true);
-            API.postPlanApprove({
-              module_id: state.moduleid,
-              year: moment(state.date).format("Y"),
-              is_closed: 1,
-              department_id: state.department_id,
-            })
-              .then((res) => {
-                dispatch({
-                  type: "STATE",
-                  data: { refresh: state.refresh + 1 },
-                });
-                dispatch({ type: "STATE", data: { modal: false } });
-
-                message({
-                  type: "success",
-                  title: "Баталгаажуулалт амжилттай",
-                });
-
-                setLoading(false);
-              })
-              .catch((error) => {
-                message({
-                  type: "error",
-                  error,
-                  title: "Жагсаалт татаж чадсангүй",
-                });
-                setLoading(false);
-              })
-              .finally(() => {
-                setLoading(false);
-              });
-          }}
-        >
-          <i className="fa fa-save" />
-
-          <span className="ml-2">Хадгалах</span>
-        </button> */}
         </Spin>
       </div>
     </div>

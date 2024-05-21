@@ -65,18 +65,10 @@ const Workers = () => {
           }
         );
         console.log("balance list", response.data.response);
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
 
         setList(
-          _.orderBy(response.data.response, ["baraa_id", "register_date"])
+          response.data.response &&
+            _.orderBy(response.data.response, ["baraa_id", "register_date"])
         );
         setLoading(false);
       } catch (error) {
@@ -375,6 +367,12 @@ const Workers = () => {
             header="Хайрцаг"
             className="text-sm"
             style={{ minWidth: "70px", maxWidth: "70px" }}
+          />
+          <Column
+            field="user_name"
+            header="Бүртгэсэн"
+            className="text-sm"
+            style={{ minWidth: "90px", maxWidth: "90px" }}
           />
           <Column
             align="center"

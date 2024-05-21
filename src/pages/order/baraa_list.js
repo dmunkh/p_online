@@ -30,38 +30,23 @@ const Goods_List = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
+  const group_id = useBearStore((state) => state.group_id);
+  const user_id = useBearStore((state) => state.user_id);
+  console.log("group idddd", group_id);
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
           "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
+              user_id: user_id,
+              group_id: group_id,
             },
           }
         );
-        console.log("order list", response.data.response);
 
         var result = _(response.data.response)
           .groupBy("id_order")
@@ -74,6 +59,7 @@ const Goods_List = () => {
               cash: items[0].cash,
               count: _.sumBy(items, "count"),
               total: _.sumBy(items, "total"),
+              user_name: items[0].user_name,
             };
           })
           .value();
@@ -191,10 +177,6 @@ const Goods_List = () => {
                 </div>
               </div>
             </div>
-
-            // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
-
-            // </div>
           }
           rowGroupHeaderTemplate={(data) => {
             var group = _.filter(list, (a) => a.order_id === data.order_id);
@@ -212,21 +194,6 @@ const Goods_List = () => {
                 </div>
                 <div className="w-[250px] text-center"></div>
               </div>
-
-              // <div className="flex items-center text-xs font-bold">
-              //   <span className="w-full">
-              //     {data.delguur_ner} | Нийт дүн -
-              //     {_.sumBy(
-              //       _.filter(list, (a) => a.order_id === data.order_id),
-              //       "total"
-              //     )}
-              //   </span>
-              // </div>
-              // <div className="text-xs font-semibold">
-              //   <span className="ml-1">
-              //     {data.delguur_ner} | {data.order_id}
-              //   </span>
-              // </div>
             );
           }}
           rows={per_page}

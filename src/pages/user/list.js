@@ -52,7 +52,7 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/user/detail"
+          "http://localhost:5000/api/backend/user"
         );
         console.log("order list", response.data.response);
         // var result = _(response.data)
@@ -255,21 +255,13 @@ const Workers = () => {
             className="text-sm"
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-          {/* <Column
-            field="company_name"
-            header="Компани"
+          <Column
+            field="login_name"
+            header="Нэвтрэх нэр"
             className="text-sm"
             style={{ minWidth: "120px", maxWidth: "120px" }}
-          /> */}
-          <Column
-            field="register_date"
-            header="Огноо"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
-            className="text-sm"
-            body={(data) => {
-              return dayjs(data.register_date).format("YYYY-MM-DD");
-            }}
           />
+
           <Column
             field="cash"
             header="Нийт дүн"
@@ -277,15 +269,15 @@ const Workers = () => {
             style={{ minWidth: "110px", maxWidth: "110px" }}
           />
           <Column
-            field="cash"
-            header="Бэлэн төлөлт"
+            field="main_company_id"
+            header="main company"
             className="text-sm"
             style={{ minWidth: "110px", maxWidth: "110px" }}
           />
 
           <Column
-            field="count"
-            header="Үлдэгдэл"
+            field="group_id"
+            header="group id"
             style={{ minWidth: "110px", maxWidth: "110px" }}
           />
           <Column

@@ -13,7 +13,7 @@ import MODAL from "src/pages/plan/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
 import AddBtn from "src/components/button/plusButton";
-
+import useBearStore from "src/state/state";
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -26,7 +26,8 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-
+  const user_id = useBearStore((state) => state.user_id);
+  console.log(user_id);
   // useEffect(() => {
   //   setLoading(true);
   //   REQ.getWorkers({
@@ -50,7 +51,8 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "http://localhost:5000/api/backend/baraa",
+          { params: { user_id: user_id } }
         );
         console.log(response.data.response);
         // var result = _(response.data)
@@ -257,7 +259,12 @@ const Workers = () => {
           <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
-            header="Order"
+            header="id"
+          />
+          <Column
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            field="company_id"
+            header="company_id"
           />
 
           <Column

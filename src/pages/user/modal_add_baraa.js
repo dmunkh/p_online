@@ -8,7 +8,7 @@ import { FilterMatchMode } from "primereact/api";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 // import Module from "src/components/custom/module";
-
+import useBearStore from "src/state/state";
 import dayjs from "dayjs";
 // import _ from "lodash";
 import {
@@ -30,6 +30,8 @@ const ModalNormDetail = () => {
   const { message } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [loading, setLoading] = useState(false);
+  const main_company_id = useBearStore((state) => state.main_company_id);
+  const user_id = useBearStore((state) => state.user_id);
 
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -123,6 +125,8 @@ const ModalNormDetail = () => {
         unit: unit,
         price: price,
         register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+        mc_id: main_company_id,
+        user_id: user_id,
       });
       setrefresh(refresh + 1);
       dispatch({

@@ -3,8 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Spin, Input, Select, Modal } from "antd";
 import _ from "lodash";
-import * as API from "src/api/plan";
-import * as REQ from "src/api/request";
+
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
@@ -32,57 +31,10 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.setMainCompanyID);
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/orders",
-          {
-            main_company_id: main_company_id,
-          }
-        );
-        console.log("order list", response.data.response);
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
-
-        setList(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh]);
-
+  const handleButtonClick = (user_id) => {
+    const url = `https://https://main.d5ki8wb12wcij.amplifyapp.com/order/print?user_id=${user_id}`;
+    window.open(url, "_blank");
+  };
   return (
     <div className="w-full">
       {" "}
@@ -164,10 +116,6 @@ const Workers = () => {
                 </div>
               </div>
             </div>
-
-            // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
-
-            // </div>
           }
           rowGroupHeaderTemplate={(data) => {
             return (
@@ -289,6 +237,10 @@ const Workers = () => {
                   // footer={() => }
                 />
                 <Column
+                  className="w-[110] text-xs"
+                  // footer={() => }
+                />
+                <Column
                   className="w-[100px] text-xs"
                   // footer={() => }
                 />
@@ -309,18 +261,8 @@ const Workers = () => {
             className="text-sm"
             header="Order"
           />
-          <Column
-            field="delguur_ner"
-            header="Дэлгүүр"
-            className="text-sm"
-            // style={{ minWidth: "120px", maxWidth: "120px" }}
-          />
-          {/* <Column
-            field="company_name"
-            header="Компани"
-            className="text-sm"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
-          /> */}
+          <Column field="delguur_ner" header="Дэлгүүр" className="text-sm" />
+
           <Column
             field="register_date"
             header="Огноо"
@@ -363,6 +305,12 @@ const Workers = () => {
             header="Баталгаажуулалт"
             className="text-sm"
             style={{ minWidth: "130px", maxWidth: "130px" }}
+          />
+          <Column
+            field="user_name"
+            header="Бүртгэсэн"
+            className="text-sm"
+            style={{ minWidth: "100px", maxWidth: "100px" }}
           />
           <Column
             align="center"
@@ -418,9 +366,9 @@ const Workers = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    // onClick={() => ()}
+                    onClick={() => handleButtonClick("10")}
                   >
-                    <i className="ft-trash-2" />
+                    <i className="ft-print" />
                   </button>
                   {/* )} */}
                 </div>
