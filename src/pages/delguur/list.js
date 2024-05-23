@@ -31,12 +31,19 @@ const Workers = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
+        // const response = await axios.get(
+        const response = await fetch(
           // "http://localhost:5000/api/backend/delguur"
           "http://3.0.177.127/api/backend/delguur"
         );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const jsonData = await response.json();
+        console.log("fetching dataa", jsonData.response);
+        // setData(jsonData);
 
-        setList(_.orderBy(response.data.response, ["id"]));
+        setList(_.orderBy(jsonData.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
