@@ -32,7 +32,8 @@ const Workers = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/delguur"
+          // "http://localhost:5000/api/backend/delguur"
+          "http://3.0.177.127/api/backend/delguur"
         );
 
         setList(_.orderBy(response.data.response, ["id"]));
