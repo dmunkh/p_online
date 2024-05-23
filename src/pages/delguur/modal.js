@@ -63,9 +63,8 @@ const ModalNormDetail = () => {
   const handleClick = () => {
     if (state.delguur.id === 0) {
       try {
-        const response = axios.post(
-          "http://localhost:5000/api/backend/delguur",
-          {
+        axios
+          .post("http://localhost:5000/api/backend/delguur", {
             delguur_ner: state.delguur.delguur_ner,
             d_dans: state.delguur.dans,
             d_hayag: state.delguur.hayag,
@@ -73,14 +72,17 @@ const ModalNormDetail = () => {
             d_utas: state.delguur.utas,
             company_name: state.delguur.company_name,
             // unit: unit,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data);
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       } catch (error) {
         setLoading(false);
       }

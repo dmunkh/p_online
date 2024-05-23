@@ -31,8 +31,10 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.setMainCompanyID);
+
   const handleButtonClick = (user_id) => {
-    const url = `https://main.d5ki8wb12wcij.amplifyapp.com/order/print?user_id=${user_id}`;
+    // const url = `https://main.d5ki8wb12wcij.amplifyapp.com/order/print?user_id=${user_id}`;
+    const url = `http://localhost:3000/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
   return (

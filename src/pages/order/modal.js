@@ -90,7 +90,8 @@ const ModalNormDetail = () => {
       "INSERTING",
       // baraa[0].company_name,
       dayjs(date).format("YYYY"),
-      dayjs(date).format("M")
+      dayjs(date).format("M"),
+      state.order.order_id
     );
 
     if (state.order.order_id === 0) {

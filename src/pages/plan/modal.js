@@ -61,44 +61,59 @@ const ModalNormDetail = () => {
   const handleClick = () => {
     if (state.baraa.id === 0) {
       try {
-        const response = axios.post("http://localhost:5000/api/backend/baraa", {
-          baraa_ner: state.baraa.baraa_ner,
-          company_ner: baraa[0].company_ner,
-          company_id: baraa[0].id,
-          une: state.baraa.price,
-          box_count: state.baraa.box_count,
-          unit: state.baraa.unit,
-          // unit: unit,
-        });
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data);
-      } catch (error) {
-        setLoading(false);
-      }
-    } else {
-      console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
-      try {
-        const response = axios.put(
-          "http://localhost:5000/api/backend/baraa/" + state.baraa.id,
-          {
+        axios
+          .post("http://localhost:5000/api/backend/baraa", {
             baraa_ner: state.baraa.baraa_ner,
             company_ner: baraa[0].company_ner,
             company_id: baraa[0].id,
             une: state.baraa.price,
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data);
+            // unit: unit,
+          })
+          .then((response) => {
+            // Handle success
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+            // Do something with the response, if needed
+          })
+          .catch((error) => {
+            // Handle error
+            console.error("Error:", error);
+            // Do something with the error, if needed
+          });
+      } catch (error) {
+        setLoading(false);
+      }
+    } else {
+      console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
+      try {
+        axios
+          .put("http://localhost:5000/api/backend/baraa/" + state.baraa.id, {
+            baraa_ner: state.baraa.baraa_ner,
+            company_ner: baraa[0].company_ner,
+            company_id: baraa[0].id,
+            une: state.baraa.price,
+            box_count: state.baraa.box_count,
+            unit: state.baraa.unit,
+          })
+          .then((response) => {
+            // Handle success
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+            // Do something with the response, if needed
+          })
+          .catch((error) => {
+            // Handle error
+            console.error("Error:", error);
+            // Do something with the error, if needed
+          });
       } catch (error) {
         setLoading(false);
       }
