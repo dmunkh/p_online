@@ -33,7 +33,7 @@ const Header = (props) => {
           </div>
           <ul className="navbar-nav">
             <li className="nav-item mr-2 d-none d-lg-block">
-              <img className=" w-40" alt="logo" src="/img/logo_black.png" />
+              <img className="w-40" alt="logo" src="/img/logo_black.png" />
             </li>
           </ul>
         </div>
