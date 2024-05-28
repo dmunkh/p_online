@@ -49,12 +49,25 @@ const Goods_List = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/userzone"
-        );
-        console.log("order list", response.data.response);
+        fetch("http://localhost:5000/api/backend/userzone")
+          .then((response) => console.log("response", response)) //response.json())
+          .then((data) => console.log("dataaa", data))
+          .catch((error) => console.error("Error:", error));
+        // const response =
+        // await axios
+        //   .get(
+        //     // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+        //     // "http://3.0.177.127/api/backend/baraa"
+        //     "http://localhost:5000/api/backend/userzone"
+        //   )
+        //   .then((response) => {
+        //     console.log("response", response);
+        //     setList(response);
+        //   })
+        //   .catch((error) => {
+        //     console.log("Error", error);
+        //   });
+        // console.log("order list", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -65,7 +78,7 @@ const Goods_List = () => {
         //   })
         //   .value();
 
-        setList(_.orderBy(response.data.response, ["id"]));
+        // setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);

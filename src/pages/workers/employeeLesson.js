@@ -34,7 +34,7 @@ const Employee = () => {
       tn: state.tn,
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setList(res);
       })
       .catch((error) =>

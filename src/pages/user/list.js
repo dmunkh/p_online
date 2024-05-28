@@ -49,19 +49,63 @@ const Workers = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const axios = require("axios");
-        const https = require("https");
+        console.log("LOADING START");
+        axios
+          .get("http://localhost:5000/api/backend/user")
+          .then((response) => {
+            console.log("user list", response.data.response);
+            setList(_.orderBy(response.data.response, ["id"]));
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
 
-        const agent = new https.Agent({
-          rejectUnauthorized: false,
-        });
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://localhost:5000/api/backend/user",
-          { httpsAgent: agent }
-        );
-        console.log("order list", response.data.response);
+        // fetch("http://localhost:5000/api/backend/user", {
+        //   method: "GET",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   // Pass the `rejectUnauthorized` option as `false` to bypass SSL certificate verification
+        //   agent: new (require("https").Agent)({
+        //     rejectUnauthorized: false,
+        //   }),
+        // })
+        //   .then((response) => {
+        //     if (!response.ok) {
+        //       throw new Error("Network response was not ok");
+        //     }
+        //     return response.json();
+        //   })
+        //   .then((data) => {
+        //     console.log(data);
+        //   })
+        //   .catch((error) => {
+        //     console.error(
+        //       "There was a problem with the fetch operation:",
+        //       error
+        //     );
+        //   });
+        // const axios = require("axios");
+        // const https = require("https");
+
+        // const agent = new https.Agent({
+        //   rejectUnauthorized: false,
+        // });
+        // await axios
+        //   .get(
+        //     // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+        //     // "http://3.0.177.127/api/backend/baraa"
+        //     "http://localhost:5000/api/backend/user",
+        //     { httpsAgent: agent }
+        //   )
+        //   .then((response) => {
+        //     console.log(response.data);
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error:", error);
+        //   });
+
+        // console.log("users list", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -72,7 +116,7 @@ const Workers = () => {
         //   })
         //   .value();
 
-        setList(_.orderBy(response.data.response, ["id"]));
+        // setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);

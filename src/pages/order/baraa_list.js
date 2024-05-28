@@ -32,7 +32,7 @@ const Goods_List = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const group_id = useBearStore((state) => state.group_id);
   const user_id = useBearStore((state) => state.user_id);
-  console.log("group idddd", group_id);
+  // console.log("group idddd", group_id);
   useEffect(() => {
     const fetchData = async () => {
       try {

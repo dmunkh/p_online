@@ -88,15 +88,15 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    console.log(
-      "INSERTING",
-      // baraa[0].company_name,
-      dayjs(date).format("YYYY"),
-      dayjs(date).format("M")
-    );
+    // console.log(
+    //   "INSERTING",
+    //   // baraa[0].company_name,
+    //   dayjs(date).format("YYYY"),
+    //   dayjs(date).format("M")
+    // );
 
     try {
-      console.log("try to insert");
+      // console.log("try to insert");
       const response = axios.post("http://localhost:5000/api/backend/orders", {
         delguur_id: 1,
         delguur_ner: "delguur",
@@ -153,10 +153,10 @@ const ModalNormDetail = () => {
               optionFilterProp="children"
               className="w-full"
               onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(baraa_list, (a) => a.id === value)
-                );
+                // console.log(
+                //   value,
+                //   _.filter(baraa_list, (a) => a.id === value)
+                // );
                 setbaraa(_.filter(baraa_list, (a) => a.id === value));
                 setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
               }}

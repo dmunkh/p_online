@@ -33,12 +33,12 @@ const Login = () => {
           response.data.response,
           (a) => a.login_name === email
         );
-        console.log("user resultttt", result[0]);
+        // console.log("user resultttt", result[0]);
         setUserId(result[0].id);
         setMainCompanyID(result[0].main_company_id);
         setUserName(result[0].user_name);
         setGroupId(result[0].group_id);
-        console.log("order list", response.data.response);
+        // console.log("order list", response.data.response);
       } catch (error) {}
     };
     fetchData();

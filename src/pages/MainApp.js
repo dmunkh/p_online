@@ -25,13 +25,13 @@ const MainApp = () => {
   const user_id = useBearStore((state) => state.user_id);
   const main_company_id = useBearStore((state) => state.main_company_id);
 
-  console.log(
-    "MainAPp",
-    isUserValid,
-    user_id,
-    main_company_id,
-    window.location.pathname
-  );
+  // console.log(
+  //   "MainAPp",
+  //   isUserValid,
+  //   user_id,
+  //   main_company_id,
+  //   window.location.pathname
+  // );
 
   return (
     <BrowserRouter>
