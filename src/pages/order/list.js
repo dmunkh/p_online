@@ -17,6 +17,7 @@ import useBearStore from "src/state/state";
 import axios from "axios";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
+import Print from "./print";
 
 import Swal from "sweetalert2";
 
@@ -27,6 +28,7 @@ const Workers = () => {
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
   const [first, set_first] = useState(0);
+  const [modalprint, setmodalprint] = useState(false);
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
@@ -37,9 +39,22 @@ const Workers = () => {
     const url = `http://localhost:3000/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
+
   return (
     <div className="w-full">
       {" "}
+      <Modal
+        style={{ width: "600" }}
+        width={800}
+        height={550}
+        visible={modalprint}
+        // visible={true}
+        onCancel={() => setmodalprint(false)}
+        // closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <Print />
+      </Modal>
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -368,7 +383,16 @@ const Workers = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => handleButtonClick("10")}
+                    onClick={() => {
+                      setmodalprint(true);
+                      dispatch({
+                        type: "ORDER",
+                        data: {
+                          order_id: item.order_id,
+                          delguur_id: item.delguur_id,
+                        },
+                      });
+                    }}
                   >
                     <i className="ft-print" />
                   </button>

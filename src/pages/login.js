@@ -14,6 +14,7 @@ const Login = () => {
   const setMainCompanyID = useBearStore((state) => state.setMainCompanyID);
   const setGroupId = useBearStore((state) => state.setGroupId);
   const setUserName = useBearStore((state) => state.setUserName);
+  const setUserInfo = useBearStore((state) => state.setUserInfo);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,6 +39,8 @@ const Login = () => {
         setMainCompanyID(result[0].main_company_id);
         setUserName(result[0].user_name);
         setGroupId(result[0].group_id);
+        setUserInfo(result[0]);
+
         // console.log("order list", response.data.response);
       } catch (error) {}
     };

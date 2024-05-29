@@ -33,8 +33,8 @@ const Workers = () => {
         setLoading(true);
         // const response = await axios.get(
         const response = await fetch(
-          // "http://localhost:5000/api/backend/delguur"
-          "http://3.0.177.127/api/backend/delguur"
+          "http://localhost:5000/api/backend/delguur"
+          // "http://3.0.177.127/api/backend/delguur"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
