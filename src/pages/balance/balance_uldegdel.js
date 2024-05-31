@@ -264,6 +264,12 @@ const Workers = () => {
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
+            field="bonus"
+            header="Урамшуулал"
+            className="text-sm"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+          />
+          <Column
             field="zahialga"
             header="Захиалга"
             className="text-sm"

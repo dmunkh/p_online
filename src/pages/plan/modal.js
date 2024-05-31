@@ -69,6 +69,7 @@ const ModalNormDetail = () => {
             une: state.baraa.price,
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
+            bar_code: state.baraa.bar_code,
             // unit: unit,
           })
           .then((response) => {
@@ -99,6 +100,7 @@ const ModalNormDetail = () => {
             une: state.baraa.price,
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
+            bar_code: state.baraa.bar_code,
           })
           .then((response) => {
             // Handle success
@@ -196,6 +198,17 @@ const ModalNormDetail = () => {
                 л
               </Option>
             </Select>
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Бараа код</div>
+          <div className="w-3/4">
+            <InputNumber
+              value={state.baraa.bar_code}
+              onChange={(value) =>
+                dispatch({ type: "BARAA", data: { bar_code: value } })
+              }
+            />
           </div>
         </div>
         <div className="flex p-1 gap-2">

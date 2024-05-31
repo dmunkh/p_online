@@ -262,6 +262,11 @@ const Workers = () => {
             header="id"
           />
           <Column
+            style={{ minWidth: "100px", maxWidth: "100px" }}
+            field="bar_code"
+            header="bar_code"
+          />
+          <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="company_id"
             header="company_id"

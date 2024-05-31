@@ -6,6 +6,7 @@ const useBearStore = create((set) => ({
   group_id: null,
   main_company_id: null,
   userInfo: [],
+  phone: null,
   setIsUserValid: (arg) => set({ isUserValid: arg }),
   setUserId: (id) => set({ user_id: id }), // Ensure this function is defined
   setUserName: (name) => set({ user_name: name }), // Ensure this function is defined

@@ -390,6 +390,8 @@ const Workers = () => {
                         data: {
                           order_id: item.order_id,
                           delguur_id: item.delguur_id,
+                          phone: item.phone,
+                          user_name: item.user_name,
                         },
                       });
                     }}

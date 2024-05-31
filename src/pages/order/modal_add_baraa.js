@@ -53,6 +53,7 @@ const ModalNormDetail = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
   const group_id = useBearStore((state) => state.group_id);
+  const [bonus, setbonus] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,31 +141,38 @@ const ModalNormDetail = () => {
 
   const handleClick = () => {
     try {
-      const response = axios.post("http://localhost:5000/api/backend/balance", {
-        type_id: 3,
-        baraa_id: baraa[0].id,
-        baraa_ner: baraa[0].baraa_ner,
-        company_name: baraa[0].company_ner,
-        company_id: baraa[0].company_id,
-        delguur_id: state.order.delguur_id,
-        delguur_ner: state.order.delguur_ner,
-        count: count,
-        unit: unit,
-        price: price,
-        order_id: state.order.order_id,
-        register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
-        mc_id: main_company_id,
-        user_id: user_id,
-        comment: comment,
-      });
-      setrefresh(refresh + 1);
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data, "refresh", state.refresh);
-    } catch (error) {}
+      axios
+        .post("http://localhost:5000/api/backend/balance", {
+          type_id: 3,
+          baraa_id: baraa[0].id,
+          baraa_ner: baraa[0].baraa_ner,
+          company_name: baraa[0].company_ner,
+          company_id: baraa[0].company_id,
+          delguur_id: state.order.delguur_id,
+          delguur_ner: state.order.delguur_ner,
+          count: count,
+          unit: unit,
+          price: price,
+          order_id: state.order.order_id,
+          register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+          mc_id: main_company_id,
+          user_id: user_id,
+          comment: comment,
+        })
+        .then((response) => {
+          dispatch({
+            type: "STATE",
+            data: { refresh: state.refresh + 1 },
+          });
+          setrefresh(refresh + 1);
+          console.log("Response:", response);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -223,6 +231,25 @@ const ModalNormDetail = () => {
               />
             </div>
             <div className="flex p-1 gap-2">
+              <div className="w-1/4">Хайрцаг</div>
+              <div className="w-3/4">
+                <InputNumber
+                  value={boxcount}
+                  onChange={(value) => {
+                    setboxcount(value);
+                    setcount(baraa[0].box_count * value);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="flex p-1 gap-2">
+              <div className="w-1/4">Урамшуулал тоо ширхэг</div>
+              <InputNumber
+                value={bonus}
+                onChange={(value) => setbonus(value)}
+              />
+            </div>
+            <div className="flex p-1 gap-2">
               <div className="w-1/4">Нэгж үнэ</div>
               <InputNumber
                 value={price}
@@ -277,18 +304,7 @@ const ModalNormDetail = () => {
                 </Select>
               </div>
             </div>
-            <div className="flex p-1 gap-2">
-              <div className="w-1/4">Хайрцаг</div>
-              <div className="w-3/4">
-                <InputNumber
-                  value={boxcount}
-                  onChange={(value) => {
-                    setboxcount(value);
-                    setcount(baraa[0].box_count * value);
-                  }}
-                />
-              </div>
-            </div>
+
             <div className="w-full p-1 flex flex-col justify-start ">
               <span className="list-group-item-text grey darken-2 m-0">
                 Тайлбар:

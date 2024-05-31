@@ -126,10 +126,28 @@ const MyComponent = () => {
               }}
               colSpan={5}
             >
-              Захиалга
+              ЗАРЛАГЫН БАРИМТ
             </th>
           </tr>
           <tr>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Компани нэр:
+            </th>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Арвин үр түрүү ХХК - Тэнгэрийн хишиг
+            </th>
             <th
               colSpan={2}
               style={{
@@ -150,26 +168,27 @@ const MyComponent = () => {
             >
               {delguur[0]?.company_name}
             </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              Компани нэр:
-            </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              {userInfo.user_name}
-            </th>
           </tr>{" "}
           <tr>
+            {" "}
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Дэлгүүр нэр:
+            </th>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Ачит холдинг
+            </th>
             <th
               colSpan={2}
               style={{
@@ -189,26 +208,27 @@ const MyComponent = () => {
             >
               {delguur[0]?.delguur_ner}
             </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              Дэлгүүр нэр:
-            </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              {userInfo.user_name}
-            </th>
           </tr>
           <tr>
+            {" "}
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Регистер:
+            </th>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              РД: 3199355
+            </th>
             <th
               colSpan={2}
               style={{
@@ -228,6 +248,9 @@ const MyComponent = () => {
             >
               {delguur[0]?.d_hayag}
             </th>
+          </tr>
+          <tr>
+            {" "}
             <th
               style={{
                 textAlign: "left",
@@ -235,11 +258,17 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Хаяг:
+              ХТ:
             </th>
-            <th></th>
-          </tr>
-          <tr>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              {state.order.user_name} / {state.order.phone} /
+            </th>
             <th
               colSpan={2}
               style={{
@@ -259,6 +288,9 @@ const MyComponent = () => {
             >
               {delguur[0]?.d_utas}
             </th>
+          </tr>
+          <tr>
+            {" "}
             <th
               style={{
                 textAlign: "left",
@@ -266,11 +298,19 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Утас:
+              Данс:
             </th>
-            <th></th>
-          </tr>
-          <tr>
+            <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              {" "}
+              Хаан банк: 5090709172 /Сарнайцэцэг/ <br /> 5217205009 /Арвин үр
+              түрүү/
+            </th>
             <th
               colSpan={2}
               style={{
@@ -290,16 +330,6 @@ const MyComponent = () => {
             >
               {delguur[0]?.d_dans}
             </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              Данс:
-            </th>
-            <th></th>
           </tr>
           <tr style={{ marginBottom: 20 }}>
             <th
@@ -435,6 +465,100 @@ const MyComponent = () => {
               }}
             >
               {Intl.NumberFormat("en-US").format(total)}
+            </td>
+          </tr>
+          <tr style={{ paddingBottom: 20 }}>
+            <td
+              colSpan={4}
+              style={{
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+                marginBottom: 20,
+              }}
+            ></td>
+            <td
+              style={{
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            ></td>
+          </tr>
+          <tr>
+            <td
+              colSpan={2}
+              style={{
+                // borderbo: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              Хүлээн авсан:
+            </td>
+            <td
+              colSpan={2}
+              style={{
+                borderBottom: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              /
+            </td>
+            <td
+              style={{
+                // border: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              /
+            </td>
+          </tr>
+          <tr>
+            <td
+              colSpan={2}
+              style={{
+                // border: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              Хүлээлгэн өгсөн ажилтан:
+            </td>
+            <td
+              colSpan={2}
+              style={{
+                borderBottom: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              /
+            </td>
+            <td
+              style={{
+                // border: "1px solid #dddddd",
+                textAlign: "right",
+                padding: "4px",
+                fontSize: "11px",
+                fontWeight: 600,
+              }}
+            >
+              /
             </td>
           </tr>
         </tbody>

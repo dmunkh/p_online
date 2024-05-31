@@ -60,6 +60,7 @@ const Goods_List = () => {
               count: _.sumBy(items, "count"),
               total: _.sumBy(items, "total"),
               user_name: items[0].user_name,
+              phone: items[0].phone,
             };
           })
           .value();

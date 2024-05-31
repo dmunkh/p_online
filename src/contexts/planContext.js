@@ -42,6 +42,7 @@ const _state = {
     box_count: 0,
     model: false,
     count: 0,
+    bar_code: 0,
   },
   delguur: {
     id: 0,
@@ -64,10 +65,14 @@ const _state = {
     dt: moment(),
     modal_edit: false,
     baraa_id: 0,
+    phone: null,
+    user_name: null,
   },
   balance: {
     id: 0,
     modal: false,
+    balance: 0,
+    bonus: 0,
     type: 1,
     count: 0,
     unit: "",

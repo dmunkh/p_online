@@ -72,7 +72,7 @@ const ModalNormDetail = () => {
         );
         console.log("baraa list", response.data.response);
 
-        setBaraa_list(_.orderBy(response.data.response, ["id"]));
+        setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -99,11 +99,13 @@ const ModalNormDetail = () => {
             company_name: baraa[0].company_ner,
             company_id: baraa[0].company_id,
             count: state.balance.count,
+            bonus: state.balance.bonus,
             unit: unit,
             price: price,
             register_date: dayjs(date).format("YYYY-MM-DD"),
             mc_id: main_company_id,
             user_id: user_id,
+            box_count: boxcount,
             comment: comment,
           }
         );
@@ -177,7 +179,7 @@ const ModalNormDetail = () => {
                 Зарлага
               </Select.Option>
               <Select.Option key={3} value={3}>
-                Зарцуулалт
+                Захиалга
               </Select.Option>
             </Select>
           </div>
@@ -193,9 +195,11 @@ const ModalNormDetail = () => {
               className="w-full"
               value={state.balance.baraa_id}
               onChange={(value) => {
+                // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
                 dispatch({ type: "BALANCE", data: { baraa_id: value } });
                 setbaraa(_.filter(baraa_list, (a) => a.id === value));
                 setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
+                setunit(_.filter(baraa_list, (a) => a.id === value)[0].unit);
                 setboxcount(0);
                 setcount(0);
               }}
@@ -214,6 +218,32 @@ const ModalNormDetail = () => {
             value={state.balance.count}
             onChange={(value) =>
               dispatch({ type: "BALANCE", data: { count: value } })
+            }
+          />
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Хайрцаг</div>
+          <div className="w-3/4">
+            <InputNumber
+              min={0}
+              value={boxcount}
+              onChange={(value) => {
+                console.log(value, baraa[0]?.box_count);
+                var ss = value * baraa[0]?.box_count;
+                console.log(ss && ss);
+                dispatch({ type: "BALANCE", data: { count: ss } });
+                setboxcount(value);
+              }}
+            />{" "}
+            {baraa && "Хайрцагт - " + baraa[0]?.box_count}
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Урамшуулал тоо ширхэг</div>
+          <InputNumber
+            value={state.balance.bonus}
+            onChange={(value) =>
+              dispatch({ type: "BALANCE", data: { bonus: value } })
             }
           />
         </div>
@@ -245,15 +275,7 @@ const ModalNormDetail = () => {
             </Select>
           </div>
         </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Хайрцаг</div>
-          <div className="w-3/4">
-            <InputNumber
-              value={boxcount}
-              onChange={(value) => setboxcount(value)}
-            />
-          </div>
-        </div>
+
         <div className="w-full p-1 flex flex-col justify-start ">
           <span className="list-group-item-text grey darken-2 m-0">
             Тайлбар:

@@ -146,6 +146,7 @@ const Workers = () => {
                         id: 0,
                         type: 1,
                         baraa_id: null,
+                        bonus: 0,
                       },
                     });
                   }}
