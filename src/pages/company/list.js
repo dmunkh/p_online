@@ -265,7 +265,7 @@ const Workers = () => {
             field="company_ner"
             header="Компанийн нэр"
             className="text-sm"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
+            // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="hayag"

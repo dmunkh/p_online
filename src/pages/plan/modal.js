@@ -90,8 +90,9 @@ const ModalNormDetail = () => {
         setLoading(false);
       }
     } else {
-      console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
       try {
+        console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
+
         axios
           .put("http://localhost:5000/api/backend/baraa/" + state.baraa.id, {
             baraa_ner: state.baraa.baraa_ner,

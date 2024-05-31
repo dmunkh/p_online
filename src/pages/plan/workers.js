@@ -93,8 +93,7 @@ const Workers = () => {
   };
 
   return (
-    <>
-      {" "}
+    <div className="w-full">
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -265,11 +264,13 @@ const Workers = () => {
             style={{ minWidth: "100px", maxWidth: "100px" }}
             field="bar_code"
             header="bar_code"
+            className="text-xs w-2"
           />
           <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="company_id"
             header="company_id"
+            className="text-xs w-2"
           />
 
           <Column
@@ -356,7 +357,7 @@ const Workers = () => {
           />
         </DataTable>
       </Spin>
-    </>
+    </div>
   );
 };
 

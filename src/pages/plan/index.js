@@ -9,11 +9,7 @@ const Index = () => {
   const { state } = usePlanContext();
   return (
     <div className=" p-2 text-xs">
-      <div className="flex flex-col md:flex-row gap-2 ">
-        <div className="md:w-2/3">
-          <Workers />
-        </div>
-      </div>
+      <Workers />
       {/* <Header />
       <div className="flex flex-col md:flex-row gap-2 ">
         {state.single_page ? (

@@ -279,6 +279,12 @@ const Goods_List = () => {
             header="Order"
           />
           <Column
+            field="bar_code"
+            header="barcode"
+            className="text-sm"
+            // style={{ minWidth: "120px", maxWidth: "120px" }}
+          />
+          <Column
             field="baraa_ner"
             header="Бараа нэр"
             className="text-sm"
@@ -312,7 +318,6 @@ const Goods_List = () => {
             className="text-sm"
             style={{ minWidth: "130px", maxWidth: "130px" }}
           />
-
           <Column
             align="center"
             header=""

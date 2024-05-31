@@ -350,6 +350,16 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
+              barcode
+            </th>{" "}
+            <th
+              style={{
+                border: "1px solid #dddddd",
+                textAlign: "center",
+                padding: "2px",
+                fontSize: "12px",
+              }}
+            >
               Бараа нэр
             </th>
             <th
@@ -406,6 +416,16 @@ const MyComponent = () => {
                   fontSize: "11px",
                 }}
               >
+                {item.bar_code}
+              </td>
+              <td
+                style={{
+                  border: "1px solid #dddddd",
+                  textAlign: "left",
+                  padding: "4px",
+                  fontSize: "11px",
+                }}
+              >
                 {item.baraa_ner}
               </td>
               <td
@@ -429,7 +449,6 @@ const MyComponent = () => {
                 {" "}
                 {item.count}
               </td>
-
               <td
                 style={{
                   border: "1px solid #dddddd",
