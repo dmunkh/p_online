@@ -289,6 +289,7 @@ const Workers = () => {
           }}
         /> */}
           <Column
+            sortable
             field="baraa_ner"
             header="Барааны нэр"
             className="text-xs w-2"

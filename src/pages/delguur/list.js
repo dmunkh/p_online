@@ -86,7 +86,7 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="negj_namemnfull"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["baraa_ner"]}
+          globalFilterFields={["delguur_ner"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -218,16 +218,15 @@ const Workers = () => {
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
-            className="text-xs w-2"
-            field="company_name"
-            header="Компани нэр"
-          />
-
-          <Column
+            sortable
             field="delguur_ner"
             header="Дэлгүүр нэр"
             className="text-xs w-2"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
+          />
+          <Column
+            className="text-xs w-2"
+            field="company_name"
+            header="Компани нэр"
           />
           {/* <Column
           field="year"
@@ -256,7 +255,6 @@ const Workers = () => {
             className="text-xs w-2"
             style={{ minWidth: "90px", maxWidth: "90px" }}
           />
-
           <Column
             align="center"
             header=""
