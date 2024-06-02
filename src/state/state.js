@@ -12,6 +12,7 @@ const useBearStore = create((set) => ({
   setUserName: (name) => set({ user_name: name }), // Ensure this function is defined
   setGroupId: (group) => set({ group_id: group }), // Ensure this function is defined
   setUserInfo: (info) => set({ userInfo: info }),
+
   setMainCompanyID: (company) => set({ main_company_id: company }), // Ensure this function is defined
 }));
 export default useBearStore;

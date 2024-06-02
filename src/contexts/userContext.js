@@ -108,7 +108,7 @@ const UserContext = ({ children }) => {
       //       if (window.location.hostname === "localhost") {
       //         url = url.replace(
       //           "https://training.erdenetmc.mn/callback",
-      //           "http://localhost:3000/callback"
+      //           "https://dmunkh.store/callback"
       //         );
       //       }
       //       window.location.replace(url);

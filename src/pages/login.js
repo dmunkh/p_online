@@ -28,7 +28,7 @@ const Login = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/backend/user"
+          "https://dmunkh.store/api/backend/user"
         );
         var result = _.filter(
           response.data.response,

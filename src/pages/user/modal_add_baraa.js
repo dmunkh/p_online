@@ -66,7 +66,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balance"
+          "https://dmunkh.store/api/backend/balance"
         );
         console.log(response.data.response);
 
@@ -88,7 +88,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "https://dmunkh.store/api/backend/baraa"
         );
         console.log("baraa list", response.data.response);
 
@@ -113,7 +113,7 @@ const ModalNormDetail = () => {
 
     try {
       console.log("try to insert", baraa[0]);
-      const response = axios.post("http://localhost:5000/api/backend/balance", {
+      const response = axios.post("https://dmunkh.store/api/backend/balance", {
         type_id: 3,
         baraa_id: baraa[0].id,
         baraa_ner: baraa[0].baraa_ner,

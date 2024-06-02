@@ -50,7 +50,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
         );
         console.log(response.data.response);
 
@@ -72,7 +72,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "https://dmunkh.store/api/backend/baraa"
         );
         console.log("baraa list", response.data.response);
 
@@ -97,7 +97,7 @@ const ModalNormDetail = () => {
 
     try {
       // console.log("try to insert");
-      const response = axios.post("http://localhost:5000/api/backend/orders", {
+      const response = axios.post("https://dmunkh.store/api/backend/orders", {
         delguur_id: 1,
         delguur_ner: "delguur",
         order_number: 2,

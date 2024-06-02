@@ -36,7 +36,7 @@ const Workers = () => {
 
   const handleButtonClick = (user_id) => {
     // const url = `https://main.d5ki8wb12wcij.amplifyapp.com/order/print?user_id=${user_id}`;
-    const url = `http://localhost:3000/order/print?user_id=${user_id}`;
+    const url = `https://dmunkh.store/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
 

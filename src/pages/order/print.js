@@ -22,7 +22,7 @@ const MyComponent = () => {
         setLoading(true);
         // const response = await axios.get(
         const response = await fetch(
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
           // "http://3.0.177.127/api/backend/delguur"
         );
         if (!response.ok) {
@@ -61,7 +61,7 @@ const MyComponent = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/balance",
+          "https://dmunkh.store/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -124,13 +124,14 @@ const MyComponent = () => {
                 padding: "8px",
                 fontSize: "16px",
               }}
-              colSpan={5}
+              colSpan={6}
             >
               ЗАРЛАГЫН БАРИМТ
             </th>
           </tr>
           <tr>
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -170,8 +171,8 @@ const MyComponent = () => {
             </th>
           </tr>{" "}
           <tr>
-            {" "}
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -210,8 +211,8 @@ const MyComponent = () => {
             </th>
           </tr>
           <tr>
-            {" "}
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -250,8 +251,8 @@ const MyComponent = () => {
             </th>
           </tr>
           <tr>
-            {" "}
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -290,8 +291,8 @@ const MyComponent = () => {
             </th>
           </tr>
           <tr>
-            {" "}
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -404,6 +405,7 @@ const MyComponent = () => {
                   textAlign: "center",
                   padding: "4px",
                   fontSize: "11px",
+                  width: 20,
                 }}
               >
                 {index + 1}
@@ -414,6 +416,7 @@ const MyComponent = () => {
                   textAlign: "left",
                   padding: "4px",
                   fontSize: "11px",
+                  width: 120,
                 }}
               >
                 {item.bar_code}
@@ -434,6 +437,7 @@ const MyComponent = () => {
                   textAlign: "right",
                   padding: "4px",
                   fontSize: "11px",
+                  width: 70,
                 }}
               >
                 {item.price}
@@ -444,9 +448,9 @@ const MyComponent = () => {
                   textAlign: "right",
                   padding: "4px",
                   fontSize: "11px",
+                  width: 60,
                 }}
               >
-                {" "}
                 {item.count}
               </td>
               <td
@@ -455,6 +459,7 @@ const MyComponent = () => {
                   textAlign: "right",
                   padding: "4px",
                   fontSize: "11px",
+                  width: 80,
                 }}
               >
                 {Intl.NumberFormat("en-US").format(item.count * item.price)}
@@ -463,7 +468,7 @@ const MyComponent = () => {
           ))}
           <tr>
             <td
-              colSpan={4}
+              colSpan={5}
               style={{
                 border: "1px solid #dddddd",
                 textAlign: "right",
@@ -488,7 +493,7 @@ const MyComponent = () => {
           </tr>
           <tr style={{ paddingBottom: 20 }}>
             <td
-              colSpan={4}
+              colSpan={5}
               style={{
                 textAlign: "right",
                 padding: "4px",

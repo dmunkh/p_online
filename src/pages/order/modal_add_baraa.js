@@ -60,7 +60,7 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/balance",
+          "https://dmunkh.store/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -98,7 +98,7 @@ const ModalNormDetail = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/backend/baraa",
+          "https://dmunkh.store/api/backend/baraa",
           { params: { user_id: user_id } }
         );
 
@@ -119,7 +119,7 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/balance/group",
+          "https://dmunkh.store/api/backend/balance/group",
           {
             params: {
               user_id: user_id,
@@ -142,7 +142,7 @@ const ModalNormDetail = () => {
   const handleClick = () => {
     try {
       axios
-        .post("http://localhost:5000/api/backend/balance", {
+        .post("https://dmunkh.store/api/backend/balance", {
           type_id: 3,
           baraa_id: baraa[0].id,
           baraa_ner: baraa[0].baraa_ner,

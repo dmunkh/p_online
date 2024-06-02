@@ -49,7 +49,7 @@ const Goods_List = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        fetch("http://localhost:5000/api/backend/userzone")
+        fetch("https://dmunkh.store/api/backend/userzone")
           .then((response) => console.log("response", response)) //response.json())
           .then((data) => console.log("dataaa", data))
           .catch((error) => console.error("Error:", error));
@@ -58,7 +58,7 @@ const Goods_List = () => {
         //   .get(
         //     // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
         //     // "http://3.0.177.127/api/backend/baraa"
-        //     "http://localhost:5000/api/backend/userzone"
+        //     "https://dmunkh.store/api/backend/userzone"
         //   )
         //   .then((response) => {
         //     console.log("response", response);

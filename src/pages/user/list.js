@@ -51,7 +51,7 @@ const Workers = () => {
         setLoading(true);
         console.log("LOADING START");
         axios
-          .get("http://localhost:5000/api/backend/user")
+          .get("https://dmunkh.store/api/backend/user")
           .then((response) => {
             console.log("user list", response.data.response);
             setList(_.orderBy(response.data.response, ["id"]));
@@ -60,7 +60,7 @@ const Workers = () => {
             console.error("Error:", error);
           });
 
-        // fetch("http://localhost:5000/api/backend/user", {
+        // fetch("https://dmunkh.store/api/backend/user", {
         //   method: "GET",
         //   headers: {
         //     "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const Workers = () => {
         //   .get(
         //     // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
         //     // "http://3.0.177.127/api/backend/baraa"
-        //     "http://localhost:5000/api/backend/user",
+        //     "https://dmunkh.store/api/backend/user",
         //     { httpsAgent: agent }
         //   )
         //   .then((response) => {

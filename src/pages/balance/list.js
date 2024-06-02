@@ -57,7 +57,7 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/balancelist",
+          "https://dmunkh.store/api/backend/balancelist",
           {
             params: {
               main_company_id: main_company_id,

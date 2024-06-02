@@ -46,7 +46,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
         );
         console.log(response.data.response);
 
@@ -67,7 +67,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa"
+          "https://dmunkh.store/api/backend/baraa"
         );
         console.log("baraa list", response.data.response);
 
@@ -89,7 +89,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
         );
         console.log("baraa list", response.data.response);
 
@@ -114,17 +114,14 @@ const ModalNormDetail = () => {
 
     if (state.order.id === 0) {
       try {
-        const response = axios.post(
-          "http://localhost:5000/api/backend/orders",
-          {
-            delguur_id: delguur[0].id,
-            delguur_ner: delguur[0].delguur_ner,
-            order_number: order,
-            cash: state.order.cash,
-            register_date: state.order.dt,
-            is_approve: 0,
-          }
-        );
+        const response = axios.post("https://dmunkh.store/api/backend/orders", {
+          delguur_id: delguur[0].id,
+          delguur_ner: delguur[0].delguur_ner,
+          order_number: order,
+          cash: state.order.cash,
+          register_date: state.order.dt,
+          is_approve: 0,
+        });
         dispatch({
           type: "STATE",
           data: { refresh: state.refresh + 1 },
@@ -145,7 +142,7 @@ const ModalNormDetail = () => {
     } else {
       try {
         const response = axios.put(
-          "http://localhost:5000/api/backend/balance/" + state.order.id,
+          "https://dmunkh.store/api/backend/balance/" + state.order.id,
           {
             count: state.order.count,
           }

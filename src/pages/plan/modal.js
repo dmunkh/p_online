@@ -43,7 +43,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/company"
+          "https://dmunkh.store/api/backend/company"
         );
         console.log(response.data.response);
 
@@ -62,7 +62,7 @@ const ModalNormDetail = () => {
     if (state.baraa.id === 0) {
       try {
         axios
-          .post("http://localhost:5000/api/backend/baraa", {
+          .post("https://dmunkh.store/api/backend/baraa", {
             baraa_ner: state.baraa.baraa_ner,
             company_ner: baraa[0].company_ner,
             company_id: baraa[0].id,
@@ -94,10 +94,10 @@ const ModalNormDetail = () => {
         console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
 
         axios
-          .put("http://localhost:5000/api/backend/baraa/" + state.baraa.id, {
+          .put("https://dmunkh.store/api/backend/baraa/" + state.baraa.id, {
             baraa_ner: state.baraa.baraa_ner,
-            company_ner: baraa[0].company_ner,
-            company_id: baraa[0].id,
+            company_ner: state.baraa.company_ner,
+            company_id: state.baraa.company_id,
             une: state.baraa.price,
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
@@ -154,15 +154,12 @@ const ModalNormDetail = () => {
               className="w-full"
               value={state.baraa.company_id}
               onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(company, (a) => a.id === value)
-                );
-                setbaraa(_.filter(company, (a) => a.id === value));
                 dispatch({
                   type: "BARAA",
                   data: {
                     company_id: _.filter(company, (a) => a.id === value)[0].id,
+                    company_ner: _.filter(company, (a) => a.id === value)[0]
+                      .company_ner,
                   },
                 });
               }}

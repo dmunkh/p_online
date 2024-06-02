@@ -51,7 +51,7 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/baraa",
+          "https://dmunkh.store/api/backend/baraa",
           { params: { user_id: user_id } }
         );
         console.log(response.data.response);
@@ -79,7 +79,7 @@ const Workers = () => {
   const deleteClick = (item) => {
     try {
       const response = axios.delete(
-        "http://localhost:5000/api/backend/baraa/" + item.id
+        "https://dmunkh.store/api/backend/baraa/" + item.id
       );
       dispatch({
         type: "STATE",
@@ -158,6 +158,7 @@ const Workers = () => {
                         price: "",
                         unit: "",
                         box_count: "",
+                        bar_code: null,
                       },
                     });
                   }}
@@ -335,6 +336,7 @@ const Workers = () => {
                           price: item.une,
                           unit: item.unit,
                           box_count: item.box_count,
+                          bar_code: item.bar_code,
                         },
                       });
                     }}

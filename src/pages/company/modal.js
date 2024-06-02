@@ -35,7 +35,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/company"
+          "https://dmunkh.store/api/backend/company"
         );
         console.log(response.data.response);
 
@@ -54,7 +54,7 @@ const ModalNormDetail = () => {
     if (state.company.id === 0) {
       try {
         const response = axios.post(
-          "http://localhost:5000/api/backend/company",
+          "https://dmunkh.store/api/backend/company",
           {
             company_ner: state.company.company_ner,
             hayag:
@@ -93,7 +93,7 @@ const ModalNormDetail = () => {
     } else {
       try {
         const response = axios.put(
-          "http://localhost:5000/api/backend/company/" + state.company.id,
+          "https://dmunkh.store/api/backend/company/" + state.company.id,
           {
             company_ner: state.company.company_ner,
             hayag:

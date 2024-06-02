@@ -45,7 +45,7 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
         );
         console.log(response.data.response);
 
@@ -64,7 +64,7 @@ const ModalNormDetail = () => {
     if (state.delguur.id === 0) {
       try {
         axios
-          .post("http://localhost:5000/api/backend/delguur", {
+          .post("https://dmunkh.store/api/backend/delguur", {
             delguur_ner: state.delguur.delguur_ner,
             d_dans: state.delguur.dans,
             d_hayag: state.delguur.hayag,
@@ -89,7 +89,7 @@ const ModalNormDetail = () => {
     } else {
       try {
         const response = axios.put(
-          "http://localhost:5000/api/backend/delguur/" + state.delguur.id,
+          "https://dmunkh.store/api/backend/delguur/" + state.delguur.id,
           {
             delguur_ner: state.delguur.delguur_ner,
             d_dans: state.delguur.dans,

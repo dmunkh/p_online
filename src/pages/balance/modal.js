@@ -48,7 +48,7 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/delguur"
+          "https://dmunkh.store/api/backend/delguur"
         );
 
         setCompany(_.orderBy(response.data.response, ["id"]));
@@ -67,7 +67,7 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:5000/api/backend/baraa",
+          "https://dmunkh.store/api/backend/baraa",
           { params: { user_id: user_id } }
         );
         console.log("baraa list", response.data.response);
@@ -88,7 +88,7 @@ const ModalNormDetail = () => {
       try {
         console.log("try to insert", baraa[0]);
         const response = axios.post(
-          "http://localhost:5000/api/backend/balance",
+          "https://dmunkh.store/api/backend/balance",
           {
             order_id: 0,
             type_id: state.balance.type,
@@ -119,7 +119,7 @@ const ModalNormDetail = () => {
     } else {
       try {
         const response = axios.put(
-          "http://localhost:5000/api/backend/balance/" + state.balance.id,
+          "https://dmunkh.store/api/backend/balance/" + state.balance.id,
           {
             count: state.balance.count,
           }
