@@ -14,13 +14,14 @@ import {
   Input,
   Select,
   Space,
+  Radio,
 } from "antd";
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
 import moment from "moment";
 import useBearStore from "src/state/state";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 const { Option } = Select;
 
 const ModalNormDetail = () => {
@@ -33,7 +34,10 @@ const ModalNormDetail = () => {
   const [company, setCompany] = useState([]);
   const [cash, setcash] = useState(0);
   const [order, setorder] = useState(0);
-  const [date, setdate] = useState(dayjs());
+  const [date, setdate] = useState(moment());
+
+  const [value, setValue] = useState(1);
+  const [label, setLabel] = useState("Бэлэн");
 
   const [delguur_list, setDelguur_list] = useState();
   const main_company_id = useBearStore((state) => state.main_company_id);
@@ -96,25 +100,29 @@ const ModalNormDetail = () => {
     fetchData();
   }, [state.refresh]);
 
+  const valueLabelMap = {
+    1: "Бэлэн",
+    2: "Зээл",
+  };
+  const handleChange = (e) => {
+    const selectedValue = e.target.value;
+    setValue(selectedValue);
+    setLabel(valueLabelMap[selectedValue]);
+  };
   const handleClick = () => {
-    console.log(
-      "INSERTING",
-      // baraa[0].company_name,
-      dayjs(date).format("YYYY"),
-      dayjs(date).format("M"),
-      state.order.order_id
-    );
-
     if (state.order.order_id === 0) {
       try {
         axios
-          .post("https://dmunkh.store/api/backend/orders", {
+          // .post("https://dmunkh.store/api/backend/orders", {
+          .post("http://localhost:5000/api/backend/orders", {
             delguur_id: delguur[0].id,
             delguur_ner: delguur[0].delguur_ner,
             order_number: order,
             cash: state.order.cash,
-            register_date: state.order.dt,
+            register_date: moment(date).format("YYYY-MM-DD HH:mm"),
             is_approve: 0,
+            is_cash_loan: value,
+            cash_loan_desc: label,
             mc_id: main_company_id,
             user_id: user_id,
           })
@@ -130,16 +138,22 @@ const ModalNormDetail = () => {
       } catch (error) {}
     } else {
       try {
+        Swal.fire({
+          title: "Уншиж байна...",
+          text: "Түр хүлээнэ үү",
+          allowOutsideClick: false,
+        });
+
         axios
           .put(
-            "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
+            "http://localhost:5000/api/backend/orders/" + state.order.order_id,
+            // "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
             {
-              delguur_id: delguur[0].id,
-              delguur_ner: delguur[0].delguur_ner,
-              order_number: order,
+              // delguur_id: delguur[0].id,
+              // delguur_ner: delguur[0].delguur_ner,
+              // order_number: order,
               cash: state.order.cash,
-              register_date: moment(state.order.dt).format("YYYY.MM.DD"),
-              is_approve: 0,
+              is_approve: state.order.is_approve,
             }
           )
           .then((response) => {
@@ -151,6 +165,12 @@ const ModalNormDetail = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
       } catch (error) {}
     }
   };
@@ -170,14 +190,8 @@ const ModalNormDetail = () => {
           <div className="w-3/4">
             <DatePicker
               className="w-full"
-              value={moment(state.order.dt)}
-              onChange={(date) =>
-                dispatch *
-                {
-                  type: "ORDER",
-                  data: { dt: dayjs(date).format("YYYY.MM.DD") },
-                }
-              }
+              value={moment(date)}
+              onChange={(date) => setdate(date)}
             />
           </div>
         </div>
@@ -196,7 +210,12 @@ const ModalNormDetail = () => {
                   value,
                   _.filter(delguur_list, (a) => a.id === value)
                 );
-                setDelguur(_.filter(delguur_list, (a) => a.id === value));
+                setDelguur(
+                  _.filter(
+                    delguur_list,
+                    (a) => parseInt(a.id) === parseInt(value)
+                  )
+                );
                 dispatch({ type: "ORDER", data: { delguur_id: value } });
               }}
             >
@@ -207,6 +226,22 @@ const ModalNormDetail = () => {
               ))}
             </Select>
           </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Төрөл:</div>
+          <Radio.Group
+            value={value}
+            onChange={
+              handleChange
+              // dispatch({
+              //   type: "STATE",
+              //   data: { info: { ...state.info, is_risk: e.target.value } },
+              // });
+            }
+          >
+            <Radio value={1}>Бэлэн</Radio>
+            <Radio value={2}>Зээл</Radio>
+          </Radio.Group>
         </div>
         <div className="flex p-1 gap-2">
           <div className="w-1/4">Захиалгын дугаар</div>

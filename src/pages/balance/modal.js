@@ -20,7 +20,7 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 const { Option } = Select;
 
 const ModalNormDetail = () => {
@@ -84,6 +84,11 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
+    Swal.fire({
+      title: "Уншиж байна...",
+      text: "Түр хүлээнэ үү",
+      allowOutsideClick: false,
+    });
     if (state.balance.id === 0) {
       try {
         console.log("try to insert", baraa[0]);
@@ -117,8 +122,18 @@ const ModalNormDetail = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
         // console.log("return", response.data, "refresh", state.refresh);
-      } catch (error) {}
+      } catch (error) {
+        setLoading(false);
+        Swal.close();
+      }
     } else {
       try {
         axios
@@ -135,7 +150,17 @@ const ModalNormDetail = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
-      } catch (error) {}
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
+      } catch (error) {
+        setLoading(false);
+        Swal.close();
+      }
     }
   };
 

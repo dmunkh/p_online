@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Modal } from "antd";
+import { Spin, Input, Select, Modal, Switch } from "antd";
 import _ from "lodash";
 
 import { SearchOutlined } from "@ant-design/icons";
@@ -28,6 +28,8 @@ const Workers = () => {
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
   const [first, set_first] = useState(0);
+  const [loadingbtn, setLoadingbtn] = useState(false);
+
   const [modalprint, setmodalprint] = useState(false);
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
@@ -39,7 +41,73 @@ const Workers = () => {
     const url = `https://dmunkh.store/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
+  const PlanApprove = (item, ischecked) => {
+    console.log("iteeeem", item, ischecked);
+    Swal.fire({
+      title: "Баталгаажуулалт",
+      text: "Захиалгын төлбөр төлөлтийг баталгаажуулах уу",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios
+            .put(
+              // "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
+              "http://localhost:5000/api/backend/orders/" + item.order_id,
+              {
+                // delguur_id: item.delguur_id,
+                // delguur_ner: item.delguur_ner,
+                // order_number: item.order_number,
+                cash: item.cash,
+                // register_date: item.register_date,
+                is_approve: 1,
+              }
+            )
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+              setLoadingbtn(false);
+            })
+            .catch((error) => {
+              setLoadingbtn(false);
+              console.error("Error:", error);
+            });
+        } catch (error) {}
+      } else {
+        setLoadingbtn(false);
+        Swal.fire("Баталгаажуулалт", "Баталгаажуулалт хийгдсэнгүй", "error");
+      }
+    });
 
+    // API.postApprove({
+    //   year: moment(date).format("Y"),
+    //   department_id: id,
+    //   module_id: module,
+    //   is_closed: ischecked,
+    // })
+    //   .then(() => {
+    //     // dispatch({ type: "REFRESH" });
+    //     setRefresh(refresh + 1);
+    //     message({
+    //       type: "success",
+    //       title: "Амжилттай хадгалагдлаа",
+    //     });
+    //     setLoadingbtn(false);
+    //   })
+    //   .catch((error) => {
+    //     setLoadingbtn(false);
+    //     message({
+    //       type: "error",
+    //       error,
+    //       title: "Хааж чадсангүй.",
+    //     });
+    //   });
+  };
   return (
     <div className="w-full">
       {" "}
@@ -350,9 +418,28 @@ const Workers = () => {
           />
           <Column
             field="is_approve"
-            header="Баталгаажуулалт"
+            header="Төлбөр дуусгах"
             className="text-sm"
-            style={{ minWidth: "130px", maxWidth: "130px" }}
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            body={(item) => {
+              return (
+                <div className="flex items-center justify-center gap-3">
+                  <Spin tip="." className="bg-opacity-80" spinning={loadingbtn}>
+                    <Switch
+                      checkedChildren={
+                        <i className="fa fa-check  text-green-600" />
+                      }
+                      unCheckedChildren={<i className="fa fa-times " />}
+                      checked={item.is_approve}
+                      onChange={(value) => {
+                        setLoadingbtn(true);
+                        PlanApprove(item, value);
+                      }}
+                    />
+                  </Spin>
+                </div>
+              );
+            }}
           />
           <Column
             field="user_name"
@@ -403,6 +490,7 @@ const Workers = () => {
                           delguur_id: item.delguur_id,
                           dt: item.register_date,
                           cash: item.cash,
+                          is_approve: item.is_approve,
                         },
                       });
                     }}

@@ -62,6 +62,7 @@ const _state = {
     delguur_ner: null,
     order_id: 0,
     filter_order_id: 0,
+    is_approve: null,
     cash: 0,
     dt: moment(),
     modal_edit: false,

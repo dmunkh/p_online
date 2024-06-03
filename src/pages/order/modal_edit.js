@@ -105,54 +105,50 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    console.log(
-      "INSERTING",
-      // baraa[0].company_name,
-      dayjs(date).format("YYYY"),
-      dayjs(date).format("M")
-    );
-
     if (state.order.id === 0) {
       try {
-        const response = axios.post("https://dmunkh.store/api/backend/orders", {
-          delguur_id: delguur[0].id,
-          delguur_ner: delguur[0].delguur_ner,
-          order_number: order,
-          cash: state.order.cash,
-          register_date: state.order.dt,
-          is_approve: 0,
-        });
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data, "refresh", state.refresh);
-        // const fetchData = async () => {
-        //   try {
-        //     const response = await axios.get(
-        //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
-        //     );
-        //     console.log("data", response.data);
-        //   } catch (error) {}
-        // };
-
-        // fetchData();
+        axios
+          .post("https://dmunkh.store/api/backend/orders", {
+            delguur_id: delguur[0].id,
+            delguur_ner: delguur[0].delguur_ner,
+            order_number: order,
+            cash: state.order.cash,
+            register_date: state.order.dt,
+            is_approve: 0,
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       } catch (error) {}
     } else {
       try {
-        const response = axios.put(
-          "https://dmunkh.store/api/backend/balance/" + state.order.id,
-          {
+        console.log("INSERTING");
+        axios
+          .put("https://dmunkh.store/api/backend/balance/" + state.order.id, {
             count: state.order.count,
-          }
-        );
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
         dispatch({
           type: "STATE",
           data: { refresh: state.refresh + 1 },
         });
 
-        console.log("return", response.data, "refresh", state.refresh);
         // const fetchData = async () => {
         //   try {
         //     const response = await axios.get(

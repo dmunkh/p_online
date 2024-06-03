@@ -39,7 +39,8 @@ const Goods_List = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
+          // "https://dmunkh.store/api/backend/balance",
+          "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -62,6 +63,7 @@ const Goods_List = () => {
               total: _.sumBy(items, "total"),
               user_name: items[0].user_name,
               phone: items[0].phone,
+              is_approve: items[0].is_approve,
             };
           })
           .value();
