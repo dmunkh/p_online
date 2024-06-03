@@ -54,22 +54,27 @@ const Workers = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/balancelist",
-          {
-            params: {
-              main_company_id: main_company_id,
-            },
-          }
-        );
-        console.log("balance list", response.data.response);
+        await axios
+          .get(
+            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+            // "http://3.0.177.127/api/backend/baraa"
+            "https://dmunkh.store/api/backend/balancelist",
+            {
+              params: {
+                main_company_id: main_company_id,
+              },
+            }
+          )
+          .then((response) => {
+            setList(
+              response.data.response &&
+                _.orderBy(response.data.response, ["baraa_id", "register_date"])
+            );
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
 
-        setList(
-          response.data.response &&
-            _.orderBy(response.data.response, ["baraa_id", "register_date"])
-        );
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -309,15 +314,15 @@ const Workers = () => {
             className="text-sm"
             style={{ minWidth: "40px", maxWidth: "60px" }}
           />
-          <Column
+          {/* <Column
             field="baraa_id"
             header="baraa_id"
             className="text-sm"
             style={{ minWidth: "60px", maxWidth: "60px" }}
-          />
+          /> */}
           <Column
             field="baraa_ner"
-            header="Name"
+            header="Бараа нэр"
             className="text-sm"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
@@ -336,6 +341,12 @@ const Workers = () => {
               return data.type_id === 0 ? data.count : "";
             }}
           /> */}
+          <Column
+            field="box_count"
+            header="Хайрцаг"
+            className="text-sm justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+          />
           <Column
             field="count"
             header="Орлого"
@@ -363,12 +374,7 @@ const Workers = () => {
               return Intl.NumberFormat("en-US").format(data.count * data.price);
             }}
           />
-          <Column
-            field="box_count"
-            header="Хайрцаг"
-            className="text-sm"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
+
           <Column
             field="user_name"
             header="Бүртгэсэн"

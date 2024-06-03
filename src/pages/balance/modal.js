@@ -87,9 +87,8 @@ const ModalNormDetail = () => {
     if (state.balance.id === 0) {
       try {
         console.log("try to insert", baraa[0]);
-        const response = axios.post(
-          "https://dmunkh.store/api/backend/balance",
-          {
+        axios
+          .post("https://dmunkh.store/api/backend/balance", {
             order_id: 0,
             type_id: state.balance.type,
             delguur_id: 0,
@@ -107,29 +106,35 @@ const ModalNormDetail = () => {
             user_id: user_id,
             box_count: boxcount,
             comment: comment,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data, "refresh", state.refresh);
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        // console.log("return", response.data, "refresh", state.refresh);
       } catch (error) {}
     } else {
       try {
-        const response = axios.put(
-          "https://dmunkh.store/api/backend/balance/" + state.balance.id,
-          {
+        axios
+          .put("https://dmunkh.store/api/backend/balance/" + state.balance.id, {
             count: state.balance.count,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data, "refresh", state.refresh);
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       } catch (error) {}
     }
   };

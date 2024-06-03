@@ -88,9 +88,8 @@ const ModalNormDetail = () => {
       }
     } else {
       try {
-        const response = axios.put(
-          "https://dmunkh.store/api/backend/delguur/" + state.delguur.id,
-          {
+        axios
+          .put("https://dmunkh.store/api/backend/delguur/" + state.delguur.id, {
             delguur_ner: state.delguur.delguur_ner,
             d_dans: state.delguur.dans,
             d_hayag: state.delguur.hayag,
@@ -98,14 +97,17 @@ const ModalNormDetail = () => {
             d_utas: state.delguur.utas,
             company_name: state.delguur.company_name,
             // unit: unit,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data);
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       } catch (error) {
         setLoading(false);
       }

@@ -117,7 +117,7 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="negj_namemnfull"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["baraa_ner"]}
+          globalFilterFields={["ner"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -240,6 +240,7 @@ const Workers = () => {
             header="Order"
           />
           <Column
+            sortable
             field="ner"
             header="Барааны нэр"
             className="text-sm"
