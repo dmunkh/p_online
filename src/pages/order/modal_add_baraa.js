@@ -60,26 +60,15 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
+          "https://dmunkh.store/api/backend/balance/order",
           {
             params: {
-              main_company_id: main_company_id,
-              user_id: user_id,
-              group_id: group_id,
+              order_id: state.order.order_id,
             },
           }
         );
 
-        setbalance_list(
-          _.orderBy(
-            _.filter(
-              response.data.response,
-              (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
-            ),
-            response.data.response,
-            ["id"]
-          )
-        );
+        setbalance_list(response.data.response);
 
         baraa_list(_.orderBy(response.data.response, ["id"]));
         console.log("baraa jagsaalttttttt", response.data.response);
@@ -142,7 +131,8 @@ const ModalNormDetail = () => {
   const handleClick = () => {
     try {
       axios
-        .post("https://dmunkh.store/api/backend/balance", {
+        // .post("https://dmunkh.store/api/backend/balance", {
+        .post("https://dmunkh.store:5000/api/backend/balance", {
           type_id: 3,
           baraa_id: baraa[0].id,
           baraa_ner: baraa[0].baraa_ner,
@@ -158,6 +148,8 @@ const ModalNormDetail = () => {
           mc_id: main_company_id,
           user_id: user_id,
           comment: comment,
+          bonus: bonus,
+          box_count: boxcount,
         })
         .then((response) => {
           dispatch({
@@ -329,47 +321,6 @@ const ModalNormDetail = () => {
                   setLoading(false);
                 }}
               />
-              {/* <button
-          className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
-          onClick={() => {
-            setLoading(true);
-            API.postPlanApprove({
-              module_id: state.moduleid,
-              year: moment(state.date).format("Y"),
-              is_closed: 1,
-              department_id: state.department_id,
-            })
-              .then((res) => {
-                dispatch({
-                  type: "STATE",
-                  data: { refresh: state.refresh + 1 },
-                });
-                dispatch({ type: "STATE", data: { modal: false } });
-
-                message({
-                  type: "success",
-                  title: "Баталгаажуулалт амжилттай",
-                });
-
-                setLoading(false);
-              })
-              .catch((error) => {
-                message({
-                  type: "error",
-                  error,
-                  title: "Жагсаалт татаж чадсангүй",
-                });
-                setLoading(false);
-              })
-              .finally(() => {
-                setLoading(false);
-              });
-          }}
-        >
-          <i className="fa fa-save" />
-
-          <span className="ml-2">Хадгалах</span>
-        </button> */}
             </Spin>
           </div>
         </div>
@@ -379,7 +330,7 @@ const ModalNormDetail = () => {
           <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
             <DataTable
               size="small"
-              value={list}
+              value={balance_list}
               dataKey="id"
               filters={search}
               paginator

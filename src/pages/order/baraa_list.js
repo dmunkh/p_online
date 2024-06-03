@@ -29,6 +29,7 @@ const Goods_List = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [filterlist, setfilterlist] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
   const group_id = useBearStore((state) => state.group_id);
   const user_id = useBearStore((state) => state.user_id);
@@ -75,6 +76,7 @@ const Goods_List = () => {
         console.log("result", result);
 
         setList(_.orderBy(response.data.response, ["id"]));
+        setfilterlist(response.data.response);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -85,6 +87,21 @@ const Goods_List = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
+  useEffect(() => {
+    console.log("filter order id", state.order.filter_order_id, filterlist);
+    var result = filterlist;
+    if (state.order.filter_order_id !== 0) {
+      setList(
+        _.filter(
+          result,
+          (a) => parseInt(a.id_order) === parseInt(state.order.filter_order_id)
+        )
+      );
+    } else {
+      setList(filterlist);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.order.order_id, state.order.filter_order_id]);
 
   return (
     <div className="w-full">

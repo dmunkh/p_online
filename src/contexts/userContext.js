@@ -105,7 +105,7 @@ const UserContext = ({ children }) => {
       //     API.getAuth().then((res) => {
       //       const result = res.data;
       //       let url = result.url;
-      //       if (window.location.hostname === "localhost") {
+      //       if (window.location.hostname === "https://dmunkh.storet") {
       //         url = url.replace(
       //           "https://training.erdenetmc.mn/callback",
       //           "https://dmunkh.store/callback"

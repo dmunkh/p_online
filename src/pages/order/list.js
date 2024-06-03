@@ -131,6 +131,19 @@ const Workers = () => {
                 >
                   <i className="ft-plus" />
                 </div>
+
+                <div
+                  title="Жагсаалт шинэчлэх"
+                  className="p-1 flex items-center justify-center font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  onClick={() => {
+                    dispatch({
+                      type: "STATE",
+                      data: { refresh: state.refresh + 1 },
+                    });
+                  }}
+                >
+                  <i className="ft-search" />
+                </div>
               </div>
             </div>
           }
@@ -142,6 +155,24 @@ const Workers = () => {
                 </span>
               </div>
             );
+          }}
+          rowClassName={(data) => {
+            var result = "cursor-pointer";
+            if (state.order.filter_order_id === data.order_id)
+              result += " bg-blue-500 text-white";
+            return result;
+          }}
+          onRowClick={(e) => {
+            console.log(e);
+            dispatch({
+              type: "ORDER",
+              data: {
+                filter_order_id:
+                  e.data.order_id === state.order.filter_order_id
+                    ? 0
+                    : e.data.order_id,
+              },
+            });
           }}
           rows={per_page}
           first={first}
@@ -382,7 +413,7 @@ const Workers = () => {
 
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    className="p-1 flex items-center justify-center font-semibold text-orange-500 rounded-full border-2 border-orange-500 hover:bg-orange-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       setmodalprint(true);
                       dispatch({
@@ -396,7 +427,7 @@ const Workers = () => {
                       });
                     }}
                   >
-                    <i className="ft-print" />
+                    <i className="ft-search" />
                   </button>
                   {/* )} */}
                 </div>

@@ -78,11 +78,11 @@ const Index = () => {
       year: moment(state.change_year).format("YYYY"),
       module_id: state.moduleid,
     };
-    var url = new URL("https://localhost:44335/training/plan");
+    var url = new URL("https://https://dmunkh.storet:44335/training/plan");
     //var url = new URL("https://training.erdenetmc.mn/api/report/plan/count");
 
-    // if (window.location.hostname === "localhost")
-    //   url = new URL("https://localhost:44335/hse/plan");
+    // if (window.location.hostname === "https://dmunkh.storet")
+    //   url = new URL("https://https://dmunkh.storet:44335/hse/plan");
     Object.keys(data).forEach((key) => url.searchParams.append(key, data[key]));
     fetch(url, {
       headers: {

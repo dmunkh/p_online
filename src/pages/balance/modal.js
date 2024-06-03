@@ -88,7 +88,7 @@ const ModalNormDetail = () => {
       try {
         console.log("try to insert", baraa[0]);
         axios
-          .post("https://dmunkh.store/api/backend/balance", {
+          .post("https://dmunkh.store/api/backend/balance/post", {
             order_id: 0,
             type_id: state.balance.type,
             delguur_id: 0,

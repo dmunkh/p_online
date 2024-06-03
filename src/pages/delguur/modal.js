@@ -18,6 +18,8 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 import TextArea from "antd/lib/input/TextArea";
 // import Swal from "sweetalert2";
 const { Option } = Select;
@@ -61,8 +63,15 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
+    Swal.fire({
+      title: "Уншиж байна...",
+      text: "Түр хүлээнэ үү",
+      allowOutsideClick: false,
+    });
+
     if (state.delguur.id === 0) {
       try {
+        setLoading(true);
         axios
           .post("https://dmunkh.store/api/backend/delguur", {
             delguur_ner: state.delguur.delguur_ner,
@@ -79,11 +88,35 @@ const ModalNormDetail = () => {
               data: { refresh: state.refresh + 1 },
             });
             console.log("Response:", response);
+            setLoading(false);
           })
           .catch((error) => {
+            setLoading(false);
             console.error("Error:", error);
           });
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
+        // Swal.fire({
+        //   title: "Operation Successful",
+        //   text: "Your request was completed successfully!",
+        //   icon: "success",
+        //   showCancelButton: true,
+        //   confirmButtonText: "Approve",
+        //   cancelButtonText: "Cancel",
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     Swal.fire("Approved!", "Your action has been approved.", "success");
+        //   } else {
+        //     Swal.fire("Cancelled", "Your action was cancelled.", "error");
+        //   }
+        // });
       } catch (error) {
+        Swal.close();
         setLoading(false);
       }
     } else {
@@ -108,7 +141,14 @@ const ModalNormDetail = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
       } catch (error) {
+        Swal.close();
         setLoading(false);
       }
     }
@@ -222,7 +262,11 @@ const ModalNormDetail = () => {
         className="bg-opacity-60"
         spinning={loading}
       >
+        <button onClick={handleClick} disabled={loading}>
+          {loading ? "Loading..." : "Click Me"}
+        </button>
         <SaveButton
+          disabled={loading}
           onClick={() => {
             setLoading(true);
             handleClick();

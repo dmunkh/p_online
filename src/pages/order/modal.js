@@ -45,14 +45,20 @@ const ModalNormDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/delguur"
-        );
-        console.log(response.data.response);
+        await axios
+          .get(
+            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+            // "http://3.0.177.127/api/backend/baraa"
+            "https://dmunkh.store/api/backend/delguur"
+          )
+          .then((response) => {
+            setCompany(_.orderBy(response.data.response, ["id"]));
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
 
-        setCompany(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -67,14 +73,19 @@ const ModalNormDetail = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/delguur"
-        );
-        console.log("baraa list", response.data.response);
+        await axios
+          .get(
+            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+            // "http://3.0.177.127/api/backend/baraa"
+            "https://dmunkh.store/api/backend/delguur"
+          )
+          .then((response) => {
+            setDelguur_list(_.orderBy(response.data.response, ["id"]));
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
 
-        setDelguur_list(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -96,62 +107,50 @@ const ModalNormDetail = () => {
 
     if (state.order.order_id === 0) {
       try {
-        const response = axios.post("https://dmunkh.store/api/backend/orders", {
-          delguur_id: delguur[0].id,
-          delguur_ner: delguur[0].delguur_ner,
-          order_number: order,
-          cash: state.order.cash,
-          register_date: state.order.dt,
-          is_approve: 0,
-          mc_id: main_company_id,
-          user_id: user_id,
-        });
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data, "refresh", state.refresh);
-        // const fetchData = async () => {
-        //   try {
-        //     const response = await axios.get(
-        //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
-        //     );
-        //     console.log("data", response.data);
-        //   } catch (error) {}
-        // };
-
-        // fetchData();
-      } catch (error) {}
-    } else {
-      try {
-        const response = axios.put(
-          "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
-          {
+        axios
+          .post("https://dmunkh.store/api/backend/orders", {
             delguur_id: delguur[0].id,
             delguur_ner: delguur[0].delguur_ner,
             order_number: order,
             cash: state.order.cash,
-            register_date: moment(state.order.dt).format("YYYY.MM.DD"),
+            register_date: state.order.dt,
             is_approve: 0,
-          }
-        );
-        dispatch({
-          type: "STATE",
-          data: { refresh: state.refresh + 1 },
-        });
-
-        console.log("return", response.data, "refresh", state.refresh);
-        // const fetchData = async () => {
-        //   try {
-        //     const response = await axios.get(
-        //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
-        //     );
-        //     console.log("data", response.data);
-        //   } catch (error) {}
-        // };
-
-        // fetchData();
+            mc_id: main_company_id,
+            user_id: user_id,
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } catch (error) {}
+    } else {
+      try {
+        axios
+          .put(
+            "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
+            {
+              delguur_id: delguur[0].id,
+              delguur_ner: delguur[0].delguur_ner,
+              order_number: order,
+              cash: state.order.cash,
+              register_date: moment(state.order.dt).format("YYYY.MM.DD"),
+              is_approve: 0,
+            }
+          )
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       } catch (error) {}
     }
   };
