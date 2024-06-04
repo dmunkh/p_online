@@ -120,8 +120,8 @@ const ModalNormDetail = () => {
       try {
         console.log("INSERTING ORDER", value, label, delguur);
         axios
-          // .post("https://dmunkh.store/api/backend/orders", {
-          .post("http://localhost:5000/api/backend/orders", {
+          .post("https://dmunkh.store/api/backend/orders", {
+            // .post("http://localhost:5000/api/backend/orders", {
             delguur_id: delguur[0].id,
             delguur_ner: delguur[0].delguur_ner,
             order_number: order,
@@ -154,8 +154,8 @@ const ModalNormDetail = () => {
       try {
         axios
           .put(
-            "http://localhost:5000/api/backend/orders/" + state.order.order_id,
-            // "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
+            // "http://localhost:5000/api/backend/orders/" + state.order.order_id,
+            "https://dmunkh.store/api/backend/orders/" + state.order.order_id,
             {
               // delguur_id: delguur[0].id,
               // delguur_ner: delguur[0].delguur_ner,
