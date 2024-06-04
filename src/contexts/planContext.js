@@ -82,6 +82,13 @@ const _state = {
     register_date: moment(),
     baraa_id: null,
   },
+  user: {
+    id: 0,
+    modal: false,
+    user_name: null,
+    user_login: null,
+    phone: null,
+  },
 };
 
 export const usePlanContext = () => {

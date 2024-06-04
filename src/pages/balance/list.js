@@ -281,12 +281,12 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
+          {/* <Column
             style={{ minWidth: "40px", maxWidth: "40px" }}
             field="id"
             className="text-sm"
             header="id"
-          />
+          /> */}
           <Column
             field="delguur_ner"
             header="Дэлгүүр"
@@ -308,12 +308,12 @@ const Workers = () => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
             }}
           />
-          <Column
+          {/* <Column
             field="type_id"
             header="type_id"
             className="text-sm"
             style={{ minWidth: "40px", maxWidth: "60px" }}
-          />
+          /> */}
           {/* <Column
             field="baraa_id"
             header="baraa_id"

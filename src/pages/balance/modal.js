@@ -84,82 +84,95 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    Swal.fire({
-      title: "Уншиж байна...",
-      text: "Түр хүлээнэ үү",
-      allowOutsideClick: false,
-    });
-    if (state.balance.id === 0) {
-      try {
-        console.log("try to insert", baraa[0]);
-        axios
-          .post("https://dmunkh.store/api/backend/balance/post", {
-            order_id: 0,
-            type_id: state.balance.type,
-            delguur_id: 0,
-            delguur_ner: "",
-            baraa_id: baraa[0].id,
-            baraa_ner: baraa[0].baraa_ner,
-            company_name: baraa[0].company_ner,
-            company_id: baraa[0].company_id,
-            count: state.balance.count,
-            bonus: state.balance.bonus,
-            unit: unit,
-            price: price,
-            register_date: dayjs(date).format("YYYY-MM-DD"),
-            mc_id: main_company_id,
-            user_id: user_id,
-            box_count: boxcount,
-            comment: comment,
-          })
-          .then((response) => {
-            dispatch({
-              type: "STATE",
-              data: { refresh: state.refresh + 1 },
-            });
-            console.log("Response:", response);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-        setLoading(false);
-        Swal.close();
-        Swal.fire(
-          "Хадгалагдлаа!",
-          "Бүртгэл амжилттай хадгалагдлаа.",
-          "success"
-        );
-        // console.log("return", response.data, "refresh", state.refresh);
-      } catch (error) {
-        setLoading(false);
-        Swal.close();
-      }
+    let validation = "";
+
+    state.balance.baraa_id || (validation += "Бараа сонгоно уу <br />");
+    state.balance.count || (validation += "Тоо ширхэг оруулна уу <br />");
+    if (validation !== "") {
+      Swal.fire({
+        icon: "warning",
+        html: validation,
+      });
     } else {
-      try {
-        axios
-          .put("https://dmunkh.store/api/backend/balance/" + state.balance.id, {
-            count: state.balance.count,
-          })
-          .then((response) => {
-            dispatch({
-              type: "STATE",
-              data: { refresh: state.refresh + 1 },
+      Swal.fire({
+        title: "Уншиж байна...",
+        text: "Түр хүлээнэ үү",
+        allowOutsideClick: false,
+      });
+      if (state.balance.id === 0) {
+        try {
+          axios
+            .post("https://dmunkh.store/api/backend/balance/post", {
+              order_id: 0,
+              type_id: state.balance.type,
+              delguur_id: 0,
+              delguur_ner: "",
+              baraa_id: baraa[0].id,
+              baraa_ner: baraa[0].baraa_ner,
+              company_name: baraa[0].company_ner,
+              company_id: baraa[0].company_id,
+              count: state.balance.count,
+              bonus: state.balance.bonus,
+              unit: unit,
+              price: price,
+              register_date: dayjs(date).format("YYYY-MM-DD"),
+              mc_id: main_company_id,
+              user_id: user_id,
+              box_count: boxcount,
+              comment: comment,
+            })
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+              console.log("Response:", response);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
             });
-            console.log("Response:", response);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-        setLoading(false);
-        Swal.close();
-        Swal.fire(
-          "Хадгалагдлаа!",
-          "Бүртгэл амжилттай хадгалагдлаа.",
-          "success"
-        );
-      } catch (error) {
-        setLoading(false);
-        Swal.close();
+          setLoading(false);
+          Swal.close();
+          Swal.fire(
+            "Хадгалагдлаа!",
+            "Бүртгэл амжилттай хадгалагдлаа.",
+            "success"
+          );
+          // console.log("return", response.data, "refresh", state.refresh);
+        } catch (error) {
+          setLoading(false);
+          Swal.close();
+        }
+      } else {
+        try {
+          axios
+            .put(
+              "https://dmunkh.store/api/backend/balance/" + state.balance.id,
+              {
+                count: state.balance.count,
+              }
+            )
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+              console.log("Response:", response);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+          setLoading(false);
+          Swal.close();
+          Swal.fire(
+            "Хадгалагдлаа!",
+            "Бүртгэл амжилттай хадгалагдлаа.",
+            "success"
+          );
+        } catch (error) {
+          setLoading(false);
+          Swal.close();
+        }
       }
     }
   };

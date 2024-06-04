@@ -3,7 +3,7 @@ import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 // import Module from "src/components/custom/module";
-
+import moment from "moment";
 import dayjs from "dayjs";
 // import _ from "lodash";
 import {
@@ -18,6 +18,9 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
+import Swal from "sweetalert2";
+
+import TextArea from "antd/lib/input/TextArea";
 // import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -32,14 +35,8 @@ const ModalNormDetail = () => {
   const [register, setregister] = useState(0);
   const [baraa, setbaraa] = useState();
   const [hayag, sethayag] = useState("");
-
-  const [company, setCompany] = useState([]);
-  const [count, setcount] = useState(0);
-  const [boxcount, setboxcount] = useState(0);
-
-  const [unit, setunit] = useState("ш");
-  const [price, setprice] = useState(0);
   const [date, setdate] = useState(dayjs());
+  const [company, setCompany] = useState([]);
 
   const [baraa_list, setBaraa_list] = useState();
 
@@ -65,164 +62,145 @@ const ModalNormDetail = () => {
     fetchData();
   }, [state.refresh]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleClick = () => {
+    Swal.fire({
+      title: "Уншиж байна...",
+      text: "Түр хүлээнэ үү",
+      allowOutsideClick: false,
+    });
+
+    if (state.user.id === 0) {
       try {
         setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/baraa"
+        axios
+          .post("https://dmunkh.store/api/backend/users/" + state.user.id, {
+            user_name: state.user.user_name,
+            phone: state.user.phone,
+            // unit: unit,
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+            setLoading(false);
+          })
+          .catch((error) => {
+            setLoading(false);
+            console.error("Error:", error);
+          });
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
         );
-        console.log("baraa list", response.data.response);
-
-        setBaraa_list(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
+        // Swal.fire({
+        //   title: "Operation Successful",
+        //   text: "Your request was completed successfully!",
+        //   icon: "success",
+        //   showCancelButton: true,
+        //   confirmButtonText: "Approve",
+        //   cancelButtonText: "Cancel",
+        // }).then((result) => {
+        //   if (result.isConfirmed) {
+        //     Swal.fire("Approved!", "Your action has been approved.", "success");
+        //   } else {
+        //     Swal.fire("Cancelled", "Your action was cancelled.", "error");
+        //   }
+        // });
       } catch (error) {
+        Swal.close();
         setLoading(false);
-        // setError(error);
       }
-    };
-
-    fetchData();
-  }, [state.refresh]);
-
-  const handleClick = () => {
-    // console.log(
-    //   "INSERTING",
-    //   // baraa[0].company_name,
-    //   dayjs(date).format("YYYY"),
-    //   dayjs(date).format("M")
-    // );
-
-    try {
-      // console.log("try to insert");
-      const response = axios.post("https://dmunkh.store/api/backend/orders", {
-        delguur_id: 1,
-        delguur_ner: "delguur",
-        order_number: 2,
-        register_date: "2024-5-8",
-        is_approve: 0,
-      });
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-
-      console.log("return", response.data, "refresh", state.refresh);
-      // const fetchData = async () => {
-      //   try {
-      //     const response = await axios.get(
-      //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
-      //     );
-      //     console.log("data", response.data);
-      //   } catch (error) {}
-      // };
-
-      // fetchData();
-    } catch (error) {}
+    } else {
+      try {
+        axios
+          .put("https://dmunkh.store/api/backend/users/" + state.user.id, {
+            user_name: state.user.user_name,
+            phone: state.user.phone,
+            // unit: unit,
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
+      } catch (error) {
+        Swal.close();
+        setLoading(false);
+      }
+    }
   };
-
   return (
     <div className="flex flex-col text-xs">
       <div>
         <h2 className=" text-center text-lg font-extrabold text-gray-900">
-          Захиалга бүртгэл
+          Хэрэглэгч засах
         </h2>
       </div>
 
       <hr className="my-2" />
       <div className="rounded-md shadow-sm -space-y-px">
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Огноо</div>
+          <div className="w-1/4">Нэр</div>
           <div className="w-3/4">
-            <DatePicker
-              className="w-full"
-              // value={dayjs(date)}
-              onChange={(date) => setdate(date)}
+            {" "}
+            <Input
+              value={state.user.user_name}
+              // onChange={(e) => setdelguur_ner(e.target.value)}
+              onChange={(e) =>
+                dispatch({
+                  type: "USER",
+                  data: { user_name: e.target.value },
+                })
+              }
             />
           </div>
         </div>
+
         <div className="flex p-1 gap-2">
-          <div className="w-1/4">Бараа</div>
+          <div className="w-1/4">Утас</div>
           <div className="w-3/4">
-            <Select
-              showSearch
-              allowClear
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              className="w-full"
-              onChange={(value) => {
-                // console.log(
-                //   value,
-                //   _.filter(baraa_list, (a) => a.id === value)
-                // );
-                setbaraa(_.filter(baraa_list, (a) => a.id === value));
-                setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
-              }}
-            >
-              {_.map(baraa_list, (item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.company_ner + " - " + item.baraa_ner + " - " + item.une}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Тоо ширхэг</div>
-          <InputNumber value={count} onChange={(value) => setcount(value)} />
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Нэгж үнэ</div>
-          <InputNumber value={price} onChange={(value) => setprice(value)} />
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Хэмжих нэгж</div>
-          <div className="w-3/4">
-            <Select
-              showSearch
-              allowClear
-              placeholder="Сонгоно уу."
-              optionFilterProp="children"
-              className="w-full"
-              value={unit}
-              onChange={(value) => setunit(value)}
-            >
-              <Option key={"ш"} value={"ш"}>
-                ш
-              </Option>
-              <Option key={"кг"} value={"кг"}>
-                кг
-              </Option>
-              <Option key={"л"} value={"л"}>
-                л
-              </Option>
-            </Select>
-          </div>
-        </div>
-        <div className="flex p-1 gap-2">
-          <div className="w-1/4">Хайрцаг</div>
-          <div className="w-3/4">
-            <InputNumber
-              value={boxcount}
-              onChange={(value) => setboxcount(value)}
+            <Input
+              value={state.user.phone}
+              onChange={(e) =>
+                dispatch({
+                  type: "USER",
+                  data: { phone: e.target.value },
+                })
+              }
             />
           </div>
         </div>
-        <Spin
-          tip="Уншиж байна. Түр хүлээнэ үү"
-          className="bg-opacity-60"
-          spinning={loading}
-        >
-          <SaveButton
-            onClick={() => {
-              setLoading(true);
-              handleClick();
-              setLoading(false);
-            }}
-          />
-          {/* <button
+      </div>
+      <Spin
+        tip="Уншиж байна. Түр хүлээнэ үү"
+        className="bg-opacity-60"
+        spinning={loading}
+      >
+        <SaveButton
+          disabled={loading}
+          onClick={() => {
+            setLoading(true);
+            handleClick();
+            setLoading(false);
+          }}
+        />
+        {/* <button
           className="w-full py-2 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-md hover:bg-violet-500 hover:text-white focus:outline-none duration-300 "
           onClick={() => {
             setLoading(true);
@@ -263,8 +241,7 @@ const ModalNormDetail = () => {
 
           <span className="ml-2">Хадгалах</span>
         </button> */}
-        </Spin>
-      </div>
+      </Spin>
     </div>
   );
 };

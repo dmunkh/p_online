@@ -5,6 +5,14 @@ export const reducer = (state, action) => {
         ...state,
         ...action.data,
       };
+    case "USER":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.data,
+        },
+      };
     case "ORDER":
       return {
         ...state,

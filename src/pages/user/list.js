@@ -6,21 +6,19 @@ import _ from "lodash";
 import * as API from "src/api/plan";
 import * as REQ from "src/api/request";
 import { SearchOutlined } from "@ant-design/icons";
-import moment from "moment";
+import useBearStore from "src/state/state";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/order/modal";
-import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
-// import { useUserContext } from "src/contexts/userContext";
+import MODAL from "src/pages/user/modal";
+
 import axios from "axios";
-import dayjs from "dayjs";
-import AddBtn from "src/components/button/plusButton";
 
 import Swal from "sweetalert2";
 
 const Workers = () => {
   // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
+  const main_company_id = useBearStore((state) => state.main_company_id);
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
@@ -29,94 +27,29 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        console.log("LOADING START");
+
         axios
           .get("https://dmunkh.store/api/backend/user")
           .then((response) => {
-            console.log("user list", response.data.response);
-            setList(_.orderBy(response.data.response, ["id"]));
+            setList(
+              _.orderBy(
+                _.filter(
+                  response.data.response,
+                  (a) =>
+                    parseInt(a.main_company_id) === parseInt(main_company_id)
+                ),
+                ["id"]
+              )
+            );
           })
           .catch((error) => {
             console.error("Error:", error);
           });
 
-        // fetch("https://dmunkh.store/api/backend/user", {
-        //   method: "GET",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   // Pass the `rejectUnauthorized` option as `false` to bypass SSL certificate verification
-        //   agent: new (require("https").Agent)({
-        //     rejectUnauthorized: false,
-        //   }),
-        // })
-        //   .then((response) => {
-        //     if (!response.ok) {
-        //       throw new Error("Network response was not ok");
-        //     }
-        //     return response.json();
-        //   })
-        //   .then((data) => {
-        //     console.log(data);
-        //   })
-        //   .catch((error) => {
-        //     console.error(
-        //       "There was a problem with the fetch operation:",
-        //       error
-        //     );
-        //   });
-        // const axios = require("axios");
-        // const https = require("https");
-
-        // const agent = new https.Agent({
-        //   rejectUnauthorized: false,
-        // });
-        // await axios
-        //   .get(
-        //     // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-        //     // "http://3.0.177.127/api/backend/baraa"
-        //     "https://dmunkh.store/api/backend/user",
-        //     { httpsAgent: agent }
-        //   )
-        //   .then((response) => {
-        //     console.log(response.data);
-        //   })
-        //   .catch((error) => {
-        //     console.error("Error:", error);
-        //   });
-
-        // console.log("users list", response.data.response);
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
-
-        // setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -135,27 +68,13 @@ const Workers = () => {
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.modal}
+        visible={state.user.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "USER", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
         <MODAL />
-      </Modal>
-      <Modal
-        style={{ width: "1200" }}
-        width={1200}
-        height={550}
-        visible={state.modal_add_baraa}
-        // visible={true}
-        onCancel={() =>
-          dispatch({ type: "STATE", data: { modal_add_baraa: false } })
-        }
-        closeIcon={<div className="">x</div>}
-        footer={false}
-      >
-        <MODAL_ADD_BARAA />
       </Modal>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
@@ -193,7 +112,7 @@ const Workers = () => {
                   }}
                 />
               </div>
-              <div className="flex items-center gap-2 ">
+              {/* <div className="flex items-center gap-2 ">
                 <div
                   title="Нэмэх"
                   className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
@@ -203,7 +122,7 @@ const Workers = () => {
                 >
                   <i className="ft-plus" />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
@@ -294,12 +213,7 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-            field="id"
-            className="text-sm"
-            header="id"
-          />
+
           <Column
             field="user_name"
             header="Хэрэглэгч"
@@ -314,12 +228,12 @@ const Workers = () => {
           />
 
           <Column
-            field="cash"
-            header="Нийт дүн"
+            field="phone"
+            header="Утасны дугаар"
             className="text-sm"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            style={{ minWidth: "200px", maxWidth: "200px" }}
           />
-          <Column
+          {/* <Column
             field="main_company_id"
             header="main company"
             className="text-sm"
@@ -336,7 +250,7 @@ const Workers = () => {
             header="Баталгаажуулалт"
             className="text-sm"
             style={{ minWidth: "130px", maxWidth: "130px" }}
-          />
+          /> */}
           <Column
             align="center"
             header=""
@@ -351,31 +265,18 @@ const Workers = () => {
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
-                        type: "STATE",
-                        data: { modal_add_baraa: true },
-                      });
-                      dispatch({
-                        type: "ORDER",
+                        type: "USER",
                         data: {
-                          delguur_id: item.delguur_id,
-                          delguur_ner: item.delguur_ner,
-                          dt: item.register_date,
+                          modal: true,
+                          id: item.id,
+                          user_name: item.user_name,
+                          phone: item.phone,
                         },
                       });
                     }}
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
-
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    // onClick={() => ()}
-                  >
-                    <i className="ft-trash-2" />
-                  </button>
-                  {/* )} */}
                 </div>
               );
             }}

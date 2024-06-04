@@ -14,7 +14,7 @@ const MyComponent = () => {
   const userInfo = useBearStore((state) => state.userInfo);
   const [total, settotal] = useState(0);
   const [delguur, setdelguur] = useState([]);
-  console.log(state.order.order_id, userInfo.user_name, state.order.delguur_id);
+
   const currentDateTime = moment().format("YYYY-MM-DD HH:mm");
   useEffect(() => {
     const fetchData = async () => {
@@ -29,15 +29,6 @@ const MyComponent = () => {
           throw new Error("Network response was not ok");
         }
         const jsonData = await response.json();
-        console.log(
-          "fetching dataa",
-          jsonData.response,
-          _.filter(
-            jsonData.response,
-            (a) => parseInt(a.id) === parseInt(state.order.delguur_id)
-          )
-        );
-        // setData(jsonData);
 
         setdelguur(
           _.filter(
@@ -126,7 +117,7 @@ const MyComponent = () => {
               }}
               colSpan={6}
             >
-              ЗАРЛАГЫН БАРИМТ
+              ЗАРЛАГЫН БАРИМТ /№:{state.order.order_id}/
             </th>
           </tr>
           <tr>
@@ -150,7 +141,6 @@ const MyComponent = () => {
               Арвин үр түрүү ХХК - Тэнгэрийн хишиг
             </th>
             <th
-              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
@@ -158,16 +148,17 @@ const MyComponent = () => {
                 width: "100px",
               }}
             >
-              Компани нэр:
+              Харилцагч:
             </th>
             <th
+              colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
                 fontSize: "12px",
               }}
             >
-              {delguur[0]?.company_name}
+              {delguur[0]?.delguur_ner} ( {delguur[0]?.company_name} )
             </th>
           </tr>{" "}
           <tr>
@@ -191,6 +182,16 @@ const MyComponent = () => {
               Ачит холдинг
             </th>
             <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              {" "}
+              Хаяг:
+            </th>
+            <th
               colSpan={2}
               style={{
                 textAlign: "left",
@@ -198,16 +199,8 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Дэлгүүр нэр:
-            </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              {delguur[0]?.delguur_ner}
+              {" "}
+              {delguur[0]?.d_hayag}
             </th>
           </tr>
           <tr>
@@ -231,6 +224,15 @@ const MyComponent = () => {
               РД: 3199355
             </th>
             <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              Утас:
+            </th>
+            <th
               colSpan={2}
               style={{
                 textAlign: "left",
@@ -238,16 +240,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Хаяг:
-            </th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            >
-              {delguur[0]?.d_hayag}
+              {delguur[0]?.d_utas}
             </th>
           </tr>
           <tr>
@@ -277,18 +270,14 @@ const MyComponent = () => {
                 fontWeight: 500,
                 fontSize: "12px",
               }}
-            >
-              Утас:
-            </th>
+            ></th>
             <th
               style={{
                 textAlign: "left",
                 fontWeight: 500,
                 fontSize: "12px",
               }}
-            >
-              {delguur[0]?.d_utas}
-            </th>
+            ></th>
           </tr>
           <tr>
             <th
@@ -319,9 +308,7 @@ const MyComponent = () => {
                 fontWeight: 500,
                 fontSize: "12px",
               }}
-            >
-              Данс:
-            </th>
+            ></th>
             <th
               style={{
                 textAlign: "left",

@@ -71,7 +71,7 @@ const ModalNormDetail = () => {
         setbalance_list(response.data.response);
 
         baraa_list(_.orderBy(response.data.response, ["id"]));
-        console.log("baraa jagsaalttttttt", response.data.response);
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -92,8 +92,6 @@ const ModalNormDetail = () => {
         );
 
         setBaraa_list(_.orderBy(response.data.response, ["id"]));
-        console.log("baraa jagsaalttttttt", response.data.response);
-        // setLoading(false);
       } catch (error) {
         // setLoading(false);
       }
@@ -129,53 +127,68 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    Swal.fire({
-      title: "Уншиж байна...",
-      text: "Түр хүлээнэ үү",
-      allowOutsideClick: false,
-    });
-    try {
-      setLoading(true);
-      axios
-        // .post("https://dmunkh.store/api/backend/balance", {
-        .post("https://dmunkh.store/api/backend/balance", {
-          type_id: 3,
-          baraa_id: baraa[0].id,
-          baraa_ner: baraa[0].baraa_ner,
-          company_name: baraa[0].company_ner,
-          company_id: baraa[0].company_id,
-          delguur_id: state.order.delguur_id,
-          delguur_ner: state.order.delguur_ner,
-          count: count,
-          unit: unit,
-          price: price,
-          order_id: state.order.order_id,
-          register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
-          mc_id: main_company_id,
-          user_id: user_id,
-          comment: comment,
-          bonus: bonus,
-          box_count: boxcount,
-        })
-        .then((response) => {
-          dispatch({
-            type: "STATE",
-            data: { refresh: state.refresh + 1 },
+    let validation = "";
+
+    baraa_id || (validation += "Нэмэх бараа соногоно уу <br />");
+    count || (validation += "Тоо ширхэг оруулна уу <br />");
+    if (validation !== "") {
+      Swal.fire({
+        icon: "warning",
+        html: validation,
+      });
+    } else {
+      Swal.fire({
+        title: "Уншиж байна...",
+        text: "Түр хүлээнэ үү",
+        allowOutsideClick: false,
+      });
+      try {
+        setLoading(true);
+        axios
+          // .post("https://dmunkh.store/api/backend/balance", {
+          .post("https://dmunkh.store/api/backend/balance", {
+            type_id: 3,
+            baraa_id: baraa[0].id,
+            baraa_ner: baraa[0].baraa_ner,
+            company_name: baraa[0].company_ner,
+            company_id: baraa[0].company_id,
+            delguur_id: state.order.delguur_id,
+            delguur_ner: state.order.delguur_ner,
+            count: count,
+            unit: unit,
+            price: price,
+            order_id: state.order.order_id,
+            register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+            mc_id: main_company_id,
+            user_id: user_id,
+            comment: comment,
+            bonus: bonus,
+            box_count: boxcount,
+          })
+          .then((response) => {
+            dispatch({
+              type: "STATE",
+              data: { refresh: state.refresh + 1 },
+            });
+            setrefresh(refresh + 1);
+            console.log("Response:", response);
+          })
+          .catch((error) => {
+            Swal.close();
+            setLoading(false);
+            console.error("Error:", error);
           });
-          setrefresh(refresh + 1);
-          console.log("Response:", response);
-        })
-        .catch((error) => {
-          Swal.close();
-          setLoading(false);
-          console.error("Error:", error);
-        });
-      setLoading(false);
-      Swal.close();
-      Swal.fire("Хадгалагдлаа!", "Бүртгэл амжилттай хадгалагдлаа.", "success");
-    } catch (error) {
-      Swal.close();
-      setLoading(false);
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
+      } catch (error) {
+        Swal.close();
+        setLoading(false);
+      }
     }
   };
 
@@ -205,7 +218,7 @@ const ModalNormDetail = () => {
                   onChange={(value) => {
                     setbaraa_id(value);
                     setbaraa(_.filter(baraa_list, (a) => a.id === value));
-                    console.log(_.filter(baraa_list, (a) => a.id === value));
+
                     setprice(
                       _.filter(baraa_list, (a) => a.id === value)[0].une
                     );

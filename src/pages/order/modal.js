@@ -43,8 +43,6 @@ const ModalNormDetail = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
-  console.log("date", dayjs(state.order.dt), state.order.order_id);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,7 +55,6 @@ const ModalNormDetail = () => {
           )
           .then((response) => {
             setCompany(_.orderBy(response.data.response, ["id"]));
-            console.log("Response:", response);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -110,47 +107,61 @@ const ModalNormDetail = () => {
     setLabel(valueLabelMap[selectedValue]);
   };
   const handleClick = () => {
-    Swal.fire({
-      title: "Уншиж байна...",
-      text: "Түр хүлээнэ үү......",
-      allowOutsideClick: false,
-    });
+    let validation = "";
+
+    state.order.delguur_id || (validation += "Дэлгүүр сонгоно уу <br />");
 
     if (state.order.order_id === 0) {
-      try {
-        console.log("INSERTING ORDER", value, label, delguur);
-        axios
-          .post("https://dmunkh.store/api/backend/orders", {
-            // .post("http://localhost:5000/api/backend/orders", {
-            delguur_id: delguur[0].id,
-            delguur_ner: delguur[0].delguur_ner,
-            order_number: order,
-            cash: state.order.cash,
-            register_date: moment(date).format("YYYY-MM-DD HH:mm"),
-            is_approve: 0,
-            is_cash_loan: value,
-            // cash_loan_desc: label,
-            mc_id: main_company_id,
-            user_id: user_id,
-          })
-          .then((response) => {
-            dispatch({
-              type: "STATE",
-              data: { refresh: state.refresh + 1 },
+      if (validation !== "") {
+        Swal.fire({
+          icon: "warning",
+          html: validation,
+        });
+      } else {
+        Swal.fire({
+          title: "Уншиж байна...",
+          text: "Түр хүлээнэ үү......",
+          allowOutsideClick: false,
+        });
+        try {
+          axios
+            .post("https://dmunkh.store/api/backend/orders", {
+              // .post("http://localhost:5000/api/backend/orders", {
+              delguur_id: delguur[0].id,
+              delguur_ner: delguur[0].delguur_ner,
+              order_number: order,
+              cash: state.order.cash,
+              register_date: moment(date).format("YYYY-MM-DD HH:mm"),
+              is_approve: 0,
+              is_cash_loan: value,
+              // cash_loan_desc: label,
+              mc_id: main_company_id,
+              user_id: user_id,
+            })
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
             });
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-        setLoading(false);
-        Swal.close();
-        Swal.fire(
-          "Хадгалагдлаа!",
-          "Бүртгэл амжилттай хадгалагдлаа.",
-          "success"
-        );
-      } catch (error) {}
+          setLoading(false);
+          Swal.close();
+          Swal.fire(
+            "Хадгалагдлаа!",
+            "Бүртгэл амжилттай хадгалагдлаа.",
+            "success"
+          );
+        } catch (error) {}
+      }
     } else {
+      Swal.fire({
+        title: "Уншиж байна...",
+        text: "Түр хүлээнэ үү......",
+        allowOutsideClick: false,
+      });
       try {
         axios
           .put(
@@ -214,10 +225,6 @@ const ModalNormDetail = () => {
               optionFilterProp="children"
               className="w-full"
               onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(delguur_list, (a) => a.id === value)
-                );
                 setDelguur(
                   _.filter(
                     delguur_list,

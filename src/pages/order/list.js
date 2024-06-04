@@ -366,6 +366,60 @@ const Workers = () => {
         >
           <Column
             align="center"
+            header=""
+            className="text-xs"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            headerClassName="flex items-center justify-center"
+            body={(item) => {
+              console.log("registerr_date", item.register_date);
+              return (
+                <div className="flex items-center justify-center gap-2">
+                  {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
+                  <div
+                    title="Нэмэх"
+                    className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                    onClick={() => {
+                      dispatch({
+                        type: "STATE",
+                        data: { modal_add_baraa: true },
+                      });
+                      dispatch({
+                        type: "ORDER",
+                        data: {
+                          order_id: item.order_id,
+                          delguur_id: item.delguur_id,
+                          delguur_ner: item.delguur_ner,
+                          dt: item.register_date,
+                        },
+                      });
+                    }}
+                  >
+                    <i className="ft-plus" />
+                  </div>
+
+                  <button
+                    className="p-1 flex items-center justify-center font-semibold text-orange-500 rounded-full border-2 border-orange-500 hover:bg-orange-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                    onClick={() => {
+                      setmodalprint(true);
+                      dispatch({
+                        type: "ORDER",
+                        data: {
+                          order_id: item.order_id,
+                          delguur_id: item.delguur_id,
+                          phone: item.phone,
+                          user_name: item.user_name,
+                        },
+                      });
+                    }}
+                  >
+                    <i className="ft-search" />
+                  </button>
+                </div>
+              );
+            }}
+          />
+          <Column
+            align="center"
             header="№"
             className="text-sm"
             style={{ minWidth: "40px", maxWidth: "40px" }}
@@ -451,34 +505,14 @@ const Workers = () => {
             align="center"
             header=""
             className="text-xs"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
+            style={{ minWidth: "40px", maxWidth: "40px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
               console.log("registerr_date", item.register_date);
               return (
                 <div className="flex items-center justify-center gap-2">
                   {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
-                  <div
-                    title="Нэмэх"
-                    className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
-                    onClick={() => {
-                      dispatch({
-                        type: "STATE",
-                        data: { modal_add_baraa: true },
-                      });
-                      dispatch({
-                        type: "ORDER",
-                        data: {
-                          order_id: item.order_id,
-                          delguur_id: item.delguur_id,
-                          delguur_ner: item.delguur_ner,
-                          dt: item.register_date,
-                        },
-                      });
-                    }}
-                  >
-                    <i className="ft-plus" />
-                  </div>
+
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
@@ -497,27 +531,6 @@ const Workers = () => {
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
-
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-orange-500 rounded-full border-2 border-orange-500 hover:bg-orange-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => {
-                      setmodalprint(true);
-                      dispatch({
-                        type: "ORDER",
-                        data: {
-                          order_id: item.order_id,
-                          delguur_id: item.delguur_id,
-                          phone: item.phone,
-                          user_name: item.user_name,
-                        },
-                      });
-                    }}
-                  >
-                    <i className="ft-search" />
-                  </button>
-                  {/* )} */}
                 </div>
               );
             }}
