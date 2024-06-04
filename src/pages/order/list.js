@@ -193,7 +193,7 @@ const Workers = () => {
                   onClick={() => {
                     dispatch({
                       type: "ORDER",
-                      data: { modal: true, order_id: 0 },
+                      data: { modal: true, order_id: 0, delguur_id: null },
                     });
                   }}
                 >

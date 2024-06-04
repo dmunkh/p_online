@@ -110,8 +110,15 @@ const ModalNormDetail = () => {
     setLabel(valueLabelMap[selectedValue]);
   };
   const handleClick = () => {
+    Swal.fire({
+      title: "Уншиж байна...",
+      text: "Түр хүлээнэ үү......",
+      allowOutsideClick: false,
+    });
+
     if (state.order.order_id === 0) {
       try {
+        console.log("INSERTING ORDER", value, label, delguur);
         axios
           // .post("https://dmunkh.store/api/backend/orders", {
           .post("http://localhost:5000/api/backend/orders", {
@@ -122,7 +129,7 @@ const ModalNormDetail = () => {
             register_date: moment(date).format("YYYY-MM-DD HH:mm"),
             is_approve: 0,
             is_cash_loan: value,
-            cash_loan_desc: label,
+            // cash_loan_desc: label,
             mc_id: main_company_id,
             user_id: user_id,
           })
@@ -135,15 +142,16 @@ const ModalNormDetail = () => {
           .catch((error) => {
             console.error("Error:", error);
           });
+        setLoading(false);
+        Swal.close();
+        Swal.fire(
+          "Хадгалагдлаа!",
+          "Бүртгэл амжилттай хадгалагдлаа.",
+          "success"
+        );
       } catch (error) {}
     } else {
       try {
-        Swal.fire({
-          title: "Уншиж байна...",
-          text: "Түр хүлээнэ үү",
-          allowOutsideClick: false,
-        });
-
         axios
           .put(
             "http://localhost:5000/api/backend/orders/" + state.order.order_id,

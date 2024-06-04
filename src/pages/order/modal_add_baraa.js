@@ -9,7 +9,7 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import TextArea from "antd/lib/input/TextArea";
 // import Module from "src/components/custom/module";
-
+import Swal from "sweetalert2";
 import dayjs from "dayjs";
 // import _ from "lodash";
 import {
@@ -129,7 +129,13 @@ const ModalNormDetail = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
+    Swal.fire({
+      title: "Уншиж байна...",
+      text: "Түр хүлээнэ үү",
+      allowOutsideClick: false,
+    });
     try {
+      setLoading(true);
       axios
         // .post("https://dmunkh.store/api/backend/balance", {
         .post("https://dmunkh.store/api/backend/balance", {
@@ -160,9 +166,15 @@ const ModalNormDetail = () => {
           console.log("Response:", response);
         })
         .catch((error) => {
+          Swal.close();
+          setLoading(false);
           console.error("Error:", error);
         });
+      setLoading(false);
+      Swal.close();
+      Swal.fire("Хадгалагдлаа!", "Бүртгэл амжилттай хадгалагдлаа.", "success");
     } catch (error) {
+      Swal.close();
       setLoading(false);
     }
   };
