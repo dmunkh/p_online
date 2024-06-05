@@ -32,7 +32,7 @@ const Login = () => {
         );
         var result = _.filter(
           response.data.response,
-          (a) => a.login_name === email
+          (a) => a.login_name.toLowerCase() === email.toLowerCase()
         );
         // console.log("user resultttt", result[0]);
         setUserId(result[0].id);
