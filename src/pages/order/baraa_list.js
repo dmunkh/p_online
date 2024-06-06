@@ -7,6 +7,9 @@ import * as API from "src/api/plan";
 import * as REQ from "src/api/request";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
+
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/order/modal";
@@ -251,6 +254,41 @@ const Goods_List = () => {
               </div>
             );
           }}
+          footerColumnGroup={
+            <ColumnGroup>
+              <Row>
+                <Column
+                  colSpan={4}
+                  className="text-xs text-right"
+                  footer={() => "Нийт"}
+                />
+                <Column
+                  className="w-[60px] text-xs text-right"
+                  footer={() =>
+                    Intl.NumberFormat("en-US").format(
+                      _.sumBy(list, (a) => a.count)
+                    )
+                  }
+                />
+                <Column
+                  className="w-[60px] text-xs text-right"
+                  footer={() => ""}
+                />
+                <Column
+                  className="w-[80px] text-xs text-right"
+                  footer={() =>
+                    Intl.NumberFormat("en-US").format(
+                      _.sumBy(list, (a) => a.price * a.count)
+                    )
+                  }
+                />
+                <Column
+                  className="w-[70px] text-xs text-right"
+                  footer={() => ""}
+                />
+              </Row>
+            </ColumnGroup>
+          }
           rows={per_page}
           first={first}
           onPage={(event) => {

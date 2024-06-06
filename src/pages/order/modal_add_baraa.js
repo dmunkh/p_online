@@ -522,10 +522,22 @@ const ModalNormDetail = () => {
                       footer={() => "Нийт"}
                     />
                     <Column
-                      className="w-[120px] text-xs text-right"
+                      className="w-[60px] text-xs text-right"
                       footer={() =>
                         Intl.NumberFormat("en-US").format(
-                          _.sumBy(list, (a) => a.price * a.count)
+                          _.sumBy(balance_list, (a) => a.count)
+                        )
+                      }
+                    />
+                    <Column
+                      className="w-[60px] text-xs text-right"
+                      footer={() => ""}
+                    />
+                    <Column
+                      className="w-[70px] text-xs text-right"
+                      footer={() =>
+                        Intl.NumberFormat("en-US").format(
+                          _.sumBy(balance_list, (a) => a.price * a.count)
                         )
                       }
                     />

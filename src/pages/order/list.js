@@ -317,7 +317,7 @@ const Workers = () => {
                   footer={() => <div className="text-right text-xs ">Нийт</div>}
                 />
                 <Column
-                  className="w-[110px] text-xs justify-end justify-items-end text-right"
+                  className="w-[80px] text-xs justify-end justify-items-end text-right"
                   footer={() => (
                     <div className="justify-items-end justify-end">
                       {Intl.NumberFormat("en-US").format(
@@ -327,7 +327,7 @@ const Workers = () => {
                   )}
                 />
                 <Column
-                  className="w-[110px] text-xs justify-end justify-items-end text-right"
+                  className="w-[80px] text-xs justify-end justify-items-end text-right"
                   footer={() => (
                     <div className="justify-items-end justify-end">
                       {Intl.NumberFormat("en-US").format(
@@ -338,7 +338,7 @@ const Workers = () => {
                 />
 
                 <Column
-                  className="w-[110px] text-xs justify-end"
+                  className="w-[80px] text-xs justify-end"
                   footer={() => (
                     <div className="justify-items-end justify-end text-right">
                       {Intl.NumberFormat("en-US").format(
@@ -349,7 +349,7 @@ const Workers = () => {
                   )}
                 />
                 <Column
-                  className="w-[80px] text-xs"
+                  className="w-[70px] text-xs"
                   // footer={() => }
                 />
                 <Column
@@ -446,7 +446,7 @@ const Workers = () => {
             field="total"
             header="Нийт дүн"
             className="text-xs justify-end"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total);
             }}
@@ -455,7 +455,7 @@ const Workers = () => {
             field="cash"
             header="Бэлэн төлөлт"
             className="text-xs justify-end"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.cash);
             }}
@@ -465,7 +465,7 @@ const Workers = () => {
             field="count"
             header="Үлдэгдэл"
             className="text-xs justify-end"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total - data.cash);
             }}
