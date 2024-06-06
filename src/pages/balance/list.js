@@ -68,7 +68,10 @@ const Workers = () => {
           .then((response) => {
             setList(
               response.data.response &&
-                _.orderBy(response.data.response, ["baraa_id", "register_date"])
+                _.orderBy(response.data.response, [
+                  "baraa_ner",
+                  "register_date",
+                ])
             );
           })
           .catch((error) => {
@@ -147,7 +150,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="baraa_id"
+          groupRowsBy="company_name"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
@@ -199,7 +202,7 @@ const Workers = () => {
             return (
               <div className="text-xs font-semibold">
                 <span className="ml-1">
-                  {data.negj_code} | {data.negj_namemnfull}
+                  {data.negj_code} | {data.company_name}
                 </span>
               </div>
             );
@@ -323,12 +326,12 @@ const Workers = () => {
             className="text-xs"
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-          <Column
+          {/* <Column
             field="company_name"
             header="Компани"
             className="text-xs"
             style={{ minWidth: "120px", maxWidth: "120px" }}
-          />
+          /> */}
           <Column
             field="register_date"
             header="Огноо"
@@ -351,10 +354,11 @@ const Workers = () => {
             style={{ minWidth: "60px", maxWidth: "60px" }}
           /> */}
           <Column
+            sortable
             field="baraa_ner"
             header="Бараа нэр"
             className="text-xs"
-            style={{ minWidth: "130px", maxWidth: "130px " }}
+            style={{ minWidth: "180px", maxWidth: "180px" }}
           />
           <Column
             field="price"
