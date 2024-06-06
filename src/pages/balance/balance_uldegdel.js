@@ -244,19 +244,27 @@ const Workers = () => {
             field="ner"
             header="Барааны нэр"
             className="text-xs"
-            // style={{ minWidth: "120px", maxWidth: "120px" }}
+            style={{ minWidth: "180px", maxWidth: "180px" }}
+          />
+          <Column
+            sortable
+            field="uldegdel"
+            header="Үлдэгдэл"
+            className="text-xs text-blue-600 font-bold justify-end"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
           />
           <Column
             field="ehni_uldegdel"
             header="Эхний үлдэгдэл"
-            className="text-xs"
+            className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
+            sortable
             field="orlogo"
             header="Орлого"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-            className="text-xs"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs justify-end"
           />
           <Column
             field="zarlaga"
@@ -276,12 +284,7 @@ const Workers = () => {
             className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
-          <Column
-            field="uldegdel"
-            header="Үлдэгдэл"
-            className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
+
           <Column
             field="box_count"
             header="Хайрцаг тоо"
