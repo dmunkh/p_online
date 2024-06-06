@@ -292,7 +292,7 @@ const Workers = () => {
             align="center"
             header=""
             className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            style={{ minWidth: "40px", maxWidth: "40px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
               return (
@@ -321,16 +321,6 @@ const Workers = () => {
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
-
-                {checkRole(["xx_warehouseItem_delete"]) && ( */}
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    // onClick={() => deleteClick(item)}
-                  >
-                    <i className="ft-trash-2" />
-                  </button>
-                  {/* )} */}
                 </div>
               );
             }}

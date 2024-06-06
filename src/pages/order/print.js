@@ -15,6 +15,7 @@ const MyComponent = () => {
   const [total, settotal] = useState(0);
   const [delguur, setdelguur] = useState([]);
 
+  console.log("userinfoooo", userInfo);
   const currentDateTime = moment().format("YYYY-MM-DD HH:mm");
   useEffect(() => {
     const fetchData = async () => {
@@ -138,7 +139,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Арвин үр түрүү ХХК - Тэнгэрийн хишиг
+              {userInfo?.company_ner}
             </th>
             <th
               style={{
@@ -179,7 +180,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Ачит холдинг
+              {userInfo?.hayag}
             </th>
             <th
               style={{
@@ -188,8 +189,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              {" "}
-              Хаяг:
+              Регистер:
             </th>
             <th
               colSpan={2}
@@ -199,8 +199,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              {" "}
-              {delguur[0]?.d_hayag}
+              {delguur[0]?.d_register}
             </th>
           </tr>
           <tr>
@@ -221,7 +220,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              РД: 3199355
+              {userInfo?.register}
             </th>
             <th
               style={{
@@ -230,7 +229,8 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              Утас:
+              {" "}
+              Хаяг:
             </th>
             <th
               colSpan={2}
@@ -240,7 +240,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              {delguur[0]?.d_utas}
+              {delguur[0]?.d_hayag}
             </th>
           </tr>
           <tr>
@@ -264,20 +264,25 @@ const MyComponent = () => {
               {state.order.user_name} / {state.order.phone} /
             </th>
             <th
+              style={{
+                textAlign: "left",
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
+              {" "}
+              Утас:
+            </th>
+            <th
               colSpan={2}
               style={{
                 textAlign: "left",
                 fontWeight: 500,
                 fontSize: "12px",
               }}
-            ></th>
-            <th
-              style={{
-                textAlign: "left",
-                fontWeight: 500,
-                fontSize: "12px",
-              }}
-            ></th>
+            >
+              {delguur[0]?.d_utas}
+            </th>
           </tr>
           <tr>
             <th
@@ -297,9 +302,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              {" "}
-              Хаан банк: 5090709172 /Сарнайцэцэг/ <br /> 5217205009 /Арвин үр
-              түрүү/
+              {userInfo?.dans}
             </th>
             <th
               colSpan={2}

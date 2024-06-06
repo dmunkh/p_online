@@ -349,15 +349,15 @@ const Workers = () => {
                   )}
                 />
                 <Column
-                  className="w-[130px] text-xs"
-                  // footer={() => }
-                />
-                <Column
-                  className="w-[110] text-xs"
+                  className="w-[80px] text-xs"
                   // footer={() => }
                 />
                 <Column
                   className="w-[100px] text-xs"
+                  // footer={() => }
+                />
+                <Column
+                  className="w-[40px] text-xs"
                   // footer={() => }
                 />
               </Row>

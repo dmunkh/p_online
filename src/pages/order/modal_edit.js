@@ -173,7 +173,7 @@ const ModalNormDetail = () => {
 
       <hr className="my-2" />
       <div className="rounded-md shadow-sm -space-y-px">
-        <div className="flex p-1 gap-2">
+        {/* <div className="flex p-1 gap-2">
           <div className="w-1/4">Бараа сонгох</div>
           <div className="w-3/4">
             <Select
@@ -199,7 +199,7 @@ const ModalNormDetail = () => {
               ))}
             </Select>
           </div>
-        </div>
+        </div> */}
         <div className="flex p-1 gap-2">
           <div className="w-1/4">Тоо ширхэг</div>
           <InputNumber

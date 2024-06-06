@@ -77,8 +77,13 @@ const Goods_List = () => {
         });
         console.log("result", result);
 
-        setList(_.orderBy(response.data.response, ["id"]));
-        setfilterlist(response.data.response);
+        setList(
+          _.orderBy(
+            _.filter(response.data.response, (a) => a.id !== null),
+            ["id"]
+          )
+        );
+        setfilterlist(_.filter(response.data.response, (a) => a.id !== null));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -104,6 +109,36 @@ const Goods_List = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.order.order_id, state.order.filter_order_id]);
+  const deleteClick = (item) => {
+    Swal.fire({
+      text: item.baraa_ner + "г устгах уу",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios
+            .delete("https://dmunkh.store/api/backend/balance/" + item.id)
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } catch (error) {
+          setLoading(false);
+        }
+      }
+    });
+  };
 
   return (
     <div className="w-full">
@@ -371,7 +406,7 @@ const Goods_List = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    // onClick={() => ()}
+                    onClick={() => deleteClick(item)}
                   >
                     <i className="ft-trash-2" />
                   </button>

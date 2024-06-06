@@ -85,6 +85,36 @@ const Workers = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
+  const deleteClick = (item) => {
+    Swal.fire({
+      text: item.baraa_ner + "г устгах уу",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios
+            .delete("https://dmunkh.store/api/backend/balance/" + item.id)
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } catch (error) {
+          setLoading(false);
+        }
+      }
+    });
+  };
 
   return (
     <div className="w-full">
@@ -259,7 +289,7 @@ const Workers = () => {
                   )}
                 />
                 <Column
-                  className="w-[70px] text-xs"
+                  className="w-[90px] text-xs"
                   // footer={() => (
                   //   <div className="text-center">
                   //     {_.sumBy(list, (a) => a.count)}
@@ -413,7 +443,7 @@ const Workers = () => {
                 {checkRole(["xx_warehouseItem_delete"]) && ( */}
                   <button
                     className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    // onClick={() => deleteClick(item)}
+                    onClick={() => deleteClick(item)}
                   >
                     <i className="ft-trash-2" />
                   </button>

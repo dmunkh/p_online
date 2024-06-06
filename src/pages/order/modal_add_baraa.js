@@ -191,6 +191,36 @@ const ModalNormDetail = () => {
       }
     }
   };
+  const deleteClick = (item) => {
+    Swal.fire({
+      text: item.baraa_ner + "г устгах уу",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios
+            .delete("https://dmunkh.store/api/backend/balance/" + item.id)
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } catch (error) {
+          setLoading(false);
+        }
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col text-xs">
@@ -388,7 +418,7 @@ const ModalNormDetail = () => {
                       }}
                     />
                   </div>
-                  <div className="flex items-center gap-2 ">
+                  {/* <div className="flex items-center gap-2 ">
                     <div
                       title="Нэмэх"
                       className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
@@ -398,7 +428,7 @@ const ModalNormDetail = () => {
                     >
                       <i className="ft-plus" />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
@@ -585,7 +615,7 @@ const ModalNormDetail = () => {
                   {checkRole(["xx_warehouseItem_delete"]) && ( */}
                       <button
                         className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                        // onClick={() => ()}
+                        onClick={() => deleteClick(item)}
                       >
                         <i className="ft-trash-2" />
                       </button>
