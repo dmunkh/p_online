@@ -35,6 +35,7 @@ const ModalNormDetail = () => {
   const [company, setCompany] = useState([]);
   const [count, setcount] = useState(0);
   const [boxcount, setboxcount] = useState(0);
+  const [list_ref, setlist_ref] = useState([]);
 
   const [unit, setunit] = useState("ш");
   const [price, setprice] = useState(0);
@@ -73,6 +74,26 @@ const ModalNormDetail = () => {
         console.log("baraa list", response.data.response);
 
         setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        // setError(error);
+      }
+    };
+
+    fetchData();
+  }, [state.refresh]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "https://dmunkh.store/api/backend/reference"
+        );
+        console.log("baraa list", response.data.response);
+
+        setlist_ref(_.orderBy(response?.data?.response, ["id"]));
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -318,7 +339,34 @@ const ModalNormDetail = () => {
             </Select>
           </div>
         </div>
-
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Борлуулагч</div>
+          <div className="w-3/4">
+            <Select
+              showSearch
+              allowClear
+              placeholder="Сонгоно уу."
+              optionFilterProp="children"
+              className="w-full"
+              value={state.balance.baraa_id}
+              onChange={(value) => {
+                // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
+                dispatch({ type: "BALANCE", data: { baraa_id: value } });
+                setbaraa(_.filter(baraa_list, (a) => a.id === value));
+                setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
+                setunit(_.filter(baraa_list, (a) => a.id === value)[0].unit);
+                setboxcount(0);
+                setcount(0);
+              }}
+            >
+              {_.map(list_ref, (item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.id + " - " + item.reference_name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+        </div>
         <div className="w-full p-1 flex flex-col justify-start ">
           <span className="list-group-item-text grey darken-2 m-0">
             Тайлбар:

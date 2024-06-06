@@ -332,7 +332,7 @@ const Workers = () => {
           <Column
             field="register_date"
             header="Огноо"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
+            style={{ minWidth: "80px", maxWidth: "80px" }}
             className="text-xs"
             body={(data) => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
@@ -354,13 +354,13 @@ const Workers = () => {
             field="baraa_ner"
             header="Бараа нэр"
             className="text-xs"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
+            style={{ minWidth: "130px", maxWidth: "130px " }}
           />
           <Column
             field="price"
             header="Нэгж үнэ"
             className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            style={{ minWidth: "60px", maxWidth: "60px" }}
           />
           {/* <Column
             field="count"
@@ -375,13 +375,13 @@ const Workers = () => {
             field="box_count"
             header="Хайрцаг"
             className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            style={{ minWidth: "60px", maxWidth: "60px" }}
           />
           <Column
             field="count"
             header="Орлого"
             className="text-xs justify-end text-green-700 font-semibold"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 1 ? data.count : "";
             }}
@@ -390,7 +390,7 @@ const Workers = () => {
             field="count"
             header="Зарлага"
             className="text-xs justify-end text-red-700 font-semibold"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 3 || data.type_id === 2 ? data.count : "";
             }}
@@ -398,7 +398,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Нийт үнэ"
-            style={{ minWidth: "100px", maxWidth: "100px" }}
+            style={{ minWidth: "70px", maxWidth: "70px" }}
             className="text-xs justify-end"
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.count * data.price);
