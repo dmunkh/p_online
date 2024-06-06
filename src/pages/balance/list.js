@@ -151,7 +151,7 @@ const Workers = () => {
           sortMode="multiple"
           rowGroupMode="subheader"
           groupRowsBy="company_name"
-          scrollHeight={window.innerHeight - 360}
+          scrollHeight={window.innerHeight - 300}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
@@ -278,11 +278,25 @@ const Workers = () => {
             <ColumnGroup>
               <Row>
                 <Column
-                  colSpan={7}
+                  colSpan={6}
                   footer={() => <div className="text-right text-xs ">Нийт</div>}
                 />
                 <Column
-                  className="w-[100px] text-xs justify-end justify-items-end text-right"
+                  className="w-[60px] text-xs justify-end justify-items-end text-right"
+                  footer={() => (
+                    <div className="justify-items-end justify-end">
+                      {Intl.NumberFormat("en-US").format(
+                        _.sumBy(list, (a) => a.count)
+                      )}
+                    </div>
+                  )}
+                />
+                <Column
+                  className="w-[50px] text-xs"
+                  // footer={() => }
+                />
+                <Column
+                  className="w-[80px] text-xs justify-end justify-items-end text-right"
                   footer={() => (
                     <div className="justify-items-end justify-end">
                       {Intl.NumberFormat("en-US").format(
