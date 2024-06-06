@@ -421,23 +421,23 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            style={{ minWidth: "50px", maxWidth: "50px" }}
             field="order_id"
-            className="text-sm"
+            className="text-xs"
             header="Order"
           />
-          <Column field="delguur_ner" header="Дэлгүүр" className="text-sm" />
+          <Column field="delguur_ner" header="Дэлгүүр" className="text-xs" />
 
           <Column
             field="register_date"
             header="Огноо"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
-            className="text-sm"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs"
             body={(data) => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
             }}
@@ -445,8 +445,8 @@ const Workers = () => {
           <Column
             field="total"
             header="Нийт дүн"
-            className="text-sm justify-end"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            className="text-xs justify-end"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total);
             }}
@@ -454,8 +454,8 @@ const Workers = () => {
           <Column
             field="cash"
             header="Бэлэн төлөлт"
-            className="text-sm justify-end"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            className="text-xs justify-end"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.cash);
             }}
@@ -464,8 +464,8 @@ const Workers = () => {
           <Column
             field="count"
             header="Үлдэгдэл"
-            className="text-sm justify-end"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            className="text-xs justify-end"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total - data.cash);
             }}
@@ -473,8 +473,8 @@ const Workers = () => {
           <Column
             field="is_approve"
             header="Төлбөр дуусгах"
-            className="text-sm"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(item) => {
               return (
                 <div className="flex items-center justify-center gap-3">
@@ -498,7 +498,7 @@ const Workers = () => {
           <Column
             field="user_name"
             header="Бүртгэсэн"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "100px", maxWidth: "100px" }}
           />
           <Column

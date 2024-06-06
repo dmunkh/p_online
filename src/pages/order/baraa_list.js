@@ -240,14 +240,14 @@ const Goods_List = () => {
                 key={"key_group_" + data.id}
                 className="flex items-center text-xs font-bold"
               >
-                <div className="w-full">
+                <div className="w-full text-xs">
                   {data.delguur_id} | {data.delguur_ner}
                 </div>
 
-                <div className="w-[110px] text-center">
+                <div className="w-[110px] text-center text-xs ">
                   {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))}
                 </div>
-                <div className="w-[250px] text-center"></div>
+                {/* <div className="w-[250px] text-center"></div> */}
               </div>
             );
           }}
@@ -326,52 +326,43 @@ const Goods_List = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-            field="id"
-            className="text-sm"
-            header="Order"
-          />
+
           <Column
             field="bar_code"
             header="barcode"
-            className="text-sm"
-            // style={{ minWidth: "120px", maxWidth: "120px" }}
+            className="text-xs"
+            style={{ minWidth: "110px", maxWidth: "110px" }}
           />
           <Column
             field="baraa_ner"
             header="Бараа нэр"
-            className="text-sm"
+            className="text-xs"
+
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="count"
             header="Тоо ширхэг"
-            className="text-sm justify-end"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
+            className="text-xs justify-end"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
           />
           <Column
             field="price"
             header="Нэгж үнэ"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
-            className="text-sm justify-end"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            className="text-xs justify-end"
           />
           <Column
             field="total"
             header="Нийт үнэ"
-            className="text-sm justify-end textAlign: left"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            className="text-xs justify-end textAlign: left"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
             bodyClassName="flex items-center justify-end"
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total);
             }}
           />
-          <Column
-            field=""
-            header="Баталгаажуулалт"
-            className="text-sm"
-            style={{ minWidth: "130px", maxWidth: "130px" }}
-          />
+
           <Column
             align="center"
             header=""

@@ -229,63 +229,63 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
+          {/* <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
-            className="text-sm"
+            className="text-xs"
             header="Order"
-          />
+          /> */}
           <Column
             sortable
             field="ner"
             header="Барааны нэр"
-            className="text-sm"
+            className="text-xs"
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="ehni_uldegdel"
             header="Эхний үлдэгдэл"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="orlogo"
             header="Орлого"
             style={{ minWidth: "60px", maxWidth: "60px" }}
-            className="text-sm"
+            className="text-xs"
           />
           <Column
             field="zarlaga"
             header="Зарлага"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="bonus"
             header="Урамшуулал"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="zahialga"
             header="Захиалга"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="uldegdel"
             header="Үлдэгдэл"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="box_count"
             header="Хайрцаг тоо"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column

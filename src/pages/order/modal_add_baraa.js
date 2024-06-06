@@ -522,7 +522,7 @@ const ModalNormDetail = () => {
                       footer={() => "Нийт"}
                     />
                     <Column
-                      className="w-[120px] text-sm text-right"
+                      className="w-[120px] text-xs text-right"
                       footer={() =>
                         Intl.NumberFormat("en-US").format(
                           _.sumBy(list, (a) => a.price * a.count)
@@ -540,39 +540,39 @@ const ModalNormDetail = () => {
               <Column
                 align="center"
                 header="№"
-                className="text-sm"
+                className="text-xs"
                 style={{ minWidth: "40px", maxWidth: "40px" }}
                 body={(data, row) => row.rowIndex + 1}
               />
-              <Column
+              {/* <Column
                 style={{ minWidth: "60px", maxWidth: "60px" }}
                 field="order_id"
-                className="text-sm"
+                className="text-xs"
                 header="order_id"
               />
               <Column
                 style={{ minWidth: "60px", maxWidth: "60px" }}
                 field="id"
-                className="text-sm"
+                className="text-xs"
                 header="id"
-              />
+              /> */}
               <Column
                 field="baraa_ner"
                 header="Бараа"
-                className="text-sm"
-                style={{ minWidth: "120px", maxWidth: "120px" }}
+                className="text-xs"
+                // style={{ minWidth: "120px", maxWidth: "120px" }}
               />
               <Column
                 field="count"
                 header="Тоо ширхэг"
-                className="text-sm justify-end"
-                style={{ minWidth: "80px", maxWidth: "80px" }}
+                className="text-xs justify-end"
+                style={{ minWidth: "60px", maxWidth: "60px" }}
               />
               <Column
                 field="price"
                 header="Нэгж үнэ"
-                style={{ minWidth: "90px", maxWidth: "90px" }}
-                className="text-sm justify-end"
+                style={{ minWidth: "60px", maxWidth: "60px" }}
+                className="text-xs justify-end"
                 body={(data) => {
                   return Intl.NumberFormat("en-US").format(data.price);
                 }}
@@ -580,8 +580,8 @@ const ModalNormDetail = () => {
               <Column
                 field="cash"
                 header="Нийт үнэ"
-                className="text-sm justify-end"
-                style={{ minWidth: "120px", maxWidth: "120px" }}
+                className="text-xs justify-end"
+                style={{ minWidth: "70px", maxWidth: "70px" }}
                 body={(data) => {
                   return Intl.NumberFormat("en-US").format(
                     data.price * data.count

@@ -307,33 +307,33 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
           {/* <Column
             style={{ minWidth: "40px", maxWidth: "40px" }}
             field="id"
-            className="text-sm"
+            className="text-xs"
             header="id"
           /> */}
           <Column
             field="delguur_ner"
             header="Дэлгүүр"
-            className="text-sm"
+            className="text-xs"
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="company_name"
             header="Компани"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="register_date"
             header="Огноо"
             style={{ minWidth: "90px", maxWidth: "90px" }}
-            className="text-sm"
+            className="text-xs"
             body={(data) => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
             }}
@@ -341,31 +341,31 @@ const Workers = () => {
           {/* <Column
             field="type_id"
             header="type_id"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "40px", maxWidth: "60px" }}
           /> */}
           {/* <Column
             field="baraa_id"
             header="baraa_id"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "60px", maxWidth: "60px" }}
           /> */}
           <Column
             field="baraa_ner"
             header="Бараа нэр"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
           <Column
             field="price"
             header="Нэгж үнэ"
-            className="text-sm justify-end"
+            className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           {/* <Column
             field="count"
             header="Эхний үлдэгдэл"
-            className="text-sm justify-end text-blue-700 font-semibold"
+            className="text-xs justify-end text-blue-700 font-semibold"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
               return data.type_id === 0 ? data.count : "";
@@ -374,13 +374,13 @@ const Workers = () => {
           <Column
             field="box_count"
             header="Хайрцаг"
-            className="text-sm justify-end"
+            className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="count"
             header="Орлого"
-            className="text-sm justify-end text-green-700 font-semibold"
+            className="text-xs justify-end text-green-700 font-semibold"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
               return data.type_id === 1 ? data.count : "";
@@ -389,7 +389,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Зарлага"
-            className="text-sm justify-end text-red-700 font-semibold"
+            className="text-xs justify-end text-red-700 font-semibold"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
               return data.type_id === 3 || data.type_id === 2 ? data.count : "";
@@ -399,7 +399,7 @@ const Workers = () => {
             field="count"
             header="Нийт үнэ"
             style={{ minWidth: "100px", maxWidth: "100px" }}
-            className="text-sm justify-end"
+            className="text-xs justify-end"
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.count * data.price);
             }}
@@ -408,7 +408,7 @@ const Workers = () => {
           <Column
             field="user_name"
             header="Бүртгэсэн"
-            className="text-sm"
+            className="text-xs"
             style={{ minWidth: "90px", maxWidth: "90px" }}
           />
           <Column
