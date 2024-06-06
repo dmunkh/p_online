@@ -81,6 +81,7 @@ const _state = {
     price: 0,
     register_date: moment(),
     baraa_id: null,
+    seller_id: null,
   },
   user: {
     id: 0,

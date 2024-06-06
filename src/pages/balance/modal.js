@@ -348,15 +348,10 @@ const ModalNormDetail = () => {
               placeholder="Сонгоно уу."
               optionFilterProp="children"
               className="w-full"
-              value={state.balance.baraa_id}
+              value={state.balance.seller_id}
               onChange={(value) => {
                 // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
-                dispatch({ type: "BALANCE", data: { baraa_id: value } });
-                setbaraa(_.filter(baraa_list, (a) => a.id === value));
-                setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
-                setunit(_.filter(baraa_list, (a) => a.id === value)[0].unit);
-                setboxcount(0);
-                setcount(0);
+                dispatch({ type: "BALANCE", data: { seller: value } });
               }}
             >
               {_.map(list_ref, (item) => (
