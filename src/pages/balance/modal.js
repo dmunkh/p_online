@@ -312,6 +312,15 @@ const ModalNormDetail = () => {
           />
         </div>
         <div className="flex p-1 gap-2">
+          <div className="w-1/4">Урамшуулал үнийн дүнгийн хувиар /%/</div>
+          <InputNumber
+            value={state.balance.bonus}
+            onChange={(value) =>
+              dispatch({ type: "BALANCE", data: { bonus: value } })
+            }
+          />
+        </div>
+        <div className="flex p-1 gap-2">
           <div className="w-1/4">Нэгж үнэ</div>
           <InputNumber value={price} onChange={(value) => setprice(value)} />
         </div>

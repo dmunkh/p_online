@@ -25,7 +25,7 @@ const _state = {
   company: {
     id: 0,
     modal: false,
-    company_ner: null,
+    company_name: null,
     hayag: null,
     utas: null,
     dans: null,

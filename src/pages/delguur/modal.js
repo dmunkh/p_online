@@ -262,9 +262,6 @@ const ModalNormDetail = () => {
         className="bg-opacity-60"
         spinning={loading}
       >
-        <button onClick={handleClick} disabled={loading}>
-          {loading ? "Loading..." : "Click Me"}
-        </button>
         <SaveButton
           disabled={loading}
           onClick={() => {

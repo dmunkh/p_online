@@ -276,6 +276,7 @@ const Workers = () => {
                           register: item.d_register,
                           hayag: item.d_hayag,
                           utas: item.d_utas,
+                          company_name: item.company_name,
                           modal: true,
                         },
                       });
