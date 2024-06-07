@@ -33,6 +33,7 @@ const Workers = () => {
   const [modalprint, setmodalprint] = useState(false);
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
+
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.setMainCompanyID);
 
@@ -41,6 +42,19 @@ const Workers = () => {
     const url = `https://dmunkh.store/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
+
+  const calculateApprovedTotal = (list_list) => {
+    console.log(
+      "Liiiist",
+      list_list,
+      _.filter(list_list, (a) => parseInt(a.is_approve) === 1)
+    );
+    return _.sumBy(
+      _.filter(list_list, (a) => parseInt(a.is_approve) === 1),
+      "total"
+    );
+  };
+
   const PlanApprove = (item, ischecked) => {
     console.log("iteeeem", item, ischecked);
     Swal.fire({
@@ -108,6 +122,7 @@ const Workers = () => {
     //     });
     //   });
   };
+
   return (
     <div className="w-full">
       {" "}
@@ -338,28 +353,32 @@ const Workers = () => {
                 />
 
                 <Column
-                  className="w-[80px] text-xs justify-end"
+                  colspan={3}
+                  className="w-[290px] text-xs justify-start"
                   footer={() => (
-                    <div className="justify-items-end justify-end text-right">
+                    <div className="justify-items-end justify-start text-left">
+                      Үйлдэгдэл:{" "}
                       {Intl.NumberFormat("en-US").format(
                         _.sumBy(state.balanceGroup_list, (a) => a.total) -
-                          _.sumBy(state.balanceGroup_list, (a) => a.cash)
+                          _.sumBy(state.balanceGroup_list, (a) => a.cash) -
+                          calculateApprovedTotal(state.balanceGroup_list)
+                      )}{" "}
+                      / Хаасан:{" "}
+                      {Intl.NumberFormat("en-US").format(
+                        calculateApprovedTotal(state.balanceGroup_list)
                       )}
                     </div>
                   )}
                 />
-                <Column
-                  className="w-[70px] text-xs"
-                  // footer={() => }
-                />
-                <Column
+
+                {/* <Column
                   className="w-[100px] text-xs"
                   // footer={() => }
                 />
                 <Column
                   className="w-[40px] text-xs"
                   // footer={() => }
-                />
+                /> */}
               </Row>
             </ColumnGroup>
           }
@@ -431,7 +450,18 @@ const Workers = () => {
             className="text-xs"
             header="Order"
           />
-          <Column field="delguur_ner" header="Дэлгүүр" className="text-xs" />
+          <Column
+            field="delguur_ner"
+            header="Дэлгүүр"
+            className="text-xs w-[140px]"
+            body={(data) => {
+              const style = {
+                backgroundColor:
+                  parseInt(data.is_approve) === 1 ? "#d4edda" : "inherit", // Light green background for approved
+              };
+              return <div style={style}>{data.delguur_ner}</div>;
+            }}
+          />
 
           <Column
             field="register_date"

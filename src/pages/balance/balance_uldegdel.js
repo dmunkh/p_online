@@ -254,41 +254,40 @@ const Workers = () => {
             style={{ minWidth: "80px", maxWidth: "80px" }}
           />
           <Column
+            sortable
+            field="orlogo"
+            header="Орлого"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs justify-end text-green-700"
+          />
+          <Column
+            field="zahialga"
+            header="Захиалга"
+            className="text-xs justify-end text-red-700"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+          />
+          <Column
             field="ehni_uldegdel"
             header="Эхний үлдэгдэл"
             className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
-            sortable
-            field="orlogo"
-            header="Орлого"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-            className="text-xs justify-end"
-          />
-          <Column
             field="zarlaga"
             header="Зарлага"
-            className="text-xs"
+            className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="bonus"
             header="Урамшуулал"
-            className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            className="text-xs justify-end"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
           />
-          <Column
-            field="zahialga"
-            header="Захиалга"
-            className="text-xs"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
-
           <Column
             field="box_count"
             header="Хайрцаг тоо"
-            className="text-xs"
+            className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
