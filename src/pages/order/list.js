@@ -455,11 +455,17 @@ const Workers = () => {
             header="Дэлгүүр"
             className="text-xs w-[140px]"
             body={(data) => {
-              const style = {
-                backgroundColor:
-                  parseInt(data.is_approve) === 1 ? "#d4edda" : "inherit", // Light green background for approved
-              };
-              return <div style={style}>{data.delguur_ner}</div>;
+              return parseInt(data.is_approve) === 1 ? (
+                <span>
+                  <i
+                    className="ft-check font-bold"
+                    style={{ color: "#4CAF50" }}
+                  />{" "}
+                  {data.delguur_ner}
+                </span>
+              ) : (
+                <span>{data.delguur_ner}</span>
+              );
             }}
           />
 
