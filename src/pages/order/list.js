@@ -357,7 +357,7 @@ const Workers = () => {
                   className="w-[290px] text-xs justify-start"
                   footer={() => (
                     <div className="justify-items-end justify-start text-left">
-                      Үйлдэгдэл:{" "}
+                      Үлдэгдэл:{" "}
                       {Intl.NumberFormat("en-US").format(
                         _.sumBy(state.balanceGroup_list, (a) => a.total) -
                           _.sumBy(state.balanceGroup_list, (a) => a.cash) -
