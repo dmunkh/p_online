@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Modal, Switch } from "antd";
+import { Spin, Input, Select, Modal, Switch, Radio } from "antd";
 import _ from "lodash";
 
 import { SearchOutlined } from "@ant-design/icons";
@@ -125,7 +125,6 @@ const Workers = () => {
 
   return (
     <div className="w-full">
-      {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -167,7 +166,7 @@ const Workers = () => {
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
-          value={state.balanceGroup_list}
+          value={_.orderBy(state.balanceGroup_list, ["delguur_id"])}
           dataKey="id"
           filters={search}
           paginator
@@ -180,7 +179,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="negj_namemnfull"
+          groupRowsBy="delguur_ner"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["delguur_ner", "order_id"]}
           emptyMessage={
@@ -233,9 +232,7 @@ const Workers = () => {
           rowGroupHeaderTemplate={(data) => {
             return (
               <div className="text-xs font-semibold">
-                <span className="ml-1">
-                  {data.negj_code} | {data.negj_namemnfull}
-                </span>
+                <span className="ml-1">{data.delguur_ner}</span>
               </div>
             );
           }}
@@ -451,6 +448,7 @@ const Workers = () => {
             header="Order"
           />
           <Column
+            sortable
             field="delguur_ner"
             header="Дэлгүүр"
             className="text-xs w-[140px]"

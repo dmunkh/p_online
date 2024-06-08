@@ -5,7 +5,7 @@ import { Column } from "primereact/column";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 
-import { Spin, Input, Select, Modal } from "antd";
+import { Spin, Input, Select, Modal, Radio } from "antd";
 import _ from "lodash";
 import * as API from "src/api/plan";
 import * as REQ from "src/api/request";
@@ -32,7 +32,9 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [filterlist, setfilterlist] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
+  const [value, setvalue] = useState(1);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -69,10 +71,12 @@ const Workers = () => {
             setList(
               response.data.response &&
                 _.orderBy(response.data.response, [
+                  "delguur_ner",
                   "baraa_ner",
                   "register_date",
                 ])
             );
+            setfilterlist(response.data.response);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -121,7 +125,14 @@ const Workers = () => {
 
   return (
     <div className="w-full">
-      {" "}
+      <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
+        <Radio value={0}>Үлдэгдэл</Radio>
+        <Radio value={1}>Орлого</Radio>
+        <Radio value={2}>Зарлага</Radio>
+        <Radio value={3}>Захиалга</Radio>
+        <Radio value={4}>Буцаалт</Radio>
+        <Radio value={5}>Хаягдал</Radio>
+      </Radio.Group>
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -150,9 +161,9 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="company_name"
+          groupRowsBy="delguur_ner"
           scrollHeight={window.innerHeight - 300}
-          globalFilterFields={["baraa_ner"]}
+          globalFilterFields={["baraa_ner", "delguur_ner"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -199,13 +210,31 @@ const Workers = () => {
             // </div>
           }
           rowGroupHeaderTemplate={(data) => {
+            var group = _.filter(list, (a) => a.order_id === data.order_id);
             return (
-              <div className="text-xs font-semibold">
-                <span className="ml-1">
-                  {data.negj_code} | {data.company_name}
-                </span>
+              <div
+                key={"key_group_" + data.id}
+                className="flex items-center text-xs font-bold"
+              >
+                <div className="w-full text-xs">
+                  {data.delguur_id} | {data.delguur_ner}
+                </div>
+
+                <div className="w-[180px] text-center text-xs ">
+                  Нийт дүн:{" "}
+                  {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))}
+                </div>
+                {/* <div className="w-[250px] text-center"></div> */}
               </div>
             );
+
+            // return (
+            //   <div className="text-xs font-semibold">
+            //     <span className="ml-1">
+            //       {data.negj_code} | {data.delguur_ner}
+            //     </span>
+            //   </div>
+            // );
           }}
           rows={per_page}
           first={first}
@@ -335,6 +364,7 @@ const Workers = () => {
             header="id"
           /> */}
           <Column
+            sortable
             field="delguur_ner"
             header="Дэлгүүр"
             className="text-xs"
@@ -372,7 +402,7 @@ const Workers = () => {
             field="baraa_ner"
             header="Бараа нэр"
             className="text-xs"
-            style={{ minWidth: "180px", maxWidth: "180px" }}
+            style={{ minWidth: "200px", maxWidth: "200px" }}
           />
           <Column
             field="price"
