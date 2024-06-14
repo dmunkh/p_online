@@ -4,6 +4,10 @@ import moment from "moment";
 import dayjs from "dayjs";
 import register from "src/pages/workers/register";
 
+const date = new Date();
+var _startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+var _endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
 const context = React.createContext();
 
 const _state = {
@@ -24,6 +28,7 @@ const _state = {
 
   company: {
     id: 0,
+    list: [],
     modal: false,
     company_name: null,
     hayag: null,
@@ -57,6 +62,8 @@ const _state = {
 
   order: {
     id: 0,
+    start_date: _startDate,
+    end_date: _endDate,
     modal: false,
     delguur_id: null,
     delguur_ner: null,
@@ -72,6 +79,8 @@ const _state = {
   },
   balance: {
     id: 0,
+    start_date: _startDate,
+    end_date: _endDate,
     modal: false,
     balance: 0,
     bonus: 0,

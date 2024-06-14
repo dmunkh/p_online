@@ -42,13 +42,15 @@ const Goods_List = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
-          // "http://localhost:5000/api/backend/balance",
+          // "https://dmunkh.store/api/backend/balance",
+          "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
               user_id: user_id,
               group_id: group_id,
+              start_date: moment(state.order.start_date).format("YYYY.MM.DD"),
+              end_date: moment(state.order.end_date).format("YYYY.MM.DD"),
             },
           }
         );
@@ -96,7 +98,7 @@ const Goods_List = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh]);
+  }, [state.refresh, state.order.start_date, state.order.end_date]);
   useEffect(() => {
     console.log("filter order id", state.order.filter_order_id, filterlist);
     var result = filterlist;

@@ -145,8 +145,9 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         axios
-          // .post("https://dmunkh.store/api/backend/balance", {
+
           .post("https://dmunkh.store/api/backend/balance", {
+            // .post("http://localhost:5000/api/backend/balance", {
             type_id: 3,
             baraa_id: baraa[0].id,
             baraa_ner: baraa[0].baraa_ner,
@@ -164,6 +165,8 @@ const ModalNormDetail = () => {
             comment: comment,
             bonus: bonus,
             box_count: boxcount,
+            src_id: state.balance.seller_id,
+            dest_id: 0,
           })
           .then((response) => {
             dispatch({
@@ -246,12 +249,24 @@ const ModalNormDetail = () => {
                   className="w-full"
                   value={baraa_id}
                   onChange={(value) => {
-                    setbaraa_id(value);
-                    setbaraa(_.filter(baraa_list, (a) => a.id === value));
-
-                    setprice(
-                      _.filter(baraa_list, (a) => a.id === value)[0].une
+                    var selected_baraa = _.filter(
+                      baraa_list,
+                      (a) => a.id === value
                     );
+                    setbaraa_id(value);
+                    setbaraa(selected_baraa);
+
+                    var c_id = _.filter(
+                      state.company.list,
+                      (a) =>
+                        parseInt(a.id) ===
+                        parseInt(selected_baraa[0].company_id)
+                    );
+                    setprice(selected_baraa[0].une);
+                    dispatch({
+                      type: "BALANCE",
+                      data: { seller_id: c_id[0].sub_code },
+                    });
                     // setprice(
                     //   _.filter(baraa_list, (a) => a.id === value)[0].une
                     // );
@@ -265,6 +280,39 @@ const ModalNormDetail = () => {
                   {_.map(list, (item) => (
                     <Select.Option key={item.id} value={item.id}>
                       {item.ner + " - " + item.uldegdel}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+            <div className="flex p-1 gap-2">
+              <div className="w-1/4">Борлуулагч</div>
+              <div className="w-3/4">
+                <Select
+                  showSearch
+                  allowClear
+                  placeholder="Сонгоно уу."
+                  optionFilterProp="children"
+                  className="w-full"
+                  value={state.balance.seller_id}
+                  onChange={(value) => {
+                    console.log(
+                      value,
+                      _.filter(
+                        state.company.list,
+                        (a) => parseInt(a.id) === parseInt(value)
+                      )
+                    );
+                    dispatch({ type: "BALANCE", data: { seller_id: value } });
+                  }}
+                >
+                  {_.map(state?.company?.list, (item) => (
+                    <Select.Option key={item.sub_code} value={item.sub_code}>
+                      {item.id +
+                        " - " +
+                        item.company_ner +
+                        " - " +
+                        item.sub_code}
                     </Select.Option>
                   ))}
                 </Select>

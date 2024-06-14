@@ -213,7 +213,6 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-
           <Column
             field="user_name"
             header="Хэрэглэгч"
@@ -226,9 +225,14 @@ const Workers = () => {
             className="text-sm"
             style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-
           <Column
             field="phone"
+            header="Утасны дугаар"
+            className="text-sm"
+            style={{ minWidth: "200px", maxWidth: "200px" }}
+          />
+          <Column
+            field="sub_code"
             header="Утасны дугаар"
             className="text-sm"
             style={{ minWidth: "200px", maxWidth: "200px" }}

@@ -28,8 +28,9 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const user_id = useBearStore((state) => state.user_id);
+  const userInfo = useBearStore((state) => state.userInfo);
   const isUserValid = useBearStore((state) => state.isUserValid);
-  console.log("user id", user_id, isUserValid);
+  console.log("user id", user_id, isUserValid, userInfo.sub_code);
   // useEffect(() => {
   //   setLoading(true);
   //   REQ.getWorkers({
@@ -53,7 +54,8 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           //"http://3.0.177.127/api/backend/company"
-          "https://dmunkh.store/api/backend/company"
+          "https://dmunkh.store/api/backend/company",
+          { params: { company_id: userInfo.sub_code } }
         );
         console.log("balance list", response.data.response);
         // var result = _(response.data)
@@ -65,7 +67,7 @@ const Workers = () => {
         //     };
         //   })
         //   .value();
-
+        dispatch({ type: "COMPANY", data: { list: response.data.response } });
         setList(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
       } catch (error) {

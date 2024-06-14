@@ -2,6 +2,7 @@ import React from "react";
 // import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
+import moment from "moment";
 // import Tree from "src/components/custom/departmentTree";
 // import * as API from "src/api/request";
 
@@ -20,11 +21,11 @@ const Header = () => {
           <DatePicker
             allowClear={false}
             className="md:w-[150px] text-xs"
-            value={state.date}
+            value={moment(state.order.start_date)}
             onChange={(date) => {
               dispatch({
-                type: "STATE",
-                data: { date: date },
+                type: "ORDER",
+                data: { start_date: date },
               });
             }}
           />
@@ -36,11 +37,11 @@ const Header = () => {
         <DatePicker
           allowClear={false}
           className="md:w-[150px] text-xs"
-          value={state.date}
+          value={moment(state.order.end_date)}
           onChange={(date) => {
             dispatch({
-              type: "STATE",
-              data: { date: date },
+              type: "ORDER",
+              data: { end_date: date },
             });
           }}
         />

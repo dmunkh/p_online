@@ -62,7 +62,7 @@ const ModalNormDetail = () => {
 
     fetchData();
   }, [state.refresh]);
-
+  console.log(state.company.list);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -71,7 +71,6 @@ const ModalNormDetail = () => {
           "https://dmunkh.store/api/backend/baraa",
           { params: { user_id: user_id } }
         );
-        console.log("baraa list", response.data.response);
 
         setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
         setLoading(false);
@@ -109,6 +108,7 @@ const ModalNormDetail = () => {
 
     state.balance.baraa_id || (validation += "Бараа сонгоно уу <br />");
     state.balance.count || (validation += "Тоо ширхэг оруулна уу <br />");
+    state.balance.seller_id || (validation += "Хүлээн авагч сонгоно уу <br />");
     if (validation !== "") {
       Swal.fire({
         icon: "warning",
@@ -124,6 +124,7 @@ const ModalNormDetail = () => {
         try {
           axios
             .post("https://dmunkh.store/api/backend/balance/post", {
+              // .post("http://localhost:5000/api/backend/balance/post", {
               order_id: 0,
               type_id: state.balance.type,
               delguur_id: 0,
@@ -141,6 +142,8 @@ const ModalNormDetail = () => {
               user_id: user_id,
               box_count: boxcount,
               comment: comment,
+              src_id: 0,
+              dest_id: state.balance.seller_id,
             })
             .then((response) => {
               dispatch({
@@ -260,7 +263,20 @@ const ModalNormDetail = () => {
               value={state.balance.baraa_id}
               onChange={(value) => {
                 // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
-                dispatch({ type: "BALANCE", data: { baraa_id: value } });
+
+                var selected_baraa = _.filter(
+                  baraa_list,
+                  (a) => a.id === value
+                );
+                var c_id = _.filter(
+                  state.company.list,
+                  (a) =>
+                    parseInt(a.id) === parseInt(selected_baraa[0].company_id)
+                );
+                dispatch({
+                  type: "BALANCE",
+                  data: { baraa_id: value, seller_id: c_id[0].sub_code },
+                });
                 setbaraa(_.filter(baraa_list, (a) => a.id === value));
                 setprice(_.filter(baraa_list, (a) => a.id === value)[0].une);
                 setunit(_.filter(baraa_list, (a) => a.id === value)[0].unit);
@@ -359,13 +375,19 @@ const ModalNormDetail = () => {
               className="w-full"
               value={state.balance.seller_id}
               onChange={(value) => {
-                // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
-                dispatch({ type: "BALANCE", data: { seller: value } });
+                console.log(
+                  value,
+                  _.filter(
+                    state.company.list,
+                    (a) => parseInt(a.id) === parseInt(value)
+                  )
+                );
+                dispatch({ type: "BALANCE", data: { seller_id: value } });
               }}
             >
-              {_.map(list_ref, (item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.id + " - " + item.reference_name}
+              {_.map(state?.company?.list, (item) => (
+                <Select.Option key={item.sub_code} value={item.sub_code}>
+                  {item.id + " - " + item.company_ner + " - " + item.sub_code}
                 </Select.Option>
               ))}
             </Select>

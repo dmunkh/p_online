@@ -61,9 +61,14 @@ const Workers = () => {
             // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
             // "http://3.0.177.127/api/backend/baraa"
             "https://dmunkh.store/api/backend/balancelist",
+            // "http://localhost:5000/api/backend/balancelist",
             {
               params: {
                 main_company_id: main_company_id,
+                start_date: moment(state.balance.start_date).format(
+                  "YYYY.MM.DD"
+                ),
+                end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
               },
             }
           )
@@ -91,7 +96,7 @@ const Workers = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh]);
+  }, [state.refresh, state.balance.start_date, state.balance.end_date]);
   const deleteClick = (item) => {
     Swal.fire({
       text: item.baraa_ner + "г устгах уу",

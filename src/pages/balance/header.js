@@ -4,9 +4,8 @@ import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
 // import Tree from "src/components/custom/departmentTree";
 // import * as API from "src/api/request";
-
 import { DatePicker } from "antd";
-import Department from "src/components/custom/departmentTseh";
+import moment from "moment";
 // import _ from "lodash";
 
 const Header = () => {
@@ -35,11 +34,11 @@ const Header = () => {
           <DatePicker
             allowClear={false}
             className="w-full md:w-[110px] text-xs"
-            value={state.date}
+            value={moment(state.balance.start_date)}
             onChange={(date) => {
               dispatch({
-                type: "STATE",
-                data: { date: date },
+                type: "BALANCE",
+                data: { start_date: date },
               });
             }}
           />
@@ -51,11 +50,11 @@ const Header = () => {
         <DatePicker
           allowClear={false}
           className="w-full md:w-[110px] text-xs"
-          value={state.date}
+          value={moment(state.balance.end_date)}
           onChange={(date) => {
             dispatch({
-              type: "STATE",
-              data: { date: date },
+              type: "BALANCE",
+              data: { end_date: date },
             });
           }}
         />
