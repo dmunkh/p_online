@@ -59,6 +59,8 @@ const Workers = () => {
           {
             params: {
               user_id: user_id, // Add your parameters here
+              start_date: moment(state.balance.start_date).format("YYYY.MM.DD"),
+              end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
             },
           }
         );
