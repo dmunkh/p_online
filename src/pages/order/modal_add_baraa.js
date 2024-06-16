@@ -146,8 +146,8 @@ const ModalNormDetail = () => {
         setLoading(true);
         axios
 
-          .post("https://dmunkh.store/api/backend/balance", {
-            // .post("http://localhost:5000/api/backend/balance", {
+          // .post("https://dmunkh.store/api/backend/balance", {
+          .post("http://localhost:5000/api/backend/balance", {
             type_id: 3,
             baraa_id: baraa[0].id,
             baraa_ner: baraa[0].baraa_ner,
