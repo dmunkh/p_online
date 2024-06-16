@@ -432,6 +432,15 @@ const Workers = () => {
           />
           <Column
             field="count"
+            header="Эхний үлдэгдэл"
+            className="text-xs justify-end text-green-700 font-semibold"
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            body={(data) => {
+              return data.type_id === 0 ? data.count : "";
+            }}
+          />
+          <Column
+            field="count"
             header="Орлого"
             className="text-xs justify-end text-green-700 font-semibold"
             style={{ minWidth: "60px", maxWidth: "60px" }}
