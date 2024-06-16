@@ -44,11 +44,6 @@ const Workers = () => {
   };
 
   const calculateApprovedTotal = (list_list) => {
-    console.log(
-      "Liiiist",
-      list_list,
-      _.filter(list_list, (a) => parseInt(a.is_approve) === 1)
-    );
     return _.sumBy(
       _.filter(list_list, (a) => parseInt(a.is_approve) === 1),
       "total"
@@ -387,7 +382,6 @@ const Workers = () => {
             style={{ minWidth: "70px", maxWidth: "70px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
-              console.log("registerr_date", item.register_date);
               return (
                 <div className="flex items-center justify-center gap-2">
                   {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
@@ -542,7 +536,6 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
-              console.log("registerr_date", item.register_date);
               return (
                 <div className="flex items-center justify-center gap-2">
                   {/* {checkRole(["xx_warehouseItem_edit"]) && ( */}
