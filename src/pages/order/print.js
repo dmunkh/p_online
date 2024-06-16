@@ -53,12 +53,15 @@ const MyComponent = () => {
       try {
         setLoading(true);
         const response = await axios.get(
+          // "http://localhost:5000/api/backend/balance",
           "https://dmunkh.store/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
               user_id: user_id,
               group_id: group_id,
+              start_date: "2024.5.1",
+              end_date: "2024.6.30",
             },
           }
         );
