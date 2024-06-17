@@ -15,7 +15,7 @@ import MODAL from "src/pages/balance/modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
-
+import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -47,6 +47,43 @@ const Workers = () => {
   //     });
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [state.department_id, state.date, state.moduleid, state.refresh]);
+  const exportToExcel = (list) => {
+    let Heading = [["№", "Бараа нэр", "Үлдэгдэл", "Орлого"]];
+    var result = _.map(_.orderBy(list, ["ner"]), (a, i) => {
+      return {
+        i: i + 1,
+        baraa_ner: a.ner,
+        uldegdel: a.uldegdel,
+        orlogo: a.orlogo,
+      };
+    });
+    // result.push({
+    //   i: "",
+    //   itemname: "Нийт",
+    //   time: "",
+    //   unitname: "",
+    //   sizemin: _.countBy(list, (a) => a.sizemin),
+    //   sizemax: _.countBy(list, (a) => a.sizemax),
+    //   sizestep: _.sumBy(list, (a) => a.sizestep),
+    //   relation_count: _.sumBy(list, (a) => a.relation_count),
+    // });
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Үлдэгдэл" + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -149,6 +186,15 @@ const Workers = () => {
                 >
                   <i className="ft-search" />
                 </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <img
+                  alt=""
+                  title="Excel татах"
+                  src="/img/excel.png"
+                  className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                  onClick={() => exportToExcel(list)}
+                />
               </div>
             </div>
           }
