@@ -176,7 +176,7 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="delguur_ner"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["delguur_ner", "order_id"]}
+          globalFilterFields={["delguur_ner", "order_id", "user_name"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...

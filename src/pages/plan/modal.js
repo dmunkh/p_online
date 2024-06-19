@@ -18,6 +18,7 @@ import {
 import SaveButton from "src/components/button/SaveButton";
 import _ from "lodash";
 import axios from "axios";
+import useBearStore from "src/state/state";
 // import Swal from "sweetalert2";
 const { Option } = Select;
 
@@ -33,6 +34,7 @@ const ModalNormDetail = () => {
   const [unit, setunit] = useState("ш");
   const [date, setdate] = useState(dayjs());
   const [company, setCompany] = useState([]);
+  const userInfo = useBearStore((state) => state.userInfo);
 
   const [baraa_list, setBaraa_list] = useState();
 
@@ -43,7 +45,8 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/company"
+          "https://dmunkh.store/api/backend/company",
+          { params: { company_id: userInfo.sub_code } }
         );
         console.log(response.data.response);
 
