@@ -43,7 +43,7 @@ const ModalNormDetail = () => {
   const [comment, setcomment] = useState("");
 
   const [baraa_list, setBaraa_list] = useState();
-
+  console.log("selller_id", state.balance.seller_id);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -174,6 +174,14 @@ const ModalNormDetail = () => {
               "https://dmunkh.store/api/backend/balance/" + state.balance.id,
               {
                 count: state.balance.count,
+                src_id:
+                  state.balance.type === 2 || state.balance.type === 3
+                    ? state.balance.seller_id
+                    : 0,
+                dest_id:
+                  state.balance.type === 0 || state.balance.type === 1
+                    ? state.balance.seller_id
+                    : 0,
               }
             )
             .then((response) => {
@@ -237,16 +245,16 @@ const ModalNormDetail = () => {
             >
               {" "}
               <Select.Option key={0} value={0}>
-                Эхний үлдэгдэл
+                0 | Эхний үлдэгдэл
               </Select.Option>
               <Select.Option key={1} value={1}>
-                Орлого
+                1 | Орлого
               </Select.Option>
               <Select.Option key={2} value={2}>
-                Зарлага
+                2 | Зарлага
               </Select.Option>
               <Select.Option key={3} value={3}>
-                Захиалга
+                3 | Захиалга
               </Select.Option>
             </Select>
           </div>

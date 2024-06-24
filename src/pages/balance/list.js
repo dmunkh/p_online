@@ -168,7 +168,12 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="delguur_ner"
           scrollHeight={window.innerHeight - 300}
-          globalFilterFields={["baraa_ner", "delguur_ner"]}
+          globalFilterFields={[
+            "baraa_ner",
+            "delguur_ner",
+            "src_company_ner",
+            "dest_company_ner",
+          ]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -326,11 +331,12 @@ const Workers = () => {
                   )}
                 />
                 <Column
-                  className="w-[50px] text-xs"
+                  className="w-[60px] text-xs"
                   // footer={() => }
                 />
                 <Column
-                  className="w-[80px] text-xs justify-end justify-items-end text-right"
+                  colSpan={4}
+                  className="w-[319px] text-xs justify-end justify-items-end text-left"
                   footer={() => (
                     <div className="justify-items-end justify-end">
                       {Intl.NumberFormat("en-US").format(
@@ -338,18 +344,6 @@ const Workers = () => {
                       )}
                     </div>
                   )}
-                />
-                <Column
-                  className="w-[90px] text-xs"
-                  // footer={() => (
-                  //   <div className="text-center">
-                  //     {_.sumBy(list, (a) => a.count)}
-                  //   </div>
-                  // )}
-                />
-                <Column
-                  className="w-[70px] text-xs"
-                  // footer={() => }
                 />
               </Row>
             </ColumnGroup>
@@ -466,7 +460,17 @@ const Workers = () => {
               return Intl.NumberFormat("en-US").format(data.count * data.price);
             }}
           />
-
+          <Column
+            field="user_name"
+            header="Борлуулагч"
+            className="text-xs"
+            style={{ minWidth: "90px", maxWidth: "90px" }}
+            body={(data) => {
+              return data.src_company_ner
+                ? data.src_company_ner
+                : data.dest_company_ner;
+            }}
+          />
           <Column
             field="user_name"
             header="Бүртгэсэн"
@@ -494,6 +498,8 @@ const Workers = () => {
                           modal: true,
                           type: item.type_id,
                           baraa_id: item.baraa_id,
+                          seller_id:
+                            item.src_id !== "0" ? item.src_id : item.dest_id,
                         },
                       });
                     }}

@@ -8,7 +8,7 @@ const Index = () => {
   const { state } = usePlanContext();
   return (
     <div className=" p-2 text-xs">
-      Компани бүртгэл
+      Борлуулалт бүртгэл
       <List />
       {/* <Header />
       <div className="flex flex-col md:flex-row gap-2 ">
