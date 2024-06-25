@@ -374,6 +374,43 @@ const Goods_List = () => {
             style={{ minWidth: "110px", maxWidth: "110px" }}
           />
           <Column
+            field="type_id"
+            header="Төрөл"
+            className="text-xs justify-end textAlign: left"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            bodyClassName="flex items-center justify-end"
+            body={(data) => {
+              let content;
+              let style = { textAlign: "left" };
+              switch (data.type_id) {
+                case 0:
+                  content = "Эхний үлдэгдэл";
+                  break;
+                case 1:
+                  content = "Орлого";
+                  break;
+                case 2:
+                  content = "Зарлага";
+                  break;
+                case 3:
+                  content = "Захиалга";
+                  break;
+                case 4:
+                  content = "Буцаалт";
+                  style.color = "red";
+                  break;
+                case 5:
+                  content = "Хаягдал";
+                  style.color = "red";
+                  break;
+
+                default:
+                  content = "Default Content";
+              }
+              return <div style={style}>{content}</div>;
+            }}
+          />
+          <Column
             field="baraa_ner"
             header="Бараа нэр"
             className="text-xs"

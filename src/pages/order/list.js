@@ -117,11 +117,46 @@ const Workers = () => {
     //     });
     //   });
   };
-
+  const deleteClick = (item) => {
+    Swal.fire({
+      text: item.delguur_ner + " дэлгүүрийн захиалгыг устгах уу",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#1890ff",
+      cancelButtonColor: "rgb(244, 106, 106)",
+      confirmButtonText: "Тийм",
+      cancelButtonText: "Үгүй",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(item);
+        try {
+          setLoading(true);
+          axios
+            .delete("https://dmunkh.store/api/backend/orders/" + item.order_id)
+            // .delete("http://localhost:5000/api/backend/orders/" + item.order_id)
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              setLoading(false);
+            });
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+        }
+      }
+    });
+  };
   return (
     <div className="w-full">
       <Modal
-        style={{ width: "600" }}
+        style={{ width: "600", paddingTop: 0 }}
+        bodyStyle={{ padding: 10 }}
         width={800}
         height={550}
         visible={modalprint}
@@ -173,8 +208,8 @@ const Workers = () => {
           filterDisplay="menu"
           responsiveLayout="scroll"
           sortMode="multiple"
-          rowGroupMode="subheader"
-          groupRowsBy="delguur_ner"
+          // rowGroupMode="subheader"
+          // groupRowsBy="delguur_ner"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["delguur_ner", "order_id", "user_name"]}
           emptyMessage={
@@ -346,7 +381,7 @@ const Workers = () => {
 
                 <Column
                   colspan={3}
-                  className="w-[290px] text-xs justify-start"
+                  className="w-[310px] text-xs justify-start"
                   footer={() => (
                     <div className="justify-items-end justify-start text-left">
                       Үлдэгдэл:{" "}
@@ -462,6 +497,7 @@ const Workers = () => {
           />
 
           <Column
+            sortable
             field="register_date"
             header="Огноо"
             style={{ minWidth: "80px", maxWidth: "80px" }}
@@ -533,7 +569,7 @@ const Workers = () => {
             align="center"
             header=""
             className="text-xs"
-            style={{ minWidth: "40px", maxWidth: "40px" }}
+            style={{ minWidth: "60px", maxWidth: "60px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
               return (
@@ -558,6 +594,16 @@ const Workers = () => {
                   >
                     <i className="ft-edit" />
                   </button>
+                  {item.total === 0 || item.total === null ? (
+                    <button
+                      className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
+                      onClick={() => deleteClick(item)}
+                    >
+                      <i className="ft-trash-2" />
+                    </button>
+                  ) : (
+                    ""
+                  )}
                 </div>
               );
             }}

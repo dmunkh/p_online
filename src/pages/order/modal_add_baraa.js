@@ -144,49 +144,85 @@ const ModalNormDetail = () => {
       });
       try {
         setLoading(true);
-        axios
-          .post("https://dmunkh.store/api/backend/balance", {
-            // .post("http://localhost:5000/api/backend/balance", {
-            type_id: 3,
-            baraa_id: baraa[0].id,
-            baraa_ner: baraa[0].baraa_ner,
-            company_name: baraa[0].company_ner,
-            company_id: baraa[0].company_id,
-            delguur_id: state.order.delguur_id,
-            delguur_ner: state.order.delguur_ner,
-            count: count,
-            unit: unit,
-            price: price,
-            order_id: state.order.order_id,
-            register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
-            mc_id: main_company_id,
-            user_id: user_id,
-            comment: comment,
-            bonus: bonus,
-            box_count: boxcount,
-            src_id: state.balance.seller_id,
-            dest_id: 0,
-          })
-          .then((response) => {
-            dispatch({
-              type: "STATE",
-              data: { refresh: state.refresh + 1 },
+        if (type === 3) {
+          axios
+            .post("https://dmunkh.store/api/backend/balance", {
+              // .post("http://localhost:5000/api/backend/balance", {
+              type_id: type,
+              baraa_id: baraa[0].id,
+              baraa_ner: baraa[0].baraa_ner,
+              company_name: baraa[0].company_ner,
+              company_id: baraa[0].company_id,
+              delguur_id: state.order.delguur_id,
+              delguur_ner: state.order.delguur_ner,
+              count: count,
+              unit: unit,
+              price: price,
+              order_id: state.order.order_id,
+              register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+              mc_id: main_company_id,
+              user_id: user_id,
+              comment: comment,
+              bonus: bonus,
+              box_count: boxcount,
+              src_id: state.balance.seller_id,
+              dest_id: 0,
+            })
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+              setrefresh(refresh + 1);
+              console.log("Response:", response);
+            })
+            .catch((error) => {
+              Swal.close();
+              setLoading(false);
+              console.error("Error:", error);
             });
-            setrefresh(refresh + 1);
-            console.log("Response:", response);
-          })
-          .catch((error) => {
-            Swal.close();
-            setLoading(false);
-            console.error("Error:", error);
-          });
-        setLoading(false);
-        Swal.close();
-        Swal.fire(
-          "Хадгалагдлаа!",
-          "Бүртгэл амжилттай хадгалагдлаа.",
-          "success"
-        );
+          setLoading(false);
+          Swal.close();
+          Swal.fire(
+            "Хадгалагдлаа!",
+            "Бүртгэл амжилттай хадгалагдлаа.",
+            "success"
+          );
+        } else {
+          axios
+            .post("https://dmunkh.store/api/backend/balance/post", {
+              // .post("http://localhost:5000/api/backend/balance/post", {
+              type_id: type,
+              baraa_id: baraa[0].id,
+              baraa_ner: baraa[0].baraa_ner,
+              company_name: baraa[0].company_ner,
+              company_id: baraa[0].company_id,
+              delguur_id: state.order.delguur_id,
+              delguur_ner: state.order.delguur_ner,
+              count: count,
+              unit: unit,
+              price: price,
+              order_id: state.order.order_id,
+              register_date: dayjs(state.order.dt).format("YYYY.MM.DD"),
+              mc_id: main_company_id,
+              user_id: user_id,
+              comment: comment,
+              bonus: bonus,
+              box_count: boxcount,
+              src_id: type === 5 ? state.balance.seller_id : 0,
+              dest_id: type === 4 ? state.balance.seller_id : 0,
+            })
+            .then((response) => {
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
+              console.log("Response:", response);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
       } catch (error) {
         Swal.close();
         setLoading(false);
@@ -363,13 +399,13 @@ const ModalNormDetail = () => {
                   onChange={(value) => settype(value)}
                 >
                   <Option key={3} value={3}>
-                    Захиалга
+                    3 | Захиалга
                   </Option>
                   <Option key={4} value={4}>
-                    Буцаалт
+                    4 | Буцаалт
                   </Option>
                   <Option key={5} value={5}>
-                    Хаягдал
+                    5| Хаягдал
                   </Option>
                 </Select>
               </div>
@@ -603,18 +639,44 @@ const ModalNormDetail = () => {
                 style={{ minWidth: "40px", maxWidth: "40px" }}
                 body={(data, row) => row.rowIndex + 1}
               />
-              {/* <Column
-                style={{ minWidth: "60px", maxWidth: "60px" }}
-                field="order_id"
-                className="text-xs"
-                header="order_id"
-              />
+
               <Column
                 style={{ minWidth: "60px", maxWidth: "60px" }}
                 field="id"
                 className="text-xs"
                 header="id"
-              /> */}
+                body={(data) => {
+                  let content;
+                  let style = { textAlign: "left" };
+                  switch (data.type_id) {
+                    case 0:
+                      content = "Эхний үлдэгдэл";
+                      break;
+                    case 1:
+                      content = "Орлого";
+                      break;
+                    case 2:
+                      content = "Зарлага";
+                      break;
+                    case 3:
+                      content = "Захиалга";
+                      break;
+                    case 4:
+                      content = "Буцаалт";
+                      style.color = "red";
+                      break;
+                    case 5:
+                      content = "Хаягдал";
+                      style.color = "red";
+                      break;
+
+                    default:
+                      content = "Default Content";
+                  }
+                  return <div style={style}>{content}</div>;
+                }}
+              />
+
               <Column
                 field="baraa_ner"
                 header="Бараа"
