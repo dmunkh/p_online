@@ -42,8 +42,8 @@ const Goods_List = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
-          // "http://localhost:5000/api/backend/balance",
+          // "https://dmunkh.store/api/backend/balance",
+          "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -69,6 +69,9 @@ const Goods_List = () => {
               user_name: items[0].user_name,
               phone: items[0].phone,
               is_approve: items[0].is_approve,
+              is_print: items[0].is_print,
+              print_date: items[0].print_date,
+              is_dist: items[0].is_dist,
             };
           })
           .value();
@@ -371,13 +374,13 @@ const Goods_List = () => {
             field="bar_code"
             header="barcode"
             className="text-xs"
-            style={{ minWidth: "110px", maxWidth: "110px" }}
+            style={{ minWidth: "100px", maxWidth: "100px" }}
           />
           <Column
             field="type_id"
             header="Төрөл"
             className="text-xs justify-end textAlign: left"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
+            style={{ minWidth: "70px", maxWidth: "70px" }}
             bodyClassName="flex items-center justify-end"
             body={(data) => {
               let content;

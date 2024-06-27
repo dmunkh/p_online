@@ -10,10 +10,10 @@ const Index = () => {
     <div className=" p-2 text-xs">
       <Header />
       <div className="flex flex-col md:flex-row gap-2 ">
-        <div className="md:w-1/2">
+        <div className="md:w-3/5">
           <List />
         </div>
-        <div className="md:w-1/2">
+        <div className="md:w-2/5">
           <Goods />
         </div>
       </div>

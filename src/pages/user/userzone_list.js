@@ -15,6 +15,7 @@ import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
 import axios from "axios";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
+import SaveButton from "src/components/button/SaveButton";
 
 import Swal from "sweetalert2";
 
@@ -29,22 +30,22 @@ const Goods_List = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
+  console.log(state.balanceGroup_list);
+
+  const deleteClick = (item) => {
+    var result = _(state.balanceGroup_list)
+      .groupBy("delguur_id")
+      .map(function (items, delguur_id) {
+        return {
+          delguur_id: delguur_id,
+          delguur_ner: items[0].delguur_ner,
+          total: items[0].total,
+        };
+      })
+      .value();
+    console.log(result);
+    setList(_.orderBy(result, ["delguur_ner"]));
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -119,6 +120,11 @@ const Goods_List = () => {
       >
         <MODAL_ADD_BARAA />
       </Modal>
+      <SaveButton
+        onClick={() => {
+          deleteClick();
+        }}
+      />
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
@@ -263,11 +269,49 @@ const Goods_List = () => {
             header="Order"
           />
           <Column
-            field="company_ner"
+            field="delguur_ner"
             header="Бараа нэр"
             className="text-sm"
             // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
+          {_.map(
+            _.orderBy(state.balanceGroup_list, ["delguur_ner"]),
+            (item) => {
+              return (
+                <Column
+                  sortable
+                  key={item.delguur_id}
+                  header={
+                    item.delguur_ner +
+                    " Үнэ: " +
+                    Intl.NumberFormat("en-US").format(item.total)
+                  }
+                  field={"col" + item.delguur_id}
+                  style={{
+                    minWidth: "100px",
+                    maxWidth: "100px",
+                    width: "100px",
+                  }}
+                  className="text-xs "
+                  align="center"
+                  body={(data) => {
+                    console.log("dataaaaaaa", data);
+                    console.log(
+                      "data delguur_id",
+                      data["col" + item.delguur_id]
+                    );
+                    var result = data["col" + item.delguur_id];
+                    var price = data["col" + item.delguur_id] * item.price_emc;
+
+                    return result !== 0
+                      ? result //+ " - " + Intl.NumberFormat("en-US").format(price)
+                      : "";
+                    // return item.price_emc;
+                  }}
+                />
+              );
+            }
+          )}
           <Column
             field="count"
             header="Тоо ширхэг"

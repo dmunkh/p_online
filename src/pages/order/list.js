@@ -29,11 +29,12 @@ const Workers = () => {
   });
   const [first, set_first] = useState(0);
   const [loadingbtn, setLoadingbtn] = useState(false);
-
+  const [draw, setDraw] = useState(0);
   const [modalprint, setmodalprint] = useState(false);
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
-
+  const [is_approve, setis_approve] = useState(0);
+  const [is_print, setis_print] = useState(0);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.setMainCompanyID);
 
@@ -50,11 +51,15 @@ const Workers = () => {
     );
   };
 
-  const PlanApprove = (item, ischecked) => {
+  const PlanApprove = (type, item, ischecked) => {
     console.log("iteeeem", item, ischecked);
+
     Swal.fire({
       title: "Баталгаажуулалт",
-      text: "Захиалгын төлбөр төлөлтийг баталгаажуулах уу",
+      text:
+        type === "approve"
+          ? "Захиалгын төлбөр төлөлтийг баталгаажуулах уу"
+          : "Хэвлэсэн үү",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Тийм",
@@ -62,24 +67,50 @@ const Workers = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
+          var result1 = state.balanceGroup_list;
+
+          var index = _.findIndex(result1, {
+            order_id: item.order_id,
+          });
+          var dt = result1[index].print_date;
+          console.log("dt", dt);
           axios
             .put(
-              "https://dmunkh.store/api/backend/orders/" + item.order_id,
-              // "http://localhost:5000/api/backend/orders/" + item.order_id,
+              // "https://dmunkh.store/api/backend/orders/" + item.order_id,
+              "http://localhost:5000/api/backend/orders/" + item.order_id,
               {
                 // delguur_id: item.delguur_id,
                 // delguur_ner: item.delguur_ner,
                 // order_number: item.order_number,
                 cash: item.cash,
                 // register_date: item.register_date,
-                is_approve: 1,
+                is_approve: type === "approve" ? ischecked : item.is_approve,
+                is_print: type === "print" ? ischecked : item.is_print,
+                print_date:
+                  type === "print" ? moment().format("YYYY-MM-DD HH:mm") : dt,
               }
             )
             .then((response) => {
-              dispatch({
-                type: "STATE",
-                data: { refresh: state.refresh + 1 },
+              var index = _.findIndex(result1, {
+                order_id: item.order_id,
               });
+
+              console.log("index", index);
+
+              if (type === "approve") {
+                result1[index].is_approve = ischecked;
+                // result1[index].is_print = dt;
+              } else {
+                result1[index].is_print = ischecked;
+                result1[index].print_date = moment().format("YYYY-MM-DD HH:mm");
+              }
+              dispatch({ type: "STATE", data: { balanceGroup_list: result1 } });
+              // setList(result);
+              setDraw(draw + 1);
+              // dispatch({
+              //   type: "STATE",
+              //   data: { refresh: state.refresh + 1 },
+              // });
               setLoadingbtn(false);
             })
             .catch((error) => {
@@ -92,30 +123,6 @@ const Workers = () => {
         Swal.fire("Баталгаажуулалт", "Баталгаажуулалт хийгдсэнгүй", "error");
       }
     });
-
-    // API.postApprove({
-    //   year: moment(date).format("Y"),
-    //   department_id: id,
-    //   module_id: module,
-    //   is_closed: ischecked,
-    // })
-    //   .then(() => {
-    //     // dispatch({ type: "REFRESH" });
-    //     setRefresh(refresh + 1);
-    //     message({
-    //       type: "success",
-    //       title: "Амжилттай хадгалагдлаа",
-    //     });
-    //     setLoadingbtn(false);
-    //   })
-    //   .catch((error) => {
-    //     setLoadingbtn(false);
-    //     message({
-    //       type: "error",
-    //       error,
-    //       title: "Хааж чадсангүй.",
-    //     });
-    //   });
   };
   const deleteClick = (item) => {
     Swal.fire({
@@ -381,7 +388,7 @@ const Workers = () => {
 
                 <Column
                   colspan={3}
-                  className="w-[310px] text-xs justify-start"
+                  className="w-[450px] text-xs justify-start"
                   footer={() => (
                     <div className="justify-items-end justify-start text-left">
                       Үлдэгдэл:{" "}
@@ -535,6 +542,31 @@ const Workers = () => {
             }}
           />
           <Column
+            field="is_print"
+            header="Хэвлэлт"
+            className="text-xs"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(item) => {
+              return (
+                <div className="flex items-center justify-center gap-3">
+                  <Spin tip="." className="bg-opacity-80" spinning={loadingbtn}>
+                    <Switch
+                      checkedChildren={
+                        <i className="fa fa-check  text-green-600" />
+                      }
+                      unCheckedChildren={<i className="fa fa-times " />}
+                      checked={item.is_print}
+                      onChange={(value) => {
+                        setLoadingbtn(true);
+                        PlanApprove("print", item, value);
+                      }}
+                    />
+                  </Spin>{" "}
+                </div>
+              );
+            }}
+          />
+          <Column
             field="is_approve"
             header="Төлбөр дуусгах"
             className="text-xs"
@@ -551,13 +583,19 @@ const Workers = () => {
                       checked={item.is_approve}
                       onChange={(value) => {
                         setLoadingbtn(true);
-                        PlanApprove(item, value);
+                        PlanApprove("approve", item, value);
                       }}
                     />
                   </Spin>
                 </div>
               );
             }}
+          />
+          <Column
+            field="is_dist"
+            header="Хүргэлт"
+            className="text-xs"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
           />
           <Column
             field="user_name"

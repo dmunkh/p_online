@@ -448,7 +448,11 @@ const Workers = () => {
             className="text-xs justify-end text-red-700 font-semibold"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
-              return data.type_id === 3 || data.type_id === 2 ? data.count : "";
+              return data.type_id === 5 ||
+                data.type_id === 3 ||
+                data.type_id === 2
+                ? data.count
+                : "";
             }}
           />
           <Column
