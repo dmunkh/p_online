@@ -8,13 +8,13 @@ const Index = () => {
   const { state } = usePlanContext();
   return (
     <div className=" p-2 text-xs">
-      <Header />
+      {/* <Header /> */}
       <div className="flex flex-col md:flex-row gap-2 ">
-        {/* <div className="md:w-1/2">
+        <div className="md:w-1/2">
           <List />
-        </div> */}
+        </div>
         {/* <div className="md:w-1/2"> */}
-        <Zone />
+        {/* <Zone /> */}
         {/* </div> */}
       </div>
       {/* <Header />
