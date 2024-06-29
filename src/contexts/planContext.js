@@ -62,6 +62,7 @@ const _state = {
 
   order: {
     id: 0,
+    modal_driver: false,
     start_date: _startDate,
     end_date: _endDate,
     modal: false,
@@ -76,6 +77,7 @@ const _state = {
     baraa_id: 0,
     phone: null,
     user_name: null,
+    checked_positionList: [],
   },
   balance: {
     id: 0,
@@ -98,6 +100,11 @@ const _state = {
     user_name: null,
     user_login: null,
     phone: null,
+  },
+  report: {
+    year: moment(),
+    month: moment(),
+    date: moment(),
   },
 };
 

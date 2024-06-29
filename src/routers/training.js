@@ -36,14 +36,14 @@ const Training = () => {
         </UseTrainingContext>
       ),
     },
-    {
-      path: "/report",
-      component: (
-        <UseTrainingContext>
-          <ReportRegister />
-        </UseTrainingContext>
-      ),
-    },
+    // {
+    //   path: "/report",
+    //   component: (
+    //     <UseTrainingContext>
+    //       <ReportRegister />
+    //     </UseTrainingContext>
+    //   ),
+    // },
   ];
   return (
     <Routes>

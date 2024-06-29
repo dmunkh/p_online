@@ -124,6 +124,23 @@ const data = [
     parent_id: 0,
     software_id: 154,
   },
+  {
+    caption: "Тайлан",
+    description: "ft-user-plus",
+    id: 2185,
+    isaction: false,
+    isactive: true,
+    isconst: false,
+    isdelete: 1,
+    isinsert: 1,
+    isupdate: 1,
+    menu_iconp: null,
+    menu_keys: null,
+    menu_link: "report",
+    ordern: 6,
+    parent_id: 0,
+    software_id: 154,
+  },
 ];
 
 const Navbar = () => {

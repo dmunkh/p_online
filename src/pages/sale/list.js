@@ -319,30 +319,54 @@ const SaleList = () => {
             header="Орлого"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             className="text-xs justify-end text-green-700"
+            body={(data) => {
+              return data.orlogo ? data.orlogo : "";
+            }}
           />
           <Column
             field="zahialga"
             header="Захиалга"
             className="text-xs justify-end text-red-700"
             style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.zahialga ? data.zahialga : "";
+            }}
           />
           <Column
             field="ehni_uldegdel"
             header="Эхний үлдэгдэл"
             className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.ehni_uldegdel ? data.ehni_uldegdel : "";
+            }}
           />
           <Column
             field="zarlaga"
             header="Зарлага"
             className="text-xs justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.zarlaga ? data.zarlaga : "";
+            }}
+          />
+          <Column
+            field="hayagdal"
+            header="Хаягдал"
+            className="text-xs justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.hayagdal ? data.hayagdal : "";
+            }}
           />
           <Column
             field="bonus"
             header="Урамшуулал"
             className="text-xs justify-end"
             style={{ minWidth: "80px", maxWidth: "80px" }}
+            body={(data) => {
+              return data.bonus ? data.bonus : "";
+            }}
           />
           <Column
             field="box_count"

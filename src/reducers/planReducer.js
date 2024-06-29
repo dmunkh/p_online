@@ -53,6 +53,14 @@ export const reducer = (state, action) => {
           ...action.data,
         },
       };
+    case "REPORT":
+      return {
+        ...state,
+        report: {
+          ...state.report,
+          ...action.data,
+        },
+      };
     default:
       return state;
   }

@@ -19,6 +19,50 @@ import SaveButton from "src/components/button/SaveButton";
 
 import Swal from "sweetalert2";
 
+const data = [
+  {
+    store_name: "Store 1",
+    date: "2024-06-01",
+    total: 10500,
+    balance: 516,
+  },
+  {
+    store_name: "Store 1",
+    date: "2024-06-25",
+    total: 9500,
+    balance: 516,
+  },
+  {
+    store_name: "Store 2",
+    date: "2024-06-10",
+    total: 500,
+    balance: 516,
+  },
+  {
+    store_name: "Store 2",
+    date: "2024-06-15",
+    total: 860,
+    balance: 516,
+  },
+  {
+    store_name: "Store 3",
+    date: "2024-06-21",
+    total: 5100,
+    balance: 516,
+  },
+];
+
+const daysInMonth = new Date(2024, 6, 0).getDate(); // June has 30 days
+
+const groupedData = data.reduce((acc, { store_name, date, total, balance }) => {
+  if (!acc[store_name]) {
+    acc[store_name] = Array(daysInMonth).fill({ total: null, balance: null });
+  }
+  const day = new Date(date).getDate() - 1;
+  acc[store_name][day] = { total, balance };
+  return acc;
+}, {});
+
 const Goods_List = () => {
   // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
@@ -30,21 +74,37 @@ const Goods_List = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
-  console.log(state.balanceGroup_list);
-
+  // console.log(state.balanceGroup_list);
+  const storeNames = Object.keys(groupedData);
+  const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const deleteClick = (item) => {
-    var result = _(state.balanceGroup_list)
-      .groupBy("delguur_id")
-      .map(function (items, delguur_id) {
-        return {
-          delguur_id: delguur_id,
-          delguur_ner: items[0].delguur_ner,
-          total: items[0].total,
-        };
-      })
-      .value();
+    var result = [];
+
+    var dict = _.groupBy(state.balanceGroup_list, "delguur_id");
+
+    for (var key in dict) {
+      if (dict.hasOwnProperty(key)) {
+        if (dict[key].length > 0) {
+          var register_date = [];
+
+          // eslint-disable-next-line no-loop-func
+          _.map(dict[key], (item) => {
+            register_date.push(
+              _.toString(item.register_date) + " " + _.toString(item.total)
+            );
+          });
+
+          result.push({
+            ...dict[key][0],
+            register_date: _.join(register_date, "<br/>"),
+            total: _.sumBy(dict[key], "total"),
+          });
+        }
+      }
+    }
+
     console.log(result);
-    setList(_.orderBy(result, ["delguur_ner"]));
+    // setList(_.orderBy(result, ["delguur_ner"]));
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -94,6 +154,36 @@ const Goods_List = () => {
   return (
     <div className="w-full">
       {" "}
+      <h1>Monthly Sales Calendar</h1>
+      <table className="pivot-table">
+        <thead>
+          <tr>
+            <th>Store Name</th>
+            {daysArray.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {storeNames.map((storeName) => (
+            <tr key={storeName}>
+              <td>{storeName}</td>
+              {groupedData[storeName].map(({ total, balance }, index) => (
+                <td key={index}>
+                  {total !== null && balance !== null ? (
+                    <div>
+                      <div>Total: {total}</div>
+                      <div>Balance: {balance}</div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>{" "}
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -295,11 +385,11 @@ const Goods_List = () => {
                   className="text-xs "
                   align="center"
                   body={(data) => {
-                    console.log("dataaaaaaa", data);
-                    console.log(
-                      "data delguur_id",
-                      data["col" + item.delguur_id]
-                    );
+                    // console.log("dataaaaaaa", data);
+                    // console.log(
+                    //   "data delguur_id",
+                    //   data["col" + item.delguur_id]
+                    // );
                     var result = data["col" + item.delguur_id];
                     var price = data["col" + item.delguur_id] * item.price_emc;
 

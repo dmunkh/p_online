@@ -42,8 +42,8 @@ const Goods_List = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
-          // "http://localhost:5000/api/backend/balance",
+          // "https://dmunkh.store/api/backend/balance",
+          "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -62,7 +62,9 @@ const Goods_List = () => {
               order_id: id_order,
               delguur_id: items[0].delguur_id,
               delguur_ner: items[0].delguur_ner,
-              register_date: items[0].register_date,
+              register_date: moment(items[0].register_date).format(
+                "YYYY.MM.DD"
+              ),
               cash: items[0].cash,
               count: _.sumBy(items, "count"),
               total: _.sumBy(items, "total"),
@@ -72,6 +74,8 @@ const Goods_List = () => {
               is_print: items[0].is_print,
               print_date: items[0].print_date,
               is_dist: items[0].is_dist,
+              dist_date_register: items[0].dist_date_register,
+              dist_user_name: items[0].dist_user_name,
             };
           })
           .value();

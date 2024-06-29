@@ -12,6 +12,30 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .scrollbar {
     overflow-y: auto;
   }
+  .pivot-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .pivot-table th,
+  .pivot-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .pivot-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .pivot-table td {
+    background-color: #ffffff;
+  }
+  
+  .pivot-table tr:hover {
+    background-color: #f1f1f1;
+  }
   
   .scrollbar::-webkit-scrollbar {
     width: 5px;
@@ -82,3 +106,5 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   {
     box-shadow: 1px 2px 9px #F4AAB9,
       }
+
+      

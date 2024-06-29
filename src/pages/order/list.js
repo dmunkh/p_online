@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Modal, Switch, Radio } from "antd";
+import { Spin, Input, Select, Modal, Switch, Checkbox } from "antd";
 import _ from "lodash";
 
 import { SearchOutlined } from "@ant-design/icons";
@@ -10,6 +10,7 @@ import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/order/modal";
 import MODAL_ADD_BARAA from "src/pages/order/modal_add_baraa";
+import MODAL_DRIVER from "src/pages/order/modal_add_driver";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import useBearStore from "src/state/state";
@@ -27,6 +28,7 @@ const Workers = () => {
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
+  const [selectedItems, setSelectedItems] = useState([]);
   const [first, set_first] = useState(0);
   const [loadingbtn, setLoadingbtn] = useState(false);
   const [draw, setDraw] = useState(0);
@@ -37,7 +39,9 @@ const Workers = () => {
   const [is_print, setis_print] = useState(0);
   const [list, setList] = useState([]);
   const main_company_id = useBearStore((state) => state.setMainCompanyID);
-
+  const [checkAll, setCheckAll] = useState(false);
+  const [indeterminate, setIndeterminate] = useState(false);
+  const [draw_check, setdraw_check] = useState(1);
   const handleButtonClick = (user_id) => {
     // const url = `https://main.d5ki8wb12wcij.amplifyapp.com/order/print?user_id=${user_id}`;
     const url = `https://dmunkh.store/order/print?user_id=${user_id}`;
@@ -159,6 +163,57 @@ const Workers = () => {
       }
     });
   };
+
+  const check_position = (e, item) => {
+    console.log(e, item, state.order.checked_positionList);
+    var result = state.order.checked_positionList;
+
+    if (e.target.checked) {
+      result.push({
+        order_id: item.order_id,
+      });
+    } else {
+      result = _.reject(
+        state.order.checked_positionList,
+        (a) => a.order_id === item.order_id
+      );
+    }
+
+    dispatch({
+      type: "ORDER",
+      data: { checked_positionList: result },
+    });
+    // dispatch({
+    //   type: "REFRESH_NORM",
+    // });
+
+    // result.length > 1 &&
+    //   dispatch({
+    //     type: "STATE",
+    //     data: { list_norm: [], selectedpositionname: null },
+    //   });
+    setdraw_check((prev) => prev + 1);
+  };
+  const onCheckboxChange = (e, rowData) => {
+    console.log("eeeeeeeeeeee", e, rowData);
+    let selected = [...selectedItems];
+    if (e.checked) {
+      selected.push(rowData);
+    } else {
+      selected = selected.filter((item) => item !== rowData);
+    }
+    setSelectedItems(selected);
+  };
+  console.log(selectedItems);
+  const checkboxTemplate = (rowData) => {
+    // console.log("rowdata", rowData);
+    return (
+      <Checkbox
+        onChange={(e) => onCheckboxChange(e, rowData)}
+        checked={selectedItems.includes(rowData)}
+      />
+    );
+  };
   return (
     <div className="w-full">
       <Modal
@@ -187,6 +242,20 @@ const Workers = () => {
         <MODAL />
       </Modal>
       <Modal
+        style={{ width: "600" }}
+        width={800}
+        height={550}
+        visible={state.order.modal_driver}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "ORDER", data: { modal_driver: false } })
+        }
+        closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <MODAL_DRIVER />
+      </Modal>
+      <Modal
         style={{ width: "1200" }}
         width={1200}
         height={550}
@@ -200,6 +269,7 @@ const Workers = () => {
       >
         <MODAL_ADD_BARAA />
       </Modal>
+
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
@@ -262,6 +332,27 @@ const Workers = () => {
                   }}
                 >
                   <i className="ft-search" />
+                </div>
+                <div
+                  title="Хүргэлт хийх ажилтан бүртгэх"
+                  className="p-1 flex items-center justify-center font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  onClick={() => {
+                    state.order.checked_positionList &&
+                    state.order.checked_positionList.length > 0
+                      ? dispatch({
+                          type: "ORDER",
+                          data: { modal_driver: true },
+                        })
+                      : Swal.fire({
+                          text: "Захиалга сонгоогүй байна",
+                          icon: "warning",
+
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          cancelButtonText: "OK",
+                        });
+                  }}
+                >
+                  <i className="ft-edit" />
                 </div>
               </div>
             </div>
@@ -417,6 +508,31 @@ const Workers = () => {
             </ColumnGroup>
           }
         >
+          <Column
+            align="center"
+            style={{ minWidth: "50px", maxWidth: "50px" }}
+            className="text-xs w-[50px]"
+            body={(item) => {
+              var checked = false;
+
+              var aa = _.find(state.order.checked_positionList, {
+                order_id: item.order_id,
+              });
+              console.log(aa);
+              if (aa !== undefined) checked = true;
+
+              return (
+                <Checkbox
+                  key={item.id}
+                  checked={checked}
+                  onChange={(e) => check_position(e, item)}
+                />
+              );
+            }}
+            headerClassName="flex items-center justify-center"
+            bodyClassName="flex items-center justify-center"
+          />
+
           <Column
             align="center"
             header=""
@@ -592,7 +708,7 @@ const Workers = () => {
             }}
           />
           <Column
-            field="is_dist"
+            field="dist_user_name"
             header="Хүргэлт"
             className="text-xs"
             style={{ minWidth: "70px", maxWidth: "70px" }}

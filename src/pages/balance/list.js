@@ -427,8 +427,8 @@ const Workers = () => {
           <Column
             field="count"
             header="Эхний үлдэгдэл"
-            className="text-xs justify-end text-green-700 font-semibold"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
+            className="text-sm justify-end text-green-700 font-semibold"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
               return data.type_id === 0 ? data.count : "";
             }}
@@ -436,7 +436,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Орлого"
-            className="text-xs justify-end text-green-700 font-semibold"
+            className="text-sm justify-end text-green-700 font-semibold"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 1 ? data.count : "";
@@ -445,7 +445,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Зарлага"
-            className="text-xs justify-end text-red-700 font-semibold"
+            className="text-sm justify-end text-red-700 font-semibold"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 5 ||
