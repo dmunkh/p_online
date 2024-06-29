@@ -36,14 +36,14 @@ const Goods_List = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const group_id = useBearStore((state) => state.group_id);
   const user_id = useBearStore((state) => state.user_id);
-  // console.log("group idddd", group_id);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://dmunkh.store/api/backend/balance",
-          "http://localhost:5000/api/backend/balance",
+          "https://dmunkh.store/api/backend/balance",
+          // "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -87,7 +87,6 @@ const Goods_List = () => {
             balanceGroup_list: result,
           },
         });
-        console.log("result", result);
 
         setList(
           _.orderBy(
@@ -107,7 +106,6 @@ const Goods_List = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.order.start_date, state.order.end_date]);
   useEffect(() => {
-    console.log("filter order id", state.order.filter_order_id, filterlist);
     var result = filterlist;
     if (state.order.filter_order_id !== 0) {
       setList(

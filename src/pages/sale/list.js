@@ -46,7 +46,7 @@ const SaleList = () => {
             },
           }
         );
-        console.log("balance list", main_company_id);
+
         var result = _(response.data)
           .groupBy("baraa_ner")
           .map(function (items, baraa_ner) {
@@ -132,13 +132,6 @@ const SaleList = () => {
             className="w-full"
             value={state.balance.seller_id}
             onChange={(value) => {
-              console.log(
-                value,
-                _.filter(
-                  state.company.list,
-                  (a) => parseInt(a.id) === parseInt(value)
-                )
-              );
               dispatch({ type: "BALANCE", data: { seller_id: value } });
             }}
           >

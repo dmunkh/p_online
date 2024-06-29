@@ -15,7 +15,6 @@ const MyComponent = () => {
   const [total, settotal] = useState(0);
   const [delguur, setdelguur] = useState([]);
 
-  console.log("userinfoooo", userInfo);
   const currentDateTime = moment().format("YYYY-MM-DD HH:mm");
   useEffect(() => {
     const fetchData = async () => {

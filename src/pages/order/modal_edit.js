@@ -37,8 +37,6 @@ const ModalNormDetail = () => {
   const [delguur_list, setDelguur_list] = useState();
   const [baraa_list, setBaraa_list] = useState();
 
-  console.log("date", dayjs(state.order.dt), state.order.order_id);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +46,6 @@ const ModalNormDetail = () => {
           // "http://3.0.177.127/api/backend/baraa"
           "https://dmunkh.store/api/backend/delguur"
         );
-        console.log(response.data.response);
 
         setCompany(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -69,7 +66,6 @@ const ModalNormDetail = () => {
           // "http://3.0.177.127/api/backend/baraa"
           "https://dmunkh.store/api/backend/baraa"
         );
-        console.log("baraa list", response.data.response);
 
         setBaraa_list(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -91,7 +87,6 @@ const ModalNormDetail = () => {
           // "http://3.0.177.127/api/backend/baraa"
           "https://dmunkh.store/api/backend/delguur"
         );
-        console.log("baraa list", response.data.response);
 
         setDelguur_list(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -121,7 +116,6 @@ const ModalNormDetail = () => {
               type: "STATE",
               data: { refresh: state.refresh + 1 },
             });
-            console.log("Response:", response);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -139,7 +133,6 @@ const ModalNormDetail = () => {
               type: "STATE",
               data: { refresh: state.refresh + 1 },
             });
-            console.log("Response:", response);
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -154,7 +147,7 @@ const ModalNormDetail = () => {
         //     const response = await axios.get(
         //       "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/balance"
         //     );
-        //     console.log("data", response.data);
+
         //   } catch (error) {}
         // };
 
@@ -184,10 +177,7 @@ const ModalNormDetail = () => {
               optionFilterProp="children"
               className="w-full"
               onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(delguur_list, (a) => a.id === value)
-                );
+             
                 setDelguur(_.filter(delguur_list, (a) => a.id === value));
                 dispatch({ type: "ORDER", data: { baraa_id: value } });
               }}

@@ -48,7 +48,6 @@ const ModalNormDetail = () => {
           "https://dmunkh.store/api/backend/company",
           { params: { company_id: userInfo.sub_code } }
         );
-        console.log(response.data.response);
 
         setCompany(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -91,8 +90,6 @@ const ModalNormDetail = () => {
               type: "STATE",
               data: { refresh: state.refresh + 1 },
             });
-            console.log("Response:", response);
-            // Do something with the response, if needed
           })
           .catch((error) => {
             // Handle error
@@ -117,18 +114,13 @@ const ModalNormDetail = () => {
             bar_code: state.baraa.bar_code,
           })
           .then((response) => {
-            // Handle success
             dispatch({
               type: "STATE",
               data: { refresh: state.refresh + 1 },
             });
-            console.log("Response:", response);
-            // Do something with the response, if needed
           })
           .catch((error) => {
-            // Handle error
             console.error("Error:", error);
-            // Do something with the error, if needed
           });
       } catch (error) {
         setLoading(false);

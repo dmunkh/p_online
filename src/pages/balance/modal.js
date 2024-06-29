@@ -43,7 +43,7 @@ const ModalNormDetail = () => {
   const [comment, setcomment] = useState("");
 
   const [baraa_list, setBaraa_list] = useState();
-  console.log("selller_id", state.balance.seller_id);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,7 +62,7 @@ const ModalNormDetail = () => {
 
     fetchData();
   }, [state.refresh]);
-  console.log(state.company.list);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -90,7 +90,6 @@ const ModalNormDetail = () => {
         const response = await axios.get(
           "https://dmunkh.store/api/backend/reference"
         );
-        console.log("baraa list", response.data.response);
 
         setlist_ref(_.orderBy(response?.data?.response, ["id"]));
         setLoading(false);
@@ -150,7 +149,6 @@ const ModalNormDetail = () => {
                 type: "STATE",
                 data: { refresh: state.refresh + 1 },
               });
-              console.log("Response:", response);
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -162,7 +160,6 @@ const ModalNormDetail = () => {
             "Бүртгэл амжилттай хадгалагдлаа.",
             "success"
           );
-          // console.log("return", response.data, "refresh", state.refresh);
         } catch (error) {
           setLoading(false);
           Swal.close();
@@ -189,7 +186,6 @@ const ModalNormDetail = () => {
                 type: "STATE",
                 data: { refresh: state.refresh + 1 },
               });
-              console.log("Response:", response);
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -270,8 +266,6 @@ const ModalNormDetail = () => {
               className="w-full"
               value={state.balance.baraa_id}
               onChange={(value) => {
-                // console.log(_.filter(baraa_list, (a) => a.id === value)[0]);
-
                 var selected_baraa = _.filter(
                   baraa_list,
                   (a) => a.id === value
@@ -316,9 +310,8 @@ const ModalNormDetail = () => {
               min={0}
               value={boxcount}
               onChange={(value) => {
-                console.log(value, baraa[0]?.box_count);
                 var ss = value * baraa[0]?.box_count;
-                console.log(ss && ss);
+
                 dispatch({ type: "BALANCE", data: { count: ss } });
                 setboxcount(value);
               }}
@@ -383,13 +376,6 @@ const ModalNormDetail = () => {
               className="w-full"
               value={state.balance.seller_id}
               onChange={(value) => {
-                console.log(
-                  value,
-                  _.filter(
-                    state.company.list,
-                    (a) => parseInt(a.id) === parseInt(value)
-                  )
-                );
                 dispatch({ type: "BALANCE", data: { seller_id: value } });
               }}
             >

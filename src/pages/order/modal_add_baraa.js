@@ -174,7 +174,6 @@ const ModalNormDetail = () => {
                 data: { refresh: state.refresh + 1 },
               });
               setrefresh(refresh + 1);
-              console.log("Response:", response);
             })
             .catch((error) => {
               Swal.close();
@@ -217,7 +216,6 @@ const ModalNormDetail = () => {
                 type: "STATE",
                 data: { refresh: state.refresh + 1 },
               });
-              console.log("Response:", response);
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -331,13 +329,6 @@ const ModalNormDetail = () => {
                   className="w-full"
                   value={state.balance.seller_id}
                   onChange={(value) => {
-                    console.log(
-                      value,
-                      _.filter(
-                        state.company.list,
-                        (a) => parseInt(a.id) === parseInt(value)
-                      )
-                    );
                     dispatch({ type: "BALANCE", data: { seller_id: value } });
                   }}
                 >

@@ -74,7 +74,6 @@ const Goods_List = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
 
-  // console.log(state.balanceGroup_list);
   const storeNames = Object.keys(groupedData);
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const deleteClick = (item) => {
@@ -103,7 +102,6 @@ const Goods_List = () => {
       }
     }
 
-    console.log(result);
     // setList(_.orderBy(result, ["delguur_ner"]));
   };
   useEffect(() => {
@@ -122,13 +120,13 @@ const Goods_List = () => {
         //     "https://dmunkh.store/api/backend/userzone"
         //   )
         //   .then((response) => {
-        //     console.log("response", response);
+        //
         //     setList(response);
         //   })
         //   .catch((error) => {
         //     console.log("Error", error);
         //   });
-        // console.log("order list", response.data.response);
+
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -385,11 +383,6 @@ const Goods_List = () => {
                   className="text-xs "
                   align="center"
                   body={(data) => {
-                    // console.log("dataaaaaaa", data);
-                    // console.log(
-                    //   "data delguur_id",
-                    //   data["col" + item.delguur_id]
-                    // );
                     var result = data["col" + item.delguur_id];
                     var price = data["col" + item.delguur_id] * item.price_emc;
 

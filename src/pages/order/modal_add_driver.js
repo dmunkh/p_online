@@ -70,7 +70,6 @@ const ModalDriver = () => {
   }, [state.refresh]);
 
   const handleClick = () => {
-    console.log(state.order.checked_positionList);
     var order_ids = _.join(
       _.map(state.order.checked_positionList, (a) => a.order_id),
       ","

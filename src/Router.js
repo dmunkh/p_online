@@ -17,7 +17,7 @@ import TrainingRoute from "src/routers/training";
 
 const Router = () => {
   const { user } = useUserContext();
-  console.log(user.loggedIn);
+
   return (
     <>
       {user?.loggedIn && (

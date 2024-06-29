@@ -101,7 +101,7 @@ const Workers = () => {
             },
           }
         );
-        console.log("balance list", main_company_id);
+
         var result = _(response.data)
           .groupBy("baraa_ner")
           .map(function (items, baraa_ner) {

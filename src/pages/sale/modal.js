@@ -37,7 +37,6 @@ const ModalNormDetail = () => {
           // "http://3.0.177.127/api/backend/baraa"
           "https://dmunkh.store/api/backend/company"
         );
-        console.log(response.data.response);
 
         setCompany(_.orderBy(response.data.response, ["id"]));
         setLoading(false);
@@ -87,8 +86,6 @@ const ModalNormDetail = () => {
           type: "STATE",
           data: { refresh: state.refresh + 1 },
         });
-
-        console.log("return", response.data, "refresh", state.refresh);
       } catch (error) {}
     } else {
       try {
@@ -126,8 +123,6 @@ const ModalNormDetail = () => {
           type: "STATE",
           data: { refresh: state.refresh + 1 },
         });
-
-        console.log("return", response.data, "refresh", state.refresh);
       } catch (error) {}
     }
   };

@@ -40,7 +40,7 @@ const Workers = () => {
           throw new Error("Network response was not ok");
         }
         const jsonData = await response.json();
-        console.log("fetching dataa", jsonData.response);
+
         // setData(jsonData);
 
         setList(_.orderBy(jsonData.response, ["id"]));

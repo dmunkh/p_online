@@ -56,8 +56,6 @@ const Workers = () => {
   };
 
   const PlanApprove = (type, item, ischecked) => {
-    console.log("iteeeem", item, ischecked);
-
     Swal.fire({
       title: "Баталгаажуулалт",
       text:
@@ -77,7 +75,7 @@ const Workers = () => {
             order_id: item.order_id,
           });
           var dt = result1[index].print_date;
-          console.log("dt", dt);
+
           axios
             .put(
               // "https://dmunkh.store/api/backend/orders/" + item.order_id,
@@ -98,8 +96,6 @@ const Workers = () => {
               var index = _.findIndex(result1, {
                 order_id: item.order_id,
               });
-
-              console.log("index", index);
 
               if (type === "approve") {
                 result1[index].is_approve = ischecked;
@@ -140,7 +136,6 @@ const Workers = () => {
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(item);
         try {
           setLoading(true);
           axios
@@ -165,7 +160,6 @@ const Workers = () => {
   };
 
   const check_position = (e, item) => {
-    console.log(e, item, state.order.checked_positionList);
     var result = state.order.checked_positionList;
 
     if (e.target.checked) {
@@ -195,7 +189,6 @@ const Workers = () => {
     setdraw_check((prev) => prev + 1);
   };
   const onCheckboxChange = (e, rowData) => {
-    console.log("eeeeeeeeeeee", e, rowData);
     let selected = [...selectedItems];
     if (e.checked) {
       selected.push(rowData);
@@ -204,9 +197,8 @@ const Workers = () => {
     }
     setSelectedItems(selected);
   };
-  console.log(selectedItems);
+
   const checkboxTemplate = (rowData) => {
-    // console.log("rowdata", rowData);
     return (
       <Checkbox
         onChange={(e) => onCheckboxChange(e, rowData)}
@@ -371,7 +363,6 @@ const Workers = () => {
             return result;
           }}
           onRowClick={(e) => {
-            console.log(e);
             dispatch({
               type: "ORDER",
               data: {
@@ -518,7 +509,7 @@ const Workers = () => {
               var aa = _.find(state.order.checked_positionList, {
                 order_id: item.order_id,
               });
-              console.log(aa);
+
               if (aa !== undefined) checked = true;
 
               return (

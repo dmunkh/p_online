@@ -9,7 +9,6 @@ const Main = () => {
   return (
     <Routes>
       {_.map(data, (el) => {
-        // console.log(el, data);
         return (
           <Route key={el.path} exact path={el.path} element={el.component} />
         );

@@ -30,11 +30,7 @@ const Workers = () => {
   const user_id = useBearStore((state) => state.user_id);
   const userInfo = useBearStore((state) => state.userInfo);
   const [totalSum, settotalSum] = useState(0);
-  console.log(
-    "days----",
-    daysInMonth,
-    moment(state.report.date).format("YYYY.MM.DD HH:mm")
-  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,7 +82,6 @@ const Workers = () => {
             balanceGroup_list: result,
           },
         });
-        // console.log("result", result);
 
         setList(
           _.orderBy(
@@ -120,8 +115,6 @@ const Workers = () => {
   }, {});
 
   const aggregatedDataArray = Object.values(aggregateData);
-
-  // console.log("aggregete----", aggregateData);
 
   const groupedData = aggregatedDataArray.reduce(
     (acc, { delguur_ner, register_date, total, balance }) => {
@@ -160,8 +153,6 @@ const Workers = () => {
         type: "STATE",
         data: { refresh: state.refresh + 1 },
       });
-
-      // console.log("return", response.data);
     } catch (error) {
       setLoading(false);
     }

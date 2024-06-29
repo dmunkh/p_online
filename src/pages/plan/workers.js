@@ -27,23 +27,7 @@ const Workers = () => {
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
   const user_id = useBearStore((state) => state.user_id);
-  console.log(user_id);
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +38,7 @@ const Workers = () => {
           "https://dmunkh.store/api/backend/baraa",
           { params: { user_id: user_id } }
         );
-        console.log(response.data.response);
+
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -85,8 +69,6 @@ const Workers = () => {
         type: "STATE",
         data: { refresh: state.refresh + 1 },
       });
-
-      console.log("return", response.data);
     } catch (error) {
       setLoading(false);
     }

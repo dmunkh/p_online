@@ -151,7 +151,6 @@ const Navbar = () => {
   const [selectedMenu, setSelectedMenu] = useState(null);
 
   useEffect(() => {
-    // console.log(data);
     // if (user.tn !== 0) {
     var allMenu = data;
     var menu1 = data;

@@ -34,21 +34,18 @@ const Login = () => {
           response.data.response,
           (a) => a.login_name.toLowerCase() === email.toLowerCase()
         );
-        // console.log("user resultttt", result[0]);
+
         setUserId(result[0].id);
         setMainCompanyID(result[0].main_company_id);
         setUserName(result[0].user_name);
         setGroupId(result[0].group_id);
         setUserInfo(result[0]);
-
-        // console.log("order list", response.data.response);
       } catch (error) {}
     };
     fetchData();
   };
 
   const handleClick = () => {
-    console.log("emaillll", email);
     setIsUserValid(true);
     const userData = { user_id: email, user_name: "John Doe" };
     setUserId(email);
