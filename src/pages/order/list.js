@@ -78,8 +78,8 @@ const Workers = () => {
 
           axios
             .put(
-              // "https://dmunkh.store/api/backend/orders/" + item.order_id,
-              "http://localhost:5000/api/backend/orders/" + item.order_id,
+              "https://dmunkh.store/api/backend/orders/" + item.order_id,
+              // "http://localhost:5000/api/backend/orders/" + item.order_id,
               {
                 // delguur_id: item.delguur_id,
                 // delguur_ner: item.delguur_ner,

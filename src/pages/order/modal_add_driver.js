@@ -94,8 +94,8 @@ const ModalDriver = () => {
         try {
           setLoading(true);
           axios
-            // .post("https://dmunkh.store/api/backend/orders/1", {
-            .post("http://localhost:5000/api/backend/orders/1", {
+            .post("https://dmunkh.store/api/backend/orders/1", {
+              // .post("http://localhost:5000/api/backend/orders/1", {
               order_ids: order_ids,
               user_id: user_id,
             })
