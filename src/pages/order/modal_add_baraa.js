@@ -131,6 +131,7 @@ const ModalNormDetail = () => {
 
     baraa_id || (validation += "Нэмэх бараа соногоно уу <br />");
     count || (validation += "Тоо ширхэг оруулна уу <br />");
+    state.balance.seller_id || (validation += "Борлуулагч сонгоно уу");
     if (validation !== "") {
       Swal.fire({
         icon: "warning",

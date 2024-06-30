@@ -1,7 +1,7 @@
 import React from "react";
 // import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
-import Module from "src/components/custom/module";
+import Company from "src/components/Company";
 // import Tree from "src/components/custom/departmentTree";
 // import * as API from "src/api/request";
 
@@ -49,6 +49,12 @@ const Header = () => {
       </div>
 
       <div className="flex items-center w-full  md:w-[100px] text-xs gap-2">
+        <Company
+          value={state.balance.seller_id}
+          onChange={(value) => {
+            dispatch({ type: "BALANCE", data: { seller_id: value } });
+          }}
+        />
         {/* <span className="font-semibold whitespace-nowrap">Сар:</span>
         <DatePicker
           allowClear={false}

@@ -29,20 +29,18 @@ const Workers = () => {
   const group_id = useBearStore((state) => state.group_id);
   const user_id = useBearStore((state) => state.user_id);
   const userInfo = useBearStore((state) => state.userInfo);
-  const [totalSum, settotalSum] = useState(0);
+  const [ssum_total, setssum_total] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
-          // "http://localhost:5000/api/backend/balance",
+          "https://dmunkh.store/api/backend/report",
+          // "http://localhost:5000/api/backend/report",
           {
             params: {
-              main_company_id: main_company_id,
-              user_id: user_id,
-              group_id: group_id,
+              sub_code: state.balance.seller_id,
               start_date: moment(state.report.date).format("YYYY.MM.01"),
               end_date: moment(state.report.date).format(
                 "YYYY.MM." + daysInMonth
@@ -74,7 +72,11 @@ const Workers = () => {
             };
           })
           .value();
-
+        var ssum = 0;
+        _.map(result, (item) => {
+          ssum += item.total;
+        });
+        setssum_total(ssum);
         dispatch({
           type: "STATE",
           data: {
@@ -99,7 +101,7 @@ const Workers = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.report.date]);
+  }, [state.refresh, state.report.date, state.balance.seller_id]);
 
   const aggregateData = _.orderBy(state.balanceGroup_list, [
     "delguur_ner",
@@ -172,6 +174,11 @@ const Workers = () => {
       >
         <MODAL />
       </Modal>
+      Нийт борлуулалт:{" "}
+      <span style={{ fontSize: 14 }}>
+        {" "}
+        {Intl.NumberFormat("en-US").format(ssum_total)}
+      </span>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <table className="pivot-table">
           <thead>
