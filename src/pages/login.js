@@ -4,6 +4,7 @@ import useBearStore from "src/state/state";
 import SaveButton from "src/components/button/SaveButton";
 import axios from "axios";
 import _ from "lodash";
+import { usePlanContext } from "src/contexts/planContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,11 +19,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform login logic here
-    // Assuming you fetch user data after successful login
-    // const userData = { user_id: "123", user_name: "John Doe" };
-    // setUserId(email); // Ensure setUserId is correctly defined and imported
-    // setUserName(userData.user_name); // Ensure setUserName is correctly defined and imported
+
     setIsUserValid(true);
 
     const fetchData = async () => {

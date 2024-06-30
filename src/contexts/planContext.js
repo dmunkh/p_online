@@ -78,6 +78,8 @@ const _state = {
     phone: null,
     user_name: null,
     checked_positionList: [],
+    is_print: null,
+    print_date: null,
   },
   balance: {
     id: 0,

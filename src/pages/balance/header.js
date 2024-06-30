@@ -6,6 +6,7 @@ import Module from "src/components/custom/module";
 // import * as API from "src/api/request";
 import { DatePicker } from "antd";
 import moment from "moment";
+import Company from "src/components/Company";
 // import _ from "lodash";
 
 const Header = () => {
@@ -58,15 +59,14 @@ const Header = () => {
             });
           }}
         />
-        {/* <Department
-          menu={1}
-          value={state.department_id}
-          onChange={(value) =>
-            dispatch({ type: "STATE", data: { department_id: value } })
-          }
-        /> */}
       </div>
-      <div className="flex items-center w-full  md:w-[250px] text-xs gap-2">
+      <div className="flex items-center w-[450px]  md:w-[450px] text-xs gap-2">
+        <Company
+          value={state.balance.seller_id}
+          onChange={(value) => {
+            dispatch({ type: "BALANCE", data: { seller_id: value } });
+          }}
+        />
         {/* {!state.single_page ? (
           <>
             {" "}

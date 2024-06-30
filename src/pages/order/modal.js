@@ -42,7 +42,7 @@ const ModalNormDetail = () => {
   const [delguur_list, setDelguur_list] = useState();
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
-
+  console.log(state.order.is_print, state.order.print_date);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -171,6 +171,8 @@ const ModalNormDetail = () => {
               // delguur_id: delguur[0].id,
               // delguur_ner: delguur[0].delguur_ner,
               // order_number: order,
+              is_print: state.order.is_print,
+              print_date: state.order.print_date,
               cash: state.order.cash,
               is_approve: state.order.is_approve,
             }

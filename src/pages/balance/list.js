@@ -1,14 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
-
 import { Column } from "primereact/column";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
-
 import { Spin, Input, Select, Modal, Radio } from "antd";
-import _ from "lodash";
-import * as API from "src/api/plan";
-import * as REQ from "src/api/request";
+import _, { filter } from "lodash";
 import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
@@ -18,8 +14,6 @@ import MODAL from "src/pages/balance/modal";
 import axios from "axios";
 import dayjs from "dayjs";
 import useBearStore from "src/state/state";
-import AddBtn from "src/components/button/plusButton";
-
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -36,30 +30,12 @@ const Workers = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const [value, setvalue] = useState(1);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   REQ.getWorkers({
-  //     department_id: state.department_id,
-  //   })
-  //     .then((res) => {
-  //       setList(_.orderBy(res, ["department_code"], ["firstname"]));
-  //     })
-  //     .catch((error) =>
-  //       message({ type: "error", error, title: "Жагсаалт татаж чадсангүй" })
-  //     )
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state.department_id, state.date, state.moduleid, state.refresh]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         await axios
           .get(
-            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-            // "http://3.0.177.127/api/backend/baraa"
             "https://dmunkh.store/api/backend/balancelist",
             // "http://localhost:5000/api/backend/balancelist",
             {
@@ -97,6 +73,24 @@ const Workers = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.balance.start_date, state.balance.end_date]);
+  console.log("seller idd", state.balance.seller_id);
+
+  useEffect(() => {
+    if (state.balance.seller_id !== undefined) {
+      var result = filterlist;
+      setList(
+        _.filter(
+          result,
+          (a) =>
+            a.src_id === state.balance.seller_id ||
+            a.dest_id === state.balance.seller_id
+        )
+      );
+    } else {
+      setList(filterlist);
+    }
+  }, [state.balance.seller_id]);
+
   const deleteClick = (item) => {
     Swal.fire({
       text: item.baraa_ner + "г устгах уу",
@@ -130,14 +124,14 @@ const Workers = () => {
 
   return (
     <div className="w-full">
-      <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
+      {/* <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
         <Radio value={0}>Үлдэгдэл</Radio>
         <Radio value={1}>Орлого</Radio>
         <Radio value={2}>Зарлага</Radio>
         <Radio value={3}>Захиалга</Radio>
         <Radio value={4}>Буцаалт</Radio>
         <Radio value={5}>Хаягдал</Radio>
-      </Radio.Group>
+      </Radio.Group> */}
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -376,6 +370,7 @@ const Workers = () => {
             style={{ minWidth: "120px", maxWidth: "120px" }}
           /> */}
           <Column
+            sortable
             field="register_date"
             header="Огноо"
             style={{ minWidth: "80px", maxWidth: "80px" }}

@@ -13,10 +13,9 @@ import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/balance/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
-import dayjs from "dayjs";
-import AddBtn from "src/components/button/plusButton";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import Company from "src/components/Company";
 
 const SaleList = () => {
   // const { message, checkRole } = useUserContext();
@@ -31,41 +30,41 @@ const SaleList = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
+  console.log(state.balance.seller_id);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/balance/group/user_zone",
-          // "http://localhost:5000/api/backend/balance/group/user_zone",
-          {
-            params: {
-              sub_code: state.balance.seller_id, // Add your parameters here
-            },
-          }
-        );
+    if (state.balance.seller_id !== null) {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            "https://dmunkh.store/api/backend/balance/group/user_zone",
+            // "http://localhost:5000/api/backend/balance/group/user_zone",
+            {
+              params: {
+                sub_code: state.balance.seller_id, // Add your parameters here
+              },
+            }
+          );
 
-        var result = _(response.data)
-          .groupBy("baraa_ner")
-          .map(function (items, baraa_ner) {
-            return {
-              itemname: baraa_ner,
-              count: _.sumBy(items, "id"),
-            };
-          })
-          .value();
+          var result = _(response.data)
+            .groupBy("baraa_ner")
+            .map(function (items, baraa_ner) {
+              return {
+                itemname: baraa_ner,
+                count: _.sumBy(items, "id"),
+              };
+            })
+            .value();
 
-        setList(_.orderBy(response.data, ["uldegdel", "desc"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
+          setList(_.orderBy(response.data, ["uldegdel", "desc"]));
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+          // setError(error);
+        }
+      };
+      fetchData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.balance.seller_id]);
 
@@ -124,23 +123,12 @@ const SaleList = () => {
       </Modal>
       <div className="flex p-1 gap-2">
         <div className="w-full">
-          <Select
-            showSearch
-            allowClear
-            placeholder="Сонгоно уу."
-            optionFilterProp="children"
-            className="w-full"
+          <Company
             value={state.balance.seller_id}
             onChange={(value) => {
               dispatch({ type: "BALANCE", data: { seller_id: value } });
             }}
-          >
-            {_.map(state?.company?.list, (item) => (
-              <Select.Option key={item.sub_code} value={item.sub_code}>
-                {item.id + " - " + item.company_ner + " - " + item.sub_code}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </div>
       </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>

@@ -733,6 +733,8 @@ const Workers = () => {
                           dt: item.register_date,
                           cash: item.cash,
                           is_approve: item.is_approve,
+                          is_print: item.is_print,
+                          print_date: item.print_date,
                         },
                       });
                     }}
