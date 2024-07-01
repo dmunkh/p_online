@@ -17,6 +17,7 @@ import AddBtn from "src/components/button/plusButton";
 import useBearStore from "src/state/state";
 import Swal from "sweetalert2";
 import register from "../workers/register";
+import * as XLSX from "xlsx";
 
 const Workers = () => {
   const { state, dispatch } = usePlanContext();
@@ -103,6 +104,43 @@ const Workers = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.report.date, state.balance.seller_id]);
 
+  const exportToExcel = () => {
+    const worksheetData = [["№", "Дэлгүүр нэр", ...daysArray, "Нийт"]];
+
+    storeNames.forEach((delguur_ner, index) => {
+      const row = [
+        index + 1,
+        delguur_ner,
+        ...groupedData[delguur_ner].days.map(({ total, balance }) =>
+          total !== null ? total : ""
+        ),
+        groupedData[delguur_ner].sumTotal,
+      ];
+      worksheetData.push(row);
+    });
+
+    // const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    // XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+    // XLSX.writeFile(workbook, "export.xlsx");
+
+    const workbook = XLSX.utils.book_new();
+    // const worksheet = XLSX.utils.json_to_sheet([]);
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    // XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    // XLSX.utils.sheet_add_json(worksheet, result, {
+    //   origin: "A2",
+    //   skipHeader: true,
+    // });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Тайлан -" + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
   const aggregateData = _.orderBy(state.balanceGroup_list, [
     "delguur_ner",
   ]).reduce((acc, { delguur_ner, register_date, total, balance }) => {
@@ -174,11 +212,21 @@ const Workers = () => {
       >
         <MODAL />
       </Modal>
-      Нийт борлуулалт:{" "}
-      <span style={{ fontSize: 14 }}>
-        {" "}
-        {Intl.NumberFormat("en-US").format(ssum_total)}
-      </span>
+      <div className="flex items-center space-x-2 mb-4">
+        <img
+          alt=""
+          title="Excel татах"
+          src="/img/excel.png"
+          className="w-[30px] h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+          onClick={() => exportToExcel()}
+        />
+        <div className="flex items-center">
+          Нийт борлуулалт:{" "}
+          <span style={{ fontSize: 14 }}>
+            {Intl.NumberFormat("en-US").format(ssum_total)}
+          </span>
+        </div>
+      </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <table className="pivot-table">
           <thead>
