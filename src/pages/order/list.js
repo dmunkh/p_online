@@ -594,7 +594,7 @@ const Workers = () => {
             sortable
             field="delguur_ner"
             header="Дэлгүүр"
-            className="text-xs w-[140px]"
+            className="text-sm text-black"
             body={(data) => {
               return parseInt(data.is_approve) === 1 ? (
                 <span>
@@ -623,7 +623,7 @@ const Workers = () => {
           <Column
             field="total"
             header="Нийт дүн"
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total);
@@ -632,7 +632,7 @@ const Workers = () => {
           <Column
             field="cash"
             header="Бэлэн төлөлт"
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.cash);
@@ -642,7 +642,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Үлдэгдэл"
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.total - data.cash);

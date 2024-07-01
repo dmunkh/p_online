@@ -48,49 +48,61 @@ const MyComponent = () => {
   }, [state.order.order_id]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "http://localhost:5000/api/backend/balance",
-          "https://dmunkh.store/api/backend/balance",
-          {
-            params: {
-              main_company_id: main_company_id,
-              user_id: user_id,
-              group_id: group_id,
-              start_date: "2024.5.1",
-              end_date: "2024.6.30",
-            },
-          }
-        );
-
-        setlist(
-          _.orderBy(
-            _.filter(
-              response.data.response,
-              (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
-            ),
-            response.data.response,
-            ["id"]
-          )
-        );
-        var result = _.filter(
-          response.data.response,
-          (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
-        );
-        var ssum = 0;
-        _.map(result, (item) => (ssum += item.price * item.count));
-        settotal(ssum);
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(true);
+    //     const response = await axios.get(
+    //       // "http://localhost:5000/api/backend/balance",
+    //       "https://dmunkh.store/api/backend/balance",
+    //       {
+    //         params: {
+    //           main_company_id: main_company_id,
+    //           user_id: user_id,
+    //           group_id: group_id,
+    //           start_date: "2024.5.1",
+    //           end_date: "2024.6.30",
+    //         },
+    //       }
+    //     );
+    //     setlist(
+    //       _.orderBy(
+    //         _.filter(
+    //           response.data.response,
+    //           (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
+    //         ),
+    //         response.data.response,
+    //         ["id"]
+    //       )
+    //     );
+    //     var result = _.filter(
+    //       response.data.response,
+    //       (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
+    //     );
+    //     var ssum = 0;
+    //     _.map(result, (item) => (ssum += item.price * item.count));
+    //     settotal(ssum);
+    //     setLoading(false);
+    //   } catch (error) {
+    //     setLoading(false);
+    //     // setError(error);
+    //   }
+    // };
+    // fetchData();
+    var result = _.filter(
+      _.orderBy(state.balance_list, ["baraa_ner"]),
+      (a) => _.parseInt(a.order_id) === _.parseInt(state.order.order_id)
+    );
+    console.log(
+      state.order.order_id,
+      _.filter(
+        result,
+        (a) => _.parseInt(a.order_id) === _.parseInt(state.order.order_id)
+      )
+    );
+    var ssum = 0;
+    _.map(result, (item) => (ssum += item.price * item.count));
+    settotal(ssum);
+    setlist(result);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.order.order_id]);
 
@@ -389,7 +401,7 @@ const MyComponent = () => {
         </thead>
         <tbody>
           {/* Map over the data array to generate table rows */}
-          {_.map(list, (item, index) => (
+          {_.map(list && list, (item, index) => (
             <tr key={item.id} style={{ border: "1px solid #dddddd" }}>
               <td
                 style={{
@@ -409,6 +421,7 @@ const MyComponent = () => {
                   padding: "4px",
                   fontSize: "11px",
                   width: 120,
+                  color: "#000000",
                 }}
               >
                 {item.bar_code}
@@ -419,6 +432,7 @@ const MyComponent = () => {
                   textAlign: "left",
                   padding: "4px",
                   fontSize: "11px",
+                  color: "#000000",
                 }}
               >
                 {item.baraa_ner}
@@ -430,6 +444,7 @@ const MyComponent = () => {
                   padding: "4px",
                   fontSize: "11px",
                   width: 70,
+                  color: "#000000",
                 }}
               >
                 {item.price}
@@ -451,6 +466,7 @@ const MyComponent = () => {
                   textAlign: "right",
                   padding: "4px",
                   fontSize: "11px",
+                  color: "#000000",
                   width: 80,
                 }}
               >

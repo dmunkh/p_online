@@ -373,8 +373,8 @@ const Workers = () => {
             sortable
             field="register_date"
             header="Огноо"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-            className="text-xs"
+            style={{ minWidth: "90px", maxWidth: "90px" }}
+            className="text-sm text-black"
             body={(data) => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
             }}
@@ -401,7 +401,7 @@ const Workers = () => {
           <Column
             field="price"
             header="Нэгж үнэ"
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
           />
           {/* <Column
@@ -416,13 +416,13 @@ const Workers = () => {
           <Column
             field="box_count"
             header="Хайрцаг"
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
           />
           <Column
             field="count"
             header="Эхний үлдэгдэл"
-            className="text-sm justify-end text-green-700 font-semibold"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "70px", maxWidth: "70px" }}
             body={(data) => {
               return data.type_id === 0 ? data.count : "";
@@ -431,7 +431,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Орлого"
-            className="text-sm justify-end text-green-700 font-semibold"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 1 ? data.count : "";
@@ -440,7 +440,7 @@ const Workers = () => {
           <Column
             field="count"
             header="Зарлага"
-            className="text-sm justify-end text-red-700 font-semibold"
+            className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
               return data.type_id === 5 ||
@@ -454,7 +454,7 @@ const Workers = () => {
             field="count"
             header="Нийт үнэ"
             style={{ minWidth: "70px", maxWidth: "70px" }}
-            className="text-xs justify-end"
+            className="text-sm text-black justify-end"
             body={(data) => {
               return Intl.NumberFormat("en-US").format(data.count * data.price);
             }}
