@@ -91,13 +91,13 @@ const Workers = () => {
         const response = await axios.get(
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/balance/group",
-          // "http://localhost:5000/api/backend/balance/group",
+          // "https://dmunkh.store/api/backend/balance/group",
+          "http://localhost:5000/api/backend/balance/group",
           {
             params: {
               user_id: user_id, // Add your parameters here
-              start_date: moment(state.balance.start_date).format("YYYY.MM.DD"),
-              end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
+              // start_date: moment(state.balance.start_date).format("YYYY.MM.DD"),
+              // end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
             },
           }
         );

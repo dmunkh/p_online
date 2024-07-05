@@ -37,8 +37,8 @@ const Workers = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/report",
-          // "http://localhost:5000/api/backend/report",
+          // "https://dmunkh.store/api/backend/report",
+          "http://localhost:5000/api/backend/report",
           {
             params: {
               sub_code: state.balance.seller_id,
@@ -105,7 +105,7 @@ const Workers = () => {
   }, [state.refresh, state.report.date, state.balance.seller_id]);
 
   const exportToExcel = () => {
-    const worksheetData = [["№", "Дэлгүүр нэр", ...daysArray, "Нийт"]];
+    const worksheetData = [["№", "Дэлгүүр нэр", ...daysArray, "Бэлэн", "Нийт"]];
 
     storeNames.forEach((delguur_ner, index) => {
       const row = [
@@ -114,6 +114,8 @@ const Workers = () => {
         ...groupedData[delguur_ner].days.map(({ total, balance }) =>
           total !== null ? total : ""
         ),
+
+        groupedData[delguur_ner].sumCash,
         groupedData[delguur_ner].sumTotal,
       ];
       worksheetData.push(row);
@@ -143,13 +145,13 @@ const Workers = () => {
   };
   const aggregateData = _.orderBy(state.balanceGroup_list, [
     "delguur_ner",
-  ]).reduce((acc, { delguur_ner, register_date, total, balance }) => {
+  ]).reduce((acc, { delguur_ner, register_date, total, cash }) => {
     const key = `${delguur_ner}-${register_date}`;
     if (!acc[key]) {
-      acc[key] = { delguur_ner, register_date, total, balance };
+      acc[key] = { delguur_ner, register_date, total, cash };
     } else {
       acc[key].total += total;
-      acc[key].balance += balance;
+      acc[key].cash += cash;
     }
     return acc;
   }, {});
@@ -157,16 +159,18 @@ const Workers = () => {
   const aggregatedDataArray = Object.values(aggregateData);
 
   const groupedData = aggregatedDataArray.reduce(
-    (acc, { delguur_ner, register_date, total, balance }) => {
+    (acc, { delguur_ner, register_date, total, cash }) => {
       if (!acc[delguur_ner]) {
         acc[delguur_ner] = {
           days: Array(daysInMonth).fill({ total: null, balance: null }),
           sumTotal: 0,
+          sumCash: 0,
         };
       }
       const day = new Date(register_date).getDate() - 1;
-      acc[delguur_ner].days[day] = { total, balance };
+      acc[delguur_ner].days[day] = { total, cash };
       acc[delguur_ner].sumTotal += total;
+      acc[delguur_ner].sumCash += cash;
       return acc;
     },
     {}
@@ -228,51 +232,63 @@ const Workers = () => {
         </div>
       </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
-        <table className="pivot-table">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Дэлгүүр нэр</th>
-              {daysArray.map((day) => (
-                <th key={day}>{day}</th>
-              ))}
-              <th>Нийт</th>
-            </tr>
-          </thead>
-          <tbody>
-            {storeNames.map((delguur_ner, index) => (
-              <tr key={delguur_ner}>
-                <td>{index + 1}</td>
-                <td style={{ textAlign: "left" }}>{delguur_ner}</td>
-                {groupedData[delguur_ner].days.map(
-                  ({ total, balance }, index) => (
-                    <td key={index}>
-                      {total !== null && balance !== null ? (
-                        <div>
-                          <div>{Intl.NumberFormat("en-US").format(total)}</div>
-                          {/* <div>Balance: {balance}</div> */}
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </td>
-                  )
-                )}
-                <td style={{ fontWeight: "bold" }}>
-                  {Intl.NumberFormat("en-US").format(
-                    groupedData[delguur_ner].sumTotal
-                  )}
-                </td>
+        <div className=" overflow-y-scroll">
+          <table className="pivot-table">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Дэлгүүр нэр</th>
+                {daysArray.map((day) => (
+                  <th key={day}>{day}</th>
+                ))}
+                <th>Бэлэн</th>
+                <th>Нийт</th>
               </tr>
-            ))}
-            <tr>
-              <td colspan={daysInMonth + 3}>...</td>
-            </tr>
-            <tr>
-              <td colspan={daysInMonth + 3}>...</td>
-            </tr>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {storeNames.map((delguur_ner, index) => (
+                <tr key={delguur_ner}>
+                  <td>{index + 1}</td>
+                  <td style={{ textAlign: "left" }}>{delguur_ner}</td>
+                  {groupedData[delguur_ner].days.map(
+                    ({ total, cash }, index) => (
+                      <td key={index}>
+                        {total !== null && cash !== null ? (
+                          <div>
+                            <div>
+                              {Intl.NumberFormat("en-US").format(total)}
+                            </div>
+                            <div>
+                              Б: {Intl.NumberFormat("en-US").format(cash)}
+                            </div>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </td>
+                    )
+                  )}
+                  <td style={{ fontWeight: "bold" }}>
+                    {Intl.NumberFormat("en-US").format(
+                      groupedData[delguur_ner].sumCash
+                    )}
+                  </td>
+                  <td style={{ fontWeight: "bold" }}>
+                    {Intl.NumberFormat("en-US").format(
+                      groupedData[delguur_ner].sumTotal
+                    )}
+                  </td>
+                </tr>
+              ))}
+              <tr>
+                <td colspan={daysInMonth + 3}>...</td>
+              </tr>
+              <tr>
+                <td colspan={daysInMonth + 3}>...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </Spin>
     </div>
   );
