@@ -145,13 +145,13 @@ const Workers = () => {
   };
   const aggregateData = _.orderBy(state.balanceGroup_list, [
     "delguur_ner",
-  ]).reduce((acc, { delguur_ner, register_date, total, cash }) => {
+  ]).reduce((acc, { delguur_ner, register_date, total, cash, is_approve }) => {
     const key = `${delguur_ner}-${register_date}`;
     if (!acc[key]) {
-      acc[key] = { delguur_ner, register_date, total, cash };
+      acc[key] = { delguur_ner, register_date, total, cash, is_approve };
     } else {
       acc[key].total += total;
-      acc[key].cash += cash;
+      acc[key].cash += is_approve === 1 ? total : cash;
     }
     return acc;
   }, {});
@@ -159,7 +159,7 @@ const Workers = () => {
   const aggregatedDataArray = Object.values(aggregateData);
 
   const groupedData = aggregatedDataArray.reduce(
-    (acc, { delguur_ner, register_date, total, cash }) => {
+    (acc, { delguur_ner, register_date, total, cash, is_approve }) => {
       if (!acc[delguur_ner]) {
         acc[delguur_ner] = {
           days: Array(daysInMonth).fill({ total: null, balance: null }),
@@ -168,9 +168,9 @@ const Workers = () => {
         };
       }
       const day = new Date(register_date).getDate() - 1;
-      acc[delguur_ner].days[day] = { total, cash };
+      acc[delguur_ner].days[day] = { total, cash, is_approve };
       acc[delguur_ner].sumTotal += total;
-      acc[delguur_ner].sumCash += cash;
+      acc[delguur_ner].sumCash += is_approve === 1 ? total : cash;
       return acc;
     },
     {}
@@ -233,7 +233,7 @@ const Workers = () => {
       </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <div className=" overflow-y-scroll">
-          <table className="pivot-table">
+          <table className="pivot-table " style={{ overflow: "scroll" }}>
             <thead>
               <tr>
                 <th>№</th>
@@ -243,6 +243,7 @@ const Workers = () => {
                 ))}
                 <th>Бэлэн</th>
                 <th>Нийт</th>
+                <th>Зээл</th>
               </tr>
             </thead>
             <tbody>
@@ -276,6 +277,12 @@ const Workers = () => {
                   <td style={{ fontWeight: "bold" }}>
                     {Intl.NumberFormat("en-US").format(
                       groupedData[delguur_ner].sumTotal
+                    )}
+                  </td>
+                  <td style={{ fontWeight: "bold" }}>
+                    {Intl.NumberFormat("en-US").format(
+                      groupedData[delguur_ner].sumTotal -
+                        groupedData[delguur_ner].sumCash
                     )}
                   </td>
                 </tr>
