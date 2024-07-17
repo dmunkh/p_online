@@ -63,6 +63,7 @@ const _state = {
   order: {
     id: 0,
     modal_driver: false,
+    modal_print_total: false,
     start_date: _startDate,
     end_date: _endDate,
     modal: false,

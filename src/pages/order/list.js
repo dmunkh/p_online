@@ -19,6 +19,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 import Print from "./print";
+import Print_Total from "./print_total";
 
 import Swal from "sweetalert2";
 
@@ -222,6 +223,21 @@ const Workers = () => {
         <Print />
       </Modal>
       <Modal
+        style={{ width: "600", paddingTop: 0 }}
+        bodyStyle={{ padding: 10 }}
+        width={800}
+        height={550}
+        visible={state.order.modal_print_total}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "ORDER", data: { modal_print_total: false } })
+        }
+        // closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <Print_Total />
+      </Modal>
+      <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
@@ -345,6 +361,27 @@ const Workers = () => {
                   }}
                 >
                   <i className="ft-edit" />
+                </div>
+                <div
+                  title="Хүргэлт хийх ажилтан бүртгэх"
+                  className="p-1 flex items-center justify-center font-semibold text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  onClick={() => {
+                    state.order.checked_positionList &&
+                    state.order.checked_positionList.length > 0
+                      ? dispatch({
+                          type: "ORDER",
+                          data: { modal_print_total: true },
+                        })
+                      : Swal.fire({
+                          text: "Дэлгүүр сонгоогүй байна",
+                          icon: "warning",
+
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          cancelButtonText: "OK",
+                        });
+                  }}
+                >
+                  <i className="ft-printer" />
                 </div>
               </div>
             </div>
