@@ -118,7 +118,7 @@ const Print_total = () => {
               }}
               colSpan={9}
             >
-              ЗАРЛАГЫН БАРИМТ /№:{state.order.order_id}/
+              АЧИЛТЫН НЭГТГЭЛ /№:{state.order.order_id}/
             </th>
           </tr>
           <tr>
