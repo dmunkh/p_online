@@ -34,14 +34,15 @@ const Print_total = () => {
           console.log("idssss", order_ids);
           // const response = await axios.get(
           const response = await axios.get(
-            "http://localhost:5000/api/backend/balance_list_orders",
+            // "http://localhost:5000/api/backend/balance_list_orders",
+            "https://dmunkh.store/api/backend/balance_list_orders",
             {
               params: {
                 order_ids: order_ids,
               },
             }
           );
-          console.log("response", response.data.response);
+          // console.log("response", response.data.response);
           var ssum = 0;
           _.map(
             response.data.response && response.data.response,
