@@ -211,7 +211,7 @@ const Goods_List = () => {
           rowGroupMode="subheader"
           groupRowsBy="order_id"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["baraa_ner"]}
+          globalFilterFields={["baraa_ner", "bar_code"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...

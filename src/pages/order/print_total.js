@@ -42,6 +42,19 @@ const Print_total = () => {
               },
             }
           );
+          var result = _(response.data.response)
+            .groupBy("baraa_id")
+            .map(function (items, baraa_id) {
+              return {
+                bar_code: items[0].bar_code,
+                baraa_id: baraa_id,
+                baraa_ner: items[0].baraa_ner,
+                box_count: items[0].box_count,
+                price: items[0].price,
+                count: _.sumBy(items, "count"),
+              };
+            })
+            .value();
           // console.log("response", response.data.response);
           var ssum = 0;
           _.map(
@@ -49,7 +62,7 @@ const Print_total = () => {
             (item) => (ssum += item.price * item.count)
           );
           settotal(ssum);
-          setlist(response.data.response);
+          setlist(result);
 
           setLoading(false);
         } catch (error) {
@@ -472,6 +485,7 @@ const Print_total = () => {
                   fontSize: "11px",
                   width: 70,
                   color: "#000000",
+                  fontWeight: 600,
                 }}
               >
                 {convertToBoxesAndUnits(item.count, item.box_count)}
@@ -481,9 +495,10 @@ const Print_total = () => {
                   border: "1px solid #dddddd",
                   textAlign: "right",
                   padding: "4px",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   width: 70,
                   color: "#000000",
+                  fontWeight: 600,
                 }}
               >
                 {convertToUnits(item.count, item.box_count)}
@@ -493,8 +508,9 @@ const Print_total = () => {
                   border: "1px solid #dddddd",
                   textAlign: "right",
                   padding: "4px",
-                  fontSize: "11px",
+                  fontSize: "13px",
                   width: 60,
+                  fontWeight: 600,
                 }}
               >
                 {item.count}
@@ -504,7 +520,7 @@ const Print_total = () => {
                   border: "1px solid #dddddd",
                   textAlign: "right",
                   padding: "4px",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   color: "#000000",
                   width: 80,
                 }}
