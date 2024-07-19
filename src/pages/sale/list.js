@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Modal } from "antd";
+import { Spin, Input, Select, Modal, DatePicker } from "antd";
 import useBearStore from "src/state/state";
 import _ from "lodash";
 import * as API from "src/api/plan";
@@ -27,6 +27,7 @@ const SaleList = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [date, setdate] = useState(moment());
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
@@ -37,11 +38,12 @@ const SaleList = () => {
         try {
           setLoading(true);
           const response = await axios.get(
-            "https://dmunkh.store/api/backend/balance/group/user_zone",
-            // "http://localhost:5000/api/backend/balance/group/user_zone",
+            // "https://dmunkh.store/api/backend/balance/group/user_zone",
+            "http://localhost:5000/api/backend/balance/group/user_zone",
             {
               params: {
                 sub_code: state.balance.seller_id, // Add your parameters here
+                dt: moment(date).format("YYYY.MM.DD"),
               },
             }
           );
@@ -66,7 +68,7 @@ const SaleList = () => {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.balance.seller_id]);
+  }, [state.refresh, state.balance.seller_id, date]);
 
   const exportToExcel = (list) => {
     let Heading = [["№", "Бараа нэр", "Үлдэгдэл", "Орлого"]];
@@ -122,6 +124,14 @@ const SaleList = () => {
         <MODAL />
       </Modal>
       <div className="flex p-1 gap-2">
+        <DatePicker
+          allowClear={false}
+          className="md:w-[150px] text-xs"
+          value={moment(date)}
+          onChange={(date) => {
+            setdate(date);
+          }}
+        />
         <div className="w-full">
           <Company
             value={state.balance.seller_id}
