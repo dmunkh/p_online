@@ -71,13 +71,26 @@ const SaleList = () => {
   }, [state.refresh, state.balance.seller_id, date]);
 
   const exportToExcel = (list) => {
-    let Heading = [["№", "Бараа нэр", "Үлдэгдэл", "Орлого"]];
+    let Heading = [
+      [
+        "№",
+        "Бараа нэр",
+        "Үлдэгдэл",
+        "Орлого",
+        "Захиалга",
+        "Хаягдал",
+        "Эхний үлдэгдэл",
+      ],
+    ];
     var result = _.map(_.orderBy(list, ["ner"]), (a, i) => {
       return {
         i: i + 1,
         baraa_ner: a.ner,
         uldegdel: a.uldegdel,
         orlogo: a.orlogo,
+        zahialga: a.zahialga,
+        hayagdal: a.hayagdal,
+        ehnii_uldegdel: a.ehni_uldegdel,
       };
     });
     // result.push({
