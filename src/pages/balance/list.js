@@ -15,6 +15,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import useBearStore from "src/state/state";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 
 const Workers = () => {
   // const { message, checkRole } = useUserContext();
@@ -121,7 +122,84 @@ const Workers = () => {
       }
     });
   };
+  const exportToExcel = (list) => {
+    let Heading = [
+      [
+        "№",
+        "огноо",
+        "Бараа нэр",
+        "Нэгж үнэ",
+        "Төрөл",
+        "Эхний үлдэгдэл",
+        "Орлого",
+        "Зарлага",
+        "Нийт үнэ",
+      ],
+    ];
+    var result = _.map(_.orderBy(list, ["type_id"]), (a, i) => {
+      let balance;
+      switch (a.type_id) {
+        case 0:
+          balance = "Эхний үлдэгдэл";
+          break;
+        case 1:
+          balance = "Орлого";
+          break;
+        case 2:
+          balance = "Захиалга";
+          break;
+        case 3:
+          balance = "Зарлага";
+          break;
+        case 4:
+          balance = "Буцаалт";
+          break;
+        case 5:
+          balance = "Хаягдал";
+          break;
+        default:
+          balance = "";
+      }
+      return {
+        i: i + 1,
+        dt: a.register_date,
+        baraa_ner: a.baraa_ner,
+        price: a.price,
+        type: balance,
+        ehni: a.type_id === 0 ? a.count : "",
+        orlogo: a.type_id === 1 ? a.count : "",
+        zahialga:
+          a.type_id === 5 || a.type_id === 3 || a.type_id === 2 ? a.count : "",
+        total: Intl.NumberFormat("en-US").format(a.count * a.price),
+      };
+    });
+    // result.push({
+    //   i: "",
+    //   itemname: "Нийт",
+    //   time: "",
+    //   unitname: "",
+    //   sizemin: _.countBy(list, (a) => a.sizemin),
+    //   sizemax: _.countBy(list, (a) => a.sizemax),
+    //   sizestep: _.sumBy(list, (a) => a.sizestep),
+    //   relation_count: _.sumBy(list, (a) => a.relation_count),
+    // });
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
 
+    XLSX.writeFile(
+      workbook,
+      "Үлдэгдэл" + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
   return (
     <div className="w-full">
       {/* <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
@@ -205,6 +283,15 @@ const Workers = () => {
                   }}
                 >
                   <i className="ft-plus" />
+                </div>
+                <div className="flex items-center justify-between">
+                  <img
+                    alt=""
+                    title="Excel татах"
+                    src="/img/excel.png"
+                    className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(list)}
+                  />
                 </div>
               </div>
             </div>
