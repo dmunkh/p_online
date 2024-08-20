@@ -363,6 +363,27 @@ const Workers = () => {
                   <i className="ft-edit" />
                 </div>
                 <div
+                  title="ХТ бүртгэл"
+                  className="p-1 flex items-center justify-center font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  onClick={() => {
+                    state.order.checked_positionList &&
+                    state.order.checked_positionList.length > 0
+                      ? dispatch({
+                          type: "ORDER",
+                          data: { modal_xt: true },
+                        })
+                      : Swal.fire({
+                          text: "Захиалга сонгоогүй байна",
+                          icon: "warning",
+
+                          cancelButtonColor: "rgb(244, 106, 106)",
+                          cancelButtonText: "OK",
+                        });
+                  }}
+                >
+                  <i className="ft-user" />
+                </div>
+                <div
                   title="Хүргэлт хийх ажилтан бүртгэх"
                   className="p-1 flex items-center justify-center font-semibold text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {

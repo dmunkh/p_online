@@ -27,7 +27,8 @@ const SaleList = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
-  const [date, setdate] = useState(moment());
+  const [dt1, setdt1] = useState(moment());
+  const [dt2, setdt2] = useState(moment().add(1, "days"));
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
@@ -43,7 +44,8 @@ const SaleList = () => {
             {
               params: {
                 sub_code: state.balance.seller_id, // Add your parameters here
-                dt: moment(date).format("YYYY.MM.DD"),
+                dt_start: moment(dt1).format("YYYY.MM.DD"),
+                dt_end: moment(dt2).format("YYYY.MM.DD"),
               },
             }
           );
@@ -68,7 +70,7 @@ const SaleList = () => {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.balance.seller_id, date]);
+  }, [state.refresh, state.balance.seller_id, dt1, dt2]);
 
   const exportToExcel = (list) => {
     let Heading = [
@@ -140,9 +142,17 @@ const SaleList = () => {
         <DatePicker
           allowClear={false}
           className="md:w-[150px] text-xs"
-          value={moment(date)}
+          value={moment(dt1)}
           onChange={(date) => {
-            setdate(date);
+            setdt1(date);
+          }}
+        />
+        <DatePicker
+          allowClear={false}
+          className="md:w-[150px] text-xs"
+          value={moment(dt2)}
+          onChange={(date) => {
+            setdt2(date);
           }}
         />
         <div className="w-full">

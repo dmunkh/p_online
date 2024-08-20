@@ -32,6 +32,7 @@ const ModalDriver = () => {
   const [delguur, setDelguur] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
   const [order, setorder] = useState(0);
+  const [xt, setxt] = useState(1);
   const [list, setList] = useState([]);
   const [user_id, setuser_id] = useState(0);
 
@@ -135,6 +136,29 @@ const ModalDriver = () => {
 
       <hr className="my-2" />
       <div className="rounded-md shadow-sm -space-y-px">
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Төрөл:</div>
+          <div className="w-3/4">
+            <Select
+              showSearch
+              allowClear
+              value={xt}
+              placeholder="Сонгоно уу."
+              optionFilterProp="children"
+              className="w-full"
+              onChange={(value) => {
+                setxt(value);
+              }}
+            >
+              <Select.Option key={1} value={1}>
+                ХТ
+              </Select.Option>
+              <Select.Option key={2} value={2}>
+                Түгээлт хийх жолооч
+              </Select.Option>
+            </Select>
+          </div>
+        </div>
         <div className="flex p-1 gap-2">
           <div className="w-1/4">Хүргэлт хийх ажилтан:</div>
           <div className="w-3/4">
