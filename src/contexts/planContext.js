@@ -82,6 +82,7 @@ const _state = {
     checked_positionList: [],
     is_print: null,
     print_date: null,
+    xt_id: null,
   },
   balance: {
     id: 0,

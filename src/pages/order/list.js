@@ -293,8 +293,8 @@ const Workers = () => {
           filterDisplay="menu"
           responsiveLayout="scroll"
           sortMode="multiple"
-          // rowGroupMode="subheader"
-          // groupRowsBy="delguur_ner"
+          rowGroupMode="subheader"
+          groupRowsBy="xt_id"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["delguur_ner", "order_id", "user_name"]}
           emptyMessage={
@@ -410,7 +410,9 @@ const Workers = () => {
           rowGroupHeaderTemplate={(data) => {
             return (
               <div className="text-xs font-semibold">
-                <span className="ml-1">{data.delguur_ner}</span>
+                <span className="ml-1">
+                  {data.xt_id} - {data.xt_company_ner} - {data.xt_utas}
+                </span>
               </div>
             );
           }}
@@ -581,7 +583,6 @@ const Workers = () => {
             headerClassName="flex items-center justify-center"
             bodyClassName="flex items-center justify-center"
           />
-
           <Column
             align="center"
             header=""
@@ -625,6 +626,7 @@ const Workers = () => {
                           delguur_id: item.delguur_id,
                           phone: item.phone,
                           user_name: item.user_name,
+                          xt_id: item.xt_id,
                         },
                       });
                     }}
@@ -648,6 +650,12 @@ const Workers = () => {
             className="text-xs"
             header="Order"
           />
+          {/* <Column
+            style={{ minWidth: "50px", maxWidth: "50px" }}
+            field="xt_id"
+            className="text-xs"
+            header="Order"
+          /> */}
           <Column
             sortable
             field="delguur_ner"
@@ -667,7 +675,6 @@ const Workers = () => {
               );
             }}
           />
-
           <Column
             sortable
             field="register_date"
@@ -696,7 +703,6 @@ const Workers = () => {
               return Intl.NumberFormat("en-US").format(data.cash);
             }}
           />
-
           <Column
             field="count"
             header="Үлдэгдэл"
@@ -793,6 +799,7 @@ const Workers = () => {
                           is_approve: item.is_approve,
                           is_print: item.is_print,
                           print_date: item.print_date,
+                          xt_id: item.xt_id,
                         },
                       });
                     }}

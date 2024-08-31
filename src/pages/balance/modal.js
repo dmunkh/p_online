@@ -252,6 +252,9 @@ const ModalNormDetail = () => {
               <Select.Option key={3} value={3}>
                 3 | Захиалга
               </Select.Option>
+              <Select.Option key={6} value={6}>
+                6 | Шилжүүлэг
+              </Select.Option>
             </Select>
           </div>
         </div>

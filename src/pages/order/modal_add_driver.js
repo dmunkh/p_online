@@ -3,6 +3,7 @@ import * as API from "src/api/plan";
 import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 // import Module from "src/components/custom/module";
+import Company from "src/components/Company";
 
 import dayjs from "dayjs";
 // import _ from "lodash";
@@ -32,7 +33,7 @@ const ModalDriver = () => {
   const [delguur, setDelguur] = useState([]);
   const main_company_id = useBearStore((state) => state.main_company_id);
   const [order, setorder] = useState(0);
-  const [xt, setxt] = useState(1);
+  const [type, settype] = useState(1);
   const [list, setList] = useState([]);
   const [user_id, setuser_id] = useState(0);
 
@@ -95,10 +96,11 @@ const ModalDriver = () => {
         try {
           setLoading(true);
           axios
-            .post("https://dmunkh.store/api/backend/orders/1", {
-              // .post("http://localhost:5000/api/backend/orders/1", {
+            // .post("https://dmunkh.store/api/backend/orders/1", {
+            .post("http://localhost:5000/api/backend/orders/1", {
               order_ids: order_ids,
-              user_id: user_id,
+              type_id: type,
+              user_id: state.balance.seller_id,
             })
             // .delete("http://localhost:5000/api/backend/orders/" + item.order_id)
             .then((response) => {
@@ -142,12 +144,12 @@ const ModalDriver = () => {
             <Select
               showSearch
               allowClear
-              value={xt}
+              value={type}
               placeholder="Сонгоно уу."
               optionFilterProp="children"
               className="w-full"
               onChange={(value) => {
-                setxt(value);
+                settype(value);
               }}
             >
               <Select.Option key={1} value={1}>
@@ -161,7 +163,17 @@ const ModalDriver = () => {
         </div>
         <div className="flex p-1 gap-2">
           <div className="w-1/4">Хүргэлт хийх ажилтан:</div>
+
           <div className="w-3/4">
+            {" "}
+            <div className="w-full">
+              <Company
+                value={state.balance.seller_id}
+                onChange={(value) => {
+                  dispatch({ type: "BALANCE", data: { seller_id: value } });
+                }}
+              />
+            </div>
             <Select
               showSearch
               allowClear

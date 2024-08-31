@@ -266,7 +266,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
-              ХТ:
+              ХТ:...
             </th>
             <th
               style={{
@@ -275,6 +275,7 @@ const MyComponent = () => {
                 fontSize: "12px",
               }}
             >
+              {state.order.xt_id}
               {state.order.user_name} / {state.order.phone} /
             </th>
             <th

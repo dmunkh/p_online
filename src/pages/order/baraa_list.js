@@ -42,8 +42,8 @@ const Goods_List = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance",
-          // "http://localhost:5000/api/backend/balance",
+          // "https://dmunkh.store/api/backend/balance",
+          "http://localhost:5000/api/backend/balance",
           {
             params: {
               main_company_id: main_company_id,
@@ -76,6 +76,9 @@ const Goods_List = () => {
               is_dist: items[0].is_dist,
               dist_date_register: items[0].dist_date_register,
               dist_user_name: items[0].dist_user_name,
+              xt_id: items[0].xt_id,
+              xt_utas: items[0].xt_utas,
+              xt_company_ner: items[0].xt_company_ner,
             };
           })
           .value();

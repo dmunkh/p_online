@@ -157,6 +157,10 @@ const Workers = () => {
         case 5:
           balance = "Хаягдал";
           break;
+        case 5:
+          balance = "Хаягдал";
+          break;
+
         default:
           balance = "";
       }
