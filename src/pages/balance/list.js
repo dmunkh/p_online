@@ -525,7 +525,7 @@ const Workers = () => {
             className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
             body={(data) => {
-              return data.type_id === 1 ? data.count : "";
+              return data.type_id === 1 || data.type_id === 6 ? data.count : "";
             }}
           />
           <Column
