@@ -53,6 +53,7 @@ const Workers = () => {
             setList(
               response.data.response &&
                 _.orderBy(response.data.response, [
+                  "type_id",
                   "delguur_ner",
                   "baraa_ner",
                   "register_date",
@@ -74,23 +75,42 @@ const Workers = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.balance.start_date, state.balance.end_date]);
-  console.log("seller idd", state.balance.seller_id);
 
   useEffect(() => {
+    let result = filterlist;
+
     if (state.balance.seller_id !== undefined) {
-      var result = filterlist;
-      setList(
-        _.filter(
-          result,
-          (a) =>
-            a.src_id === state.balance.seller_id ||
-            a.dest_id === state.balance.seller_id
-        )
+      result = _.filter(
+        result,
+        (a) =>
+          a.src_id === state.balance.seller_id ||
+          a.dest_id === state.balance.seller_id
       );
-    } else {
-      setList(filterlist);
     }
-  }, [state.balance.seller_id]);
+
+    if (state.balance.baraa_id_filter !== undefined) {
+      result = _.filter(
+        result,
+        (a) => a.baraa_id === state.balance.baraa_id_filter
+      );
+    }
+
+    setList(result);
+    // if (state.balance.seller_id !== undefined) {
+    //   var result = filterlist;
+    //   setList(
+    //     _.filter(
+    //       result,
+    //       (a) =>
+    //         a.src_id === state.balance.seller_id ||
+    //         a.dest_id === state.balance.seller_id
+    //     )
+    //   );
+    // } else {
+    //   setList(filterlist);
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.balance.seller_id, state.balance.baraa_id_filter]);
 
   const deleteClick = (item) => {
     Swal.fire({
@@ -157,8 +177,8 @@ const Workers = () => {
         case 5:
           balance = "Хаягдал";
           break;
-        case 5:
-          balance = "Хаягдал";
+        case 6:
+          balance = "Шилжүүлэг";
           break;
 
         default:
@@ -204,6 +224,26 @@ const Workers = () => {
       }
     );
   };
+  const formattype = (type_id) => {
+    switch (type_id) {
+      case 0:
+        return "Эхний үлдэгдэл";
+      case 1:
+        return "Орлого";
+      case 2:
+        return "Захиалга";
+      case 3:
+        return "Зарлага";
+      case 4:
+        return "Буцаалт";
+      case 5:
+        return "Хаягдал";
+      case 6:
+        return "Шилжүүлэг";
+      default:
+        return "";
+    }
+  };
   return (
     <div className="w-full">
       {/* <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
@@ -242,7 +282,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="delguur_ner"
+          groupRowsBy="type_id"
           scrollHeight={window.innerHeight - 300}
           globalFilterFields={[
             "baraa_ner",
@@ -305,20 +345,24 @@ const Workers = () => {
             // </div>
           }
           rowGroupHeaderTemplate={(data) => {
-            var group = _.filter(list, (a) => a.order_id === data.order_id);
+            var group = _.filter(list, (a) => a.type_id === data.type_id);
             return (
               <div
                 key={"key_group_" + data.id}
                 className="flex items-center text-xs font-bold"
               >
                 <div className="w-full text-xs">
-                  {data.delguur_id} | {data.delguur_ner}
+                  {/* {data.delguur_id} | {data.delguur_ner} */}
+                  <span className="text-blue-600">
+                    {formattype(data.type_id)}
+                  </span>{" "}
+                  | Нийт дүн:{" "}
+                  {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))} |
+                  Тоо:{" "}
+                  {Intl.NumberFormat("en-US").format(_.sumBy(group, "count"))}
                 </div>
 
-                <div className="w-[180px] text-center text-xs ">
-                  Нийт дүн:{" "}
-                  {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))}
-                </div>
+                <div className="w-[180px] text-center text-xs "></div>
                 {/* <div className="w-[250px] text-center"></div> */}
               </div>
             );

@@ -98,6 +98,7 @@ const _state = {
     register_date: moment(),
     baraa_id: null,
     seller_id: null,
+    baraa_id_filter: null,
   },
   user: {
     id: 0,

@@ -1,17 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import { useUserContext } from "src/contexts/userContext";
 import { usePlanContext } from "src/contexts/planContext";
 import Module from "src/components/custom/module";
 // import Tree from "src/components/custom/departmentTree";
 // import * as API from "src/api/request";
-import { DatePicker } from "antd";
+import { DatePicker, Select } from "antd";
 import moment from "moment";
 import Company from "src/components/Company";
-// import _ from "lodash";
+import axios from "axios";
+import useBearStore from "src/state/state";
+import _ from "lodash";
+const { Option } = Select;
 
 const Header = () => {
   const { state, dispatch } = usePlanContext();
+  const [baraa_list, setBaraa_list] = useState();
+  const [loading, setLoading] = useState(false);
+  const user_id = useBearStore((state) => state.user_id);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          "https://dmunkh.store/api/backend/baraa",
+          { params: { user_id: user_id } }
+        );
 
+        setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        // setError(error);
+      }
+    };
+
+    fetchData();
+  }, [state.refresh]);
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
       <div className="flex items-center justify-between text-xs gap-2">
@@ -60,27 +84,37 @@ const Header = () => {
           }}
         />
       </div>
-      <div className="flex items-center w-[450px]  md:w-[450px] text-xs gap-2">
+      <div className="flex items-center w-[800px]  md:w-[850px] text-xs gap-2">
         <Company
           value={state.balance.seller_id}
           onChange={(value) => {
             dispatch({ type: "BALANCE", data: { seller_id: value } });
           }}
-        />
-        {/* {!state.single_page ? (
-          <>
-            {" "}
-            <span className="font-semibold whitespace-nowrap">Модуль:</span>
-            <Module
-              value={state.moduleid}
-              onChange={(value) =>
-                dispatch({ type: "STATE", data: { moduleid: value } })
-              }
-            />
-          </>
-        ) : (
-          ""
-        )} */}
+        />{" "}
+        <div className="w-full">
+          <Select
+            showSearch
+            allowClear
+            placeholder="Сонгоно уу."
+            optionFilterProp="children"
+            className="w-full"
+            value={state.balance.baraa_id_filter}
+            onChange={(value) => {
+              // var selected_baraa = _.filter(baraa_list, (a) => a.id === value);
+
+              dispatch({
+                type: "BALANCE",
+                data: { baraa_id_filter: value },
+              });
+            }}
+          >
+            {_.map(baraa_list, (item) => (
+              <Select.Option key={item.id} value={item.id}>
+                {item.company_ner + " - " + item.baraa_ner + " - " + item.une}
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
       </div>
     </div>
   );
