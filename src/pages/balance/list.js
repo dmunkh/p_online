@@ -95,7 +95,14 @@ const Workers = () => {
       );
     }
 
-    setList(result);
+    setList(
+      _.orderBy(result, [
+        "type_id",
+        "delguur_ner",
+        "baraa_ner",
+        "register_date",
+      ])
+    );
     // if (state.balance.seller_id !== undefined) {
     //   var result = filterlist;
     //   setList(
