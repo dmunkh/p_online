@@ -8,6 +8,7 @@ import { FilterMatchMode } from "primereact/api";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import TextArea from "antd/lib/input/TextArea";
+import moment from "moment";
 // import Module from "src/components/custom/module";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -106,10 +107,13 @@ const ModalNormDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance/group",
+          // "https://dmunkh.store/api/backend/balance/group",
+          "http://localhost:5000/api/backend/balance/group",
           {
             params: {
               user_id: user_id,
+              start_date: moment(state.order.start_date).format("YYYY.MM.DD"),
+              end_date: moment(state.order.end_date).format("YYYY.MM.DD"),
             },
           }
         );
@@ -124,7 +128,7 @@ const ModalNormDetail = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh]);
+  }, [state.refresh, state.order.start_date, state.order.end_date]);
 
   const handleClick = () => {
     let validation = "";
