@@ -89,8 +89,8 @@ const Workers = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          // "https://dmunkh.store/api/backend/balance/group",
-          "http://localhost:5000/api/backend/balance/group",
+          "https://dmunkh.store/api/backend/balance/group",
+          // "http://localhost:5000/api/backend/balance/group",
           {
             params: {
               user_id: user_id, // Add your parameters here
