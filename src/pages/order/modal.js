@@ -125,8 +125,8 @@ const ModalNormDetail = () => {
         });
         try {
           axios
-            .post("https://dmunkh.store/api/backend/orders", {
-              // .post("http://localhost:5000/api/backend/orders", {
+            // .post("https://dmunkh.store/api/backend/orders", {
+            .post("http://localhost:5000/api/backend/orders", {
               delguur_id: delguur[0].id,
               delguur_ner: delguur[0].delguur_ner,
               order_number: order,

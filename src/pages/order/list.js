@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import AddBtn from "src/components/button/plusButton";
 import Print from "./print";
 import Print_Total from "./print_total";
+import Print_order_list from "./print_order_list";
 
 import Swal from "sweetalert2";
 
@@ -238,6 +239,21 @@ const Workers = () => {
         <Print_Total />
       </Modal>
       <Modal
+        style={{ width: "600", paddingTop: 0 }}
+        bodyStyle={{ padding: 10 }}
+        width={800}
+        height={550}
+        visible={state.order.modal_print_order_list}
+        // visible={true}
+        onCancel={() =>
+          dispatch({ type: "ORDER", data: { modal_print_order_list: false } })
+        }
+        // closeIcon={<div className="">x</div>}
+        footer={false}
+      >
+        <Print_order_list />
+      </Modal>
+      <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
@@ -363,14 +379,14 @@ const Workers = () => {
                   <i className="ft-edit" />
                 </div>
                 <div
-                  title="ХТ бүртгэл"
+                  title="Захиалгын жагсаалт хэвлэх"
                   className="p-1 flex items-center justify-center font-semibold text-green-600 border-2 border-green-600 rounded-full hover:bg-green-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     state.order.checked_positionList &&
                     state.order.checked_positionList.length > 0
                       ? dispatch({
                           type: "ORDER",
-                          data: { modal_xt: true },
+                          data: { modal_print_order_list: true },
                         })
                       : Swal.fire({
                           text: "Захиалга сонгоогүй байна",
@@ -384,7 +400,7 @@ const Workers = () => {
                   <i className="ft-user" />
                 </div>
                 <div
-                  title="Хүргэлт хийх ажилтан бүртгэх"
+                  title="Барааны нэгдсэн жагсаалт хэвлэх"
                   className="p-1 flex items-center justify-center font-semibold text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
                     state.order.checked_positionList &&
@@ -407,11 +423,65 @@ const Workers = () => {
               </div>
             </div>
           }
+          // rowGroupHeaderTemplate={(data) => {
+          //   return (
+          //     <div className="text-xs font-semibold">
+          //       <span className="ml-1">
+          //         {data.xt_id} - {data.xt_name} - {data.xt_phone}
+          //       </span>
+          //     </div>
+          //   );
+          // }}
           rowGroupHeaderTemplate={(data) => {
+            var group = _.filter(
+              state.balanceGroup_list,
+              (a) => a.xt_id === data.xt_id
+            );
+
+            console.log("group---", group);
+            console.log(
+              "filter---",
+              _.filter(state.balanceGroup_list, (a) => a.xt_id === data.xt_id)
+            );
             return (
-              <div className="text-xs font-semibold">
-                <span className="ml-1">
-                  {data.xt_id} - {data.xt_company_ner} - {data.xt_utas}
+              <div className="flex items-center gap-2 text-xs font-semibold">
+                <Checkbox
+                  onChange={(e) => {
+                    console.log(state.balanceGroup_list);
+                    if (e.target.checked) {
+                      console.log("checked ");
+                      dispatch({
+                        type: "ORDER",
+                        data: {
+                          checked_positionList: _.filter(
+                            state.balanceGroup_list,
+                            (a) => a.xt_id === data.xt_id
+                          ),
+                        },
+                      });
+                    } else {
+                      console.log("checked ");
+                      dispatch({
+                        type: "ORDER",
+                        data: {
+                          checked_positionList: [],
+                        },
+                      });
+                      // dispatch({
+                      //   type: "STATE",
+                      //   data: {
+                      //     checked_positionList: _.reject(
+                      //       result,
+                      //       (a) => a.negj_code === data.negj_code
+                      //     ),
+                      //   },
+                      // });
+                    }
+                  }}
+                />
+                <span>
+                  {data.xt_id} - {data.xt_name} - {data.xt_phone} | Падааны тоо:{" "}
+                  {Intl.NumberFormat("en-US").format(group.length)}
                 </span>
               </div>
             );

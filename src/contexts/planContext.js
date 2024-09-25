@@ -65,6 +65,7 @@ const _state = {
     modal_driver: false,
     modal_print_total: false,
     modal_xt: false,
+    modal_print_order_list: false,
     start_date: _startDate,
     end_date: _endDate,
     modal: false,

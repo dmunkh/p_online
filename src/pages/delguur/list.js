@@ -13,7 +13,7 @@ import MODAL from "src/pages/delguur/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
 import AddBtn from "src/components/button/plusButton";
-
+import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 
 const Workers = () => {
@@ -54,6 +54,39 @@ const Workers = () => {
     fetchData();
   }, [state.refresh]);
 
+  const exportToExcel = (list) => {
+    let Heading = [
+      ["№", "Дэлгүүр нэр", "Компани", "Хаяг", "Утас", "Регистер", "Данс"],
+    ];
+    var result = _.map(_.orderBy(list, ["delguur_ner"]), (a, i) => {
+      return {
+        i: i + 1,
+        ner: a.delguur_ner,
+        uldegdel: a.company_name,
+        d_hayag: a.d_hayag,
+        d_utas: a.d_utas,
+        d_register: a.d_register,
+        d_dans: a.d_dans,
+      };
+    });
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
+    XLSX.utils.sheet_add_json(worksheet, result, {
+      origin: "A2",
+      skipHeader: true,
+    });
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(
+      workbook,
+      "Дэлгүүр" + moment().format("YYYY_MM_сар") + ".xlsx",
+      {
+        compression: true,
+      }
+    );
+  };
   return (
     <>
       {" "}
@@ -86,7 +119,7 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="negj_namemnfull"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["delguur_ner"]}
+          globalFilterFields={["delguur_ner", "d_register", "d_utas"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -125,6 +158,15 @@ const Workers = () => {
                   }}
                 >
                   <i className="ft-plus" />
+                </div>{" "}
+                <div className="flex items-center justify-between">
+                  <img
+                    alt=""
+                    title="Excel татах"
+                    src="/img/excel.png"
+                    className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                    onClick={() => exportToExcel(list)}
+                  />
                 </div>
               </div>
             </div>

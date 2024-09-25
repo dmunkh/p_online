@@ -9,6 +9,24 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm; /* Adjust margin as needed */
+  }
+  .page-break {
+    page-break-before: always;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 1in;
+  }
+}
+table, tr, td, th {
+  page-break-inside: avoid !important;
+}
 .scrollbar {
     overflow-y: auto;
   }

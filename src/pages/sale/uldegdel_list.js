@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { Spin, Input, Select, Modal } from "antd";
+import { Spin, Input, Select, Modal, DatePicker } from "antd";
+import useBearStore from "src/state/state";
 import _ from "lodash";
 import * as API from "src/api/plan";
 import * as REQ from "src/api/request";
@@ -9,15 +10,14 @@ import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
-import MODAL from "src/pages/plan/modal";
+import MODAL from "src/pages/balance/modal";
 // import { useUserContext } from "src/contexts/userContext";
 import axios from "axios";
-import AddBtn from "src/components/button/plusButton";
-import useBearStore from "src/state/state";
-import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
+import Company from "src/components/Company";
 
-const Workers = () => {
+const SaleList = () => {
   // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
@@ -27,81 +27,84 @@ const Workers = () => {
   const [per_page, set_per_page] = useState(50);
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
+  const [dt1, setdt1] = useState(moment());
+  const [dt2, setdt2] = useState(moment().add(1, "days"));
+  const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
+  console.log(state.balance.seller_id);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/baraa",
-          { params: { user_id: user_id } }
-        );
+    if (state.balance.seller_id !== null) {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            "http://localhost:5000/api/backend/test",
+            // "http://localhost:5000/api/backend/balance/group/user_zone",
+            {
+              params: {
+                // sub_code: state.balance.seller_id, // Add your parameters here
+                dt_start: moment(dt1).format("YYYY.MM.DD"),
+                dt_end: moment(dt2).format("YYYY.MM.DD"),
+              },
+            }
+          );
 
-        // var result = _(response.data)
-        //   .groupBy("baraa_ner")
-        //   .map(function (items, baraa_ner) {
-        //     return {
-        //       itemname: baraa_ner,
-        //       count: _.sumBy(items, "id"),
-        //     };
-        //   })
-        //   .value();
-
-        setList(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
-  }, [state.refresh]);
-
-  const deleteClick = (item) => {
-    try {
-      const response = axios.delete(
-        "https://dmunkh.store/api/backend/baraa/" + item.id
-      );
-      dispatch({
-        type: "STATE",
-        data: { refresh: state.refresh + 1 },
-      });
-    } catch (error) {
-      setLoading(false);
+          var result = _(response.data)
+            .groupBy("baraa_ner")
+            .map(function (items, baraa_ner) {
+              return {
+                itemname: baraa_ner,
+                count: _.sumBy(items, "id"),
+              };
+            })
+            .value();
+          console.log(response.data.response);
+          setList(_.orderBy(response.data.response, ["uldegdel", "desc"]));
+          setLoading(false);
+        } catch (error) {
+          setLoading(false);
+          // setError(error);
+        }
+      };
+      fetchData();
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.refresh, state.balance.seller_id, dt1, dt2]);
 
   const exportToExcel = (list) => {
     let Heading = [
       [
         "№",
-        "Компани",
         "Бараа нэр",
-        "barcode",
-        "Нэгж үнэ",
-        "Хэмжих нэгж",
-        "Хайрцаг",
+        "Үлдэгдэл",
+        "Орлого",
+        "Захиалга",
+        "Хаягдал",
+        "Эхний үлдэгдэл",
       ],
     ];
-    var result = _.map(
-      _.orderBy(list, ["company_ner", "baraa_ner"]),
-      (a, i) => {
-        return {
-          i: i + 1,
-          ner: a.company_ner,
-          uldegdel: a.baraa_ner,
-          d_hayag: a.bar_code,
-          d_utas: a.une,
-          d_register: a.unit,
-          d_dans: a.box_count,
-        };
-      }
-    );
-
+    var result = _.map(_.orderBy(list, ["ner"]), (a, i) => {
+      return {
+        i: i + 1,
+        baraa_ner: a.ner,
+        uldegdel: a.uldegdel,
+        orlogo: a.orlogo,
+        zahialga: a.zahialga,
+        hayagdal: a.hayagdal,
+        ehnii_uldegdel: a.ehni_uldegdel,
+      };
+    });
+    // result.push({
+    //   i: "",
+    //   itemname: "Нийт",
+    //   time: "",
+    //   unitname: "",
+    //   sizemin: _.countBy(list, (a) => a.sizemin),
+    //   sizemax: _.countBy(list, (a) => a.sizemax),
+    //   sizestep: _.sumBy(list, (a) => a.sizestep),
+    //   relation_count: _.sumBy(list, (a) => a.relation_count),
+    // });
     const workbook = XLSX.utils.book_new();
     const worksheet = XLSX.utils.json_to_sheet([]);
     XLSX.utils.sheet_add_aoa(worksheet, Heading, { origin: "A1" });
@@ -113,26 +116,54 @@ const Workers = () => {
 
     XLSX.writeFile(
       workbook,
-      "Бараа" + moment().format("YYYY_MM_сар") + ".xlsx",
+      "Үлдэгдэл" + moment().format("YYYY_MM_сар") + ".xlsx",
       {
         compression: true,
       }
     );
   };
+
   return (
     <div className="w-full">
+      {" "}
       <Modal
         style={{ width: "600" }}
         width={800}
         height={550}
-        visible={state.baraa.modal}
+        visible={state.modal}
         // visible={true}
-        onCancel={() => dispatch({ type: "BARAA", data: { modal: false } })}
+        onCancel={() => dispatch({ type: "STATE", data: { modal: false } })}
         closeIcon={<div className="">x</div>}
         footer={false}
       >
         <MODAL />
       </Modal>
+      <div className="flex p-1 gap-2">
+        <DatePicker
+          allowClear={false}
+          className="md:w-[150px] text-xs"
+          value={moment(dt1)}
+          onChange={(date) => {
+            setdt1(date);
+          }}
+        />
+        <DatePicker
+          allowClear={false}
+          className="md:w-[150px] text-xs"
+          value={moment(dt2)}
+          onChange={(date) => {
+            setdt2(date);
+          }}
+        />
+        <div className="w-full">
+          <Company
+            value={state.balance.seller_id}
+            onChange={(value) => {
+              dispatch({ type: "BALANCE", data: { seller_id: value } });
+            }}
+          />
+        </div>
+      </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
@@ -140,6 +171,7 @@ const Workers = () => {
           dataKey="id"
           filters={search}
           paginator
+          rowHover
           scrollable
           removableSort
           showGridlines
@@ -150,7 +182,7 @@ const Workers = () => {
           rowGroupMode="subheader"
           groupRowsBy="negj_namemnfull"
           scrollHeight={window.innerHeight - 360}
-          globalFilterFields={["baraa_ner"]}
+          globalFilterFields={["ner"]}
           emptyMessage={
             <div className="text-xs text-orange-500 italic font-semibold">
               Мэдээлэл олдсонгүй...
@@ -172,41 +204,24 @@ const Workers = () => {
               <div className="flex items-center gap-2 ">
                 <div
                   title="Нэмэх"
-                  className="p-1 flex items-center justify-center font-semibold text-violet-500 border-2 border-violet-500 rounded-full hover:bg-violet-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  className="p-1 flex items-center justify-center font-semibold text-blue-500 border-2 border-blue-500 rounded-full hover:bg-blue-500 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
                   onClick={() => {
-                    dispatch({
-                      type: "BARAA",
-                      data: {
-                        modal: true,
-                        id: 0,
-                        baraa_ner: "",
-                        company_id: "",
-                        company_ner: "",
-                        price: "",
-                        unit: "",
-                        box_count: "",
-                        bar_code: null,
-                      },
-                    });
+                    dispatch({ type: "STATE", data: { modal: true } });
                   }}
                 >
-                  <i className="ft-plus" />
-                </div>{" "}
-                <div className="flex items-center justify-between">
-                  <img
-                    alt=""
-                    title="Excel татах"
-                    src="/img/excel.png"
-                    className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
-                    onClick={() => exportToExcel(list)}
-                  />
+                  <i className="ft-search" />
                 </div>
               </div>
+              <div className="flex items-center justify-between">
+                <img
+                  alt=""
+                  title="Excel татах"
+                  src="/img/excel.png"
+                  className="w-12 h-8 object-cover cursor-pointer hover:scale-125 duration-300"
+                  onClick={() => exportToExcel(list)}
+                />
+              </div>
             </div>
-
-            // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
-
-            // </div>
           }
           rowGroupHeaderTemplate={(data) => {
             return (
@@ -288,72 +303,96 @@ const Workers = () => {
           <Column
             align="center"
             header="№"
-            className="text-xs w-2"
+            className="text-xs"
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          <Column
+          {/* <Column
             style={{ minWidth: "60px", maxWidth: "60px" }}
             field="id"
-            header="id"
-          />
-          <Column
-            style={{ minWidth: "100px", maxWidth: "100px" }}
-            field="bar_code"
-            header="bar_code"
-            className="text-xs w-2"
-          />
-          <Column
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-            field="company_id"
-            header="company_id"
-            className="text-xs w-2"
-          />
-
-          <Column
-            field="company_ner"
-            header="Компани"
-            className="text-xs w-2"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
-          />
-          {/* <Column
-          field="year"
-          header="Огноо"
-          style={{ minWidth: "90px", maxWidth: "90px" }}
-          body={(data) => {
-            return data.year && data.year + "-" + data.month + "-" + data.day;
-          }}
-        /> */}
+            className="text-xs"
+            header="Order"
+          /> */}
           <Column
             sortable
-            field="baraa_ner"
+            field="ner"
             header="Барааны нэр"
-            className="text-xs w-2"
+            className="text-xs"
+            style={{ minWidth: "280px", maxWidth: "280px" }}
           />
           <Column
-            field="une"
-            header="Нэгж үнэ"
-            className="text-xs w-2"
+            sortable
+            field="uldegdel"
+            header="Үлдэгдэл"
+            className="text-xs text-blue-600 font-bold justify-end"
             style={{ minWidth: "80px", maxWidth: "80px" }}
           />
           <Column
-            field="unit"
-            header="Хэмжих нэгж"
-            className="text-xs w-2"
+            sortable
+            field="orlogo"
+            header="Орлого"
             style={{ minWidth: "80px", maxWidth: "80px" }}
+            className="text-xs justify-end text-green-700"
+            body={(data) => {
+              return data.orlogo ? data.orlogo : "";
+            }}
+          />
+          <Column
+            field="zahialga"
+            header="Захиалга"
+            className="text-xs justify-end text-red-700"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.zahialga ? data.zahialga : "";
+            }}
+          />
+          <Column
+            field="ehni_uldegdel"
+            header="Эхний үлдэгдэл"
+            className="text-xs justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.ehni_uldegdel ? data.ehni_uldegdel : "";
+            }}
+          />
+          <Column
+            field="zarlaga"
+            header="Зарлага"
+            className="text-xs justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.zarlaga ? data.zarlaga : "";
+            }}
+          />
+          <Column
+            field="hayagdal"
+            header="Хаягдал"
+            className="text-xs justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
+            body={(data) => {
+              return data.hayagdal ? data.hayagdal : "";
+            }}
+          />
+          <Column
+            field="bonus"
+            header="Урамшуулал"
+            className="text-xs justify-end"
+            style={{ minWidth: "80px", maxWidth: "80px" }}
+            body={(data) => {
+              return data.bonus ? data.bonus : "";
+            }}
           />
           <Column
             field="box_count"
-            header="Хайрцаг"
-            className="text-xs w-2"
-            style={{ minWidth: "90px", maxWidth: "90px" }}
+            header="Хайрцаг тоо"
+            className="text-xs justify-end"
+            style={{ minWidth: "70px", maxWidth: "70px" }}
           />
-
           <Column
             align="center"
             header=""
-            className="text-xs w-2"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            className="text-xs"
+            style={{ minWidth: "40px", maxWidth: "40px" }}
             headerClassName="flex items-center justify-center"
             body={(item) => {
               return (
@@ -363,9 +402,12 @@ const Workers = () => {
                     className="p-1 flex items-center justify-center font-semibold text-green-500 rounded-full border-2 border-green-500 hover:bg-green-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
                     onClick={() => {
                       dispatch({
+                        type: "STATE",
+                        data: { modal: true },
+                      });
+                      dispatch({
                         type: "BARAA",
                         data: {
-                          modal: true,
                           id: item.id,
                           baraa_ner: item.baraa_ner,
                           company_id: item.company_id,
@@ -373,23 +415,12 @@ const Workers = () => {
                           price: item.une,
                           unit: item.unit,
                           box_count: item.box_count,
-                          bar_code: item.bar_code,
                         },
                       });
                     }}
                   >
                     <i className="ft-edit" />
                   </button>
-                  {/* )}
-
-                  {checkRole(["xx_warehouseItem_delete"]) && ( */}
-                  <button
-                    className="p-1 flex items-center justify-center font-semibold text-red-500 rounded-full border-2 border-red-500 hover:bg-red-500 hover:scale-125 hover:text-white focus:outline-none duration-300"
-                    onClick={() => deleteClick(item)}
-                  >
-                    <i className="ft-trash-2" />
-                  </button>
-                  {/* )} */}
                 </div>
               );
             }}
@@ -400,4 +431,4 @@ const Workers = () => {
   );
 };
 
-export default React.memo(Workers);
+export default React.memo(SaleList);
