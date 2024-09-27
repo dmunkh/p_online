@@ -297,7 +297,11 @@ const Workers = () => {
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
-          value={_.orderBy(state.balanceGroup_list, ["delguur_id"])}
+          value={_.orderBy(state.balanceGroup_list, [
+            "xt_id",
+            "delguur_id",
+            "register_date",
+          ])}
           dataKey="id"
           filters={search}
           paginator
