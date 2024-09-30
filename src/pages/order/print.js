@@ -56,7 +56,7 @@ const MyComponent = () => {
     const element = pdfRef.current;
 
     const opt = {
-      margin: 0.1,
+      margin: [0.1, 0.4, 0.1, 0.2], // Top, right, bottom, left margins
       filename: "generated_document.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
@@ -362,7 +362,7 @@ const MyComponent = () => {
             border: "1px solid #dddddd",
           }}
         ></iframe>
-        <div ref={pdfRef}>
+        <div ref={pdfRef} className="pdf-content">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
@@ -645,6 +645,7 @@ const MyComponent = () => {
                     textAlign: "center",
                     padding: "2px",
                     fontSize: "12px",
+                    fontWeight: 600,
                   }}
                 >
                   Хэмжээ
@@ -655,6 +656,7 @@ const MyComponent = () => {
                     textAlign: "center",
                     padding: "2px",
                     fontSize: "12px",
+                    fontWeight: 600,
                   }}
                 >
                   Нийт үнэ
@@ -664,7 +666,10 @@ const MyComponent = () => {
             <tbody>
               {/* Map over the data array to generate table rows */}
               {_.map(list && list, (item, index) => (
-                <tr key={item.id} style={{ border: "1px solid #dddddd" }}>
+                <tr
+                  key={item.id}
+                  style={{ border: "1px solid #dddddd", color: "#000000" }}
+                >
                   <td
                     style={{
                       border: "1px solid #dddddd",
@@ -672,6 +677,7 @@ const MyComponent = () => {
                       padding: "4px",
                       fontSize: "11px",
                       width: 20,
+                      color: "#000000",
                     }}
                   >
                     {index + 1}
@@ -716,8 +722,10 @@ const MyComponent = () => {
                       border: "1px solid #dddddd",
                       textAlign: "right",
                       padding: "4px",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       width: 60,
+                      color: "#000000",
+                      fontWeight: 600,
                     }}
                   >
                     {item.count}
@@ -727,9 +735,10 @@ const MyComponent = () => {
                       border: "1px solid #dddddd",
                       textAlign: "right",
                       padding: "4px",
-                      fontSize: "11px",
+                      fontSize: "12px",
                       color: "#000000",
                       width: 80,
+                      fontWeight: 600,
                     }}
                   >
                     {Intl.NumberFormat("en-US").format(item.count * item.price)}
@@ -756,6 +765,7 @@ const MyComponent = () => {
                     padding: "4px",
                     fontSize: "11px",
                     fontWeight: 600,
+                    color: "#000000",
                   }}
                 >
                   {Intl.NumberFormat("en-US").format(total)}
@@ -770,6 +780,7 @@ const MyComponent = () => {
                     fontSize: "11px",
                     fontWeight: 600,
                     marginBottom: 20,
+                    color: "#000000",
                   }}
                 ></td>
                 <td
@@ -778,6 +789,7 @@ const MyComponent = () => {
                     padding: "4px",
                     fontSize: "11px",
                     fontWeight: 600,
+                    color: "#000000",
                   }}
                 ></td>
               </tr>
@@ -790,6 +802,7 @@ const MyComponent = () => {
                     padding: "4px",
                     fontSize: "11px",
                     fontWeight: 600,
+                    color: "#000000",
                   }}
                 >
                   Хүлээн авсан:
