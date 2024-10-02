@@ -678,6 +678,7 @@ const MyComponent = () => {
                       fontSize: "11px",
                       width: 20,
                       color: "#000000",
+                      fontWeight: 600,
                     }}
                   >
                     {index + 1}
@@ -690,6 +691,7 @@ const MyComponent = () => {
                       fontSize: "11px",
                       width: 120,
                       color: "#000000",
+                      fontWeight: 500,
                     }}
                   >
                     {item.bar_code}
@@ -701,6 +703,7 @@ const MyComponent = () => {
                       padding: "4px",
                       fontSize: "11px",
                       color: "#000000",
+                      fontWeight: 600,
                     }}
                   >
                     {item.baraa_ner}
@@ -713,6 +716,7 @@ const MyComponent = () => {
                       fontSize: "11px",
                       width: 70,
                       color: "#000000",
+                      fontWeight: 600,
                     }}
                   >
                     {item.price}
