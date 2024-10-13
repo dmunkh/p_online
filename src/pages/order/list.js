@@ -293,7 +293,7 @@ const Workers = () => {
       >
         <MODAL_ADD_BARAA />
       </Modal>
-
+      .
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
