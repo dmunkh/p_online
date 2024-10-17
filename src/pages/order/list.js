@@ -485,7 +485,38 @@ const Workers = () => {
                 />
                 <span>
                   {data.xt_id} - {data.xt_name} - {data.xt_phone} | Падааны тоо:{" "}
-                  {Intl.NumberFormat("en-US").format(group.length)}
+                  {Intl.NumberFormat("en-US").format(group.length)} Үнийн дүн:{" "}
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "blue",
+                    }}
+                  >
+                    {Intl.NumberFormat("en-US").format(_.sumBy(group, "total"))}
+                  </span>{" "}
+                  Бэлэн:{" "}
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "green",
+                    }}
+                  >
+                    {Intl.NumberFormat("en-US").format(_.sumBy(group, "cash"))}
+                  </span>{" "}
+                  Зээл:{" "}
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "red",
+                    }}
+                  >
+                    {Intl.NumberFormat("en-US").format(
+                      _.sumBy(group, "total") - _.sumBy(group, "cash")
+                    )}
+                  </span>{" "}
                 </span>
               </div>
             );
