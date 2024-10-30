@@ -31,7 +31,7 @@ const SaleList = () => {
   const [dt2, setdt2] = useState(moment().add(1, "days"));
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
-
+  const userInfo = useBearStore((state) => state.userInfo);
   console.log(state.balance.seller_id);
   useEffect(() => {
     if (state.balance.seller_id !== null) {
@@ -46,6 +46,7 @@ const SaleList = () => {
                 // sub_code: state.balance.seller_id, // Add your parameters here
                 dt_start: moment(dt1).format("YYYY.MM.DD"),
                 dt_end: moment(dt2).format("YYYY.MM.DD"),
+                sub_code: state.balance.seller_id,
               },
             }
           );

@@ -28,12 +28,21 @@ const Workers = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    console.log(token);
     const fetchData = async () => {
       try {
         setLoading(true);
         // const response = await axios.get(
         const response = await fetch(
+          // "http://localhost:5000/api/backend/delguur"
           "https://dmunkh.store/api/backend/delguur"
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${token}`, // Include 'Bearer' before the token
+          //     "Content-Type": "application/json",
+          //   },
+          // }
           // "http://3.0.177.127/api/backend/delguur"
         );
         if (!response.ok) {

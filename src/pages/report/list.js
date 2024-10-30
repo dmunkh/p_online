@@ -31,14 +31,15 @@ const Workers = () => {
   const user_id = useBearStore((state) => state.user_id);
   const userInfo = useBearStore((state) => state.userInfo);
   const [ssum_total, setssum_total] = useState(0);
+  const [sum_cash, setsum_cash] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          "https://dmunkh.store/api/backend/report",
-          // "http://localhost:5000/api/backend/report",
+          // "https://dmunkh.store/api/backend/report",
+          "http://localhost:5000/api/backend/report",
           {
             params: {
               sub_code: state.balance.seller_id,
@@ -78,6 +79,11 @@ const Workers = () => {
           ssum += item.total;
         });
         setssum_total(ssum);
+        var cashsum = 0;
+        _.map(result, (item) => {
+          cashsum += item.cash;
+        });
+        setsum_cash(cashsum);
         dispatch({
           type: "STATE",
           data: {
@@ -226,9 +232,37 @@ const Workers = () => {
         />
         <div className="flex items-center">
           Нийт борлуулалт:{" "}
-          <span style={{ fontSize: 14 }}>
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "blue",
+            }}
+          >
             {Intl.NumberFormat("en-US").format(ssum_total)}
           </span>
+          {" |  "}
+          Бэлэн:{" "}
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "green",
+            }}
+          >
+            {Intl.NumberFormat("en-US").format(sum_cash)}
+          </span>
+          {" |  "}
+          Зээл:{" "}
+          <span
+            style={{
+              fontSize: "14px",
+              fontWeight: "bold",
+              color: "red",
+            }}
+          >
+            {Intl.NumberFormat("en-US").format(ssum_total - sum_cash)}
+          </span>{" "}
         </div>
       </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>

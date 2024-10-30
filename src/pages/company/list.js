@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 
 const Workers = () => {
   const { state, dispatch } = usePlanContext();
+
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
@@ -32,6 +33,8 @@ const Workers = () => {
   const isUserValid = useBearStore((state) => state.isUserValid);
 
   useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -39,9 +42,16 @@ const Workers = () => {
           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
           //"http://3.0.177.127/api/backend/company"
           "https://dmunkh.store/api/backend/company",
-          { params: { company_id: userInfo.sub_code } }
+          // "http://localhost:5000/api/backend/company",
+          {
+            params: { company_id: userInfo.sub_code },
+            // headers: {
+            //   Authorization: `Bearer ${token}`, // Include 'Bearer' before the token
+            //   "Content-Type": "application/json",
+            // },
+          }
         );
-
+        console.log("jwttttt", response.data.response);
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {
@@ -56,7 +66,15 @@ const Workers = () => {
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        // setError(error);
+
+        if (error.response && error.response.status === 401) {
+          // Clear token from storage
+          localStorage.removeItem("access_token");
+          // Redirect to the login page
+          window.location.href = "/login"; // Replace with your login route
+        } else {
+          console.error("Error fetching data:", error);
+        }
       }
     };
 
