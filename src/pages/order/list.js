@@ -442,18 +442,11 @@ const Workers = () => {
               (a) => a.xt_id === data.xt_id
             );
 
-            console.log("group---", group);
-            console.log(
-              "filter---",
-              _.filter(state.balanceGroup_list, (a) => a.xt_id === data.xt_id)
-            );
             return (
               <div className="flex items-center gap-2 text-xs font-semibold">
                 <Checkbox
                   onChange={(e) => {
-                    console.log(state.balanceGroup_list);
                     if (e.target.checked) {
-                      console.log("checked ");
                       dispatch({
                         type: "ORDER",
                         data: {
@@ -464,7 +457,6 @@ const Workers = () => {
                         },
                       });
                     } else {
-                      console.log("checked ");
                       dispatch({
                         type: "ORDER",
                         data: {

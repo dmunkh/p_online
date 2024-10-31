@@ -36,7 +36,8 @@ const Goods_List = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const group_id = useBearStore((state) => state.group_id);
   const user_id = useBearStore((state) => state.user_id);
-
+  const userInfo = useBearStore((state) => state.userInfo);
+  // console.log(userInfo, userInfo.sub_code);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,9 +47,10 @@ const Goods_List = () => {
           // "http://localhost:5000/api/backend/balance",
           {
             params: {
-              main_company_id: main_company_id,
-              user_id: user_id,
-              group_id: group_id,
+              // main_company_id: main_company_id,
+              sub_code: userInfo.sub_code,
+              // user_id: user_id,
+              // group_id: group_id,
               start_date: moment(state.order.start_date).format("YYYY.MM.DD"),
               end_date: moment(state.order.end_date).format("YYYY.MM.DD"),
             },
