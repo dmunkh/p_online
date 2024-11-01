@@ -122,8 +122,8 @@ const ModalNormDetail = () => {
       if (state.balance.id === 0) {
         try {
           axios
-            // .post("https://dmunkh.store/api/backend/balance/post", {
-            .post("http://localhost:5000/api/backend/balance/post", {
+             .post("https://dmunkh.store/api/backend/balance/post", {
+            //.post("http://localhost:5000/api/backend/balance/post", {
               order_id: 0,
               type_id: state.balance.type,
               delguur_id: 0,
