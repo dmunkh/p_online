@@ -407,7 +407,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                  {userInfo?.company_ner}
+                  Арвин үр түрүү - Тэнгэрийн хишиг
                 </th>
                 <th
                   style={{
@@ -448,7 +448,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                  {userInfo?.hayag}
+                 Ачит холдинг
                 </th>
                 <th
                   style={{
@@ -488,7 +488,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                  {userInfo?.register}
+                3199355
                 </th>
                 <th
                   style={{
@@ -561,7 +561,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                  Данс: {userInfo?.dans}
+                  Данс: Сарнайцэцэг /5090709172/ Аовин үр түрүү ххк /5217205009/
                 </th>
                 <th
                   style={{
