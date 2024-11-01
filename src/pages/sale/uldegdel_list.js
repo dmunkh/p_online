@@ -39,7 +39,7 @@ const SaleList = () => {
         try {
           setLoading(true);
           const response = await axios.get(
-            "http://localhost:5000/api/backend/test",
+            "https://dmunkh.store/api/backend/test",
             // "http://localhost:5000/api/backend/balance/group/user_zone",
             {
               params: {
