@@ -36,7 +36,7 @@ const MyComponent = () => {
             /* Add any styles for the print preview */
             body {
               font-family: Arial, sans-serif;
-              margin: 0;
+             margin: 5px 20px 0 20px; /* top right bottom left */
             }
           </style>
         </head>
@@ -547,10 +547,7 @@ const MyComponent = () => {
             <tbody>
               {/* Map over the data array to generate table rows */}
               {_.map(list && list, (item, index) => (
-                <tr
-                  key={item.id}
-                  // style={{ border: "1px solid #dddddd", color: "#000000" }}
-                >
+                <tr key={item.id}>
                   <td
                     style={{
                       border: "1px solid #dddddd",
