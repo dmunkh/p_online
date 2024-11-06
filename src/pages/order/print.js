@@ -21,6 +21,32 @@ const MyComponent = () => {
   const [delguur, setdelguur] = useState([]);
   const pdfRef = useRef(null);
   const currentDateTime = moment().format("YYYY-MM-DD HH:mm");
+  const [pdfBlob, setPdfBlob] = useState(null);
+
+  const printRef = useRef();
+
+  const handlePrint = () => {
+    const printContents = printRef.current.innerHTML;
+    const newWindow = window.open("", "_blank");
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Preview</title>
+          <style>
+            /* Add any styles for the print preview */
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+            }
+          </style>
+        </head>
+        <body onload="window.print(); window.close();">
+          ${printContents}
+        </body>
+      </html>
+    `);
+    newWindow.document.close(); // To ensure document is fully loaded before print
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,29 +78,30 @@ const MyComponent = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.order.order_id]);
-  const handleGeneratePDF = () => {
-    const element = pdfRef.current;
 
-    const opt = {
-      margin: [0.1, 0.4, 0.1, 0.2], // Top, right, bottom, left margins
-      filename: "generated_document.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
+  // const handleGeneratePDF = () => {
+  //   const element = pdfRef.current;
 
-    // Generate PDF and display it in the iframe
-    html2pdf()
-      .from(element)
-      .set(opt)
-      .toPdf()
-      .get("pdf")
-      .then(function (pdf) {
-        const pdfUrl = pdf.output("bloburl");
-        document.getElementById("pdf-preview").src = pdfUrl;
-        setLoading(false); // Stop loading after PDF is generated
-      });
-  };
+  //   const opt = {
+  //     margin: [0.1, 0.4, 0.1, 0.2], // Top, right, bottom, left margins
+  //     filename: "generated_document.pdf",
+  //     image: { type: "jpeg", quality: 0.98 },
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+  //   };
+
+  //   // Generate PDF and display it in the iframe
+  //   html2pdf()
+  //     .from(element)
+  //     .set(opt)
+  //     .toPdf()
+  //     .get("pdf")
+  //     .then(function (pdf) {
+  //       const pdfUrl = pdf.output("bloburl");
+  //       document.getElementById("pdf-preview").src = pdfUrl;
+  //       setLoading(false); // Stop loading after PDF is generated
+  //     });
+  // };
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -103,9 +130,10 @@ const MyComponent = () => {
   useEffect(() => {
     if (delguur.length > 0) {
       setLoading(true); // Show loading while generating PDF
-      handleGeneratePDF();
+      // handleGeneratePDF();
     }
   }, [delguur]);
+
   useEffect(() => {
     // const fetchData = async () => {
     //   try {
@@ -178,191 +206,44 @@ const MyComponent = () => {
   //     pdf.save("table.pdf"); // Save the PDF
   //   });
   // };
-
+  const company = (id) => {
+    switch (state.order.xt_id) {
+      case 1:
+        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+      case 2:
+        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+      case 3:
+        return "Хүнс экспресс";
+      case 4:
+        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+      case 5:
+        return null;
+      default:
+        return null; // Handle any other cases
+    }
+  };
+  const driver = (id) => {
+    switch (state.order.xt_id) {
+      case 1:
+        return "Жолооч 99877765";
+      case 2:
+        return "Жолооч 99357688";
+      case 3:
+        return "Жолооч 80597132";
+      case 4:
+        return "";
+      case 5:
+        return null;
+      default:
+        return null; // Handle any other cases
+    }
+  };
   return (
     <div style={{ padding: 0, margin: 0 }}>
-      <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}>
-        <div>
-          <button onClick={handleGeneratePDF} style={{ marginTop: "20px" }}>
-            Generate PDF
-          </button>
-          {/* _.map(list && list, (item, index) => ( */}
-
-          {/* {_.map(list && list, (item, index) => (
-          <div key={item.id}>
-            <h2>item from {item.delguur_ner}</h2>
-            <p>
-              <strong>item ID:</strong> {item.id} <br />
-              <strong>Delguur ID:</strong> {item.delguur_id} <br />
-              <strong>item Number:</strong> {item.item_number} <br />
-              <strong>Register Date:</strong>{" "}
-              {new Date(item.register_date).toLocaleDateString()} <br />
-              <strong>Cash:</strong> {item.cash} <br />
-              <strong>Month:</strong> {item.month} <br />
-              <strong>User ID:</strong> {item.user_id} <br />
-            </p>
-
-            <h3>Balance Items</h3>
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <thead>
-                <tr style={{ border: "1px solid #dddddd" }}>
-                  <th
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "left",
-                    }}
-                  >
-                    №
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "left",
-                    }}
-                  >
-                    Product Name
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "left",
-                    }}
-                  >
-                    Count
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "left",
-                    }}
-                  >
-                    Price
-                  </th>
-                  <th
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "left",
-                    }}
-                  >
-                    Нийт
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {_.map(
-                  item.balance && item.balance,
-                  (balanceItem, balanceIndex) => (
-                    <tr
-                      key={balanceItem.baraa_id}
-                      style={{ border: "1px solid #dddddd" }}
-                    >
-                      <td
-                        style={{
-                          border: "1px solid #dddddd",
-                          textAlign: "center",
-                          padding: "4px",
-                          fontSize: "11px",
-                          width: "50px",
-                        }}
-                      >
-                        {balanceIndex + 1}
-                      </td>
-                      <td
-                        style={{
-                          border: "1px solid #dddddd",
-                          padding: "2px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        {balanceItem.baraa_ner}
-                      </td>
-                      <td
-                        style={{
-                          border: "1px solid #dddddd",
-                          padding: "2px",
-                          fontSize: "12px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {balanceItem.count}
-                      </td>
-                      <td
-                        style={{
-                          border: "1px solid #dddddd",
-                          padding: "2px",
-                          fontSize: "12px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {balanceItem.price}
-                      </td>
-                      <td
-                        style={{
-                          border: "1px solid #dddddd",
-                          padding: "2px",
-                          fontSize: "12px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {Intl.NumberFormat("en-US").format(
-                          balanceItem.count * balanceItem.price
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td
-                    colSpan="4"
-                    style={{
-                      textAlign: "right",
-                      padding: "2px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Нийт
-                  </td>
-
-                  <td
-                    style={{
-                      border: "1px solid #dddddd",
-                      padding: "2px",
-                      textAlign: "center",
-                    }}
-                  >
-                    {" "}
-                    {_.sumBy(
-                      item.balance,
-                      (balanceItem) => balanceItem.count * balanceItem.price
-                    )}
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-
-            <hr />
-          </div>
-        ))}*/}
-        </div>
-        {/* PDF preview */}
-        <iframe
-          id="pdf-preview"
-          title="PDF Preview Document" // <-- Add a unique title here
-          style={{
-            width: "100%",
-            height: "600px",
-            marginTop: "20px",
-            border: "1px solid #dddddd",
-          }}
-        ></iframe>
-        <div ref={pdfRef} className="pdf-content">
+      {/* <Spin tip="Уншиж байна" className="bg-opacity-80" spinning={loading}> */}
+      <div>
+        <button onClick={handlePrint}> Хэвлэх</button>
+        <div ref={printRef} id="printable-content">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
@@ -407,7 +288,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                  Хүнс экспресс
+                  {company(userInfo.user_id)}
                 </th>
                 <th
                   style={{
@@ -448,7 +329,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                 Жолооч 80597132
+                  {driver(userInfo.user_id)}
                 </th>
                 <th
                   style={{
@@ -488,7 +369,7 @@ const MyComponent = () => {
                     fontSize: "12px",
                   }}
                 >
-                3199355
+                  3199355
                 </th>
                 <th
                   style={{
@@ -668,7 +549,7 @@ const MyComponent = () => {
               {_.map(list && list, (item, index) => (
                 <tr
                   key={item.id}
-                  style={{ border: "1px solid #dddddd", color: "#000000" }}
+                  // style={{ border: "1px solid #dddddd", color: "#000000" }}
                 >
                   <td
                     style={{
@@ -873,9 +754,190 @@ const MyComponent = () => {
                 </td>
               </tr>
             </tbody>
-          </table>{" "}
+          </table>
         </div>
-      </Spin>
+
+        {/* <button onClick={handleGeneratePDF} style={{ marginTop: "20px" }}>
+          Generate PDF
+        </button> */}
+        {/* _.map(list && list, (item, index) => ( */}
+
+        {/* {_.map(list && list, (item, index) => (
+          <div key={item.id}>
+            <h2>item from {item.delguur_ner}</h2>
+            <p>
+              <strong>item ID:</strong> {item.id} <br />
+              <strong>Delguur ID:</strong> {item.delguur_id} <br />
+              <strong>item Number:</strong> {item.item_number} <br />
+              <strong>Register Date:</strong>{" "}
+              {new Date(item.register_date).toLocaleDateString()} <br />
+              <strong>Cash:</strong> {item.cash} <br />
+              <strong>Month:</strong> {item.month} <br />
+              <strong>User ID:</strong> {item.user_id} <br />
+            </p>
+
+            <h3>Balance Items</h3>
+            <table style={{ borderCollapse: "collapse", width: "100%" }}>
+              <thead>
+                <tr style={{ border: "1px solid #dddddd" }}>
+                  <th
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "left",
+                    }}
+                  >
+                    №
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Count
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Price
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Нийт
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {_.map(
+                  item.balance && item.balance,
+                  (balanceItem, balanceIndex) => (
+                    <tr
+                      key={balanceItem.baraa_id}
+                      style={{ border: "1px solid #dddddd" }}
+                    >
+                      <td
+                        style={{
+                          border: "1px solid #dddddd",
+                          textAlign: "center",
+                          padding: "4px",
+                          fontSize: "11px",
+                          width: "50px",
+                        }}
+                      >
+                        {balanceIndex + 1}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dddddd",
+                          padding: "2px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {balanceItem.baraa_ner}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dddddd",
+                          padding: "2px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {balanceItem.count}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dddddd",
+                          padding: "2px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {balanceItem.price}
+                      </td>
+                      <td
+                        style={{
+                          border: "1px solid #dddddd",
+                          padding: "2px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {Intl.NumberFormat("en-US").format(
+                          balanceItem.count * balanceItem.price
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{
+                      textAlign: "right",
+                      padding: "2px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Нийт
+                  </td>
+
+                  <td
+                    style={{
+                      border: "1px solid #dddddd",
+                      padding: "2px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {" "}
+                    {_.sumBy(
+                      item.balance,
+                      (balanceItem) => balanceItem.count * balanceItem.price
+                    )}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <hr />
+          </div>
+        ))}*/}
+      </div>
+      {/* PDF preview */}
+      {/* <iframe
+          id="pdf-preview"
+          title="PDF Preview Document" // <-- Add a unique title here
+          style={{
+            width: "100%",
+            height: "600px",
+            marginTop: "20px",
+            border: "1px solid #dddddd",
+          }}
+        ></iframe> */}
+      <div ref={pdfRef} className="pdf-content"></div>
+      {/* </Spin> */}
     </div>
   );
 };

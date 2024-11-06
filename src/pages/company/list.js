@@ -264,6 +264,12 @@ const Workers = () => {
             header="id"
           />
           <Column
+            style={{ minWidth: "60px", maxWidth: "60px" }}
+            field="sub_code"
+            className="text-sm"
+            header="Код"
+          />
+          <Column
             field="company_ner"
             header="Компанийн нэр"
             className="text-sm"

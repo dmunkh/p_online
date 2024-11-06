@@ -21,15 +21,17 @@ import AddBtn from "src/components/button/plusButton";
 import Print from "./print";
 import Print_Total from "./print_total";
 import Print_order_list from "./print_order_list";
-
+import PdfModal from "./printpdf";
 import Swal from "sweetalert2";
 
+import { jsPDF } from "jspdf";
 const Workers = () => {
   // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
   });
+  const [pdfBlob, setPdfBlob] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [first, set_first] = useState(0);
   const [loadingbtn, setLoadingbtn] = useState(false);
@@ -49,7 +51,41 @@ const Workers = () => {
     const url = `https://dmunkh.store/order/print?user_id=${user_id}`;
     window.open(url, "_blank");
   };
+  const [showModal, setShowModal] = useState(false);
+  const list1 = ["Item 1", "Item 2", "Item 3"]; // Example list
 
+  const handleGeneratePdf = () => {
+    console.log("modal starts");
+    const blob = generatePdf(list1);
+    setPdfBlob(blob);
+    setShowModal(true); // Open the modal
+    console.log(showModal);
+  };
+  const generatePdf = (list) => {
+    const doc = new jsPDF();
+
+    // Header
+    doc.setFontSize(18);
+    doc.text("My List Header", 10, 20);
+
+    // Line separator
+    doc.setLineWidth(0.5);
+    doc.line(10, 25, 200, 25);
+
+    // List Content
+    doc.setFontSize(12);
+    list.forEach((item, index) => {
+      doc.text(`${index + 1}. ${item}`, 10, 40 + index * 10);
+    });
+
+    // Footer
+    const pageHeight = doc.internal.pageSize.height;
+    doc.line(10, pageHeight - 30, 200, pageHeight - 30);
+    doc.setFontSize(10);
+    doc.text("This is the footer text", 10, pageHeight - 20);
+
+    return doc.output("blob"); // Returns a blob for previewing
+  };
   const calculateApprovedTotal = (list_list) => {
     return _.sumBy(
       _.filter(list_list, (a) => parseInt(a.is_approve) === 1),
@@ -210,6 +246,11 @@ const Workers = () => {
   };
   return (
     <div className="w-full">
+      <PdfModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        pdfBlob={pdfBlob}
+      />
       <Modal
         style={{ width: "600", paddingTop: 0 }}
         bodyStyle={{ padding: 10 }}
@@ -406,21 +447,44 @@ const Workers = () => {
                 <div
                   title="Барааны нэгдсэн жагсаалт хэвлэх"
                   className="p-1 flex items-center justify-center font-semibold text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
-                  onClick={() => {
-                    state.order.checked_positionList &&
-                    state.order.checked_positionList.length > 0
-                      ? dispatch({
-                          type: "ORDER",
-                          data: { modal_print_total: true },
-                        })
-                      : Swal.fire({
-                          text: "Дэлгүүр сонгоогүй байна",
-                          icon: "warning",
+                  onClick={handleGeneratePdf}
+                  // onClick={() => {
+                  //   state.order.checked_positionList &&
+                  //   state.order.checked_positionList.length > 0
+                  //     ? dispatch({
+                  //         type: "ORDER",
+                  //         data: { modal_print_total: true },
+                  //       })
+                  //     : Swal.fire({
+                  //         text: "Дэлгүүр сонгоогүй байна",
+                  //         icon: "warning",
 
-                          cancelButtonColor: "rgb(244, 106, 106)",
-                          cancelButtonText: "OK",
-                        });
-                  }}
+                  //         cancelButtonColor: "rgb(244, 106, 106)",
+                  //         cancelButtonText: "OK",
+                  //       });
+                  // }}
+                >
+                  <i className="ft-printer" />
+                </div>
+                <div
+                  title="Барааны нэгдсэн жагсаалт хэвлэх"
+                  className="p-1 flex items-center justify-center font-semibold text-blue-600 border-2 border-blue-600 rounded-full hover:bg-blue-600 hover:text-white hover:scale-125 focus:outline-none duration-300 cursor-pointer "
+                  onClick={handleGeneratePdf}
+                  // onClick={() => {
+                  //   state.order.checked_positionList &&
+                  //   state.order.checked_positionList.length > 0
+                  //     ? dispatch({
+                  //         type: "ORDER",
+                  //         data: { modal_print_total: true },
+                  //       })
+                  //     : Swal.fire({
+                  //         text: "Дэлгүүр сонгоогүй байна",
+                  //         icon: "warning",
+
+                  //         cancelButtonColor: "rgb(244, 106, 106)",
+                  //         cancelButtonText: "OK",
+                  //       });
+                  // }}
                 >
                   <i className="ft-printer" />
                 </div>

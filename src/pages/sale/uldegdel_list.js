@@ -39,14 +39,16 @@ const SaleList = () => {
         try {
           setLoading(true);
           const response = await axios.get(
-            "https://dmunkh.store/api/backend/test",
+            // "https://dmunkh.store/api/backend/test",
             // "http://localhost:5000/api/backend/balance/group/user_zone",
+            "http://localhost:5000/api/backend/test",
             {
               params: {
                 // sub_code: state.balance.seller_id, // Add your parameters here
                 dt_start: moment(dt1).format("YYYY.MM.DD"),
                 dt_end: moment(dt2).format("YYYY.MM.DD"),
                 sub_code: state.balance.seller_id,
+                user_id: user_id,
               },
             }
           );
