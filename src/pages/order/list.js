@@ -94,6 +94,7 @@ const Workers = () => {
   };
 
   const PlanApprove = (type, item, ischecked) => {
+    console.log(type, item, ischecked);
     Swal.fire({
       title: "Баталгаажуулалт",
       text:
@@ -122,7 +123,7 @@ const Workers = () => {
                 // delguur_id: item.delguur_id,
                 // delguur_ner: item.delguur_ner,
                 // order_number: item.order_number,
-                cash: item.cash,
+                cash: item.total,
                 // register_date: item.register_date,
                 is_approve: type === "approve" ? ischecked : item.is_approve,
                 is_print: type === "print" ? ischecked : item.is_print,
@@ -142,6 +143,10 @@ const Workers = () => {
                 result1[index].is_print = ischecked;
                 result1[index].print_date = moment().format("YYYY-MM-DD HH:mm");
               }
+              dispatch({
+                type: "STATE",
+                data: { refresh: state.refresh + 1 },
+              });
               dispatch({ type: "STATE", data: { balanceGroup_list: result1 } });
               // setList(result);
               setDraw(draw + 1);

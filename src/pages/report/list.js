@@ -111,18 +111,30 @@ const Workers = () => {
   }, [state.refresh, state.report.date, state.balance.seller_id]);
 
   const exportToExcel = () => {
-    const worksheetData = [["№", "Дэлгүүр нэр", ...daysArray, "Бэлэн", "Нийт"]];
-
+    const worksheetData = [
+      ["№", "Дэлгүүр нэр", ...daysArray, "Бэлэн", "Нийт", "Зээл"],
+    ];
+    const styles = [];
     storeNames.forEach((delguur_ner, index) => {
       const row = [
         index + 1,
         delguur_ner,
-        ...groupedData[delguur_ner].days.map(({ total, balance }) =>
-          total !== null ? total : ""
-        ),
+        ...groupedData[delguur_ner].days.map(({ total, cash }) => {
+          if (total !== null) {
+            const balance = total - cash;
+            // Add styling info for conditional formatting
+            styles.push(
+              balance > 0 ? { color: "FF0000" } : { color: "000000" }
+            );
+            return total + ", \nБ:" + cash;
+          }
+          return "";
+        }),
 
         groupedData[delguur_ner].sumCash,
         groupedData[delguur_ner].sumTotal,
+
+        groupedData[delguur_ner].sumTotal - groupedData[delguur_ner].sumCash,
       ];
       worksheetData.push(row);
     });
@@ -266,8 +278,20 @@ const Workers = () => {
         </div>
       </div>
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
-        <div className=" overflow-y-scroll">
-          <table className="pivot-table " style={{ overflow: "scroll" }}>
+        <div
+          style={{
+            maxWidth: "100%",
+            overflowX: "auto", // Enable horizontal scrolling
+            paddingBottom: "50px", // Add padding to avoid scroll bar being clipped
+          }}
+        >
+          <table
+            className="pivot-table"
+            style={{
+              width: "100%", // Ensures the table fills the container
+              minWidth: "800px", // Ensures the table has a minimum width
+            }}
+          >
             <thead>
               <tr>
                 <th>№</th>
@@ -287,7 +311,14 @@ const Workers = () => {
                   <td style={{ textAlign: "left" }}>{delguur_ner}</td>
                   {groupedData[delguur_ner].days.map(
                     ({ total, cash }, index) => (
-                      <td key={index}>
+                      <td
+                        key={index}
+                        style={{
+                          backgroundColor:
+                            total - cash > 0 ? "red" : "transparent",
+                          color: "black", // Optional: Adjust text color for better contrast
+                        }}
+                      >
                         {total !== null && cash !== null ? (
                           <div>
                             <div>
@@ -303,16 +334,27 @@ const Workers = () => {
                       </td>
                     )
                   )}
+
                   <td style={{ fontWeight: "bold" }}>
                     {Intl.NumberFormat("en-US").format(
                       groupedData[delguur_ner].sumCash
                     )}
                   </td>
-                  <td style={{ fontWeight: "bold" }}>
+                  <td
+                    style={{
+                      backgroundColor:
+                        groupedData[delguur_ner].sumTotal -
+                          groupedData[delguur_ner].sumCash >
+                        0
+                          ? "red"
+                          : "transparent",
+                    }}
+                  >
                     {Intl.NumberFormat("en-US").format(
                       groupedData[delguur_ner].sumTotal
                     )}
                   </td>
+
                   <td style={{ fontWeight: "bold" }}>
                     {Intl.NumberFormat("en-US").format(
                       groupedData[delguur_ner].sumTotal -
