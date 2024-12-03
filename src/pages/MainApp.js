@@ -24,7 +24,7 @@ const MainApp = () => {
   const isUserValid = useBearStore((state) => state.isUserValid);
   const user_id = useBearStore((state) => state.user_id);
   const main_company_id = useBearStore((state) => state.main_company_id);
-  console.log("is user valied", isUserValid);
+
   // console.log(
   //   "MainAPp",
   //   isUserValid,

@@ -40,26 +40,26 @@ const ModalNormDetail = () => {
 
   const [baraa_list, setBaraa_list] = useState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/delguur"
-        );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+  //         // "http://3.0.177.127/api/backend/baraa"
+  //         "https://dmunkh.store/api/backend/delguur"
+  //       );
 
-        setCompany(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+  //       setCompany(_.orderBy(response.data.response, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [state.refresh]);
+  //   fetchData();
+  // }, [state.refresh]);
 
   const handleClick = () => {
     Swal.fire({

@@ -51,7 +51,7 @@ const Workers = () => {
             // },
           }
         );
-        console.log("jwttttt", response.data.response);
+
         // var result = _(response.data)
         //   .groupBy("baraa_ner")
         //   .map(function (items, baraa_ner) {

@@ -42,60 +42,63 @@ const ModalNormDetail = () => {
   const [delguur_list, setDelguur_list] = useState();
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
-  console.log(state.order.is_print, state.order.print_date);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await axios
-          .get(
-            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-            // "http://3.0.177.127/api/backend/baraa"
-            "https://dmunkh.store/api/backend/delguur"
-          )
-          .then((response) => {
-            setCompany(_.orderBy(response.data.response, ["id"]));
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
-  }, [state.refresh]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await axios
-          .get(
-            // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-            // "http://3.0.177.127/api/backend/baraa"
-            "https://dmunkh.store/api/backend/delguur"
-          )
-          .then((response) => {
-            setDelguur_list(_.orderBy(response.data.response, ["id"]));
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+    setCompany(_.orderBy(state.delguur_list, ["id"]));
+    setDelguur_list(_.orderBy(state.delguur_list, ["id"]));
+    setLoading(false);
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(true);
+    //     await axios
+    //       .get(
+    //         // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+    //         // "http://3.0.177.127/api/backend/baraa"
+    //         "https://dmunkh.store/api/backend/delguur"
+    //       )
+    //       .then((response) => {
+    //         setCompany(_.orderBy(response.data.response, ["id"]));
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error:", error);
+    //       });
 
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+    //     setLoading(false);
+    //   } catch (error) {
+    //     setLoading(false);
+    //     // setError(error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
   }, [state.refresh]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       await axios
+  //         .get(
+  //           // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+  //           // "http://3.0.177.127/api/backend/baraa"
+  //           "https://dmunkh.store/api/backend/delguur"
+  //         )
+  //         .then((response) => {
+  //           setDelguur_list(_.orderBy(response.data.response, ["id"]));
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error:", error);
+  //         });
+
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [state.refresh]);
 
   const valueLabelMap = {
     1: "Бэлэн",

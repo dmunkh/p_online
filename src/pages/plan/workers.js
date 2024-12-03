@@ -51,6 +51,10 @@ const Workers = () => {
         //   .value();
 
         setList(_.orderBy(response.data.response, ["id"]));
+        dispatch({
+          type: "STATE",
+          data: { baraa_list: response.data.response },
+        });
         setLoading(false);
       } catch (error) {
         setLoading(false);

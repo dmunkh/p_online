@@ -55,11 +55,9 @@ const Workers = () => {
   const list1 = ["Item 1", "Item 2", "Item 3"]; // Example list
 
   const handleGeneratePdf = () => {
-    console.log("modal starts");
     const blob = generatePdf(list1);
     setPdfBlob(blob);
     setShowModal(true); // Open the modal
-    console.log(showModal);
   };
   const generatePdf = (list) => {
     const doc = new jsPDF();
@@ -94,7 +92,6 @@ const Workers = () => {
   };
 
   const PlanApprove = (type, item, ischecked) => {
-    console.log(type, item, ischecked);
     Swal.fire({
       title: "Баталгаажуулалт",
       text:

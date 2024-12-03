@@ -63,16 +63,6 @@ const ModalNormDetail = () => {
   const handleClick = () => {
     if (state.baraa.id === 0) {
       try {
-        console.log(
-          "try inserting....",
-          state.baraa.baraa_ner,
-          state.baraa.company_ner,
-          state.baraa.company_id,
-          state.baraa.price,
-          state.baraa.box_count,
-          state.baraa.unit,
-          state.baraa.bar_code
-        );
         axios
           .post("https://dmunkh.store/api/backend/baraa", {
             baraa_ner: state.baraa.baraa_ner,
@@ -101,8 +91,6 @@ const ModalNormDetail = () => {
       }
     } else {
       try {
-        console.log("INSERTING", state.baraa.baraa_ner, state.baraa.id);
-
         axios
           .put("https://dmunkh.store/api/backend/baraa/" + state.baraa.id, {
             baraa_ner: state.baraa.baraa_ner,

@@ -89,6 +89,7 @@ const Goods_List = () => {
         dispatch({
           type: "STATE",
           data: {
+            balance_baraa_list: response.data.response,
             balance_list: response.data.response,
             balanceGroup_list: result,
           },
@@ -101,6 +102,10 @@ const Goods_List = () => {
           )
         );
         setfilterlist(_.filter(response.data.response, (a) => a.id !== null));
+        dispatch({
+          type: "STATE",
+          data: { balance_baraa_list: response.data.response },
+        });
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -111,6 +116,7 @@ const Goods_List = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.order.start_date, state.order.end_date]);
+
   useEffect(() => {
     var result = filterlist;
     if (state.order.filter_order_id !== 0) {
@@ -125,6 +131,7 @@ const Goods_List = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.order.order_id, state.order.filter_order_id]);
+
   const deleteClick = (item) => {
     Swal.fire({
       text: item.baraa_ner + "г устгах уу",

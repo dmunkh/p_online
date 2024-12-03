@@ -36,7 +36,7 @@ const DepartmentTseh = (props) => {
         var department = _.find(res, {
           departmentcode: user?.info?.tseh_code,
         });
-        console.log(checkGroup([306]));
+
         if (checkGroup([306])) {
           props.onChange(0);
         } else {

@@ -38,66 +38,71 @@ const ModalNormDetail = () => {
   const [baraa_list, setBaraa_list] = useState();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/delguur"
-        );
+    setCompany(_.orderBy(state.delguur_list, ["id"]));
+    setBaraa_list(_.orderBy(state.baraa_list, ["id"]));
+    setDelguur_list(_.orderBy(state.delguur_list, ["id"]));
+    setLoading(false);
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(true);
+    //     const response = await axios.get(
+    //       // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+    //       // "http://3.0.177.127/api/backend/baraa"
+    //       "https://dmunkh.store/api/backend/delguur"
+    //     );
 
-        setCompany(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+    //     setCompany(_.orderBy(response.data.response, ["id"]));
+    //     setLoading(false);
+    //   } catch (error) {
+    //     setLoading(false);
+    //     // setError(error);
+    //   }
+    // };
 
-    fetchData();
-  }, [state.refresh]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/baraa"
-        );
-
-        setBaraa_list(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
+    // fetchData();
   }, [state.refresh]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
-          // "http://3.0.177.127/api/backend/baraa"
-          "https://dmunkh.store/api/backend/delguur"
-        );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+  //         // "http://3.0.177.127/api/backend/baraa"
+  //         "https://dmunkh.store/api/backend/baraa"
+  //       );
 
-        setDelguur_list(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+  //       setBaraa_list(_.orderBy(response.data.response, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [state.refresh]);
+  //   fetchData();
+  // }, [state.refresh]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         // "https://9xz5rjl8ej.execute-api.us-east-1.amazonaws.com/production/baraa"
+  //         // "http://3.0.177.127/api/backend/baraa"
+  //         "https://dmunkh.store/api/backend/delguur"
+  //       );
+
+  //       setDelguur_list(_.orderBy(response.data.response, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [state.refresh]);
 
   const handleClick = () => {
     if (state.order.id === 0) {
@@ -123,7 +128,6 @@ const ModalNormDetail = () => {
       } catch (error) {}
     } else {
       try {
-        console.log("INSERTING");
         axios
           .put("https://dmunkh.store/api/backend/balance/" + state.order.id, {
             count: state.order.count,

@@ -32,7 +32,6 @@ const SaleList = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
-  console.log(state.balance.seller_id);
   useEffect(() => {
     if (state.balance.seller_id !== null) {
       const fetchData = async () => {

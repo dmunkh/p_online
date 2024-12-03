@@ -44,63 +44,65 @@ const ModalNormDetail = () => {
 
   const [baraa_list, setBaraa_list] = useState();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/delguur"
-        );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         "https://dmunkh.store/api/backend/delguur"
+  //       );
 
-        setCompany(_.orderBy(response.data.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+  //       setCompany(_.orderBy(response.data.response, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, [state.refresh]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/baraa",
-          { params: { user_id: user_id } }
-        );
-
-        setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
-  }, [state.refresh]);
+  //   fetchData();
+  // }, [state.refresh]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/reference"
-        );
+    setBaraa_list(_.orderBy(state.baraa_list, ["id"]));
+    setLoading(false);
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(true);
+    //     const response = await axios.get(
+    //       "https://dmunkh.store/api/backend/baraa",
+    //       { params: { user_id: user_id } }
+    //     );
 
-        setlist_ref(_.orderBy(response?.data?.response, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+    //     setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
+    //     setLoading(false);
+    //   } catch (error) {
+    //     setLoading(false);
+    //     // setError(error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
   }, [state.refresh]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         "https://dmunkh.store/api/backend/reference"
+  //       );
+
+  //       setlist_ref(_.orderBy(response?.data?.response, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [state.refresh]);
 
   const handleClick = () => {
     let validation = "";
@@ -122,8 +124,8 @@ const ModalNormDetail = () => {
       if (state.balance.id === 0) {
         try {
           axios
-             .post("https://dmunkh.store/api/backend/balance/post", {
-            //.post("http://localhost:5000/api/backend/balance/post", {
+            .post("https://dmunkh.store/api/backend/balance/post", {
+              //.post("http://localhost:5000/api/backend/balance/post", {
               order_id: 0,
               type_id: state.balance.type,
               delguur_id: 0,

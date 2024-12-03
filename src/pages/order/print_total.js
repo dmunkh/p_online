@@ -37,7 +37,7 @@ const Print_total = () => {
               _.map(state.order.checked_positionList, (a) => a.order_id),
               ","
             );
-            console.log("idssss", order_ids);
+
             // const response = await axios.get(
             const response = await axios.get(
               // "http://localhost:5000/api/backend/balance_list_orders",

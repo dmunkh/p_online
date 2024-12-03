@@ -11,9 +11,9 @@ const Index = () => {
     <div className=" p-2 text-xs">
       Борлуулалт бүртгэл
       <div className="flex flex-col md:flex-row gap-2 ">
-        <div className="md:w-1/2">
+        {/* <div className="md:w-1/2">
           <List />
-        </div>
+        </div> */}
         <div className="md:w-1/2">
           <Uldegdel />
         </div>

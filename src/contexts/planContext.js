@@ -5,7 +5,10 @@ import dayjs from "dayjs";
 import register from "src/pages/workers/register";
 
 const date = new Date();
-var _startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+
+const oneDayBefore = new Date(date);
+var _startDate = oneDayBefore.setDate(date.getDate() - 1);
+// var _startDate = new Date(date.getFullYear(), date.getMonth(), 1);
 var _endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
 const context = React.createContext();
@@ -25,6 +28,9 @@ const _state = {
   balance_list: [],
   balanceGroup_list: [],
   single_page: false,
+  delguur_list: [],
+  baraa_list: [],
+  balance_baraa_list: [],
 
   company: {
     id: 0,

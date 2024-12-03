@@ -56,51 +56,59 @@ const ModalNormDetail = () => {
   const group_id = useBearStore((state) => state.group_id);
   const [bonus, setbonus] = useState(0);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         "https://dmunkh.store/api/backend/balance/order",
+  //         {
+  //           params: {
+  //             order_id: state.order.order_id,
+  //           },
+  //         }
+  //       );
+
+  //       setbalance_list(response.data.response);
+
+  //       baraa_list(_.orderBy(response.data.response, ["id"]));
+
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.refresh, refresh, state.order.order_id]);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance/order",
-          {
-            params: {
-              order_id: state.order.order_id,
-            },
-          }
-        );
+    setBaraa_list(_.orderBy(state.baraa_list, ["id"]));
+    setbalance_list(
+      _.filter(
+        state.balance_baraa_list,
+        (a) => parseInt(a.id_order) === parseInt(state.order.order_id)
+      )
+    );
 
-        setbalance_list(response.data.response);
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       "https://dmunkh.store/api/backend/baraa",
+    //       { params: { user_id: user_id } }
+    //     );
 
-        baraa_list(_.orderBy(response.data.response, ["id"]));
+    //     setBaraa_list(_.orderBy(response.data.response, ["id"]));
+    //   } catch (error) {
+    //     // setLoading(false);
+    //   }
+    // };
 
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
-
-    fetchData();
+    // fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, refresh, state.order.order_id]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/baraa",
-          { params: { user_id: user_id } }
-        );
-
-        setBaraa_list(_.orderBy(response.data.response, ["id"]));
-      } catch (error) {
-        // setLoading(false);
-      }
-    };
-
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.order.order_id]);
+  }, [state.order.order_id, state.balance_baraa_list]);
 
   useEffect(() => {
     const fetchData = async () => {

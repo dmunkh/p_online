@@ -32,7 +32,7 @@ const SaleList = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
   const userInfo = useBearStore((state) => state.userInfo);
-  console.log(state.balance.seller_id);
+
   useEffect(() => {
     if (state.balance.seller_id !== null) {
       const fetchData = async () => {
@@ -62,7 +62,7 @@ const SaleList = () => {
               };
             })
             .value();
-          console.log(response.data.response);
+
           setList(_.orderBy(response.data.response, ["uldegdel", "desc"]));
           setLoading(false);
         } catch (error) {

@@ -15,6 +15,7 @@ import axios from "axios";
 import AddBtn from "src/components/button/plusButton";
 import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
+import delguur from ".";
 
 const Workers = () => {
   // const { message, checkRole } = useUserContext();
@@ -29,7 +30,7 @@ const Workers = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    console.log(token);
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -53,6 +54,8 @@ const Workers = () => {
         // setData(jsonData);
 
         setList(_.orderBy(jsonData.response, ["id"]));
+        dispatch({ type: "STATE", data: { delguur_list: jsonData.response } });
+
         setLoading(false);
       } catch (error) {
         setLoading(false);

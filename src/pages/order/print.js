@@ -49,33 +49,41 @@ const MyComponent = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        // const response = await axios.get(
-        const response = await fetch(
-          "https://dmunkh.store/api/backend/delguur"
-          // "http://3.0.177.127/api/backend/delguur"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const jsonData = await response.json();
+    // console.log("delguur iddd", state.order.delguur_id, state.delguur);
+    setdelguur(
+      _.filter(
+        state.delguur_list,
+        (a) => parseInt(a.id) === parseInt(state.order.delguur_id)
+      )
+    );
+    setLoading(false);
+    // const fetchData = async () => {
+    //   try {
+    //     setLoading(true);
+    //     // const response = await axios.get(
+    //     const response = await fetch(
+    //       "https://dmunkh.store/api/backend/delguur"
+    //       // "http://3.0.177.127/api/backend/delguur"
+    //     );
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     const jsonData = await response.json();
 
-        setdelguur(
-          _.filter(
-            jsonData.response,
-            (a) => parseInt(a.id) === parseInt(state.order.delguur_id)
-          )
-        );
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+    //     setdelguur(
+    //       _.filter(
+    //         jsonData.response,
+    //         (a) => parseInt(a.id) === parseInt(state.order.delguur_id)
+    //       )
+    //     );
+    //     setLoading(false);
+    //   } catch (error) {
+    //     setLoading(false);
+    //     // setError(error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.order.order_id]);
 
@@ -179,13 +187,7 @@ const MyComponent = () => {
       _.orderBy(state.balance_list, ["baraa_ner"]),
       (a) => _.parseInt(a.order_id) === _.parseInt(state.order.order_id)
     );
-    console.log(
-      state.order.order_id,
-      _.filter(
-        result,
-        (a) => _.parseInt(a.order_id) === _.parseInt(state.order.order_id)
-      )
-    );
+
     var ssum = 0;
     _.map(result, (item) => (ssum += item.price * item.count));
     settotal(ssum);

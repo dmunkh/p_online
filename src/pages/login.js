@@ -37,7 +37,6 @@ const Login = () => {
 
         const data = await response.json();
         if (response.ok) {
-          console.log(data.user_info.user_name);
           localStorage.setItem("access_token", data.access_token);
           setIsUserValid(true);
           setUserId(data.user_info.id);
