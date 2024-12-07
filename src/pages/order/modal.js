@@ -181,10 +181,18 @@ const ModalNormDetail = () => {
             }
           )
           .then((response) => {
+            var result1 = state.balanceGroup_list;
+            var index = _.findIndex(result1, {
+              order_id: state.order.order_id,
+            });
+
+            result1[index].is_approve = state.order.cash;
             dispatch({
               type: "STATE",
               data: { refresh: state.refresh + 1 },
             });
+
+            dispatch({ type: "STATE", data: { balanceGroup_list: result1 } });
           })
           .catch((error) => {
             console.error("Error:", error);

@@ -53,7 +53,7 @@ const Workers = () => {
   };
   const [showModal, setShowModal] = useState(false);
   const list1 = ["Item 1", "Item 2", "Item 3"]; // Example list
-
+  console.log(state.balanceGroup_list);
   const handleGeneratePdf = () => {
     const blob = generatePdf(list1);
     setPdfBlob(blob);
@@ -120,7 +120,7 @@ const Workers = () => {
                 // delguur_id: item.delguur_id,
                 // delguur_ner: item.delguur_ner,
                 // order_number: item.order_number,
-                cash: item.total,
+                cash: type === "approve" ? item.total : item.cash,
                 // register_date: item.register_date,
                 is_approve: type === "approve" ? ischecked : item.is_approve,
                 is_print: type === "print" ? ischecked : item.is_print,
@@ -135,15 +135,16 @@ const Workers = () => {
 
               if (type === "approve") {
                 result1[index].is_approve = ischecked;
+                result1[index].cash = item.total;
                 // result1[index].is_print = dt;
               } else {
                 result1[index].is_print = ischecked;
                 result1[index].print_date = moment().format("YYYY-MM-DD HH:mm");
               }
-              dispatch({
-                type: "STATE",
-                data: { refresh: state.refresh + 1 },
-              });
+              // dispatch({
+              //   type: "STATE",
+              //   data: { refresh: state.refresh + 1 },
+              // });
               dispatch({ type: "STATE", data: { balanceGroup_list: result1 } });
               // setList(result);
               setDraw(draw + 1);
@@ -246,6 +247,7 @@ const Workers = () => {
       />
     );
   };
+
   return (
     <div className="w-full">
       <PdfModal
