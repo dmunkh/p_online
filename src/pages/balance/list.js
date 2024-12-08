@@ -84,8 +84,11 @@ const Workers = () => {
   useEffect(() => {
     let result = filterlist;
 
-    if (state.balance.seller_id !== undefined) {
-      if (state.balance.seller_id.length === 6) {
+    if (
+      state.balance.seller_id !== undefined &&
+      state.balance.seller_id !== null
+    ) {
+      if (state.balance?.seller_id?.length === 6) {
         result = _.filter(
           result,
           (a) =>
@@ -104,7 +107,10 @@ const Workers = () => {
       result = filterlist;
     }
 
-    if (state.balance.baraa_id_filter !== undefined) {
+    if (
+      state.balance.baraa_id_filter !== undefined &&
+      state.balance.baraa_id_filter !== null
+    ) {
       result = _.filter(
         result,
         (a) =>
