@@ -20,23 +20,7 @@ const Header = () => {
   useEffect(() => {
     setBaraa_list(_.orderBy(state.baraa_list, ["id"]));
     setLoading(false);
-    // const fetchData = async () => {
-    //   try {
-    //     setLoading(true);
-    //     const response = await axios.get(
-    //       "https://dmunkh.store/api/backend/baraa",
-    //       { params: { user_id: user_id } }
-    //     );
-
-    //     setBaraa_list(_.orderBy(response?.data?.response, ["id"]));
-    //     setLoading(false);
-    //   } catch (error) {
-    //     setLoading(false);
-    //     // setError(error);
-    //   }
-    // };
-
-    // fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh]);
   return (
     <div className="mb-2 pb-2 flex flex-col md:flex-row gap-2 border-b">
@@ -102,8 +86,6 @@ const Header = () => {
             className="w-full"
             value={state.balance.baraa_id_filter}
             onChange={(value) => {
-              // var selected_baraa = _.filter(baraa_list, (a) => a.id === value);
-
               dispatch({
                 type: "BALANCE",
                 data: { baraa_id_filter: value },

@@ -10,7 +10,7 @@ import moment from "moment";
 import { FilterMatchMode } from "primereact/api";
 import { usePlanContext } from "src/contexts/planContext";
 import MODAL from "src/pages/balance/modal";
-// import { useUserContext } from "src/contexts/userContext";
+
 import axios from "axios";
 import dayjs from "dayjs";
 import useBearStore from "src/state/state";
@@ -18,7 +18,6 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 
 const Workers = () => {
-  // const { message, checkRole } = useUserContext();
   const { state, dispatch } = usePlanContext();
   const [search, setSearch] = useState({
     global: { value: "", matchMode: FilterMatchMode.CONTAINS },
@@ -75,7 +74,13 @@ const Workers = () => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.refresh, state.balance.start_date, state.balance.end_date]);
+  console.log(
+    "selected filterr",
 
+    state.balance.seller_id,
+    state.balance.baraa_id_filter,
+    filterlist
+  );
   useEffect(() => {
     let result = filterlist;
 
@@ -83,15 +88,18 @@ const Workers = () => {
       result = _.filter(
         result,
         (a) =>
-          a.src_id === state.balance.seller_id ||
-          a.dest_id === state.balance.seller_id
+          parseInt(a.src_id, 10) === parseInt(state.balance.seller_id, 10) ||
+          parseInt(a.dest_id, 10) === parseInt(state.balance.seller_id, 10)
       );
+    } else {
+      result = filterlist;
     }
 
     if (state.balance.baraa_id_filter !== undefined) {
       result = _.filter(
         result,
-        (a) => a.baraa_id === state.balance.baraa_id_filter
+        (a) =>
+          parseInt(a.baraa_id, 10) === parseInt(state.balance.baraa_id_filter)
       );
     }
 
@@ -103,19 +111,7 @@ const Workers = () => {
         "register_date",
       ])
     );
-    // if (state.balance.seller_id !== undefined) {
-    //   var result = filterlist;
-    //   setList(
-    //     _.filter(
-    //       result,
-    //       (a) =>
-    //         a.src_id === state.balance.seller_id ||
-    //         a.dest_id === state.balance.seller_id
-    //     )
-    //   );
-    // } else {
-    //   setList(filterlist);
-    // }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.balance.seller_id, state.balance.baraa_id_filter]);
 
@@ -253,14 +249,6 @@ const Workers = () => {
   };
   return (
     <div className="w-full">
-      {/* <Radio.Group value={value} onChange={(e) => setvalue(e.target.value)}>
-        <Radio value={0}>Үлдэгдэл</Radio>
-        <Radio value={1}>Орлого</Radio>
-        <Radio value={2}>Зарлага</Radio>
-        <Radio value={3}>Захиалга</Radio>
-        <Radio value={4}>Буцаалт</Radio>
-        <Radio value={5}>Хаягдал</Radio>
-      </Radio.Group> */}
       <Modal
         style={{ width: "600" }}
         width={800}
@@ -346,10 +334,6 @@ const Workers = () => {
                 </div>
               </div>
             </div>
-
-            // <div className="flex items-center justify-between  pb-2 mb-2  text-xs">
-
-            // </div>
           }
           rowGroupHeaderTemplate={(data) => {
             var group = _.filter(list, (a) => a.type_id === data.type_id);
@@ -373,14 +357,6 @@ const Workers = () => {
                 {/* <div className="w-[250px] text-center"></div> */}
               </div>
             );
-
-            // return (
-            //   <div className="text-xs font-semibold">
-            //     <span className="ml-1">
-            //       {data.negj_code} | {data.delguur_ner}
-            //     </span>
-            //   </div>
-            // );
           }}
           rows={per_page}
           first={first}
@@ -492,25 +468,14 @@ const Workers = () => {
             style={{ minWidth: "40px", maxWidth: "40px" }}
             body={(data, row) => row.rowIndex + 1}
           />
-          {/* <Column
-            style={{ minWidth: "40px", maxWidth: "40px" }}
-            field="id"
-            className="text-xs"
-            header="id"
-          /> */}
+
           <Column
             sortable
             field="delguur_ner"
             header="Дэлгүүр"
             className="text-xs"
-            // style={{ minWidth: "120px", maxWidth: "120px" }}
           />
-          {/* <Column
-            field="company_name"
-            header="Компани"
-            className="text-xs"
-            style={{ minWidth: "120px", maxWidth: "120px" }}
-          /> */}
+
           <Column
             sortable
             field="register_date"
@@ -521,18 +486,7 @@ const Workers = () => {
               return dayjs(data.register_date).format("YYYY-MM-DD");
             }}
           />
-          {/* <Column
-            field="type_id"
-            header="type_id"
-            className="text-xs"
-            style={{ minWidth: "40px", maxWidth: "60px" }}
-          /> */}
-          {/* <Column
-            field="baraa_id"
-            header="baraa_id"
-            className="text-xs"
-            style={{ minWidth: "60px", maxWidth: "60px" }}
-          /> */}
+
           <Column
             sortable
             field="baraa_ner"
@@ -546,15 +500,7 @@ const Workers = () => {
             className="text-sm text-black justify-end"
             style={{ minWidth: "60px", maxWidth: "60px" }}
           />
-          {/* <Column
-            field="count"
-            header="Эхний үлдэгдэл"
-            className="text-xs justify-end text-blue-700 font-semibold"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-            body={(data) => {
-              return data.type_id === 0 ? data.count : "";
-            }}
-          /> */}
+
           <Column
             field="box_count"
             header="Хайрцаг"
