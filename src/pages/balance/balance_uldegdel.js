@@ -84,43 +84,43 @@ const Workers = () => {
       }
     );
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://dmunkh.store/api/backend/balance/group",
-          // "http://localhost:5000/api/backend/balance/group",
-          {
-            params: {
-              user_id: user_id, // Add your parameters here
-              start_date: moment(state.balance.start_date).format("YYYY.MM.DD"),
-              end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
-            },
-          }
-        );
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const response = await axios.get(
+  //         "https://dmunkh.store/api/backend/balance/group",
+  //         // "http://localhost:5000/api/backend/balance/group",
+  //         {
+  //           params: {
+  //             user_id: user_id, // Add your parameters here
+  //             start_date: moment(state.balance.start_date).format("YYYY.MM.DD"),
+  //             end_date: moment(state.balance.end_date).format("YYYY.MM.DD"),
+  //           },
+  //         }
+  //       );
 
-        var result = _(response.data)
-          .groupBy("baraa_ner")
-          .map(function (items, baraa_ner) {
-            return {
-              itemname: baraa_ner,
-              count: _.sumBy(items, "id"),
-            };
-          })
-          .value();
+  //       var result = _(response.data)
+  //         .groupBy("baraa_ner")
+  //         .map(function (items, baraa_ner) {
+  //           return {
+  //             itemname: baraa_ner,
+  //             count: _.sumBy(items, "id"),
+  //           };
+  //         })
+  //         .value();
 
-        setList(_.orderBy(response.data, ["id"]));
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        // setError(error);
-      }
-    };
+  //       setList(_.orderBy(response.data, ["id"]));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setLoading(false);
+  //       // setError(error);
+  //     }
+  //   };
 
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.balance.start_date, state.balance.end_date]);
+  //   fetchData();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [state.refresh, state.balance.start_date, state.balance.end_date]);
 
   return (
     <div className="w-full">

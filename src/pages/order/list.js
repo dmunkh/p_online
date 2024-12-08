@@ -53,7 +53,7 @@ const Workers = () => {
   };
   const [showModal, setShowModal] = useState(false);
   const list1 = ["Item 1", "Item 2", "Item 3"]; // Example list
-  console.log(state.balanceGroup_list);
+
   const handleGeneratePdf = () => {
     const blob = generatePdf(list1);
     setPdfBlob(blob);
