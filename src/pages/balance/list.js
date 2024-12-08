@@ -85,12 +85,21 @@ const Workers = () => {
     let result = filterlist;
 
     if (state.balance.seller_id !== undefined) {
-      result = _.filter(
-        result,
-        (a) =>
-          parseInt(a.src_id, 10) === parseInt(state.balance.seller_id, 10) ||
-          parseInt(a.dest_id, 10) === parseInt(state.balance.seller_id, 10)
-      );
+      if (state.balance.seller_id.length === 6) {
+        result = _.filter(
+          result,
+          (a) =>
+            parseInt(a.src_id, 10) === parseInt(state.balance.seller_id, 10) ||
+            parseInt(a.dest_id, 10) === parseInt(state.balance.seller_id, 10)
+        );
+      } else {
+        result = _.filter(
+          result,
+          (a) =>
+            parseInt(a.company_sub_code, 10) ===
+            parseInt(state.balance.seller_id, 10)
+        );
+      }
     } else {
       result = filterlist;
     }
