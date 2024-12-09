@@ -136,7 +136,7 @@ const ModalNormDetail = () => {
 
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.refresh, state.order.start_date, state.order.end_date]);
+  }, [state.order.start_date, state.order.end_date]);
 
   const handleClick = () => {
     let validation = "";
