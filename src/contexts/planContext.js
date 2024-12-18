@@ -54,6 +54,7 @@ const _state = {
     model: false,
     count: 0,
     bar_code: 0,
+    filter_company_id: null,
   },
   delguur: {
     id: 0,
