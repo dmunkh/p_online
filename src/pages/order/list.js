@@ -180,8 +180,15 @@ const Workers = () => {
         try {
           setLoading(true);
           axios
-            .delete("https://dmunkh.store/api/backend/orders/" + item.order_id)
+            // .delete("https://dmunkh.store/api/backend/orders/" + item.order_id)
             // .delete("http://localhost:5000/api/backend/orders/" + item.order_id)
+            .put(
+              "https://dmunkh.store/api/backend/orders/delete/" + item.order_id,
+              {
+                is_delete: 1,
+                deleted_user_id: 3,
+              }
+            )
             .then((response) => {
               dispatch({
                 type: "STATE",
