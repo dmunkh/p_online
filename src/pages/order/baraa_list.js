@@ -58,7 +58,10 @@ const Goods_List = () => {
         );
 
         var result = _(
-          _.filter(response.data.response, (a) => a.is_delete === 0)
+          _.filter(
+            response.data.response,
+            (a) => a.is_delete === 0 || a.is_delete === null
+          )
         )
           .groupBy("id_order")
           .map(function (items, id_order) {
