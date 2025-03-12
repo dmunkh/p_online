@@ -211,13 +211,13 @@ const MyComponent = () => {
   const company = (id) => {
     switch (state.order.xt_id) {
       case 1:
-        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+        return "Арвин үр түрүү - Тэнгэрийн хишиг ХХК";
       case 2:
-        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+        return "Арвин үр түрүү - Тэнгэрийн хишиг ХХК";
       case 3:
-        return "Хүнс экспресс";
+        return "Арвин үр түрүү - Хүнс экспресс";
       case 4:
-        return "Арвин үр түрүү - Тэнгэийн хишиг ХХК";
+        return "Арвин үр түрүү - Тэнгэрийн хишиг ХХК";
       case 5:
         return null;
       default:
