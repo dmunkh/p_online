@@ -218,6 +218,8 @@ const MyComponent = () => {
         return "Арвин үр түрүү - Хүнс экспресс";
       case 4:
         return "Арвин үр түрүү - Тэнгэрийн хишиг ХХК";
+      case 10:
+        return "Арвин үр түрүү -  Гэр ахуйн бараа";
       case 5:
         return null;
       default:
