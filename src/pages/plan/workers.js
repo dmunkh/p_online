@@ -152,7 +152,7 @@ const Workers = () => {
           responsiveLayout="scroll"
           sortMode="multiple"
           rowGroupMode="subheader"
-          groupRowsBy="negj_namemnfull"
+          groupRowsBy="type_id"
           scrollHeight={window.innerHeight - 360}
           globalFilterFields={["baraa_ner"]}
           emptyMessage={
@@ -216,7 +216,7 @@ const Workers = () => {
             return (
               <div className="text-xs font-semibold">
                 <span className="ml-1">
-                  {data.negj_code} | {data.negj_namemnfull}
+                  {data.type_id} | {data.negj_namemnfull}
                 </span>
               </div>
             );

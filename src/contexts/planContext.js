@@ -31,6 +31,8 @@ const _state = {
   delguur_list: [],
   baraa_list: [],
   balance_baraa_list: [],
+  baraa_type_list: [],
+  baraa_type: null,
 
   company: {
     id: 0,

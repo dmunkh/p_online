@@ -72,6 +72,7 @@ const ModalNormDetail = () => {
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
             bar_code: state.baraa.bar_code,
+            type_id: state.baraa_type,
             // unit: unit,
           })
           .then((response) => {
@@ -100,6 +101,7 @@ const ModalNormDetail = () => {
             box_count: state.baraa.box_count,
             unit: state.baraa.unit,
             bar_code: state.baraa.bar_code,
+            type_id: state.baraa_type,
           })
           .then((response) => {
             dispatch({
@@ -222,6 +224,36 @@ const ModalNormDetail = () => {
                 dispatch({ type: "BARAA", data: { box_count: value } })
               }
             />
+          </div>
+        </div>
+        <div className="flex p-1 gap-2">
+          <div className="w-1/4">Барааны ангилал</div>
+          <div className="w-3/4">
+            <Select
+              showSearch
+              allowClear
+              placeholder="Сонгоно уу."
+              optionFilterProp="children"
+              className="w-full"
+              value={state.baraa_type}
+              onChange={(value) => {
+                dispatch({
+                  type: "STATE",
+                  data: {
+                    baraa_type: _.filter(
+                      state.baraa_type_list,
+                      (a) => a.id === value
+                    )[0].id,
+                  },
+                });
+              }}
+            >
+              {_.map(state.baraa_type_list, (item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.reference_name}
+                </Select.Option>
+              ))}
+            </Select>
           </div>
         </div>
       </div>
