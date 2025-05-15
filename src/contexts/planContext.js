@@ -109,6 +109,7 @@ const _state = {
     baraa_id: null,
     seller_id: null,
     baraa_id_filter: null,
+    balance_list_group: [],
   },
   user: {
     id: 0,
