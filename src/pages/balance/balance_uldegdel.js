@@ -31,6 +31,43 @@ const Workers = () => {
   const main_company_id = useBearStore((state) => state.main_company_id);
   const user_id = useBearStore((state) => state.user_id);
 
+  const group_data = [
+    { id: 1, baraa_group_name: "Майонез-Лука" },
+    { id: 2, baraa_group_name: "G7 кофе" },
+    { id: 3, baraa_group_name: "Агро" },
+    { id: 4, baraa_group_name: "Saigon" },
+    { id: 5, baraa_group_name: "Chili" },
+  ];
+
+  const grouped = state.balance.balance_list_group.reduce((acc, item) => {
+    const key = item.baraa_type_id;
+
+    if (key == null) return acc; // skip null
+
+    if (!acc[key]) {
+      const groupInfo = group_data.find((group) => group.id === key);
+
+      acc[key] = {
+        baraa_type_id: key,
+        baraa_group_name: groupInfo
+          ? groupInfo.baraa_group_name
+          : "Тодорхойгүй",
+        total: 0,
+        total_count: 0,
+      };
+    }
+
+    const itemCount = item.count ?? 0;
+    const itemPrice = item.price ?? 0;
+
+    acc[key].total += itemCount * itemPrice;
+    acc[key].total_count += itemCount;
+
+    return acc;
+  }, {});
+
+  const result = Object.values(grouped);
+
   // useEffect(() => {
   //   setLoading(true);
   //   REQ.getWorkers({
@@ -89,7 +126,7 @@ const Workers = () => {
   //     try {
   //       setLoading(true);
   //       const response = await axios.get(
-  //         "https://dmunkh.store/api/backend/balance/group",
+  //         "http://tugeelt.online/api/backend/balance/group",
   //         // "http://localhost:5000/api/backend/balance/group",
   //         {
   //           params: {
@@ -140,7 +177,7 @@ const Workers = () => {
       <Spin tip="Уншиж байна." className="bg-opacity-80" spinning={loading}>
         <DataTable
           size="small"
-          value={list}
+          value={result}
           dataKey="id"
           filters={search}
           paginator
@@ -288,61 +325,28 @@ const Workers = () => {
           /> */}
           <Column
             sortable
-            field="ner"
+            field="baraa_group_name"
             header="Барааны нэр"
             className="text-xs"
-            style={{ minWidth: "180px", maxWidth: "180px" }}
           />
           <Column
             sortable
-            field="uldegdel"
-            header="Үлдэгдэл"
-            className="text-xs text-blue-600 font-bold justify-end"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            sortable
-            field="orlogo"
-            header="Орлого"
+            field="total_count"
+            header="Тоо ширхэг"
             style={{ minWidth: "80px", maxWidth: "80px" }}
             className="text-xs justify-end text-green-700"
           />
           <Column
-            field="zahialga"
-            header="Захиалга"
-            className="text-xs justify-end text-red-700"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
+            sortable
+            field="total"
+            header="Нийт үнэ"
+            className="text-xs text-black-600 font-bold justify-end"
+            style={{ minWidth: "120px", maxWidth: "120px" }}
+            body={(data) => {
+              return Intl.NumberFormat("en-US").format(data.total);
+            }}
           />
-          <Column
-            field="ehni_uldegdel"
-            header="Эхний үлдэгдэл"
-            className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
-          <Column
-            field="zarlaga"
-            header="Зарлага"
-            className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
-          <Column
-            field="shiljuuleg"
-            header="Шилжүүлэг"
-            className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
-          <Column
-            field="bonus"
-            header="Урамшуулал"
-            className="text-xs justify-end"
-            style={{ minWidth: "80px", maxWidth: "80px" }}
-          />
-          <Column
-            field="box_count"
-            header="Хайрцаг тоо"
-            className="text-xs justify-end"
-            style={{ minWidth: "70px", maxWidth: "70px" }}
-          />
+
           <Column
             align="center"
             header=""
