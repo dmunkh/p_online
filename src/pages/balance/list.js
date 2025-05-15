@@ -49,6 +49,15 @@ const Workers = () => {
             }
           )
           .then((response) => {
+               dispatch({
+              type: "BALANCE",
+              data: {
+                balance_list_group: _.filter(
+                  response.data.response,
+                  (a) => a.baraa_type_id !== null
+                ),
+              },
+            });
             setList(
               response.data.response &&
                 _.orderBy(response.data.response, [
